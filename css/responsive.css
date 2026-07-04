@@ -1,0 +1,238 @@
+/* =========================================================
+   MARVINI ELITE ENTERPRISES — responsive.css
+   ========================================================= */
+
+/* ─── LARGE DESKTOP (≤1280px) ────────────────────────────── */
+@media (max-width: 1280px) {
+  .hero-orbital-wrap {
+    width: 400px;
+    height: 400px;
+    right: 1%;
+  }
+  .orbit-ring-3 { display: none; }
+}
+
+/* ─── TABLET LANDSCAPE (≤1024px) ─────────────────────────── */
+@media (max-width: 1024px) {
+  :root { --section-pad: 80px; }
+
+  /* Nav */
+  .nav-links { display: none !important; }
+  .nav-hamburger { display: flex !important; }
+  .nav-actions .btn-primary { display: none !important; }
+
+  /* Hero — force hide orbital, full width content */
+  .hero-orbital-wrap { display: none !important; }
+  .hero .container { display: block; }
+  .hero-content {
+    max-width: 100%;
+    position: relative;
+    z-index: 3;
+  }
+  .hero-cta {
+    position: relative;
+    z-index: 3;
+  }
+  .hero-title { font-size: clamp(3rem, 7vw, 5rem); }
+  .hero-stats {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* About */
+  .mvv-grid { grid-template-columns: 1fr 1fr; }
+  .values-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Companies */
+  .companies-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Innovation */
+  .innovation-inner {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .innovation-visual { display: none; }
+
+  /* Team */
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+/* ─── FEATURED TEAM CARDS MOBILE ────────────────────────── */
+@media (max-width: 640px) {
+  .featured-profile-card {
+    flex-direction: column;
+    text-align: center;
+    max-width: 100%;
+    width: 100%;
+  }
+  .featured-info { text-align: center; }
+}
+
+/* ─── BIO MODAL MOBILE ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .bio-modal { padding: 1rem; }
+  .bio-modal-card {
+    padding: 1.5rem;
+    max-height: 85vh;
+    border-radius: var(--radius-lg);
+  }
+  .bio-modal-header {
+    flex-direction: column;
+    text-align: center;
+    padding-right: 0;
+    gap: 0.75rem;
+  }
+  .bio-modal-avatar { width: 72px; height: 72px; }
+  .bio-modal-close { top: 1rem; right: 1rem; }
+  .bio-modal-text { font-size: 0.9rem; }
+}
+
+/* ─── TABLET PORTRAIT (≤768px) ───────────────────────────── */
+@media (max-width: 768px) {
+  :root {
+    --section-pad: 60px;
+    --container-pad: 1.25rem;
+  }
+
+  /* Hero */
+  .hero { padding-top: 70px; }
+  .hero-title { font-size: clamp(2.5rem, 10vw, 4rem); }
+  .hero-subtitle { font-size: 1rem; }
+  .hero-cta {
+    flex-direction: column;
+    position: relative;
+    z-index: 3;
+  }
+  .hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-stats {
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+  .stat-divider { display: none; }
+
+  /* CEO Card */
+  .ceo-card-inner {
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .quote-mark { display: none; }
+
+  /* About */
+  .mvv-grid { grid-template-columns: 1fr; }
+  .values-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Companies */
+  .companies-grid { grid-template-columns: 1fr; }
+
+  /* Contact */
+  .contact-inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .form-row { grid-template-columns: 1fr; }
+
+  /* News */
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Team */
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-brand { grid-column: auto; }
+  .footer-bottom .container {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  /* Section titles */
+  .section-title { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+}
+
+/* ─── MOBILE (≤480px) ────────────────────────────────────── */
+@media (max-width: 480px) {
+  :root {
+    --section-pad: 50px;
+    --container-pad: 1rem;
+  }
+
+  /* Hero */
+  .hero-title { font-size: clamp(2.2rem, 11vw, 3rem); }
+  .hero-badge { font-size: 0.72rem; }
+  .br-desktop { display: none; }
+
+  /* Values & Team — single column */
+  .values-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+
+  /* Contact form */
+  .contact-form { padding: 1.5rem 1rem; }
+
+  /* Company cards */
+  .company-card { padding: 1.5rem; }
+  .company-card-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .company-card-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Team card */
+  .team-card-inner { padding: 1.5rem 1.25rem; }
+
+  /* News */
+  .news-grid { grid-template-columns: 1fr; }
+
+  /* Gallery */
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Partners carousel */
+  .partner-logo { padding: 1rem 1.5rem; font-size: 0.8rem; }
+
+  /* Back to top */
+  .back-to-top { bottom: 1rem; right: 1rem; }
+
+  /* Mobile menu links */
+  .mobile-link { font-size: 1.5rem; }
+
+  /* Innovation section */
+  .innovation-inner { gap: 2rem; }
+
+  /* MVV cards */
+  .mvv-card { padding: 1.5rem; }
+}
+
+/* ─── VERY SMALL (≤360px) ────────────────────────────────── */
+@media (max-width: 360px) {
+  .hero-title { font-size: 2rem; }
+  .hero-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .gallery-grid { grid-template-columns: 1fr; }
+}

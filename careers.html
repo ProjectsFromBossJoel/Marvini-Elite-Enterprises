@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Primary Meta -->
+  <title>Careers & Volunteering | Marvini Elite Enterprises</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="img/site.webmanifest">
+  <meta name="description" content="Join Marvini Elite Enterprises. Explore career opportunities and volunteer programs across M-Smart, M-Digital Food Chain, M-Events & Festivals, M-Farms and M-Consultancy & Training." />
+  <meta name="keywords" content="Marvini Elite Enterprises careers, Marvini volunteer, Ghana jobs, work with Marvini, M-Smart careers, M-Farms volunteer" />
+  <meta name="author" content="Marvini Elite Enterprises" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://marvini-elite-enterprises.web.app/careers" />
+  <meta property="og:title" content="Careers & Volunteering | Marvini Elite Enterprises" />
+  <meta property="og:description" content="Build Africa's future with us. Explore open roles and volunteer opportunities across the Marvini group." />
+  <meta property="og:image" content="https://marvini-elite-enterprises.web.app/img/marvini_elite_enterprise_logo1.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Careers & Volunteering | Marvini Elite Enterprises" />
+  <meta name="twitter:description" content="Build Africa's future with us. Explore open roles and volunteer opportunities across the Marvini group." />
+  <meta name="twitter:image" content="https://marvini-elite-enterprises.web.app/img/marvini_elite_enterprise_logo1.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets (shared with main site) -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css?v=2" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════ */
+    /* CAREERS/VOLUNTEER PAGE — extends the shared design system */
+    /* Reuses .section, .company-card, .value-card, .contact-form etc.  */
+    /* All new rules below are additive/scoped so they don't collide.   */
+    /* ═══════════════════════════════════════════════════ */
+
+    .team-bio, .featured-bio, .bio-modal-text { text-align: justify; }
+
+    /* Slim page hero (lighter than homepage hero, same visual language) */
+    .page-hero {
+      position: relative;
+      padding: 168px 0 96px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .page-hero .hero-gradient-orb { position: absolute; }
+    .page-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1a56ff;
+      background: rgba(26,86,255,0.08);
+      border: 1px solid rgba(26,86,255,0.18);
+      padding: 8px 18px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .page-hero-eyebrow .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #1a56ff; }
+    .page-hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin: 0 0 20px;
+    }
+    .page-hero-title .accent-line { color: #1a56ff; }
+    .page-hero-sub {
+      max-width: 640px;
+      margin: 0 auto 36px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      opacity: 0.78;
+    }
+    .page-hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* Path selector — Career vs Volunteer */
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin: 0 0 8px;
+    }
+    .path-card {
+      position: relative;
+      border-radius: 20px;
+      padding: 34px 30px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.6);
+      overflow: hidden;
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+    [data-theme="dark"] .path-card { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+    .path-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(26,86,255,0.12); border-color: rgba(26,86,255,0.35); }
+    .path-card-icon { font-size: 34px; margin-bottom: 16px; display: block; }
+    .path-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.4rem; margin: 0 0 10px; }
+    .path-card p { font-family: 'Poppins', sans-serif; font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0 0 20px; }
+    .path-card--volunteer .path-card-icon { color: #059669; }
+    .path-card--career .path-card-icon { color: #1a56ff; }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0 0 44px;
+    }
+    .filter-tab {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: transparent;
+      cursor: pointer;
+      transition: all .25s ease;
+      color: inherit;
+    }
+    [data-theme="dark"] .filter-tab { border-color: rgba(255,255,255,0.16); }
+    .filter-tab:hover { border-color: #1a56ff; color: #1a56ff; }
+    .filter-tab.active { background: #1a56ff; border-color: #1a56ff; color: #fff; }
+
+    /* Job / opportunity cards */
+    .jobs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .job-card {
+      position: relative;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.55);
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+    [data-theme="dark"] .job-card { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); }
+    .job-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+    .job-card.hidden { display: none; }
+    .job-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .job-badge {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .job-badge--career { background: rgba(26,86,255,0.1); color: #1a56ff; }
+    .job-badge--volunteer { background: rgba(5,150,105,0.1); color: #059669; }
+    .job-type {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.55;
+      white-space: nowrap;
+    }
+    .job-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.18rem; margin: 0 0 6px; }
+    .job-company { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; color: #1a56ff; margin: 0 0 14px; }
+    .job-desc { font-family: 'Poppins', sans-serif; font-size: 14.5px; line-height: 1.65; opacity: 0.78; margin: 0 0 18px; }
+    .job-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+    .job-meta-item { display: flex; align-items: center; gap: 6px; font-family: 'Poppins', sans-serif; font-size: 12.5px; opacity: 0.65; }
+    .job-card-footer { display: flex; }
+
+    /* Steps / how to apply */
+    .apply-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      counter-reset: step;
+    }
+    .apply-step { position: relative; padding: 26px 22px 22px; border-radius: 16px; border: 1px dashed rgba(0,0,0,0.14); }
+    [data-theme="dark"] .apply-step { border-color: rgba(255,255,255,0.16); }
+    .apply-step-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: #fff;
+      background: #1a56ff;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .apply-step h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; margin: 0 0 8px; }
+    .apply-step p { font-family: 'Poppins', sans-serif; font-size: 13.5px; opacity: 0.72; line-height: 1.6; margin: 0; }
+
+    /* Application form extras: applying-as toggle */
+    .apply-toggle { display: flex; gap: 12px; margin-bottom: 22px; }
+    .apply-toggle-option {
+      flex: 1;
+      cursor: pointer;
+      text-align: center;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(0,0,0,0.12);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all .2s ease;
+    }
+    [data-theme="dark"] .apply-toggle-option { border-color: rgba(255,255,255,0.16); }
+    .apply-toggle-option input { display: none; }
+    .apply-toggle-option.active { border-color: #1a56ff; background: rgba(26,86,255,0.08); color: #1a56ff; }
+
+    .form-file-hint { font-family: 'Poppins', sans-serif; font-size: 12px; opacity: 0.55; margin-top: 6px; }
+
+    /* ── Apply Modal ─────────────────────────────────── */
+    .apply-modal {
+      position: fixed; inset: 0; z-index: 9500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      opacity: 0; visibility: hidden;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .apply-modal.open { opacity: 1; visibility: visible; }
+    .apply-modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.25rem;
+      max-width: 480px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      transition: transform .3s ease;
+    }
+    .apply-modal.open .apply-modal-card { transform: translateY(0); }
+    .apply-modal-close {
+      position: absolute; top: 1.1rem; right: 1.1rem;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg-glass); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--text-muted);
+      transition: background .25s ease;
+    }
+    .apply-modal-close:hover { background: var(--bg-glass-hover); color: var(--text-primary); }
+    .apply-modal-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800; font-size: 1.4rem;
+      margin: 0 0 6px; padding-right: 2rem;
+    }
+    .apply-modal-sub {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13.5px; opacity: .7; margin: 0 0 24px;
+    }
+    .apply-modal-file {
+      background: var(--bg-secondary);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 10px;
+      transition: border-color .2s ease;
+    }
+    .apply-modal-file:hover { border-color: var(--royal-blue); }
+    .apply-modal-file input[type="file"] { display: none; }
+    .apply-modal-file-name { opacity: .65; }
+    .apply-modal-progress {
+      height: 4px; border-radius: 99px; background: var(--border);
+      overflow: hidden; margin-top: 10px; display: none;
+    }
+    .apply-modal-progress-bar {
+      height: 100%; width: 0%; background: var(--grad-blue-green);
+      transition: width .2s ease;
+    }
+
+    @media (max-width: 900px) {
+      .path-grid { grid-template-columns: 1fr; }
+      .jobs-grid { grid-template-columns: 1fr; }
+      .apply-steps { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .apply-steps { grid-template-columns: 1fr; }
+      .apply-toggle { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PAGE LOADER -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="page-loader" class="page-loader" aria-hidden="true">
+    <div class="loader-inner">
+      <div class="loader-logo">
+        <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini Elite Enterprises" class="loader-logo-img" />
+      </div>
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
+      <p class="loader-text">Innovating Africa's Future</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- NAVIGATION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <header class="site-header" id="site-header" role="banner">
+    <nav class="navbar" aria-label="Main navigation">
+      <a href="index.html#home" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+        <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini Elite Enterprises" class="nav-logo-img" />
+        <span class="nav-logo-text">
+          <span class="logo-name">Marvini</span>
+          <span class="logo-sub">Elite Enterprises</span>
+        </span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#companies" class="nav-link">Companies</a></li>
+        <li><a href="index.html#team" class="nav-link">Team</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+        <li><a href="careers.html" class="nav-link active">Careers/ Volunteer</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☽</span>
+        </button>
+        <a href="#opportunities" class="btn btn-primary btn-sm">View Openings</a>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
+    <ul class="mobile-links" role="list">
+      <li><a href="index.html#home" class="mobile-link">Home</a></li>
+      <li><a href="index.html#about" class="mobile-link">About</a></li>
+      <li><a href="index.html#companies" class="mobile-link">Companies</a></li>
+      <li><a href="index.html#team" class="mobile-link">Team</a></li>
+      <li><a href="careers.html" class="mobile-link">Careers</a></li>
+      <li><a href="index.html#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE HERO -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="hero page-hero" aria-label="Careers and Volunteering Hero">
+      <div class="hero-gradient-orb orb-1" aria-hidden="true"></div>
+      <div class="hero-gradient-orb orb-2" aria-hidden="true"></div>
+
+      <div class="container">
+        <div class="page-hero-eyebrow reveal-fade-up">
+          <span class="badge-dot"></span>
+          Careers & Volunteering
+        </div>
+        <h1 class="page-hero-title reveal-fade-up delay-1">
+          Build Africa's Future.<br /><span class="accent-line">With Us.</span>
+        </h1>
+        <p class="page-hero-sub reveal-fade-up delay-2">
+          Whether you're looking for a career or a cause, Marvini Elite Enterprises gives you a seat at the table across mobility, food systems, events, agriculture and consultancy — all in service of a smarter, stronger Africa.
+        </p>
+        <div class="page-hero-cta reveal-fade-up delay-3">
+          <a href="#opportunities" class="btn btn-primary btn-lg">
+            Browse Opportunities
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#apply" class="btn btn-ghost btn-lg" id="heroApplyBtn">Apply Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- WHY JOIN US -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section about-section" aria-label="Why Join Marvini">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Why Marvini</span>
+          <h2 class="section-title">Two Ways to<br />Get Involved.</h2>
+          <p class="section-subtitle">Every path into Marvini — paid or volunteer — plugs directly into real subsidiaries solving real problems.</p>
+        </div>
+
+        <div class="path-grid reveal-fade-up">
+          <div class="path-card path-card--career">
+            <span class="path-card-icon" aria-hidden="true">💼</span>
+            <h3>Careers</h3>
+            <p>Join a subsidiary team full-time or part-time and help build the platforms powering M-Smart, M-Digital Food Chain, M-Events & Festivals, M-Farms and M-Consultancy & Training.</p>
+            <a href="#opportunities" class="btn btn-outline btn-sm">See Open Roles</a>
+          </div>
+          <div class="path-card path-card--volunteer">
+            <span class="path-card-icon" aria-hidden="true">🤝</span>
+            <h3>Volunteer</h3>
+            <p>Give your time and skills to community-facing programs — from farmer training days to festival production — and see the impact firsthand.</p>
+            <a href="#opportunities" class="btn btn-outline btn-sm">See Volunteer Programs</a>
+          </div>
+        </div>
+
+        <!-- Reuse the same 3-column value grid pattern for perks -->
+        <div class="values-section" id="perks" style="margin-top:70px;">
+          <div class="section-header reveal-fade-up">
+            <span class="section-eyebrow">What You Get</span>
+            <h2 class="section-title">Life at Marvini</h2>
+          </div>
+          <div class="values-grid">
+            <div class="value-card reveal-fade-up delay-1">
+              <div class="value-icon" aria-hidden="true">📈</div>
+              <h4 class="value-name">Real Ownership</h4>
+              <p class="value-desc">Work directly on platforms used by real customers, not internal side projects.</p>
+            </div>
+            <div class="value-card reveal-fade-up delay-2">
+              <div class="value-icon" aria-hidden="true">🌍</div>
+              <h4 class="value-name">Cross-Sector Exposure</h4>
+              <p class="value-desc">Move across mobility, food, events, agriculture and consulting as the group grows.</p>
+            </div>
+            <div class="value-card reveal-fade-up delay-3">
+              <div class="value-icon" aria-hidden="true">🎓</div>
+              <h4 class="value-name">Mentorship</h4>
+              <p class="value-desc">Learn directly from senior leaders across engineering, finance, operations and strategy.</p>
+            </div>
+            <div class="value-card reveal-fade-up delay-4">
+              <div class="value-icon" aria-hidden="true">🕒</div>
+              <h4 class="value-name">Flexible Paths</h4>
+              <p class="value-desc">Full-time, part-time, project-based or volunteer — contribute the way that fits your life.</p>
+            </div>
+            <div class="value-card reveal-fade-up delay-5">
+              <div class="value-icon" aria-hidden="true">🏆</div>
+              <h4 class="value-name">Recognised Impact</h4>
+              <p class="value-desc">Volunteers and staff are credited publicly for the programs and launches they help ship.</p>
+            </div>
+            <div class="value-card reveal-fade-up delay-6">
+              <div class="value-icon" aria-hidden="true">🔗</div>
+              <h4 class="value-name">A Real Network</h4>
+              <p class="value-desc">Join partners like DVLA Ghana, GIPC, GEPA and NBSSI through group-wide initiatives.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- OPEN OPPORTUNITIES -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section id="opportunities" class="section companies-section" aria-label="Open Opportunities">
+      <div class="section-bg-accent" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Open Now</span>
+          <h2 class="section-title">Careers &<br />Volunteer Openings</h2>
+          <p class="section-subtitle">Filter by type or subsidiary to find where you fit.</p>
+        </div>
+
+        <div class="filter-tabs reveal-fade-up" role="tablist" aria-label="Filter opportunities">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="career">Careers</button>
+          <button class="filter-tab" data-filter="volunteer">Volunteer</button>
+          <button class="filter-tab" data-filter="msmart">M-Smart</button>
+          <button class="filter-tab" data-filter="mfood">M-Digital Food</button>
+          <button class="filter-tab" data-filter="mevents">M-Events</button>
+          <button class="filter-tab" data-filter="mfarms">M-Farms</button>
+          <button class="filter-tab" data-filter="mconsultancy">M-Consultancy</button>
+        </div>
+
+        <div class="jobs-grid" id="jobsGrid">
+
+          <!-- Career: M-Smart -->
+          <article class="job-card reveal-fade-up delay-1" data-type="career" data-company="msmart">
+            <div class="job-card-top">
+              <span class="job-badge job-badge--career">Career</span>
+              <span class="job-type">Full-time · Accra</span>
+            </div>
+            <h3 class="job-title">Frontend Engineer</h3>
+            <p class="job-company">M-Smart Driving School Solution</p>
+            <p class="job-desc">Build and maintain the scheduling, payments and DVLA-compliance interfaces used by driving schools across Ghana.</p>
+            <div class="job-meta">
+              <span class="job-meta-item">🧩 React / TypeScript</span>
+              <span class="job-meta-item">📍 Hybrid</span>
+            </div>
+            <div class="job-card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="Frontend Engineer — M-Smart Driving School Solution" data-track="career">Apply Now</a>
+            </div>
+          </article>
+
+          <!-- Career: M-Digital Food Chain -->
+          <article class="job-card reveal-fade-up delay-2" data-type="career" data-company="mfood">
+            <div class="job-card-top">
+              <span class="job-badge job-badge--career">Career</span>
+              <span class="job-type">Full-time · Accra</span>
+            </div>
+            <h3 class="job-title">Supply Chain Operations Associate</h3>
+            <p class="job-company">M-Digital Food Chain</p>
+            <p class="job-desc">Coordinate farmer onboarding, logistics and vendor relationships across the digital food distribution network.</p>
+            <div class="job-meta">
+              <span class="job-meta-item">🥦 Operations</span>
+              <span class="job-meta-item">📍 On-site</span>
+            </div>
+            <div class="job-card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="Supply Chain Operations Associate — M-Digital Food Chain" data-track="career">Apply Now</a>
+            </div>
+          </article>
+
+          <!-- Volunteer: M-Farms -->
+          <article class="job-card reveal-fade-up delay-3" data-type="volunteer" data-company="mfarms">
+            <div class="job-card-top">
+              <span class="job-badge job-badge--volunteer">Volunteer</span>
+              <span class="job-type">Weekends · Rotating regions</span>
+            </div>
+            <h3 class="job-title">Farmer Training Volunteer</h3>
+            <p class="job-company">M-Farms</p>
+            <p class="job-desc">Support field days that introduce smallholder farmers to modern techniques, tools and direct market access.</p>
+            <div class="job-meta">
+              <span class="job-meta-item">🌾 Community</span>
+              <span class="job-meta-item">📍 Regional travel</span>
+            </div>
+            <div class="job-card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="Farmer Training Volunteer — M-Farms" data-track="volunteer">Apply Now</a>
+            </div>
+          </article>
+
+          <!-- Volunteer: M-Events -->
+          <article class="job-card reveal-fade-up delay-4" data-type="volunteer" data-company="mevents">
+            <div class="job-card-top">
+              <span class="job-badge job-badge--volunteer">Volunteer</span>
+              <span class="job-type">Event-based</span>
+            </div>
+            <h3 class="job-title">Festival Production Volunteer</h3>
+            <p class="job-company">M-Events & Festivals</p>
+            <p class="job-desc">Join the crew behind Marvini's festivals and cultural experiences — from setup to guest experience on event day.</p>
+            <div class="job-meta">
+              <span class="job-meta-item">🎪 Live events</span>
+              <span class="job-meta-item">📍 Various venues</span>
+            </div>
+            <div class="job-card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="Festival Production Volunteer — M-Events & Festivals" data-track="volunteer">Apply Now</a>
+            </div>
+          </article>
+
+          <!-- Career: M-Consultancy & Training -->
+          <article class="job-card reveal-fade-up delay-5" data-type="career" data-company="mconsultancy">
+            <div class="job-card-top">
+              <span class="job-badge job-badge--career">Career</span>
+              <span class="job-type">Part-time · Remote/Hybrid</span>
+            </div>
+            <h3 class="job-title">Training Program Facilitator</h3>
+            <p class="job-company">M-Consultancy & Training</p>
+            <p class="job-desc">Deliver capacity-building workshops for businesses and institutions across Marvini's consultancy client base.</p>
+            <div class="job-meta">
+              <span class="job-meta-item">🎓 Facilitation</span>
+              <span class="job-meta-item">📍 Flexible</span>
+            </div>
+            <div class="job-card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="Training Program Facilitator — M-Consultancy & Training" data-track="career">Apply Now</a>
+            </div>
+          </article>
+
+          <!-- Volunteer: M-Smart -->
+          <article class="job-card reveal-fade-up delay-6" data-type="volunteer" data-company="msmart">
+            <div class="job-card-top">
+              <span class="job-badge job-badge--volunteer">Volunteer</span>
+              <span class="job-type">Ongoing</span>
+            </div>
+            <h3 class="job-title">Road Safety Outreach Volunteer</h3>
+            <p class="job-company">M-Smart Driving School Solution</p>
+            <p class="job-desc">Support community road-safety awareness sessions run alongside partner driving schools.</p>
+            <div class="job-meta">
+              <span class="job-meta-item">🚗 Outreach</span>
+              <span class="job-meta-item">📍 Accra & regions</span>
+            </div>
+            <div class="job-card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="Road Safety Outreach Volunteer — M-Smart Driving School Solution" data-track="volunteer">Apply Now</a>
+            </div>
+          </article>
+
+        </div>
+
+        <p id="noResults" class="section-subtitle" style="display:none; text-align:center; margin-top:32px;">No openings match that filter right now — check back soon or send a general application below.</p>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- HOW TO APPLY -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section innovation-section" aria-label="How to Apply">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">The Process</span>
+          <h2 class="section-title">How to Apply</h2>
+          <p class="section-subtitle">A simple, transparent path from application to your first day.</p>
+        </div>
+
+        <div class="apply-steps reveal-fade-up">
+          <div class="apply-step">
+            <div class="apply-step-num">1</div>
+            <h4>Apply</h4>
+            <p>Submit the form below with your details and the role or program you're interested in.</p>
+          </div>
+          <div class="apply-step">
+            <div class="apply-step-num">2</div>
+            <h4>Review</h4>
+            <p>The relevant subsidiary lead reviews your application, usually within 5 business days.</p>
+          </div>
+          <div class="apply-step">
+            <div class="apply-step-num">3</div>
+            <h4>Conversation</h4>
+            <p>A short call or interview to talk through fit, expectations and timelines.</p>
+          </div>
+          <div class="apply-step">
+            <div class="apply-step-num">4</div>
+            <h4>Onboard</h4>
+            <p>Get set up with your team, tools and first project or program assignment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- APPLICATION FORM -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section id="apply" class="section contact-section" aria-label="Apply">
+      <div class="section-bg-accent" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Get Started</span>
+          <h2 class="section-title">Submit Your Application</h2>
+          <p class="section-subtitle">Tell us a bit about yourself and where you'd like to contribute.</p>
+        </div>
+
+        <div class="contact-inner">
+          <div class="contact-info reveal-fade-left">
+            <div class="contact-info-item">
+              <div class="contact-icon" aria-hidden="true">📍</div>
+              <div>
+                <strong>Headquarters</strong>
+                <p>Accra, Ghana, West Africa</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon" aria-hidden="true">📧</div>
+              <div>
+                <strong>Careers Email</strong>
+                <p><a href="mailto:careers@marvini.com">careers@marvini.com</a></p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon" aria-hidden="true">⏱️</div>
+              <div>
+                <strong>Response Time</strong>
+                <p>We reply to every application within 5 business days.</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon" aria-hidden="true">🌐</div>
+              <div>
+                <strong>Follow Us</strong>
+                <div class="social-links">
+                  <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+                  <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+                  <a href="#" class="social-link" aria-label="Facebook">f</a>
+                  <a href="#" class="social-link" aria-label="Instagram">◎</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form reveal-fade-right" id="applyForm" novalidate aria-label="Career and volunteer application form">
+
+            <div class="apply-toggle" role="radiogroup" aria-label="Applying as">
+              <label class="apply-toggle-option active">
+                <input type="radio" name="applyType" value="career" checked />
+                💼 Career
+              </label>
+              <label class="apply-toggle-option">
+                <input type="radio" name="applyType" value="volunteer" />
+                🤝 Volunteer
+              </label>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="applyName" class="form-label">Full Name <span aria-hidden="true">*</span></label>
+                <input type="text" id="applyName" name="name" class="form-input" placeholder="Your full name" required autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="applyEmail" class="form-label">Email Address <span aria-hidden="true">*</span></label>
+                <input type="email" id="applyEmail" name="email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="applyPhone" class="form-label">Phone Number</label>
+                <input type="tel" id="applyPhone" name="phone" class="form-input" placeholder="+233 XX XXX XXXX" autocomplete="tel" />
+              </div>
+              <div class="form-group">
+                <label for="applyCompany" class="form-label">Subsidiary <span aria-hidden="true">*</span></label>
+                <select id="applyCompany" name="company" class="form-input form-select" required>
+                  <option value="">Select subsidiary…</option>
+                  <option value="msmart">M-Smart Driving School Solution</option>
+                  <option value="mfood">M-Digital Food Chain</option>
+                  <option value="mevents">M-Events & Festivals</option>
+                  <option value="mfarms">M-Farms</option>
+                  <option value="mconsultancy">M-Consultancy & Training</option>
+                  <option value="general">Not sure / General</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="applyRole" class="form-label">Role or Program of Interest <span aria-hidden="true">*</span></label>
+              <input type="text" id="applyRole" name="role" class="form-input" placeholder="e.g. Frontend Engineer, Farmer Training Volunteer" required />
+            </div>
+
+            <div class="form-group">
+              <label for="applyResume" class="form-label">Resume / Portfolio Link</label>
+              <input type="url" id="applyResume" name="resumeLink" class="form-input" placeholder="Link to your CV, LinkedIn or portfolio" />
+              <p class="form-file-hint">Paste a link (Google Drive, LinkedIn, portfolio site) — file upload isn't required.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="applyMessage" class="form-label">Why do you want to join Marvini? <span aria-hidden="true">*</span></label>
+              <textarea id="applyMessage" name="message" class="form-input form-textarea" placeholder="Tell us about your experience and why this role or program interests you…" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-full" id="applySubmit">
+              <span class="btn-text">Submit Application</span>
+              <span class="btn-spinner" style="display:none;" aria-hidden="true">⟳</span>
+            </button>
+            <div class="form-success" id="applySuccess" role="alert" aria-live="polite" style="display:none;">
+              ✅ Thank you! Your application has been received. We'll be in touch soon.
+            </div>
+            <div class="form-error" id="applyError" role="alert" aria-live="polite" style="display:none;">
+              ❌ Something went wrong. Please try again or email us directly.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+
+          <div class="footer-brand">
+            <a href="index.html#home" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+              <img src="img/marvini_elite_enterprise_logo.png" alt="Marvini Elite Enterprises" class="footer-logo-img" />
+            </a>
+            <p class="footer-tagline">Innovating Africa's Future</p>
+            <p class="footer-about">Building African-led solutions that are innovative, sustainable, and globally competitive.</p>
+            <div class="footer-social">
+              <a href="#" class="fsocial-link" aria-label="LinkedIn">in</a>
+              <a href="#" class="fsocial-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="fsocial-link" aria-label="Facebook">f</a>
+              <a href="#" class="fsocial-link" aria-label="Instagram">◎</a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Company</h4>
+            <ul class="footer-links" role="list">
+              <li><a href="index.html#about" class="footer-link">About Us</a></li>
+              <li><a href="index.html#ceo" class="footer-link">CEO Message</a></li>
+              <li><a href="index.html#values" class="footer-link">Core Values</a></li>
+              <li><a href="index.html#team" class="footer-link">Meet the Team</a></li>
+              <li><a href="careers.html" class="footer-link">Careers & Volunteering</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Our Companies</h4>
+            <ul class="footer-links" role="list">
+              <li><a href="https://marvini-smart-driving-school-solution.web.app/" class="footer-link">M-Smart Driving School</a></li>
+              <li><a href="index.html#companies" class="footer-link">M-Digital Food Chain</a></li>
+              <li><a href="index.html#companies" class="footer-link">M-Events & Festivals</a></li>
+              <li><a href="index.html#companies" class="footer-link">M-Consultancy & Training</a></li>
+              <li><a href="index.html#companies" class="footer-link">M-Farms</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Join Us</h4>
+            <p class="footer-newsletter-text">Ready to contribute? Browse open roles and volunteer programs.</p>
+            <a href="#opportunities" class="btn btn-primary btn-sm" style="margin-top:6px;">View Openings</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="footer-copy">&copy; <span id="footerYear">2025</span> Marvini Elite Enterprises. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Privacy Policy</a>
+          <a href="#" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+  <!-- Apply Modal -->
+  <div class="apply-modal" id="applyModal" role="dialog" aria-label="Job application form" aria-hidden="true">
+    <div class="apply-modal-card">
+      <button class="apply-modal-close" id="applyModalClose" aria-label="Close">✕</button>
+      <h3 class="apply-modal-title">Apply Now</h3>
+      <p class="apply-modal-sub">Fill in your details below — we'll get back to you within 5 business days.</p>
+
+      <form id="applyModalForm" novalidate>
+        <div class="form-group" style="margin-bottom:1.1rem;">
+          <label for="modalFullName" class="form-label">Full Name <span aria-hidden="true">*</span></label>
+          <input type="text" id="modalFullName" name="fullName" class="form-input" placeholder="Your full name" required autocomplete="name" />
+        </div>
+
+        <div class="form-group" style="margin-bottom:1.1rem;">
+          <label for="modalEmail" class="form-label">Email Address <span aria-hidden="true">*</span></label>
+          <input type="email" id="modalEmail" name="email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-group" style="margin-bottom:1.1rem;">
+          <label for="modalPhone" class="form-label">Phone Number <span aria-hidden="true">*</span></label>
+          <input type="tel" id="modalPhone" name="phone" class="form-input" placeholder="+233 XX XXX XXXX" required autocomplete="tel" />
+        </div>
+
+        <div class="form-group" style="margin-bottom:1.1rem;">
+          <label for="modalJobSelect" class="form-label">Select Job <span aria-hidden="true">*</span></label>
+          <select id="modalJobSelect" name="job" class="form-input form-select" required>
+            <option value="">Select a role…</option>
+            <option value="Frontend Engineer — M-Smart Driving School Solution">Frontend Engineer — M-Smart</option>
+            <option value="Supply Chain Operations Associate — M-Digital Food Chain">Supply Chain Operations Associate — M-Digital Food Chain</option>
+            <option value="Farmer Training Volunteer — M-Farms">Farmer Training Volunteer — M-Farms</option>
+            <option value="Festival Production Volunteer — M-Events & Festivals">Festival Production Volunteer — M-Events</option>
+            <option value="Training Program Facilitator — M-Consultancy & Training">Training Program Facilitator — M-Consultancy</option>
+            <option value="Road Safety Outreach Volunteer — M-Smart Driving School Solution">Road Safety Outreach Volunteer — M-Smart</option>
+            <option value="General / Not Listed">General / Not Listed</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0.4rem;">
+          <label class="form-label">Attach CV <span aria-hidden="true">*</span></label>
+          <label class="apply-modal-file" id="modalFileLabel">
+            📎 <span class="apply-modal-file-name" id="modalFileName">Choose a PDF or Word file…</span>
+            <input type="file" id="modalCvFile" name="cv" accept=".pdf,.doc,.docx" required />
+          </label>
+          <div class="apply-modal-progress" id="modalUploadProgress">
+            <div class="apply-modal-progress-bar" id="modalUploadProgressBar"></div>
+          </div>
+          <p class="form-file-hint">PDF or Word, up to 10MB.</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-full" id="modalSubmitBtn" style="margin-top:1.1rem;">
+          <span class="btn-text">Submit Application</span>
+          <span class="btn-spinner" style="display:none;" aria-hidden="true">⟳</span>
+        </button>
+        <div class="form-success" id="modalSuccess" role="alert" aria-live="polite" style="display:none;">
+          ✅ Thank you! Your application has been received. We'll be in touch soon.
+        </div>
+        <div class="form-error" id="modalError" role="alert" aria-live="polite" style="display:none;">
+          ❌ Something went wrong. Please try again or email us directly.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ── LOADER DISMISS ──────────────────────────────────
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+          loader.classList.add('hidden');
+          setTimeout(() => loader.remove(), 600);
+        }
+      }, 1200);
+    });
+
+    // ── STICKY HEADER ───────────────────────────────────
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+      const btt = document.getElementById('backToTop');
+      if (btt) btt.classList.toggle('visible', window.scrollY > 400);
+    });
+
+    // ── BACK TO TOP ─────────────────────────────────────
+    document.getElementById('backToTop')?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ── THEME TOGGLE ────────────────────────────────────
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    });
+
+    // ── MOBILE MENU ─────────────────────────────────────
+    const hamburger = document.getElementById('navHamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger?.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      mobileMenu.setAttribute('aria-hidden', !isOpen);
+      document.body.classList.toggle('no-scroll', isOpen);
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('no-scroll');
+      });
+    });
+
+    // ── REVEAL ON SCROLL ────────────────────────────────
+    const revealStyle = document.createElement('style');
+    revealStyle.textContent = `
+      .reveal-fade-up, .reveal-fade-left, .reveal-fade-right {
+        opacity: 0; transform: translateY(40px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+      .reveal-fade-left  { transform: translateX(-40px); }
+      .reveal-fade-right { transform: translateX( 40px); }
+      .revealed { opacity: 1 !important; transform: none !important; }
+      .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; }
+      .delay-3 { transition-delay: 0.3s; } .delay-4 { transition-delay: 0.4s; }
+      .delay-5 { transition-delay: 0.5s; } .delay-6 { transition-delay: 0.6s; }
+    `;
+    document.head.appendChild(revealStyle);
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); revealObserver.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal-fade-up, .reveal-fade-left, .reveal-fade-right')
+      .forEach(el => revealObserver.observe(el));
+
+    // ── JOB FILTERING ───────────────────────────────────
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const jobCards = document.querySelectorAll('.job-card');
+    const noResults = document.getElementById('noResults');
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        let visibleCount = 0;
+        jobCards.forEach(card => {
+          const matches = filter === 'all' || card.dataset.type === filter || card.dataset.company === filter;
+          card.classList.toggle('hidden', !matches);
+          if (matches) visibleCount++;
+        });
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      });
+    });
+
+    // ── APPLY LINKS: OPEN MODAL + PRE-FILL ──────────────
+    document.querySelectorAll('.apply-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const roleField = document.getElementById('applyRole');
+        if (roleField && link.dataset.role) roleField.value = link.dataset.role;
+        const track = link.dataset.track;
+        if (track) {
+          document.querySelectorAll('.apply-toggle-option').forEach(opt => {
+            const input = opt.querySelector('input');
+            const isMatch = input.value === track;
+            input.checked = isMatch;
+            opt.classList.toggle('active', isMatch);
+          });
+        }
+        openApplyModal(link.dataset.role || '');
+      });
+    });
+
+    document.getElementById('heroApplyBtn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      openApplyModal('');
+    });
+
+    // ── APPLY TYPE TOGGLE ───────────────────────────────
+    document.querySelectorAll('.apply-toggle-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.apply-toggle-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        opt.querySelector('input').checked = true;
+      });
+    });
+
+    // ── APPLICATION FORM SUBMIT (no backend yet) ────────
+    document.getElementById('applyForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('applySuccess').style.display = 'block';
+      document.getElementById('applyError').style.display = 'none';
+      e.target.reset();
+      document.querySelectorAll('.apply-toggle-option').forEach((o, i) => o.classList.toggle('active', i === 0));
+      setTimeout(() => document.getElementById('applySuccess').style.display = 'none', 5000);
+    });
+
+    // ── FOOTER YEAR ──────────────────────────────────────
+    const yr = document.getElementById('footerYear');
+    if (yr) yr.textContent = new Date().getFullYear();
+
+    // ── APPLY MODAL: OPEN/CLOSE ──────────────────────────
+    const applyModal = document.getElementById('applyModal');
+    function openApplyModal(prefillJob) {
+      const jobSelect = document.getElementById('modalJobSelect');
+      if (jobSelect && prefillJob) {
+        const match = [...jobSelect.options].find(o => o.value === prefillJob);
+        jobSelect.value = match ? prefillJob : '';
+      }
+      applyModal.classList.add('open');
+      applyModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+    }
+    function closeApplyModal() {
+      applyModal.classList.remove('open');
+      applyModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+    document.getElementById('applyModalClose')?.addEventListener('click', closeApplyModal);
+    applyModal?.addEventListener('click', e => { if (e.target === applyModal) closeApplyModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeApplyModal(); });
+
+    // ── APPLY MODAL: FILE NAME PREVIEW ───────────────────
+    const modalCvFile = document.getElementById('modalCvFile');
+    modalCvFile?.addEventListener('change', () => {
+      const nameEl = document.getElementById('modalFileName');
+      nameEl.textContent = modalCvFile.files[0] ? modalCvFile.files[0].name : 'Choose a PDF or Word file…';
+    });
+
+    // ── CLOUDINARY CONFIG ────────────────────────────────
+    const CLOUDINARY_CLOUD_NAME = 'YOUR_CLOUD_NAME';
+    const CLOUDINARY_UPLOAD_PRESET = 'YOUR_UNSIGNED_UPLOAD_PRESET';
+
+    async function uploadCvToCloudinary(file) {
+      const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      const progressWrap = document.getElementById('modalUploadProgress');
+      const progressBar = document.getElementById('modalUploadProgressBar');
+      progressWrap.style.display = 'block';
+      progressBar.style.width = '0%';
+
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url);
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            progressBar.style.width = Math.round((e.loaded / e.total) * 100) + '%';
+          }
+        };
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(JSON.parse(xhr.responseText).secure_url);
+          } else {
+            reject(new Error('Upload failed'));
+          }
+        };
+        xhr.onerror = () => reject(new Error('Upload failed'));
+        xhr.send(formData);
+      });
+    }
+
+    // ── APPLY MODAL: SUBMIT ──────────────────────────────
+    document.getElementById('applyModalForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('modalSubmitBtn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnSpinner = submitBtn.querySelector('.btn-spinner');
+      const successEl = document.getElementById('modalSuccess');
+      const errorEl = document.getElementById('modalError');
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+
+      const file = document.getElementById('modalCvFile').files[0];
+      if (!file) return;
+
+      submitBtn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+
+      try {
+        const cvUrl = await uploadCvToCloudinary(file);
+
+        const payload = {
+          fullName: document.getElementById('modalFullName').value,
+          email: document.getElementById('modalEmail').value,
+          phone: document.getElementById('modalPhone').value,
+          job: document.getElementById('modalJobSelect').value,
+          cvUrl
+        };
+        console.log('Application submitted:', payload);
+        // TODO: send `payload` to your backend / Firestore / email service here
+
+        successEl.style.display = 'block';
+        e.target.reset();
+        document.getElementById('modalFileName').textContent = 'Choose a PDF or Word file…';
+        document.getElementById('modalUploadProgress').style.display = 'none';
+        setTimeout(() => { closeApplyModal(); successEl.style.display = 'none'; }, 2500);
+      } catch (err) {
+        errorEl.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

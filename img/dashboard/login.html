@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Login | Marvini Elite Enterprises</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --royal-blue:#1A56FF; --emerald:#059669; --emerald-light:#10B981;
+    --bg-primary:#080C14; --bg-card:#111827; --border:rgba(255,255,255,0.08);
+    --text-primary:#F1F5F9; --text-muted:#94A3B8;
+    --grad-blue-green: linear-gradient(135deg, #1A56FF 0%, #059669 100%);
+    --radius-lg:24px; --radius-md:16px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:'Poppins', sans-serif;
+    background:var(--bg-primary);
+    color:var(--text-primary);
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:1.5rem;
+    background-image: radial-gradient(ellipse at 20% 20%, rgba(26,86,255,0.18) 0%, transparent 50%),
+                       radial-gradient(ellipse at 80% 80%, rgba(5,150,105,0.15) 0%, transparent 50%);
+  }
+  .login-card {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:2.75rem;
+    width:100%;
+    max-width:400px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  }
+  .login-logo { text-align:center; margin-bottom:1.75rem; }
+  .login-logo-mark {
+    width:56px; height:56px; border-radius:16px;
+    background:var(--grad-blue-green);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 1rem;
+    font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4rem; color:#fff;
+  }
+  .login-title { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.35rem; text-align:center; margin-bottom:0.35rem; }
+  .login-sub { font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:2rem; }
+  .form-group { margin-bottom:1.1rem; }
+  label { display:block; font-size:0.82rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem; }
+  input {
+    width:100%; padding:0.8rem 1rem;
+    background:rgba(255,255,255,0.04);
+    border:1.5px solid var(--border);
+    border-radius:var(--radius-md);
+    color:var(--text-primary); font-size:0.95rem; font-family:inherit;
+    transition: border-color 0.2s ease;
+  }
+  input:focus { outline:none; border-color:var(--royal-blue); }
+  .btn-login {
+    width:100%; padding:0.85rem; margin-top:0.5rem;
+    background:var(--grad-blue-green); color:#fff; border:none;
+    border-radius:999px; font-weight:600; font-size:0.95rem; cursor:pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow:0 4px 20px rgba(26,86,255,0.3);
+    display:flex; align-items:center; justify-content:center; gap:0.5rem;
+  }
+  .btn-login:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,86,255,0.45); }
+  .btn-login:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+  .error-msg {
+    background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3);
+    color:#F87171; padding:0.7rem 1rem; border-radius:var(--radius-md);
+    font-size:0.85rem; margin-bottom:1.1rem; display:none;
+  }
+  .spinner {
+    width:16px; height:16px; border:2px solid rgba(255,255,255,0.4);
+    border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; display:none;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .back-link { display:block; text-align:center; margin-top:1.5rem; font-size:0.82rem; color:var(--text-muted); text-decoration:none; }
+  .back-link:hover { color:var(--text-primary); }
+</style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="../marvini_elite_enterprise_logo1.png" alt="Marvini Elite Enterprises Logo" class="login-logo-mark" />
+    </div>
+    <h1 class="login-title">Admin Dashboard</h1>
+    <p class="login-sub">Marvini Elite Enterprises</p>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@marvini.com" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn">
+        <span id="loginBtnText">Sign In</span>
+        <span class="spinner" id="loginSpinner"></span>
+      </button>
+    </form>
+
+    <a href="../index.html" class="back-link">← Back to website</a>
+  </div>
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <script>
+    // If already logged in, skip straight to dashboard
+    auth.onAuthStateChanged(user => {
+      if (user) window.location.href = 'index.html';
+    });
+
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginBtnText = document.getElementById('loginBtnText');
+    const loginSpinner = document.getElementById('loginSpinner');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtnText.style.display = 'none';
+      loginSpinner.style.display = 'inline-block';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        window.location.href = 'index.html';
+      } catch (err) {
+        let msg = 'Something went wrong. Please try again.';
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+          msg = 'Incorrect email or password.';
+        } else if (err.code === 'auth/invalid-email') {
+          msg = 'Please enter a valid email address.';
+        } else if (err.code === 'auth/too-many-requests') {
+          msg = 'Too many attempts. Please wait a moment and try again.';
+        }
+        errorMsg.textContent = msg;
+        errorMsg.style.display = 'block';
+      } finally {
+        loginBtn.disabled = false;
+        loginBtnText.style.display = 'inline';
+        loginSpinner.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

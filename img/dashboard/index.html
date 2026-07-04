@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin | Marvini Elite Enterprises</title>
+<meta name="robots" content="noindex, nofollow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- LOGIN SCREEN -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">M</div>
+    <h1 class="login-title">Marvini Admin</h1>
+    <p class="login-sub">Sign in to manage the Marvini Elite Enterprises site</p>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm">
+      <div class="login-field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@marvini.com" required autocomplete="username" />
+      </div>
+      <div class="login-field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ADMIN SHELL -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="admin-shell" id="adminShell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-mark">M</div>
+      <div class="sidebar-brand-text">
+        <strong>Marvini</strong>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+
+    <ul class="nav-list" id="navList">
+      <li><button class="nav-item active" data-panel="dashboard"><span class="nav-icon">📊</span> Dashboard</button></li>
+      <li><button class="nav-item" data-panel="news"><span class="nav-icon">📰</span> News <span class="nav-badge" id="badgeNews"></span></button></li>
+      <li><button class="nav-item" data-panel="team"><span class="nav-icon">👥</span> Team</button></li>
+      <li><button class="nav-item" data-panel="companies"><span class="nav-icon">🏢</span> Companies</button></li>
+      <li><button class="nav-item" data-panel="messages"><span class="nav-icon">✉️</span> Messages <span class="nav-badge" id="badgeMessages"></span></button></li>
+      <li><button class="nav-item" data-panel="gallery"><span class="nav-icon">🖼️</span> Gallery</button></li>
+      <li><button class="nav-item" data-panel="articles"><span class="nav-icon">📄</span> Articles</button></li>
+      <li><button class="nav-item" data-panel="settings"><span class="nav-icon">⚙️</span> Settings</button></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="../index.html" target="_blank" class="nav-item" style="text-decoration:none;"><span class="nav-icon">🌐</span> View Site</a>
+      <button class="nav-item" id="logoutBtn"><span class="nav-icon">🚪</span> Log Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+      <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle menu">☰</button>
+      <div>
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-sub" id="topbarSub">Overview of the Marvini group</div>
+      </div>
+      <div class="topbar-right">
+        <div class="admin-avatar" id="adminAvatar">A</div>
+      </div>
+    </div>
+
+    <!-- ═══════════ DASHBOARD ═══════════ -->
+    <section class="panel active" id="panel-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-card-icon">📰</div><div><div class="stat-card-num" id="statNews">0</div><div class="stat-card-label">News Posts</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-num" id="statTeam">0</div><div class="stat-card-label">Team Members</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">🏢</div><div><div class="stat-card-num" id="statCompanies">0</div><div class="stat-card-label">Companies</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">✉️</div><div><div class="stat-card-num" id="statMessages">0</div><div class="stat-card-label">Unread Messages</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">🖼️</div><div><div class="stat-card-num" id="statGallery">0</div><div class="stat-card-label">Gallery Images</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">📄</div><div><div class="stat-card-num" id="statArticles">0</div><div class="stat-card-label">Articles</div></div></div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-header"><h3>Recent Messages</h3><button class="btn btn-outline btn-sm" data-goto="messages">View All</button></div>
+          <div id="dashRecentMessages"><p style="padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Latest News</h3><button class="btn btn-outline btn-sm" data-goto="news">View All</button></div>
+          <div id="dashRecentNews"><p style="padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">Loading…</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ NEWS ═══════════ -->
+    <section class="panel" id="panel-news">
+      <div class="card">
+        <div class="card-header">
+          <h3>News & Announcements</h3>
+          <button class="btn btn-primary btn-sm" id="addNewsBtn">+ Add News</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Title</th><th>Tag</th><th>Date</th><th>Status</th><th></th></tr></thead>
+            <tbody id="newsTableBody"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ TEAM ═══════════ -->
+    <section class="panel" id="panel-team">
+      <div class="card">
+        <div class="card-header">
+          <h3>Team Members</h3>
+          <button class="btn btn-primary btn-sm" id="addTeamBtn">+ Add Team Member</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Name</th><th>Role</th><th>Subsidiary</th><th>Featured</th><th></th></tr></thead>
+            <tbody id="teamTableBody"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ COMPANIES ═══════════ -->
+    <section class="panel" id="panel-companies">
+      <div class="card">
+        <div class="card-header">
+          <h3>Subsidiaries</h3>
+          <button class="btn btn-primary btn-sm" id="addCompanyBtn">+ Add Company</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Name</th><th>Category</th><th>Website</th><th></th></tr></thead>
+            <tbody id="companiesTableBody"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ MESSAGES ═══════════ -->
+    <section class="panel" id="panel-messages">
+      <div class="card">
+        <div class="card-header"><h3>Contact Submissions</h3></div>
+        <div id="messagesList"><p style="padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">Loading…</p></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ GALLERY ═══════════ -->
+    <section class="panel" id="panel-gallery">
+      <div class="card">
+        <div class="card-header">
+          <h3>Gallery</h3>
+          <button class="btn btn-primary btn-sm" id="addGalleryBtn">+ Add Image</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Caption</th><th>Category</th><th></th></tr></thead>
+            <tbody id="galleryTableBody"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ ARTICLES ═══════════ -->
+    <section class="panel" id="panel-articles">
+      <div class="card">
+        <div class="card-header">
+          <h3>Articles & Reports</h3>
+          <button class="btn btn-primary btn-sm" id="addArticleBtn">+ Add Article</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Title</th><th>Description</th><th></th></tr></thead>
+            <tbody id="articlesTableBody"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SETTINGS ═══════════ -->
+    <section class="panel" id="panel-settings">
+      <div class="card">
+        <div class="card-header"><h3>Site Settings</h3></div>
+        <div class="card-body">
+          <form id="settingsForm">
+
+            <div class="settings-section">
+              <h4>Hero Stats</h4>
+              <div class="form-grid">
+                <div class="form-group"><label>Companies Count</label><input type="number" id="setCompaniesCount" /></div>
+                <div class="form-group"><label>Industries Count</label><input type="number" id="setIndustriesCount" /></div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>Contact Info</h4>
+              <div class="form-grid">
+                <div class="form-group"><label>Contact Email</label><input type="email" id="setContactEmail" /></div>
+                <div class="form-group"><label>Careers Email</label><input type="email" id="setCareersEmail" /></div>
+                <div class="form-group full"><label>Headquarters</label><input type="text" id="setHQ" /></div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>Social Links</h4>
+              <div class="form-grid">
+                <div class="form-group"><label>LinkedIn URL</label><input type="url" id="setLinkedin" /></div>
+                <div class="form-group"><label>Twitter / X URL</label><input type="url" id="setTwitter" /></div>
+                <div class="form-group"><label>Facebook URL</label><input type="url" id="setFacebook" /></div>
+                <div class="form-group"><label>Instagram URL</label><input type="url" id="setInstagram" /></div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>Footer</h4>
+              <div class="form-group full"><label>About Text</label><textarea id="setFooterAbout"></textarea></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- MODALS -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<!-- News Modal -->
+<div class="modal-overlay" id="newsModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="newsModalTitle">Add News Post</h3><button class="modal-close" data-close="newsModal">✕</button></div>
+    <form id="newsForm">
+      <input type="hidden" id="newsId" />
+      <div class="form-grid">
+        <div class="form-group full"><label>Title</label><input type="text" id="newsTitle" required /></div>
+        <div class="form-group"><label>Tag</label><input type="text" id="newsTag" placeholder="e.g. Technology" /></div>
+        <div class="form-group"><label>Date</label><input type="date" id="newsDate" /></div>
+        <div class="form-group full"><label>Image URL</label><input type="url" id="newsImage" placeholder="Cloudinary URL" /></div>
+        <div class="form-group full"><label>Excerpt</label><textarea id="newsExcerpt" required></textarea></div>
+        <div class="form-group full checkbox-row"><input type="checkbox" id="newsPublished" checked /><label for="newsPublished">Published</label></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close="newsModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Team Modal -->
+<div class="modal-overlay" id="teamModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="teamModalTitle">Add Team Member</h3><button class="modal-close" data-close="teamModal">✕</button></div>
+    <form id="teamForm">
+      <input type="hidden" id="teamId" />
+      <div class="form-grid">
+        <div class="form-group full"><label>Full Name</label><input type="text" id="teamName" required /></div>
+        <div class="form-group"><label>Role / Title</label><input type="text" id="teamRole" required /></div>
+        <div class="form-group">
+          <label>Subsidiary</label>
+          <select id="teamCompany">
+            <option value="Marvini Group">Marvini Group</option>
+            <option value="M-Smart">M-Smart Driving School</option>
+            <option value="M-Digital Food">M-Digital Food Chain</option>
+            <option value="M-Events & Festivals">M-Events & Festivals</option>
+            <option value="M-Farms">M-Farms</option>
+            <option value="M-Consultancy">M-Consultancy & Training</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Photo URL</label><input type="url" id="teamImage" placeholder="Cloudinary URL" /></div>
+        <div class="form-group"><label>LinkedIn URL</label><input type="url" id="teamLinkedin" /></div>
+        <div class="form-group"><label>Twitter / X URL</label><input type="url" id="teamTwitter" /></div>
+        <div class="form-group full"><label>Short Bio (card preview)</label><textarea id="teamBio" required></textarea></div>
+        <div class="form-group full"><label>Full Bio (read-more modal, HTML allowed)</label><textarea id="teamBioText" style="min-height:120px;"></textarea></div>
+        <div class="form-group full checkbox-row"><input type="checkbox" id="teamFeatured" /><label for="teamFeatured">Show as featured profile (e.g. CEO)</label></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close="teamModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Member</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Company Modal -->
+<div class="modal-overlay" id="companyModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="companyModalTitle">Add Company</h3><button class="modal-close" data-close="companyModal">✕</button></div>
+    <form id="companyForm">
+      <input type="hidden" id="companyId" />
+      <div class="form-grid">
+        <div class="form-group full"><label>Company Name</label><input type="text" id="companyName" required /></div>
+        <div class="form-group"><label>Category Tag</label><input type="text" id="companyTag" placeholder="e.g. Education & Tech" /></div>
+        <div class="form-group full"><label>Logo/Icon URL</label><input type="url" id="companyIcon" /></div>
+        <div class="form-group full"><label>Description</label><textarea id="companyDesc" required></textarea></div>
+        <div class="form-group"><label>Website URL</label><input type="url" id="companyWebsite" placeholder="https://" /></div>
+        <div class="form-group"><label>Learn More URL</label><input type="url" id="companyLearnMore" placeholder="https://" /></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close="companyModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Company</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="galleryModalTitle">Add Gallery Image</h3><button class="modal-close" data-close="galleryModal">✕</button></div>
+    <form id="galleryForm">
+      <input type="hidden" id="galleryId" />
+      <div class="form-grid">
+        <div class="form-group full"><label>Image URL</label><input type="url" id="galleryImage" placeholder="Cloudinary URL" required /></div>
+        <div class="form-group full"><label>Caption</label><input type="text" id="galleryCaption" required /></div>
+        <div class="form-group full"><label>Category</label><input type="text" id="galleryCategory" placeholder="e.g. M-Farms" /></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close="galleryModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Image</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Article Modal -->
+<div class="modal-overlay" id="articleModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="articleModalTitle">Add Article</h3><button class="modal-close" data-close="articleModal">✕</button></div>
+    <form id="articleForm">
+      <input type="hidden" id="articleId" />
+      <div class="form-grid">
+        <div class="form-group full"><label>Title</label><input type="text" id="articleTitle" required /></div>
+        <div class="form-group full"><label>Description</label><textarea id="articleDesc" required></textarea></div>
+        <div class="form-group full"><label>Cover Image URL</label><input type="url" id="articleCover" /></div>
+        <div class="form-group full"><label>PDF URL</label><input type="url" id="articlePdf" required /></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close="articleModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Article</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Message Detail Modal -->
+<div class="modal-overlay" id="messageModal">
+  <div class="modal">
+    <div class="modal-header"><h3>Message</h3><button class="modal-close" data-close="messageModal">✕</button></div>
+    <div id="messageDetail" style="font-size:0.9rem; line-height:1.8;"></div>
+    <div class="form-actions">
+      <button type="button" class="btn btn-danger" id="deleteMessageBtn">Delete</button>
+      <button type="button" class="btn btn-outline" data-close="messageModal">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>
