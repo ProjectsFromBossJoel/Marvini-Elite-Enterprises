@@ -1,24 +1,23 @@
 // api/chat.js
 export default async function handler(req, res) {
-  // ── CORS: Allow only your Firebase domain ──────────
-  // Allow multiple origins (including localhost for testing)
-const allowedOrigins = [
-  'https://marvini-elite-enterprises.web.app',
-  'http://127.0.0.1:5500',
-  'http://localhost:5500'
-];'http://127.0.0.1:5501'; // ⚠️ CHANGE THIS!
-
-  // For local testing, you can add 'http://localhost:5500' or 'http://127.0.0.1:5500'
+  // ── CORS: Allow only your Firebase domain (+ local dev) ──────────
+  const allowedOrigins = [
+    'https://marvini-elite-enterprises.web.app',
+    'http://127.0.0.1:5500',
+    'http://localhost:5500',
+    'http://127.0.0.1:5501',
+    'http://localhost:5501'
+  ];
 
   const origin = req.headers.origin;
-  if (origin === ALLOWED_ORIGIN || process.env.NODE_ENV === 'development') {
+  if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
-    // Fallback: allow the specific domain anyway (or block others)
-    res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+    // Fallback: default to the production domain
+    res.setHeader('Access-Control-Allow-Origin', 'https://marvini-elite-enterprises.web.app');
   }
-  
-  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
