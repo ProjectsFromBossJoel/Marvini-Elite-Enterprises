@@ -2669,8 +2669,8 @@ html, body {
   width: 370px;
   max-width: calc(100vw - 32px);
   height: auto;
-  min-height: 320px;
-  max-height: min(520px, calc(100vh - 140px));
+  min-height: 260px;
+  max-height: min(420px, calc(100vh - 140px));
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -2740,7 +2740,7 @@ html, body {
 /* Messages */
 .chat-messages {
   flex: 0 1 auto;
-  max-height: 360px;
+  max-height: 260px;
   overflow-y: auto;
   padding: 1.25rem;
   display: flex;
