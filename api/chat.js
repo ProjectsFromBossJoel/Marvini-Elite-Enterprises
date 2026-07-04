@@ -1,7 +1,12 @@
 // api/chat.js
 export default async function handler(req, res) {
   // ── CORS: Allow only your Firebase domain ──────────
-  const ALLOWED_ORIGIN = 'https://marvini-elite-enterprises.web.app';'http://127.0.0.1:5501'; // ⚠️ CHANGE THIS!
+  // Allow multiple origins (including localhost for testing)
+const allowedOrigins = [
+  'https://marvini-elite-enterprises.web.app',
+  'http://127.0.0.1:5500',
+  'http://localhost:5500'
+];'http://127.0.0.1:5501'; // ⚠️ CHANGE THIS!
 
   // For local testing, you can add 'http://localhost:5500' or 'http://127.0.0.1:5500'
 

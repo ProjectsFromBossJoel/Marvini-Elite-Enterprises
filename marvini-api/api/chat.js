@@ -1,18 +1,19 @@
 // api/chat.js
 export default async function handler(req, res) {
-  // ── CORS: Allow only your Firebase domain ──────────
-  const ALLOWED_ORIGIN = 'https://marvini-elite-enterprises.web.app';'http://127.0.0.1:5501'; // ⚠️ CHANGE THIS!
-
-  // For local testing, you can add 'http://localhost:5500' or 'http://127.0.0.1:5500'
+  // ── CORS: Allow specific origins (including localhost) ──
+  const allowedOrigins = [
+    'https://marvini-elite-enterprises.web.app',
+    'http://127.0.0.1:5500',
+    'http://localhost:5500'
+  ];
 
   const origin = req.headers.origin;
-  if (origin === ALLOWED_ORIGIN || process.env.NODE_ENV === 'development') {
+  if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
-    // Fallback: allow the specific domain anyway (or block others)
-    res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+    res.setHeader('Access-Control-Allow-Origin', 'https://marvini-elite-enterprises.web.app');
   }
-  
+
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -33,7 +34,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Message is required' });
   }
 
-  // ── System prompt (train the AI) ───────────────────
+  // ── System prompt ───────────────────────────────────
   const systemPrompt = `
 You are Marvini AI, the official assistant for Marvini Elite Enterprises.
 
@@ -76,7 +77,7 @@ INSTRUCTIONS:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile', // Free, fast, and powerful
+        model: 'llama-3.3-70b-versatile',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }

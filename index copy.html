@@ -1493,10 +1493,7 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
     </div>
   </footer>
 
-  <!-- Back to Top -->
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
-  </button>
+  
 
   <!-- Toast Notification -->
   <div class="toast" id="toast" role="status" aria-live="polite" aria-hidden="true"></div>
@@ -1531,6 +1528,7 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
           loader.classList.add('hidden');
           setTimeout(() => loader.remove(), 600);
         }
+        document.getElementById('chatWidget')?.classList.add('ready');
       }, 1600); // matches the CSS progress bar duration
     });
 
@@ -1538,10 +1536,6 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
     const header = document.getElementById('site-header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 60);
-
-      // Back to top
-      const btt = document.getElementById('backToTop');
-      if (btt) btt.classList.toggle('visible', window.scrollY > 400);
     });
 
     // ── BACK TO TOP ─────────────────────────────────────
