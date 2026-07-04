@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard | Marvini Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="admin.css" />
+
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini" onerror="this.style.display='none'"/>
+      <div class="side-brand-text">
+        <div class="name">Marvini Admin</div>
+        <div class="sub">Elite Enterprises</div>
+      </div>
+    </div>
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item active" href="index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span>Dashboard</a>
+    <div class="nav-section-label">Site Content</div>
+    <a class="nav-item" href="companies.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Companies</a>
+    <a class="nav-item" href="team.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>Team</a>
+    <a class="nav-item" href="news.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg></span>News & Updates</a>
+    <a class="nav-item" href="articles.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>Articles & Reports</a>
+    <a class="nav-item" href="gallery.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>Gallery</a>
+    <a class="nav-item" href="partners.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></svg></span>Partners</a>
+    <div class="nav-section-label">Engagement</div>
+    <a class="nav-item" href="careers.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>Careers & Volunteering<span class="nav-badge">12</span></a>
+    <a class="nav-item" href="messages.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></span>Contact Messages<span class="nav-badge">4</span></a>
+    <a class="nav-item" href="analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Site Analytics</a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="settings.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Settings</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search pages, applications, messages…" />
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">☀</button>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="icon-dot"></span>
+        </button>
+        <button class="icon-btn" aria-label="Messages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+        </button>
+        <div class="profile">
+          <img src="img/ceo_mee121.png" alt="Admin" onerror="this.src='https://ui-avatars.com/api/?name=Admin+User&background=1a56ff&color=fff'"/>
+          <div class="who">
+            <strong>Nana Yaa Ofori</strong>
+            <span>Site Administrator</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="hero-banner">
+      <div class="hero-text">
+        <h1>Welcome back, Nana 👋</h1>
+        <p>Here's what's happening across marvini-elite-enterprises.web.app today — applications, messages and site activity at a glance.</p>
+      </div>
+      <a class="hero-badge-btn" href="messages.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+        4 New Contact Messages
+      </a>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="ring">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--border)" stroke-width="4"/>
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--royal-blue)" stroke-width="4" stroke-dasharray="138" stroke-dashoffset="30" stroke-linecap="round"/>
+          </svg>
+          <div class="ic" style="color:var(--royal-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        </div>
+        <div>
+          <p class="stat-label">Site Visitors (30d)</p>
+          <p class="stat-value">24,680 <span class="stat-delta up">▲ 8.2%</span></p>
+        </div>
+      </div>
+
+      <a class="stat-card" href="careers.html" style="text-decoration:none;color:inherit;">
+        <div class="ring">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--border)" stroke-width="4"/>
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--deep-teal)" stroke-width="4" stroke-dasharray="138" stroke-dashoffset="60" stroke-linecap="round"/>
+          </svg>
+          <div class="ic" style="color:var(--deep-teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+        </div>
+        <div>
+          <p class="stat-label">Career Applications</p>
+          <p class="stat-value">142 <span class="stat-delta up">▲ 12%</span></p>
+        </div>
+      </a>
+
+      <a class="stat-card" href="messages.html" style="text-decoration:none;color:inherit;">
+        <div class="ring">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--border)" stroke-width="4"/>
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--amber)" stroke-width="4" stroke-dasharray="138" stroke-dashoffset="95" stroke-linecap="round"/>
+          </svg>
+          <div class="ic" style="color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></div>
+        </div>
+        <div>
+          <p class="stat-label">Contact Messages</p>
+          <p class="stat-value">38 <span class="stat-delta up">▲ 6.4%</span></p>
+        </div>
+      </a>
+
+      <div class="stat-card">
+        <div class="ring">
+          <svg width="52" height="52" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--border)" stroke-width="4"/>
+            <circle cx="26" cy="26" r="22" fill="none" stroke="var(--royal-blue)" stroke-width="4" stroke-dasharray="138" stroke-dashoffset="45" stroke-linecap="round"/>
+          </svg>
+          <div class="ic" style="color:var(--royal-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+        </div>
+        <div>
+          <p class="stat-label">Newsletter Subscribers</p>
+          <p class="stat-value">1,926 <span class="stat-delta up">▲ 4.1%</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-eyebrow">Site Traffic Overview</p>
+            <h2 class="panel-title">24.6K <span style="font-size:.85rem;color:var(--text-muted);font-weight:600;">Monthly Visitors</span></h2>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="legend">
+              <div class="legend-item"><span class="legend-dot" style="background:var(--royal-blue)"></span>Visitors</div>
+              <div class="legend-item"><span class="legend-dot" style="background:var(--deep-teal)"></span>Applications</div>
+            </div>
+            <div class="dropdown">This Year <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <svg viewBox="0 0 760 260" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a56ff" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#1a56ff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="gradTeal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="var(--border)" stroke-width="1">
+              <line x1="0" y1="20" x2="760" y2="20"/>
+              <line x1="0" y1="75" x2="760" y2="75"/>
+              <line x1="0" y1="130" x2="760" y2="130"/>
+              <line x1="0" y1="185" x2="760" y2="185"/>
+              <line x1="0" y1="240" x2="760" y2="240"/>
+            </g>
+            <path d="M0,150 C60,110 100,190 160,150 C220,110 260,60 320,80 C380,100 420,150 480,120 C540,90 580,50 640,70 C690,86 720,60 760,40 L760,260 L0,260 Z" fill="url(#gradBlue)"/>
+            <path d="M0,150 C60,110 100,190 160,150 C220,110 260,60 320,80 C380,100 420,150 480,120 C540,90 580,50 640,70 C690,86 720,60 760,40" fill="none" stroke="#1a56ff" stroke-width="3" stroke-linecap="round"/>
+            <path d="M0,210 C60,190 100,220 160,205 C220,190 260,160 320,175 C380,190 420,215 480,195 C540,175 580,150 640,165 C690,175 720,155 760,140 L760,260 L0,260 Z" fill="url(#gradTeal)"/>
+            <path d="M0,210 C60,190 100,220 160,205 C220,190 260,160 320,175 C380,190 420,215 480,195 C540,175 580,150 640,165 C690,175 720,155 760,140" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <div class="chart-months">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="pipeline-card">
+          <div class="pipeline-top">
+            <div>
+              <div class="label">Applications Pipeline</div>
+              <div class="sub">Careers & volunteer stages</div>
+            </div>
+            <div class="pipeline-gear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+          </div>
+
+          <div class="bubble-track">
+            <div class="bubble done"><div class="bubble-dot">✓</div><div class="bubble-label">Submitted</div><div class="bubble-count">142</div></div>
+            <div class="bubble done"><div class="bubble-dot">✓</div><div class="bubble-label">Reviewed</div><div class="bubble-count">96</div></div>
+            <div class="bubble"><div class="bubble-dot">●</div><div class="bubble-label">Interview</div><div class="bubble-count">34</div></div>
+            <div class="bubble"><div class="bubble-dot">4</div><div class="bubble-label">Offer</div><div class="bubble-count">12</div></div>
+            <div class="bubble"><div class="bubble-dot">5</div><div class="bubble-label">Hired</div><div class="bubble-count">9</div></div>
+          </div>
+        </div>
+
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="ic-wrap" style="background:rgba(26,86,255,0.1);color:var(--royal-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+            <div><div class="num">12</div><div class="lbl">Team Members</div></div>
+          </div>
+          <div class="mini-stat">
+            <div class="ic-wrap" style="background:rgba(5,150,105,0.1);color:var(--deep-teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+            <div><div class="num">6</div><div class="lbl">Open Roles</div></div>
+          </div>
+        </div>
+
+        <div class="lifetime-box">
+          <div>
+            <div class="amt">3,482</div>
+            <div class="sub">Total Applications Received</div>
+          </div>
+          <div class="yoy-badge">YoY 24%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-eyebrow">Careers & Volunteering</p>
+            <h2 class="panel-title" style="font-size:1.15rem;">Recent Applications</h2>
+          </div>
+          <a class="dropdown" href="careers.html">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Applicant</th><th>Role</th><th>Subsidiary</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Ama+Serwaa&background=1a56ff&color=fff"/><div><strong>Ama Serwaa</strong><span>Career · Full-time</span></div></div></td>
+              <td>Frontend Engineer</td>
+              <td>M-Smart</td>
+              <td><span class="pill pending">Under Review</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Kwesi+Boateng&background=059669&color=fff"/><div><strong>Kwesi Boateng</strong><span>Volunteer</span></div></div></td>
+              <td>Farmer Training Volunteer</td>
+              <td>M-Farms</td>
+              <td><span class="pill completed">Hired</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Linda+Mensah&background=F59E0B&color=fff"/><div><strong>Linda Mensah</strong><span>Career · Part-time</span></div></div></td>
+              <td>Training Program Facilitator</td>
+              <td>M-Consultancy</td>
+              <td><span class="pill pending">Interview Scheduled</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Yaw+Adjei&background=1a56ff&color=fff"/><div><strong>Yaw Adjei</strong><span>Career · Full-time</span></div></div></td>
+              <td>Supply Chain Operations Associate</td>
+              <td>M-Digital Food Chain</td>
+              <td><span class="pill active">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Efua+Owusu&background=059669&color=fff"/><div><strong>Efua Owusu</strong><span>Volunteer</span></div></div></td>
+              <td>Festival Production Volunteer</td>
+              <td>M-Events</td>
+              <td><span class="pill active">New</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-eyebrow">Inbox</p>
+            <h2 class="panel-title" style="font-size:1.15rem;">Recent Contact Messages</h2>
+          </div>
+          <a class="dropdown" href="messages.html">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+        </div>
+
+        <div class="lesson-item">
+          <div class="lesson-time"><div class="t">8:14</div><div class="m">AM</div></div>
+          <div class="lesson-bar" style="background:var(--royal-blue)"></div>
+          <div class="lesson-info"><strong>Kojo Antwi — Partnership Inquiry</strong><span>Interested in a distribution partnership with M-Digital Food Chain</span></div>
+        </div>
+        <div class="lesson-item">
+          <div class="lesson-time"><div class="t">9:47</div><div class="m">AM</div></div>
+          <div class="lesson-bar" style="background:var(--deep-teal)"></div>
+          <div class="lesson-info"><strong>Abena Frimpong — Media & Press</strong><span>Requesting an interview about the M-Farms pilot programme</span></div>
+        </div>
+        <div class="lesson-item">
+          <div class="lesson-time"><div class="t">11:22</div><div class="m">AM</div></div>
+          <div class="lesson-bar" style="background:var(--amber)"></div>
+          <div class="lesson-info"><strong>Selorm Mensah — Investment</strong><span>Asking for the latest Marvini Annual Report</span></div>
+        </div>
+        <div class="lesson-item">
+          <div class="lesson-time"><div class="t">2:05</div><div class="m">PM</div></div>
+          <div class="lesson-bar" style="background:var(--royal-blue)"></div>
+          <div class="lesson-info"><strong>Naana Boateng — General Inquiry</strong><span>Question about M-Events booking for a community festival</span></div>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
