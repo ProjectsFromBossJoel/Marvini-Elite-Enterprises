@@ -1522,6 +1522,47 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
     </div>
   </div>
 
+
+
+  <!-- ═══════════════════════════════════════════════════ -->
+<!-- AI CHATBOT WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="chat-widget" id="chatWidget">
+  <!-- Toggle Button -->
+  <button class="chat-toggle" id="chatToggle" aria-label="Open chat">
+    <span class="chat-icon">💬</span>
+    <span class="chat-close-icon">✕</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chatWindow" aria-hidden="true">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <span class="chat-avatar">🤖</span>
+        <div>
+          <strong>Marvini AI</strong>
+          <span class="chat-status">Online</span>
+        </div>
+      </div>
+      <button class="chat-minimize" id="chatMinimize" aria-label="Minimize chat">−</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message bot">
+        <div class="message-bubble">
+          👋 Hi there! I'm Marvini's AI assistant. Ask me about our companies, mission, team, or anything about Marvini Elite Enterprises!
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..." />
+      <button class="chat-send" id="chatSend" aria-label="Send message">➤</button>
+    </div>
+  </div>
+</div>
+
+
   <script>
     // ── LOADER DISMISS ──────────────────────────────────
     window.addEventListener('load', () => {
@@ -1977,7 +2018,99 @@ document.getElementById('bioModalClose')?.addEventListener('click', closeBioModa
 bioModal?.addEventListener('click', e => { if (e.target === bioModal) closeBioModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBioModal(); });
 
+
+// ── CHAT WIDGET ──────────────────────────────────────
+const chatToggle = document.getElementById('chatToggle');
+const chatWindow = document.getElementById('chatWindow');
+const chatMinimize = document.getElementById('chatMinimize');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatMessages = document.getElementById('chatMessages');
+
+// Toggle open/close
+chatToggle.addEventListener('click', () => {
+  const isOpen = chatWindow.classList.toggle('open');
+  chatToggle.classList.toggle('active', isOpen);
+});
+
+chatMinimize.addEventListener('click', () => {
+  chatWindow.classList.remove('open');
+  chatToggle.classList.remove('active');
+});
+
+// Append message to chat
+function appendMessage(text, sender) {
+  const div = document.createElement('div');
+  div.className = `chat-message ${sender}`;
+  div.innerHTML = `<div class="message-bubble">${text}</div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Show typing indicator
+function showTyping() {
+  const id = Date.now();
+  const div = document.createElement('div');
+  div.className = 'chat-message bot';
+  div.id = `typing-${id}`;
+  div.innerHTML = `<div class="message-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(`typing-${id}`);
+  if (el) el.remove();
+}
+
+// Send message to Vercel API
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  appendMessage(text, 'user');
+  chatInput.value = '';
+  chatSend.disabled = true;
+
+  const typingId = showTyping();
+
+  try {
+    // 🔥 CALL YOUR VERCELL API
+    const response = await fetch('https://marvini-elite-enterprises.vercel.app/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text }),
+    });
+
+    const data = await response.json();
+
+    removeTyping(typingId);
+
+    if (response.ok) {
+      appendMessage(data.reply || 'Thanks for your question!', 'bot');
+    } else {
+      appendMessage('⚠️ ' + (data.error || 'Something went wrong.'), 'bot');
+    }
+  } catch (error) {
+    removeTyping(typingId);
+    appendMessage('⚠️ Connection error. Please try again.', 'bot');
+  }
+
+  chatSend.disabled = false;
+}
+
+// Event listeners
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+
   </script>
+
+
+
+
 
 </body>
 </html>
