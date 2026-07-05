@@ -1203,7 +1203,7 @@
       const typingId = showChatTyping();
 
       try {
-        const response = await fetch('https://marvini-elite-enterprises.vercel.app/api/chat', {
+        const response = await fetch('https://marvini-elite-enterprises.vercel.app/api/message', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text }),
