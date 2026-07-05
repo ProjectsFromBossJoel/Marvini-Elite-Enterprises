@@ -34,16 +34,33 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Message is required' });
   }
 
+  const userMessage = message.toLowerCase().trim();
+
+  // ════════════════════════════════════════════════════════════════
+  // 🛑 HARDCODED CONTACT RESPONSES – NO AI INVOLVED
+  // ════════════════════════════════════════════════════════════════
+  const contactKeywords = ['contact', 'phone', 'number', 'call', 'reach', 'email', 'address', 'location', 'where', 'located', 'office', 'visit', 'message', 'get in touch'];
+
+  const isContactQuestion = contactKeywords.some(keyword => userMessage.includes(keyword));
+
+  if (isContactQuestion) {
+    return res.status(200).json({
+      reply: `You can reach Marvini Elite Enterprises at 0208818137. Our email is jakunor@hotmail.com, and our address is Ayi Mensah, Adjacent Arts Village, Ghana. Our landmark is the Arts and Basket Weaving Centre, and our digital address is E3-741-1600.`
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // 🤖 AI RESPONSE FOR OTHER QUESTIONS
+  // ════════════════════════════════════════════════════════════════
+
   // ── System prompt ───────────────────────────────────
   const systemPrompt = `
 You are Marvini AI, the official assistant for Marvini Elite Enterprises.
 
-BUSINESS FACTS (USE THESE EXACTLY):
+BUSINESS FACTS:
 - Business Name: Marvini Elite Enterprise
 - Business Address: Ayi Mensah, Adjacent Arts Village, Ghana
 - Digital Address: E3-741-1600
-- House Number: E3-741-1600
-- Landmark: Arts and Basket Weaving Centre
 - Phone Number: 0208818137
 - Email Address: jakunor@hotmail.com
 
@@ -60,33 +77,11 @@ LEADERSHIP:
 MISSION: Build innovative, technology-driven enterprises that solve real challenges in Africa.
 VALUES: Innovation, Integrity, Excellence, Impact, Sustainability, Collaboration.
 
-═══════════════════════════════════════════════════════════════
-CRITICAL RULES – FOLLOW THESE EXACTLY:
-═══════════════════════════════════════════════════════════════
-
-RULE 1: For ANY question about contact, location, phone, email, or address, ALWAYS respond using the EXACT format below. DO NOT add extra sentences.
-
-RULE 2: NEVER say "visit our website" or "social media" or make up email addresses. ONLY use the contact info provided above.
-
-═══════════════════════════════════════════════════════════════
-EXACT RESPONSE FORMATS – COPY THESE VERBATIM:
-═══════════════════════════════════════════════════════════════
-
-WHEN ASKED: "What's your phone number?" or "How can I contact you?"
-RESPOND WITH:
-"You can reach Marvini Elite Enterprises at 0208818137. Our email is jakunor@hotmail.com, and our address is Ayi Mensah, Adjacent Arts Village, Ghana."
-
-WHEN ASKED: "Where are you located?" or "What's your address?"
-RESPOND WITH:
-"Marvini Elite Enterprises is located at Ayi Mensah, Adjacent Arts Village, Ghana. Our landmark is the Arts and Basket Weaving Centre, and our digital address is E3-741-1600."
-
-WHEN ASKED: "What's your email?"
-RESPOND WITH:
-"Our email address is jakunor@hotmail.com."
-
-FOR ALL OTHER QUESTIONS:
+INSTRUCTIONS:
 - Be helpful, concise, and professional.
 - If asked something outside Marvini, politely say you don't know.
+- Keep responses under 200 words.
+- Use a friendly but professional tone.
 `;
 
   // ── Get API key from environment variables ──────────
@@ -110,8 +105,8 @@ FOR ALL OTHER QUESTIONS:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 600,
-        temperature: 0.1,
+        max_tokens: 450,
+        temperature: 0.3,
       }),
     });
 
