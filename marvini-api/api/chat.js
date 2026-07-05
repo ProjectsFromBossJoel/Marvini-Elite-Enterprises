@@ -18,17 +18,14 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // ── Handle preflight OPTIONS request ──────────────
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // ── Only allow POST ────────────────────────────────
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // ── Get the user's message ─────────────────────────
   const { message } = req.body;
   if (!message || message.trim().length === 0) {
     return res.status(400).json({ error: 'Message is required' });
@@ -36,32 +33,27 @@ export default async function handler(req, res) {
 
   const userMessage = message.toLowerCase().trim();
 
+  // ── DEBUG LOGS ──────────────────────────────────────
+  console.log('📩 Received message:', message);
+  console.log('📩 Lowercase trimmed:', userMessage);
+
   // ════════════════════════════════════════════════════════════════
-  // 🛑 HARDCODED CONTACT RESPONSES – CHECKED FIRST
+  // 🛑 SUPER AGGRESSIVE CATCH – ANY CONTACT QUESTION
   // ════════════════════════════════════════════════════════════════
-  // This catches ANY question about contact, location, phone, email, address, etc.
-  const contactKeywords = [
-    'contact', 'phone', 'number', 'call', 'reach', 'email', 'e-mail', 
-    'address', 'location', 'where', 'located', 'office', 'visit', 
-    'message', 'get in touch', 'talk to', 'speak with', 'find you',
-    'whatsapp', 'telephone', 'mobile', 'landline', 'hotline'
-  ];
-
-  const isContactQuestion = contactKeywords.some(keyword => userMessage.includes(keyword));
-
-  // Also catch questions that start with common contact phrases
-  const contactPhrases = [
-    'how can i contact', 'how do i contact', 'how to contact',
-    'how can i reach', 'how do i reach', 'how to reach',
-    'can i contact', 'can i reach', 'can i call',
-    'where are you', 'where is your', 'what is your phone',
-    'what is your email', 'what is your address',
-    'how can i get in touch', 'how do i get in touch'
-  ];
-
-  const isContactPhrase = contactPhrases.some(phrase => userMessage.includes(phrase));
-
-  if (isContactQuestion || isContactPhrase) {
+  if (
+    userMessage.includes('contact') ||
+    userMessage.includes('phone') ||
+    userMessage.includes('email') ||
+    userMessage.includes('address') ||
+    userMessage.includes('located') ||
+    userMessage.includes('reach') ||
+    userMessage.includes('call') ||
+    userMessage.includes('where') ||
+    userMessage.includes('office') ||
+    userMessage.includes('number') ||
+    userMessage.includes('mobile')
+  ) {
+    console.log('✅ SUPER AGGRESSIVE TRIGGERED!');
     return res.status(200).json({
       reply: `You can reach Marvini Elite Enterprises at 0208818137. Our email is jakunor@hotmail.com, and our address is Ayi Mensah, Adjacent Arts Village, Ghana. Our landmark is the Arts and Basket Weaving Centre, and our digital address is E3-741-1600.`
     });
@@ -71,7 +63,6 @@ export default async function handler(req, res) {
   // 🤖 AI RESPONSE FOR OTHER QUESTIONS
   // ════════════════════════════════════════════════════════════════
 
-  // ── System prompt ───────────────────────────────────
   const systemPrompt = `
 You are Marvini AI, the official assistant for Marvini Elite Enterprises.
 
@@ -102,7 +93,6 @@ INSTRUCTIONS:
 - Use a friendly but professional tone.
 `;
 
-  // ── Get API key from environment variables ──────────
   const GROQ_API_KEY = process.env.GROQ_API_KEY;
   if (!GROQ_API_KEY) {
     console.error('Missing GROQ_API_KEY');
@@ -110,7 +100,6 @@ INSTRUCTIONS:
   }
 
   try {
-    // ── Call Groq API ──────────────────────────────────
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
