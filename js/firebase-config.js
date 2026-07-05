@@ -1,29 +1,30 @@
-// ══════════════════════════════════════════════════════════
-// Firebase initialization — Marvini Elite Enterprises
-// ══════════════════════════════════════════════════════════
-// Replace the values in `firebaseConfig` with your own project's
-// credentials: Firebase Console → Project Settings → General →
-// "Your apps" → SDK setup and configuration → Config.
-//
-// This file is imported by both articles-admin.js (admin dashboard)
-// and articles-public.js (public website).
-// ══════════════════════════════════════════════════════════
+// js/firebase-config.js
+// Central Firebase init. Both dashboard/js/articles-admin.js and js/articles-public.js
+// import from this file so there's a single Firestore connection.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
-  doc,
   updateDoc,
   deleteDoc,
+  doc,
+  onSnapshot,
   query,
   where,
   orderBy,
   serverTimestamp,
+  increment,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// ⚠️ Replace with your actual Firebase project config (Project settings → General → Your apps)
 const firebaseConfig = {
   apiKey: "AIzaSyAveG3TjWcZCNz56ygnD44laL5XrWZCmtQ",
   authDomain: "marvini-elite-enterprises.firebaseapp.com",
@@ -35,22 +36,25 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 
-// Name of the Firestore collection that holds every publication
-// (articles, journals, and news), regardless of draft/published status.
-export const PUBLICATIONS_COLLECTION = "publications";
-
+// Re-export the Firestore + Auth helpers so other files only need one import source
 export {
-  db,
   collection,
   addDoc,
-  getDocs,
-  doc,
   updateDoc,
   deleteDoc,
+  doc,
+  onSnapshot,
   query,
   where,
   orderBy,
   serverTimestamp,
+  increment,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 };
+
+export const PUBLICATIONS_COLLECTION = "publications";
