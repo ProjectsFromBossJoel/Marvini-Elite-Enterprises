@@ -46,6 +46,18 @@ Marvini Elite Enterprises is a premier African enterprise group with subsidiarie
 - M-Farms: Sustainable agriculture initiative for food security.
 - M-Consultancy & Training: Professional consulting and training services.
 
+BUSINESS ACTIVITY:
+Technology Solutions Development, Consultancy and Training, Event Organisation, Innovation and Agric Engineering.
+
+CONTACT INFORMATION:
+- Business Name: Marvini Elite Enterprise
+- Business Address: Ayi Mensah, Adjacent Arts Village, Ghana
+- Digital Address: E3-741-1600
+- House Number: E3-741-1600
+- Landmark: Arts and Basket Weaving Centre
+- Phone Number: 0208818137
+- Email Address: jakunor@hotmail.com
+
 LEADERSHIP:
 - CEO: Jacob T. Akunor (PMP-certified, tech executive).
 - Team: Joel Obuamah Addy (Software Developer), Prince Antwi Wiafe (Solutions Architect), Linda Oduraa Boakye (Finance), Dr. Elvis Baidoo (PM/GM), Daniel Etoo Yeboah (M-Events), Nicolette Naa Shormeh Noi (M-Digital Food).
