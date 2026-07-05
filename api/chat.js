@@ -85,7 +85,7 @@ INSTRUCTIONS:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 300,
+        max_tokens: 450,
         temperature: 0.7,
       }),
     });
