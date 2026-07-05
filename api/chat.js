@@ -1,79 +1,48 @@
 // api/message.js
 export default async function handler(req, res) {
-  // ── CORS: Allow specific origins (including localhost) ──
+  // ── CORS: Allow only your Firebase domain (+ local dev) ──────────
   const allowedOrigins = [
     'https://marvini-elite-enterprises.web.app',
     'http://127.0.0.1:5500',
-    'http://localhost:5500'
+    'http://localhost:5500',
+    'http://127.0.0.1:5501',
+    'http://localhost:5501'
   ];
 
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
+    // Fallback: default to the production domain
     res.setHeader('Access-Control-Allow-Origin', 'https://marvini-elite-enterprises.web.app');
   }
 
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  // ── Handle preflight OPTIONS request ──────────────
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
+  // ── Only allow POST ────────────────────────────────
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // ── Get the user's message ─────────────────────────
   const { message } = req.body;
   if (!message || message.trim().length === 0) {
     return res.status(400).json({ error: 'Message is required' });
   }
 
-  const userMessage = message.toLowerCase().trim();
-
-  // ── DEBUG LOGS ──────────────────────────────────────
-  console.log('📩 Received message:', message);
-  console.log('📩 Lowercase trimmed:', userMessage);
-
-  // ════════════════════════════════════════════════════════════════
-  // 🛑 SUPER AGGRESSIVE CATCH – ANY CONTACT QUESTION
-  // ════════════════════════════════════════════════════════════════
-  if (
-    userMessage.includes('contact') ||
-    userMessage.includes('phone') ||
-    userMessage.includes('email') ||
-    userMessage.includes('address') ||
-    userMessage.includes('located') ||
-    userMessage.includes('reach') ||
-    userMessage.includes('call') ||
-    userMessage.includes('where') ||
-    userMessage.includes('office') ||
-    userMessage.includes('number') ||
-    userMessage.includes('mobile')
-  ) {
-    console.log('✅ SUPER AGGRESSIVE TRIGGERED!');
-    return res.status(200).json({
-      reply: `You can reach Marvini Elite Enterprises at 0208818137. Our email is jakunor@hotmail.com, and our address is Ayi Mensah, Adjacent Arts Village, Ghana. Our landmark is the Arts and Basket Weaving Centre, and our digital address is E3-741-1600.`
-    });
-  }
-
-  // ════════════════════════════════════════════════════════════════
-  // 🤖 AI RESPONSE FOR OTHER QUESTIONS
-  // ════════════════════════════════════════════════════════════════
-
+  // ── System prompt (train the AI) ───────────────────
   const systemPrompt = `
 You are Marvini AI, the official assistant for Marvini Elite Enterprises.
 
-BUSINESS FACTS:
-- Business Name: Marvini Elite Enterprise
-- Business Address: Ayi Mensah, Adjacent Arts Village, Ghana
-- Digital Address: E3-741-1600
-- Phone Number: 0208818137
-- Email Address: jakunor@hotmail.com
-
-SUBSIDIARIES:
+ABOUT MARVINI:
+Marvini Elite Enterprises is a premier African enterprise group with subsidiaries:
 - M-Smart Driving School Solution: Digital driving school platform in Ghana.
 - M-Digital Food Chain: Tech-enabled food distribution ecosystem.
 - M-Events & Festivals: Creative events company producing festivals and cultural experiences.
@@ -82,8 +51,10 @@ SUBSIDIARIES:
 
 LEADERSHIP:
 - CEO: Jacob T. Akunor (PMP-certified, tech executive).
+- Team: Joel Obuamah Addy (Software Developer), Prince Antwi Wiafe (Solutions Architect), Linda Oduraa Boakye (Finance), Dr. Elvis Baidoo (PM/GM), Daniel Etoo Yeboah (M-Events), Nicolette Naa Shormeh Noi (M-Digital Food).
 
 MISSION: Build innovative, technology-driven enterprises that solve real challenges in Africa.
+VISION: Become one of Africa's most trusted and transformative enterprise groups.
 VALUES: Innovation, Integrity, Excellence, Impact, Sustainability, Collaboration.
 
 INSTRUCTIONS:
@@ -93,6 +64,7 @@ INSTRUCTIONS:
 - Use a friendly but professional tone.
 `;
 
+  // ── Get API key from environment variables ──────────
   const GROQ_API_KEY = process.env.GROQ_API_KEY;
   if (!GROQ_API_KEY) {
     console.error('Missing GROQ_API_KEY');
@@ -100,6 +72,7 @@ INSTRUCTIONS:
   }
 
   try {
+    // ── Call Groq API ──────────────────────────────────
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -107,13 +80,13 @@ INSTRUCTIONS:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'llama-3.3-70b-versatile', // Free, fast, and powerful
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
         max_tokens: 450,
-        temperature: 0.3,
+        temperature: 0.7,
       }),
     });
 

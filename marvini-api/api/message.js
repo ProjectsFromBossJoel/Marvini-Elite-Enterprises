@@ -1,4 +1,4 @@
-// api/chat.js
+// api/message.js
 export default async function handler(req, res) {
   // ── CORS: Allow specific origins (including localhost) ──
   const allowedOrigins = [
