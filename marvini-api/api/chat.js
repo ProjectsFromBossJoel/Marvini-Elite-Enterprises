@@ -37,13 +37,31 @@ export default async function handler(req, res) {
   const userMessage = message.toLowerCase().trim();
 
   // ════════════════════════════════════════════════════════════════
-  // 🛑 HARDCODED CONTACT RESPONSES – NO AI INVOLVED
+  // 🛑 HARDCODED CONTACT RESPONSES – CHECKED FIRST
   // ════════════════════════════════════════════════════════════════
-  const contactKeywords = ['contact', 'phone', 'number', 'call', 'reach', 'email', 'address', 'location', 'where', 'located', 'office', 'visit', 'message', 'get in touch'];
+  // This catches ANY question about contact, location, phone, email, address, etc.
+  const contactKeywords = [
+    'contact', 'phone', 'number', 'call', 'reach', 'email', 'e-mail', 
+    'address', 'location', 'where', 'located', 'office', 'visit', 
+    'message', 'get in touch', 'talk to', 'speak with', 'find you',
+    'whatsapp', 'telephone', 'mobile', 'landline', 'hotline'
+  ];
 
   const isContactQuestion = contactKeywords.some(keyword => userMessage.includes(keyword));
 
-  if (isContactQuestion) {
+  // Also catch questions that start with common contact phrases
+  const contactPhrases = [
+    'how can i contact', 'how do i contact', 'how to contact',
+    'how can i reach', 'how do i reach', 'how to reach',
+    'can i contact', 'can i reach', 'can i call',
+    'where are you', 'where is your', 'what is your phone',
+    'what is your email', 'what is your address',
+    'how can i get in touch', 'how do i get in touch'
+  ];
+
+  const isContactPhrase = contactPhrases.some(phrase => userMessage.includes(phrase));
+
+  if (isContactQuestion || isContactPhrase) {
     return res.status(200).json({
       reply: `You can reach Marvini Elite Enterprises at 0208818137. Our email is jakunor@hotmail.com, and our address is Ayi Mensah, Adjacent Arts Village, Ghana. Our landmark is the Arts and Basket Weaving Centre, and our digital address is E3-741-1600.`
     });
