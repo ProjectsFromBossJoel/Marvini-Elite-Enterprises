@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Publications | Marvini Elite Enterprises</title>
+<meta name="description" content="Browse articles, journals, and news from Marvini Elite Enterprises, or submit your own publication for review." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/animations.css" />
+<link rel="stylesheet" href="css/responsive.css?v=2" />
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
+
+<style>
+  .pub-filters { display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; margin: 1.5rem 0 2.5rem; }
+  .pub-filter-btn {
+    padding:.5rem 1.2rem; border-radius:999px; border:1px solid var(--border,#e2e8f0);
+    background: var(--bg-card,#fff); font-weight:600; font-size:.9rem; cursor:pointer;
+    transition: all .2s ease;
+  }
+  .pub-filter-btn.active { background: var(--grad-blue-green, #1a56ff); color:#fff; border-color: transparent; }
+  .pub-submit-cta { text-align:center; margin: 2.5rem 0; }
+  .pub-submit-modal {
+    position: fixed; inset:0; background: rgba(0,0,0,0.55); display:flex; align-items:center;
+    justify-content:center; z-index:2000; opacity:0; visibility:hidden;
+    transition: opacity .25s ease, visibility .25s ease; padding: 1.5rem;
+  }
+  .pub-submit-modal.open { opacity:1; visibility:visible; }
+  .pub-submit-card {
+    background: var(--bg-card,#fff); border-radius:16px; padding:2rem; width:100%; max-width:520px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;
+    transform: translateY(16px); transition: transform .25s ease;
+  }
+  .pub-submit-modal.open .pub-submit-card { transform: translateY(0); }
+  .pub-submit-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; }
+  .pub-submit-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border,#e2e8f0); background:transparent; cursor:pointer; }
+  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
+  .form-field label { font-size:.85rem; font-weight:600; }
+  .form-field input, .form-field textarea, .form-field select {
+    padding:.6rem .8rem; border:1px solid var(--border,#e2e8f0); border-radius:8px; font-size:.9rem; font-family:inherit;
+  }
+  .form-field textarea { resize: vertical; min-height:70px; }
+  #publicSubmitStatus { font-size:.85rem; color: var(--text-muted,#64748b); margin-top:.5rem; min-height:1.2em; }
+  .empty-state { text-align:center; padding:3rem 1rem; color: var(--text-muted,#64748b); grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="site-header" role="banner">
+  <nav class="navbar" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+      <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini Elite Enterprises" class="nav-logo-img" />
+      <span class="nav-logo-text">
+        <span class="logo-name">Marvini</span>
+        <span class="logo-sub">Elite Enterprises</span>
+      </span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#home" class="nav-link">Home</a></li>
+      <li><a href="index.html#about" class="nav-link">About</a></li>
+      <li><a href="index.html#companies" class="nav-link">Companies</a></li>
+      <li><a href="publications.html" class="nav-link active">Publications</a></li>
+      <li><a href="index.html#team" class="nav-link">Team</a></li>
+      <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+      <li><a href="careers.html" class="nav-link">Careers/ Volunteer</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <span class="theme-icon sun">☀</span>
+        <span class="theme-icon moon">☽</span>
+      </button>
+      <a href="index.html#contact" class="btn btn-primary btn-sm">Get In Touch</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="section articles-section" aria-label="Publications" style="padding-top: 8rem;">
+    <div class="container">
+      <div class="section-header reveal-fade-up">
+        <span class="section-eyebrow">Publications</span>
+        <h2 class="section-title">Articles & Reports</h2>
+        <p class="section-subtitle">Explore our full collection of articles, journals, and news — or submit your own for review.</p>
+      </div>
+
+      <div class="pub-filters">
+        <button class="pub-filter-btn active" data-filter="all">All</button>
+        <button class="pub-filter-btn" data-filter="article">Articles</button>
+        <button class="pub-filter-btn" data-filter="journal">Journals</button>
+        <button class="pub-filter-btn" data-filter="news">News</button>
+      </div>
+
+      <div class="articles-grid" data-full></div>
+
+      <div class="pub-submit-cta" id="submit">
+        <button class="btn btn-primary btn-lg" id="openSubmitBtn" type="button">Submit a Publication</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Public Submission Modal -->
+<div class="pub-submit-modal" id="submitModal">
+  <div class="pub-submit-card">
+    <div class="pub-submit-head">
+      <h3>Submit a Publication</h3>
+      <button class="pub-submit-close" id="closeSubmitBtn" aria-label="Close">✕</button>
+    </div>
+    <p style="font-size:.9rem; color: var(--text-muted,#64748b); margin-bottom:1rem;">
+      Your submission will be reviewed by our team before it appears publicly.
+    </p>
+    <form id="publicSubmitForm">
+      <div class="form-field">
+        <label for="subTitle">Title *</label>
+        <input type="text" id="subTitle" placeholder="Title of your article, journal, or news item" required />
+      </div>
+      <div class="form-field">
+        <label for="subDescription">Short Description</label>
+        <textarea id="subDescription" placeholder="One or two sentences describing this document…"></textarea>
+      </div>
+      <div class="form-field">
+        <label for="subCategory">Type *</label>
+        <select id="subCategory" required>
+          <option value="">Select type…</option>
+          <option value="article">Article</option>
+          <option value="journal">Journal</option>
+          <option value="news">News</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="subCover">Cover Image (optional)</label>
+        <input type="file" id="subCover" accept="image/*" />
+      </div>
+      <div class="form-field">
+        <label for="subPdf">PDF File *</label>
+        <input type="file" id="subPdf" accept="application/pdf" required />
+      </div>
+      <button type="submit" class="btn btn-primary" id="publicSubmitBtn" style="width:100%; justify-content:center;">
+        Submit for Review
+      </button>
+      <div id="publicSubmitStatus"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const submitModal = document.getElementById("submitModal");
+  document.getElementById("openSubmitBtn")?.addEventListener("click", () => {
+    submitModal.classList.add("open");
+  });
+  document.getElementById("closeSubmitBtn")?.addEventListener("click", () => {
+    submitModal.classList.remove("open");
+  });
+  submitModal?.addEventListener("click", (e) => {
+    if (e.target === submitModal) submitModal.classList.remove("open");
+  });
+
+  const themeToggle = document.getElementById("themeToggle");
+  themeToggle?.addEventListener("click", () => {
+    const html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+  });
+</script>
+
+<script type="module" src="js/articles-public.js"></script>
+</body>
+</html>
