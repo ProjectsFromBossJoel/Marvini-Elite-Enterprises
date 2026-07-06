@@ -26,7 +26,7 @@ const submitBtn = document.getElementById("teamSubmitBtn");
 
 // ── Cloudinary config — same account used elsewhere on the site ──
 const CLOUDINARY_CLOUD_NAME = "dilb7jd6w";
-const CLOUDINARY_UPLOAD_PRESET = "team_profile_pic";
+const CLOUDINARY_UPLOAD_PRESET = "team_avatar";
 
 async function uploadPhotoToCloudinary(file) {
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
