@@ -43,10 +43,13 @@ if (grid) {
       grid.innerHTML = docs.map((n) => {
         const ts = n.publishedAt || n.createdAt;
         const dateLabel = ts?.toDate ? monthYearLabel(ts.toDate()) : "";
+        const mediaHtml = n.imageUrl
+          ? `<img src="${escapeHtml(n.imageUrl)}" alt="${escapeHtml(n.title || "")}" style="width:100%; height:100%; object-fit:cover;" />`
+          : `<div class="news-img-placeholder" style="display:flex;align-items:center;justify-content:center;font-size:2.4rem;">${escapeHtml(n.emoji || "📰")}</div>`;
         return `
           <article class="news-card reveal-fade-up revealed">
             <div class="news-img-wrap">
-              <div class="news-img-placeholder" style="display:flex;align-items:center;justify-content:center;font-size:2.4rem;">${escapeHtml(n.emoji || "📰")}</div>
+              ${mediaHtml}
             </div>
             <div class="news-body">
               <span class="news-tag">${escapeHtml(n.tag || "")}</span>

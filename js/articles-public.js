@@ -31,13 +31,14 @@ async function renderPublishedArticles() {
     );
     const snapshot = await getDocs(q);
 
+    // Always clear whatever is currently in the grid (including any
+    // dummy/static cards left in the HTML) before rendering live data.
+    grid.innerHTML = "";
+
     if (snapshot.empty) {
-      // Leave the static fallback cards (already in the HTML) untouched
-      // if nothing has been published yet.
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-muted,#64748b);">No publications available yet. Check back soon.</div>`;
       return;
     }
-
-    grid.innerHTML = "";
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();

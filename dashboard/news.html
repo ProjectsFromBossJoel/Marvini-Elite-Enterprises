@@ -149,8 +149,16 @@
         <textarea id="newsExcerpt" placeholder="One or two sentences summarizing this update…" required></textarea>
       </div>
       <div class="form-field">
-        <label for="newsEmoji">Card Emoji</label>
+        <label for="newsEmoji">Card Emoji (used if no image is uploaded)</label>
         <input type="text" id="newsEmoji" placeholder="📰" maxlength="4" />
+      </div>
+      <div class="form-field">
+        <label for="newsImageFile">Cover Image (optional)</label>
+        <input type="file" id="newsImageFile" accept="image/*" />
+        <div id="newsImagePreviewWrap" style="display:none; margin-top:.5rem;">
+          <img id="newsImagePreview" src="" alt="Preview" style="max-width:100%; max-height:160px; border-radius:8px; object-fit:cover;" />
+          <button type="button" id="newsImageRemoveBtn" class="btn btn-outline btn-sm" style="margin-top:.5rem;">Remove Image</button>
+        </div>
       </div>
       <label class="form-check">
         <input type="checkbox" id="newsPublishNow" checked />

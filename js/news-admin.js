@@ -22,6 +22,56 @@ const form = document.getElementById("newsForm");
 const modalTitle = document.getElementById("newsModalTitle");
 const statusEl = document.getElementById("newsStatus");
 const submitBtn = document.getElementById("newsSubmitBtn");
+const imageFileInput = document.getElementById("newsImageFile");
+const imagePreviewWrap = document.getElementById("newsImagePreviewWrap");
+const imagePreview = document.getElementById("newsImagePreview");
+const imageRemoveBtn = document.getElementById("newsImageRemoveBtn");
+
+// ── Cloudinary config ───────────────────────────────────
+// Unsigned upload preset created in the Cloudinary console, scoped to
+// the marvini/news folder (mirrors the marvini/gallery pattern already in use).
+const CLOUDINARY_CLOUD_NAME = "dilb7jd6w";
+const CLOUDINARY_UPLOAD_PRESET = "marvini_news_unsigned";
+
+let currentImageUrl = ""; // tracks the image currently attached to the form
+let pendingRemoveImage = false;
+
+async function uploadToCloudinary(file) {
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  formData.append("folder", "marvini/news");
+
+  const res = await fetch(url, { method: "POST", body: formData });
+  if (!res.ok) throw new Error("Cloudinary upload failed");
+  const json = await res.json();
+  return json.secure_url;
+}
+
+function showImagePreview(url) {
+  if (!url) {
+    imagePreviewWrap.style.display = "none";
+    imagePreview.src = "";
+    return;
+  }
+  imagePreview.src = url;
+  imagePreviewWrap.style.display = "block";
+}
+
+imageFileInput?.addEventListener("change", () => {
+  const file = imageFileInput.files?.[0];
+  if (!file) return;
+  pendingRemoveImage = false;
+  showImagePreview(URL.createObjectURL(file));
+});
+
+imageRemoveBtn?.addEventListener("click", () => {
+  imageFileInput.value = "";
+  currentImageUrl = "";
+  pendingRemoveImage = true;
+  showImagePreview("");
+});
 
 function escapeHtml(str) {
   const div = document.createElement("div");
@@ -38,6 +88,9 @@ function monthYearLabel(date) {
 function openModal(editData = null, editId = null) {
   form.reset();
   document.getElementById("newsDocId").value = editId || "";
+  imageFileInput.value = "";
+  pendingRemoveImage = false;
+
   if (editData) {
     modalTitle.textContent = "Edit Post";
     document.getElementById("newsTitle").value = editData.title || "";
@@ -45,9 +98,13 @@ function openModal(editData = null, editId = null) {
     document.getElementById("newsExcerpt").value = editData.excerpt || "";
     document.getElementById("newsEmoji").value = editData.emoji || "";
     document.getElementById("newsPublishNow").checked = editData.status === "published";
+    currentImageUrl = editData.imageUrl || "";
+    showImagePreview(currentImageUrl);
   } else {
     modalTitle.textContent = "New Post";
     document.getElementById("newsPublishNow").checked = true;
+    currentImageUrl = "";
+    showImagePreview("");
   }
   statusEl.textContent = "";
   modal.classList.add("open");
@@ -68,16 +125,29 @@ form?.addEventListener("submit", async (e) => {
 
   const editId = document.getElementById("newsDocId").value;
   const publishNow = document.getElementById("newsPublishNow").checked;
+  const newFile = imageFileInput.files?.[0] || null;
 
-  const data = {
-    title: document.getElementById("newsTitle").value.trim(),
-    tag: document.getElementById("newsTag").value.trim(),
-    excerpt: document.getElementById("newsExcerpt").value.trim(),
-    emoji: document.getElementById("newsEmoji").value.trim() || "📰",
-    status: publishNow ? "published" : "draft",
-  };
+  let imageUrl = currentImageUrl;
 
   try {
+    if (newFile) {
+      statusEl.textContent = "Uploading image…";
+      imageUrl = await uploadToCloudinary(newFile);
+    } else if (pendingRemoveImage) {
+      imageUrl = "";
+    }
+
+    statusEl.textContent = "Saving…";
+
+    const data = {
+      title: document.getElementById("newsTitle").value.trim(),
+      tag: document.getElementById("newsTag").value.trim(),
+      excerpt: document.getElementById("newsExcerpt").value.trim(),
+      emoji: document.getElementById("newsEmoji").value.trim() || "📰",
+      imageUrl: imageUrl || "",
+      status: publishNow ? "published" : "draft",
+    };
+
     if (editId) {
       await updateDoc(doc(db, "news", editId), data);
     } else {
@@ -107,8 +177,12 @@ function buildCard(id, data) {
     ? monthYearLabel(data.createdAt.toDate())
     : "";
 
+  const mediaHtml = data.imageUrl
+    ? `<img src="${escapeHtml(data.imageUrl)}" alt="${escapeHtml(data.title || "")}" style="width:100%; height:100%; object-fit:cover;" />`
+    : escapeHtml(data.emoji || "📰");
+
   card.innerHTML = `
-    <div class="content-card-media">${escapeHtml(data.emoji || "📰")}<span class="cc-badge">${data.status === "published" ? "Published" : "Draft"}</span></div>
+    <div class="content-card-media">${mediaHtml}<span class="cc-badge">${data.status === "published" ? "Published" : "Draft"}</span></div>
     <div class="content-card-body">
       <span class="content-card-tag">${escapeHtml(data.tag || "")}${dateLabel ? " · " + dateLabel : ""}</span>
       <h3 class="content-card-title">${escapeHtml(data.title || "Untitled")}</h3>
