@@ -10,6 +10,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
 
+<style>
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; padding: 1.5rem; }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-card { background: var(--bg-card); border-radius: 16px; padding: 2rem; width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: translateY(16px); transition: transform .25s ease; max-height: 90vh; overflow-y: auto; }
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; }
+  .modal-head h3 { font-size: 1.15rem; font-weight: 700; margin: 0; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:transparent; cursor:pointer; color:var(--text-secondary); }
+  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
+  .form-field label { font-size:.85rem; font-weight:600; color:var(--text-secondary); }
+  .form-field input, .form-field textarea { padding:.6rem .8rem; border:1px solid var(--border); border-radius:8px; font-size:.9rem; font-family:inherit; background: var(--bg-secondary); color: var(--text-primary); }
+  .form-field textarea { resize: vertical; min-height: 80px; }
+  .form-row2-modal { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-check { display:flex; align-items:center; gap:.5rem; margin-bottom: 1.25rem; font-size:.9rem; }
+  #companyStatus { font-size:.85rem; color: var(--text-muted); margin-top:.5rem; min-height: 1.2em; }
+</style>
+
 </head>
 <body>
 
@@ -76,116 +93,84 @@
         <h1>Companies</h1>
         <p>Manage the five subsidiary profiles shown on the public site's Companies section.</p>
       </div>
-      <div class="page-head-actions"><button class="btn btn-primary" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      Add Company
-    </button></div>
+      <div class="page-head-actions">
+      <button class="btn btn-primary" type="button" id="openCompanyBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Add Company
+      </button>
+    </div>
     </div>
     <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-      <div class="stat-card"><div><p class="stat-label">Total Subsidiaries</p><p class="stat-value">5</p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Published</p><p class="stat-value">5 <span class="stat-delta up">▲ live</span></p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Draft / Unlisted</p><p class="stat-value">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Total Subsidiaries</p><p class="stat-value" id="statTotalCompanies">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Published</p><p class="stat-value" id="statPublishedCompanies">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Draft / Unlisted</p><p class="stat-value" id="statDraftCompanies">0</p></div></div>
     </div>
 
-    <div class="card-grid">
-      <div class="content-card">
-        <div class="content-card-media">🚗<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Education & Tech</span>
-          <h3 class="content-card-title">M-Smart Driving School Solution</h3>
-          <p class="content-card-desc">Digital platform automating registration, scheduling, payments and DVLA-compliant training records for driving schools in Ghana.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-              Edit
-            </button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media">🍎<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Food & Technology</span>
-          <h3 class="content-card-title">M-Digital Food Chain</h3>
-          <p class="content-card-desc">Technology-enabled food distribution ecosystem connecting farmers, suppliers, retailers and consumers across Africa.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-              Edit
-            </button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media">🎪<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Events & Festivals</span>
-          <h3 class="content-card-title">M-Events & Festivals</h3>
-          <p class="content-card-desc">Creative events company producing festivals, corporate events and cultural experiences across the continent.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-              Edit
-            </button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media">🌾<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Agriculture</span>
-          <h3 class="content-card-title">M-Farms</h3>
-          <p class="content-card-desc">Sustainable agriculture initiative focused on modern farming practices, food security and farmer empowerment.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-              Edit
-            </button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media">🎓<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Consulting & Training</span>
-          <h3 class="content-card-title">M-Consultancy & Training</h3>
-          <p class="content-card-desc">Professional consultancy and training services delivering capacity-building programs for businesses and institutions.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-              Edit
-            </button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
+    <div class="card-grid" id="companiesAdminGrid"></div>
+    <div class="empty-state" id="companiesEmptyState" style="display:none;">
+      <div class="es-icon">🏢</div>
+      <h4>No companies yet</h4>
+      <p>Click <strong>Add Company</strong> to add your first subsidiary.</p>
     </div>
-
 
   </main>
 </div>
 
+<!-- Company Modal -->
+<div class="modal-overlay" id="companyModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="companyModalTitle">Add Company</h3>
+      <button class="modal-close" id="closeCompanyBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="companyForm">
+      <input type="hidden" id="companyDocId" value="" />
+      <div class="form-field">
+        <label for="companyName">Company Name *</label>
+        <input type="text" id="companyName" placeholder="e.g. M-Smart Driving School Solution" required />
+      </div>
+      <div class="form-row2-modal">
+        <div class="form-field">
+          <label for="companyTag">Category Tag *</label>
+          <input type="text" id="companyTag" placeholder="e.g. Education & Tech" required />
+        </div>
+        <div class="form-field">
+          <label for="companyIcon">Icon (emoji) *</label>
+          <input type="text" id="companyIcon" placeholder="🚗" maxlength="4" required />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="companyDesc">Description *</label>
+        <textarea id="companyDesc" placeholder="Short description shown on the public card…" required></textarea>
+      </div>
+      <div class="form-row2-modal">
+        <div class="form-field">
+          <label for="companyWebsite">Website URL</label>
+          <input type="text" id="companyWebsite" placeholder="https://…" />
+        </div>
+        <div class="form-field">
+          <label for="companyLearnMore">Learn More URL</label>
+          <input type="text" id="companyLearnMore" placeholder="https://…/about" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="companyOrder">Display Order (lower shows first)</label>
+        <input type="number" id="companyOrder" placeholder="1" />
+      </div>
+      <label class="form-check">
+        <input type="checkbox" id="companyPublishNow" checked />
+        Published (uncheck to hide from public site)
+      </label>
+      <button type="submit" class="btn btn-primary" id="companySubmitBtn" style="width:100%; justify-content:center;">
+        Save Company
+      </button>
+      <div id="companyStatus"></div>
+    </form>
+  </div>
+</div>
+
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
-<script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/companies-admin.js"></script>
 </body>
 </html>
