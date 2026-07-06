@@ -10,6 +10,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
 
+<style>
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+    padding: 1.5rem;
+  }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-card {
+    background: var(--bg-card); border-radius: 16px;
+    padding: 2rem; width: 100%; max-width: 460px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: translateY(16px); transition: transform .25s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; }
+  .modal-head h3 { font-size: 1.15rem; font-weight: 700; margin: 0; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:transparent; cursor:pointer; color:var(--text-secondary); }
+  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
+  .form-field label { font-size:.85rem; font-weight:600; color:var(--text-secondary); }
+  .form-field input { padding:.6rem .8rem; border:1px solid var(--border); border-radius:8px; font-size:.9rem; font-family:inherit; background: var(--bg-secondary); color: var(--text-primary); }
+  .modal-file-picker {
+    display:flex; align-items:center; gap:8px;
+    padding:.6rem .8rem; border:1.5px dashed var(--border); border-radius:8px;
+    font-size:.85rem; cursor:pointer; background: var(--bg-secondary); color: var(--text-secondary);
+  }
+  .modal-file-picker:hover { border-color: var(--royal-blue); }
+  .modal-upload-progress { height:4px; border-radius:99px; background: var(--border); overflow:hidden; margin-top:8px; display:none; }
+  .modal-upload-progress-bar { height:100%; width:0%; background: var(--grad-blue-green); transition: width .2s ease; }
+  #partnerStatus { font-size:.85rem; color: var(--text-muted); margin-top:.5rem; min-height: 1.2em; }
+  .partner-card-logo { height:90px; display:flex; align-items:center; justify-content:center; background: var(--bg-glass); }
+  .partner-card-logo img { max-width:70%; max-height:60%; object-fit:contain; }
+</style>
 </head>
 <body>
 
@@ -38,7 +73,7 @@
     <a class="nav-item" href="analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Site Analytics</a>
     <div class="nav-section-label">System</div>
     <a class="nav-item" href="settings.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Settings</a>
-  <a class="nav-item" href="users.html" data-page="users"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Users</a>
+    <a class="nav-item" href="users.html" data-page="users"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Users</a>
   </aside>
 
   <main class="main">
@@ -74,93 +109,67 @@
       <div>
         <p class="page-head-eyebrow">Site Content</p>
         <h1>Partners</h1>
-        <p>Logos shown in the public site's scrolling Partners carousel.</p>
+        <p>Organisations shown in the public site's partner logo carousel.</p>
       </div>
-      <div class="page-head-actions"><button class="btn btn-primary" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      Add Partner
-    </button></div>
-    </div>
-    <div class="panel">
-      <table>
-        <thead><tr><th>Partner</th><th>Type</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-            <tr>
-              <td><div class="student-cell"><div style="width:32px;height:32px;border-radius:8px;background:var(--bg-glass);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🤝</div><div><strong>DVLA Ghana</strong></div></div></td>
-              <td><span class="pill active">Government / Institutional</span></td>
-              <td><span class="pill completed">Live on site</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><div style="width:32px;height:32px;border-radius:8px;background:var(--bg-glass);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🤝</div><div><strong>Ministry of Food and Agriculture (MoFA)</strong></div></div></td>
-              <td><span class="pill active">Government / Institutional</span></td>
-              <td><span class="pill completed">Live on site</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><div style="width:32px;height:32px;border-radius:8px;background:var(--bg-glass);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🤝</div><div><strong>Ghana Investment Promotion Centre (GIPC)</strong></div></div></td>
-              <td><span class="pill active">Government / Institutional</span></td>
-              <td><span class="pill completed">Live on site</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><div style="width:32px;height:32px;border-radius:8px;background:var(--bg-glass);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🤝</div><div><strong>National Board for Small Scale Industries (NBSSI)</strong></div></div></td>
-              <td><span class="pill active">Government / Institutional</span></td>
-              <td><span class="pill completed">Live on site</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><div style="width:32px;height:32px;border-radius:8px;background:var(--bg-glass);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🤝</div><div><strong>Ghana Tourism Authority (GTA)</strong></div></div></td>
-              <td><span class="pill active">Government / Institutional</span></td>
-              <td><span class="pill completed">Live on site</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><div style="width:32px;height:32px;border-radius:8px;background:var(--bg-glass);display:flex;align-items:center;justify-content:center;font-size:.85rem;">🤝</div><div><strong>Ghana Export Promotion Authority (GEPA)</strong></div></div></td>
-              <td><span class="pill active">Government / Institutional</span></td>
-              <td><span class="pill completed">Live on site</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-        </tbody>
-      </table>
+      <div class="page-head-actions">
+        <button class="btn btn-primary" type="button" id="openPartnerBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Add Partner
+        </button>
+      </div>
     </div>
 
+    <div class="card-grid" id="partnersAdminGrid"></div>
+    <div class="empty-state" id="partnersEmptyState" style="display:none;">
+      <div class="es-icon">🌍</div>
+      <h4>No partners yet</h4>
+      <p>Click <strong>Add Partner</strong> to add your first organisation.</p>
+    </div>
 
   </main>
 </div>
 
+<!-- Partner Modal -->
+<div class="modal-overlay" id="partnerModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="partnerModalTitle">Add Partner</h3>
+      <button class="modal-close" id="closePartnerBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="partnerForm">
+      <input type="hidden" id="partnerDocId" value="" />
+      <div class="form-field">
+        <label for="partnerName">Organisation Name *</label>
+        <input type="text" id="partnerName" placeholder="e.g. DVLA Ghana" required />
+      </div>
+      <div class="form-field">
+        <label for="partnerWebsite">Website URL</label>
+        <input type="text" id="partnerWebsite" placeholder="https://…" />
+      </div>
+      <div class="form-field">
+        <label>Logo (optional — shows text name if left blank)</label>
+        <label class="modal-file-picker" id="partnerLogoLabel">
+          🏢 <span id="partnerLogoFileName">Choose a logo image…</span>
+          <input type="file" id="partnerLogoFile" accept="image/*" style="display:none;" />
+        </label>
+        <div class="modal-upload-progress" id="partnerLogoProgress">
+          <div class="modal-upload-progress-bar" id="partnerLogoProgressBar"></div>
+        </div>
+        <div id="partnerLogoPreviewWrap" style="display:none; margin-top:.6rem;">
+          <img id="partnerLogoPreview" src="" alt="Preview" style="max-height:60px;object-fit:contain;" />
+        </div>
+        <input type="hidden" id="partnerLogo" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="partnerSubmitBtn" style="width:100%; justify-content:center;">
+        Save Partner
+      </button>
+      <div id="partnerStatus"></div>
+    </form>
+  </div>
+</div>
+
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
-<script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/partners-admin.js"></script>
 </body>
 </html>

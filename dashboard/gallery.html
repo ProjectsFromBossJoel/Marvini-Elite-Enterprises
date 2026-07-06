@@ -10,6 +10,46 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
 
+<style>
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+    padding: 1.5rem;
+  }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-card {
+    background: var(--bg-card); border-radius: 16px;
+    padding: 2rem; width: 100%; max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: translateY(16px); transition: transform .25s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; }
+  .modal-head h3 { font-size: 1.15rem; font-weight: 700; margin: 0; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:transparent; cursor:pointer; color:var(--text-secondary); }
+  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
+  .form-field label { font-size:.85rem; font-weight:600; color:var(--text-secondary); }
+  .form-field input, .form-field select {
+    padding:.6rem .8rem; border:1px solid var(--border); border-radius:8px; font-size:.9rem; font-family:inherit;
+    background: var(--bg-secondary); color: var(--text-primary);
+  }
+  .modal-file-picker {
+    display:flex; align-items:center; gap:8px;
+    padding:.6rem .8rem; border:1.5px dashed var(--border); border-radius:8px;
+    font-size:.85rem; cursor:pointer; background: var(--bg-secondary); color: var(--text-secondary);
+  }
+  .modal-file-picker:hover { border-color: var(--royal-blue); }
+  .modal-upload-progress {
+    height:4px; border-radius:99px; background: var(--border);
+    overflow:hidden; margin-top:8px; display:none;
+  }
+  .modal-upload-progress-bar { height:100%; width:0%; background: var(--grad-blue-green); transition: width .2s ease; }
+  #galleryStatus { font-size:.85rem; color: var(--text-muted); margin-top:.5rem; min-height: 1.2em; }
+</style>
+
 </head>
 <body>
 
@@ -76,80 +116,71 @@
         <h1>Gallery</h1>
         <p>Photos shown in the public site's Gallery section and lightbox.</p>
       </div>
-      <div class="page-head-actions"><button class="btn btn-primary" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      Upload Photos
-    </button></div>
+      <div class="page-head-actions">
+      <button class="btn btn-primary" type="button" id="openGalleryBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Upload Photo
+      </button>
     </div>
-    <div class="card-grid">
-      <div class="content-card">
-        <div class="content-card-media" style="height:170px;font-size:3rem;">🚗</div>
-        <div class="content-card-body" style="gap:6px;">
-          <h3 class="content-card-title" style="font-size:.92rem;">M-Smart Driving School Solutions</h3>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit Caption</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media" style="height:170px;font-size:3rem;">🍎</div>
-        <div class="content-card-body" style="gap:6px;">
-          <h3 class="content-card-title" style="font-size:.92rem;">M-Digital Food Chain</h3>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit Caption</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media" style="height:170px;font-size:3rem;">🎪</div>
-        <div class="content-card-body" style="gap:6px;">
-          <h3 class="content-card-title" style="font-size:.92rem;">M-Events & Festivals</h3>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit Caption</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media" style="height:170px;font-size:3rem;">🌾</div>
-        <div class="content-card-body" style="gap:6px;">
-          <h3 class="content-card-title" style="font-size:.92rem;">M-Farms</h3>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit Caption</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media" style="height:170px;font-size:3rem;">🌍</div>
-        <div class="content-card-body" style="gap:6px;">
-          <h3 class="content-card-title" style="font-size:.92rem;">Community Impact</h3>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit Caption</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media" style="height:170px;font-size:3rem;">🏢</div>
-        <div class="content-card-body" style="gap:6px;">
-          <h3 class="content-card-title" style="font-size:.92rem;">M-Events & Festivals</h3>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit Caption</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
     </div>
 
+    <div class="card-grid" id="galleryAdminGrid"></div>
+    <div class="empty-state" id="galleryEmptyState" style="display:none;">
+      <div class="es-icon">🖼️</div>
+      <h4>No photos yet</h4>
+      <p>Click <strong>Upload Photo</strong> to add your first gallery image.</p>
+    </div>
 
   </main>
 </div>
 
+<!-- Gallery Upload Modal -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="galleryModalTitle">Upload Photo</h3>
+      <button class="modal-close" id="closeGalleryBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="galleryForm">
+      <input type="hidden" id="galleryDocId" value="" />
+      <div class="form-field">
+        <label for="galleryCaption">Caption *</label>
+        <input type="text" id="galleryCaption" placeholder="e.g. M-Farms Field Day 2026" required />
+      </div>
+      <div class="form-field">
+        <label for="galleryCategory">Subsidiary / Category</label>
+        <select id="galleryCategory">
+          <option value="">General</option>
+          <option value="msmart">M-Smart Driving School</option>
+          <option value="mfood">M-Digital Food Chain</option>
+          <option value="mevents">M-Events & Festivals</option>
+          <option value="mfarms">M-Farms</option>
+          <option value="community">Community Impact</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Photo *</label>
+        <label class="modal-file-picker" id="galleryFileLabel">
+          📷 <span id="galleryFileName">Choose an image…</span>
+          <input type="file" id="galleryFile" accept="image/*" style="display:none;" />
+        </label>
+        <div class="modal-upload-progress" id="galleryUploadProgress">
+          <div class="modal-upload-progress-bar" id="galleryUploadProgressBar"></div>
+        </div>
+        <div id="galleryPreviewWrap" style="display:none; margin-top:.6rem;">
+          <img id="galleryPreview" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border);" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="gallerySubmitBtn" style="width:100%; justify-content:center;">
+        Save Photo
+      </button>
+      <div id="galleryStatus"></div>
+    </form>
+  </div>
+</div>
+
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
-<script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/gallery-admin.js"></script>
 </body>
 </html>

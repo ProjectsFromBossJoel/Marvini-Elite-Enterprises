@@ -11,7 +11,7 @@
 // ══════════════════════════════════════════════════════════
 
 const CLOUD_NAME = "dilb7jd6w";
-const UPLOAD_PRESET = "marvini_publications";
+const DEFAULT_UPLOAD_PRESET = "marvini_publications";
 
 /**
  * Uploads a single file to Cloudinary.
@@ -19,14 +19,19 @@ const UPLOAD_PRESET = "marvini_publications";
  * @param {"image"|"raw"|"auto"} resourceType - "image" for cover art,
  *        "raw" for PDFs, "auto" lets Cloudinary decide.
  * @param {string} folder - Cloudinary folder to keep uploads organized.
+ * @param {string} preset - Unsigned upload preset name. Defaults to the
+ *        publications preset for backward compatibility with existing
+ *        callers; pass a dedicated preset (e.g. "marvini_gallery",
+ *        "marvini_partners") for other content types so their folder
+ *        settings aren't at the mercy of the publications preset's config.
  * @returns {Promise<{url: string, publicId: string, format: string}>}
  */
-export async function uploadToCloudinary(file, resourceType = "auto", folder = "marvini-publications") {
+export async function uploadToCloudinary(file, resourceType = "auto", folder = "marvini-publications", preset = DEFAULT_UPLOAD_PRESET) {
   const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`;
 
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", UPLOAD_PRESET);
+  formData.append("upload_preset", preset);
   formData.append("folder", folder);
 
   const response = await fetch(endpoint, { method: "POST", body: formData });
