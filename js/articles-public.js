@@ -9,11 +9,14 @@ import {
   db,
   collection,
   getDocs,
+  addDoc,
   query,
   where,
   orderBy,
+  serverTimestamp,
   PUBLICATIONS_COLLECTION,
 } from "./firebase-config.js";
+import { uploadToCloudinary } from "./cloudinary.js";
 
 const grid = document.querySelector(".articles-grid");
 
@@ -90,5 +93,68 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+// ── Public submission form ──────────────────────────────
+const publicSubmitForm = document.getElementById("publicSubmitForm");
+const publicSubmitBtn = document.getElementById("publicSubmitBtn");
+const publicSubmitStatus = document.getElementById("publicSubmitStatus");
+
+publicSubmitForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById("subTitle").value.trim();
+  const description = document.getElementById("subDescription").value.trim();
+  const category = document.getElementById("subCategory").value;
+  const pdfFile = document.getElementById("subPdf").files[0];
+  const coverFile = document.getElementById("subCover").files[0];
+
+  if (!title || !category || !pdfFile) {
+    publicSubmitStatus.textContent = "Please fill in the title, type, and choose a PDF file.";
+    return;
+  }
+
+  publicSubmitBtn.disabled = true;
+  publicSubmitStatus.textContent = "Uploading PDF…";
+
+  try {
+    const pdfResult = await uploadToCloudinary(pdfFile, "raw", "marvini-publications/pdfs");
+
+    let coverResult = null;
+    if (coverFile) {
+      publicSubmitStatus.textContent = "Uploading cover image…";
+      coverResult = await uploadToCloudinary(coverFile, "image", "marvini-publications/covers");
+    }
+
+    publicSubmitStatus.textContent = "Submitting…";
+
+    await addDoc(collection(db, PUBLICATIONS_COLLECTION), {
+      title,
+      description,
+      category,
+      fileUrl: pdfResult.url,
+      filePublicId: pdfResult.publicId,
+      fileName: pdfFile.name,
+      coverImageUrl: coverResult ? coverResult.url : null,
+      coverPublicId: coverResult ? coverResult.publicId : null,
+      status: "draft", // always starts pending review, never auto-published
+      downloads: 0,
+      createdAt: serverTimestamp(),
+      publishedAt: null,
+      submittedPublicly: true,
+    });
+
+    publicSubmitStatus.textContent = "✅ Thank you! Your submission has been received and will be reviewed.";
+    publicSubmitForm.reset();
+    setTimeout(() => {
+      document.getElementById("submitModal")?.classList.remove("open");
+      publicSubmitStatus.textContent = "";
+    }, 2500);
+  } catch (err) {
+    console.error("Public submission failed:", err);
+    publicSubmitStatus.textContent = "⚠️ Something went wrong: " + err.message;
+  } finally {
+    publicSubmitBtn.disabled = false;
+  }
+});
 
 renderPublishedArticles();
