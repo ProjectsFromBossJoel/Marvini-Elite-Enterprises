@@ -7,6 +7,8 @@ import {
   getFirestore,
   collection,
   addDoc,
+  setDoc,
+  getDoc,
   updateDoc,
   deleteDoc,
   doc,
@@ -20,6 +22,7 @@ import {
 import {
   getAuth,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -43,6 +46,8 @@ export const auth = getAuth(app);
 export {
   collection,
   addDoc,
+  setDoc,
+  getDoc,
   updateDoc,
   deleteDoc,
   doc,
@@ -53,8 +58,16 @@ export {
   serverTimestamp,
   increment,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 };
 
+// Exposed so js/users-admin.js can spin up a *second*, isolated Firebase App
+// instance when creating new admin users — createUserWithEmailAndPassword
+// signs in as the new user on whatever app instance you call it on, so we
+// don't want that to be this shared `app`/`auth` (it would boot the current admin).
+export { firebaseConfig };
+
 export const PUBLICATIONS_COLLECTION = "publications";
+export const USERS_COLLECTION = "users";
