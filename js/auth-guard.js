@@ -70,7 +70,18 @@ onAuthStateChanged(auth, async (user) => {
 
   const signOutBtn = document.getElementById("signOutBtn");
   signOutBtn?.addEventListener("click", async () => {
+    window.marviniUser = null;
     await signOut(auth);
-    window.location.href = "login.html";
+    // replace() drops this page from history, so Back can't return to it.
+    window.location.replace("login.html");
   });
+});
+
+// If the browser restores this page from its back-forward cache (e.g. the
+// user hits Back after logging out), force a full reload so onAuthStateChanged
+// runs again from scratch instead of showing the stale, already-rendered page.
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    window.location.reload();
+  }
 });

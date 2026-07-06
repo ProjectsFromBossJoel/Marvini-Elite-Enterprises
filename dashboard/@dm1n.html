@@ -430,6 +430,9 @@
         <button class="icon-btn" aria-label="Messages">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
         </button>
+        <button class="icon-btn" id="signOutBtn" aria-label="Sign out" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
         <div class="profile">
           <img src="img/ceo_mee121.png" alt="Admin" onerror="this.src='https://ui-avatars.com/api/?name=Admin+User&background=1a56ff&color=fff'"/>
           <div class="who">
@@ -575,31 +578,30 @@
           </div>
 
           <div class="bubble-track">
-            <div class="bubble done"><div class="bubble-dot">✓</div><div class="bubble-label">Submitted</div><div class="bubble-count">142</div></div>
-            <div class="bubble done"><div class="bubble-dot">✓</div><div class="bubble-label">Reviewed</div><div class="bubble-count">96</div></div>
-            <div class="bubble"><div class="bubble-dot">●</div><div class="bubble-label">Interview</div><div class="bubble-count">34</div></div>
-            <div class="bubble"><div class="bubble-dot">4</div><div class="bubble-label">Offer</div><div class="bubble-count">12</div></div>
-            <div class="bubble"><div class="bubble-dot">5</div><div class="bubble-label">Hired</div><div class="bubble-count">9</div></div>
+            <div class="bubble"><div class="bubble-dot">1</div><div class="bubble-label">Submitted</div><div class="bubble-count" id="bubbleSubmitted">0</div></div>
+            <div class="bubble"><div class="bubble-dot">2</div><div class="bubble-label">Reviewed</div><div class="bubble-count" id="bubbleReviewed">0</div></div>
+            <div class="bubble"><div class="bubble-dot">3</div><div class="bubble-label">Interview</div><div class="bubble-count" id="bubbleInterview">0</div></div>
+            <div class="bubble"><div class="bubble-dot">4</div><div class="bubble-label">Offer</div><div class="bubble-count" id="bubbleOffer">0</div></div>
+            <div class="bubble"><div class="bubble-dot">5</div><div class="bubble-label">Hired</div><div class="bubble-count" id="bubbleHired">0</div></div>
           </div>
         </div>
 
         <div class="mini-stats">
           <div class="mini-stat">
             <div class="ic-wrap" style="background:rgba(26,86,255,0.1);color:var(--royal-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
-            <div><div class="num">12</div><div class="lbl">Team Members</div></div>
+            <div><div class="num" id="statTeamCount">0</div><div class="lbl">Team Members</div></div>
           </div>
           <div class="mini-stat">
             <div class="ic-wrap" style="background:rgba(5,150,105,0.1);color:var(--deep-teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
-            <div><div class="num">6</div><div class="lbl">Open Roles</div></div>
+            <div><div class="num" id="statOpenRoles">0</div><div class="lbl">Open Roles</div></div>
           </div>
         </div>
 
         <div class="lifetime-box">
           <div>
-            <div class="amt">3,482</div>
+            <div class="amt" id="statLifetimeApplications">0</div>
             <div class="sub">Total Applications Received</div>
           </div>
-          <div class="yoy-badge">YoY 24%</div>
         </div>
       </div>
     </div>
@@ -620,37 +622,8 @@
           <thead>
             <tr><th>Applicant</th><th>Role</th><th>Subsidiary</th><th>Status</th></tr>
           </thead>
-          <tbody>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Ama+Serwaa&background=1a56ff&color=fff"/><div><strong>Ama Serwaa</strong><span>Career · Full-time</span></div></div></td>
-              <td>Frontend Engineer</td>
-              <td>M-Smart</td>
-              <td><span class="pill pending">Under Review</span></td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Kwesi+Boateng&background=059669&color=fff"/><div><strong>Kwesi Boateng</strong><span>Volunteer</span></div></div></td>
-              <td>Farmer Training Volunteer</td>
-              <td>M-Farms</td>
-              <td><span class="pill completed">Hired</span></td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Linda+Mensah&background=F59E0B&color=fff"/><div><strong>Linda Mensah</strong><span>Career · Part-time</span></div></div></td>
-              <td>Training Program Facilitator</td>
-              <td>M-Consultancy</td>
-              <td><span class="pill pending">Interview Scheduled</span></td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Yaw+Adjei&background=1a56ff&color=fff"/><div><strong>Yaw Adjei</strong><span>Career · Full-time</span></div></div></td>
-              <td>Supply Chain Operations Associate</td>
-              <td>M-Digital Food Chain</td>
-              <td><span class="pill active">New</span></td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Efua+Owusu&background=059669&color=fff"/><div><strong>Efua Owusu</strong><span>Volunteer</span></div></div></td>
-              <td>Festival Production Volunteer</td>
-              <td>M-Events</td>
-              <td><span class="pill active">New</span></td>
-            </tr>
+          <tbody id="recentApplicationsBody">
+            <tr><td colspan="4" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Loading…</td></tr>
           </tbody>
         </table>
       </div>

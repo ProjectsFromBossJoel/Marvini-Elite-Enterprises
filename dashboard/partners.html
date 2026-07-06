@@ -34,7 +34,7 @@
     <a class="nav-item active" href="partners.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></svg></span>Partners</a>
     <div class="nav-section-label">Engagement</div>
     <a class="nav-item" href="careers.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>Careers & Volunteering<span class="nav-badge">12</span></a>
-    <a class="nav-item" href="messages.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></span>Contact Messages<span class="nav-badge">4</span></a>
+    <a class="nav-item" href="messages.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></span>Contact Messages<span class="nav-badge" id="messagesNavBadge">0</span></a>
     <a class="nav-item" href="analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Site Analytics</a>
     <div class="nav-section-label">System</div>
     <a class="nav-item" href="settings.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Settings</a>
@@ -56,6 +56,9 @@
         </button>
         <button class="icon-btn" aria-label="Messages">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+        </button>
+        <button class="icon-btn" id="signOutBtn" aria-label="Sign out" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
         </button>
         <div class="profile">
           <img src="img/ceo_mee121.png" alt="Admin" onerror="this.src='https://ui-avatars.com/api/?name=Admin+User&background=1a56ff&color=fff'"/>
@@ -158,5 +161,6 @@
 
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
+<script type="module" src="../js/dashboard-admin.js"></script>
 </body>
 </html>
