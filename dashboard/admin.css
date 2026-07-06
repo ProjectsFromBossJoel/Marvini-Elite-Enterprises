@@ -419,6 +419,10 @@ tr:last-child td{border-bottom:none;}
 .admin-tab:hover{border-color:var(--royal-blue);color:var(--royal-blue);}
 .admin-tab.active{background:var(--royal-blue);border-color:var(--royal-blue);color:#fff;}
 
+
+#signOutBtn { color: #dc2626; border-color: rgba(220,38,38,0.3); }
+  #signOutBtn:hover { background: rgba(220,38,38,0.08); border-color: #dc2626; }
+
 @media (max-width:1150px){
   .content-grid,.bottom-grid{grid-template-columns:1fr;}
   .stats-grid{grid-template-columns:repeat(2,1fr);}
