@@ -159,11 +159,13 @@ function buildApplicantRow(id, data) {
     <td><span class="pill ${STAGE_PILL_CLASS[stage] || "active"}">${STAGE_LABELS[stage] || stage}</span></td>
     <td>
       <div class="row-actions">
+        <button aria-label="View applicant" data-view title="View details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
         <button aria-label="Advance stage" data-advance title="Advance stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
         <button aria-label="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
       </div>
     </td>
   `;
+  tr.querySelector("[data-view]").addEventListener("click", () => openApplicantModal(data));
   tr.querySelector("[data-advance]").addEventListener("click", async () => {
     const idx = STAGE_ORDER.indexOf(stage);
     const next = STAGE_ORDER[Math.min(idx + 1, STAGE_ORDER.length - 2)]; // stop before "rejected" on auto-advance
@@ -177,6 +179,56 @@ function buildApplicantRow(id, data) {
   });
   return tr;
 }
+
+/* ── APPLICANT VIEW MODAL ─────────────────────────────── */
+
+const applicantViewModal = document.getElementById("applicantViewModal");
+
+function openApplicantModal(data) {
+  document.getElementById("viewApplicantName").textContent = data.applicantName || "—";
+  document.getElementById("viewApplicantEmail").innerHTML = data.email
+    ? `<a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a>` : "—";
+  document.getElementById("viewApplicantPhone").innerHTML = data.phone
+    ? `<a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a>` : "—";
+  document.getElementById("viewApplicantRole").textContent = data.role || "—";
+  document.getElementById("viewApplicantSubsidiary").textContent = COMPANY_LABELS[data.subsidiary] || data.subsidiary || "—";
+  document.getElementById("viewApplicantType").textContent = data.type === "volunteer" ? "Volunteer" : "Career";
+  document.getElementById("viewApplicantStage").textContent = STAGE_LABELS[data.stage || "submitted"] || data.stage;
+
+  const resumeWrap = document.getElementById("viewApplicantResumeLinkWrap");
+  const resumeEl = document.getElementById("viewApplicantResumeLink");
+  if (data.resumeLink) {
+    resumeEl.innerHTML = `<a href="${escapeHtml(data.resumeLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(data.resumeLink)}</a>`;
+    resumeWrap.style.display = "flex";
+  } else {
+    resumeWrap.style.display = "none";
+  }
+
+  const msgWrap = document.getElementById("viewApplicantMessageWrap");
+  const msgEl = document.getElementById("viewApplicantMessage");
+  if (data.message) {
+    msgEl.textContent = data.message;
+    msgWrap.style.display = "flex";
+  } else {
+    msgWrap.style.display = "none";
+  }
+
+  const cvStatus = document.getElementById("viewApplicantCvStatus");
+  const cvDownload = document.getElementById("viewApplicantCvDownload");
+  if (data.cvUrl) {
+    cvStatus.textContent = "CV attached.";
+    cvDownload.href = data.cvUrl;
+    cvDownload.style.display = "inline-flex";
+  } else {
+    cvStatus.textContent = "No CV attached.";
+    cvDownload.style.display = "none";
+  }
+
+  applicantViewModal.classList.add("open");
+}
+function closeApplicantModal() { applicantViewModal.classList.remove("open"); }
+document.getElementById("closeApplicantViewBtn")?.addEventListener("click", closeApplicantModal);
+applicantViewModal?.addEventListener("click", (e) => { if (e.target === applicantViewModal) closeApplicantModal(); });
 
 onSnapshot(collection(db, "applications"), (snap) => {
   const docs = snap.docs.map((d) => ({ id: d.id, data: d.data() }));

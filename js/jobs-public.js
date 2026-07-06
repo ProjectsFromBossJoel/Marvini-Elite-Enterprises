@@ -1,6 +1,6 @@
 // js/jobs-public.js
-// Public: render live "open" job postings into #jobsGrid.
-// Falls back to the hardcoded cards already in careers.html if empty.
+// Public: render live "open" job postings into #jobsGrid,
+// and populate the Apply modal's "Select Job" dropdown from the same data.
 
 import { db, collection, onSnapshot } from "./firebase-config.js";
 
@@ -10,33 +10,61 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-const TYPE_ICON = { career: "💼", volunteer: "🤝" };
 const grid = document.getElementById("jobsGrid");
+const modalJobSelect = document.getElementById("modalJobSelect");
 
-if (grid) {
-  onSnapshot(collection(db, "jobs"), (snap) => {
-    const docs = snap.docs
-      .map((d) => ({ id: d.id, data: d.data() }))
-      .filter((d) => d.data.status === "open");
+function refreshModalJobSelect(docs) {
+  if (!modalJobSelect) return;
+  const previousValue = modalJobSelect.value;
 
-    if (docs.length === 0) return; // keep existing hardcoded fallback cards
+  const optionsHtml = docs
+    .map(({ data }) => {
+      const value = `${data.title || ""} — ${data.companyLabel || ""}`;
+      return `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`;
+    })
+    .join("");
 
-    grid.innerHTML = docs.map(({ data }) => `
-      <article class="job-card reveal-fade-up revealed" data-type="${escapeHtml(data.type || "career")}" data-company="${escapeHtml(data.companyKey || "general")}">
-        <div class="job-card-top">
-          <span class="job-badge job-badge--${data.type === "volunteer" ? "volunteer" : "career"}">${data.type === "volunteer" ? "Volunteer" : "Career"}</span>
-          <span class="job-type">${escapeHtml(data.schedule || "")}</span>
-        </div>
-        <h3 class="job-title">${escapeHtml(data.title || "")}</h3>
-        <p class="job-company">${escapeHtml(data.companyLabel || "")}</p>
-        <p class="job-desc">${escapeHtml(data.description || "")}</p>
-        <div class="job-card-footer">
-          <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="${escapeHtml(data.title || "")} — ${escapeHtml(data.companyLabel || "")}" data-track="${escapeHtml(data.type || "career")}">Apply Now</a>
-        </div>
-      </article>
-    `).join("");
+  modalJobSelect.innerHTML =
+    `<option value="">Select a role…</option>` +
+    optionsHtml +
+    `<option value="General / Not Listed">General / Not Listed</option>`;
 
-    // Re-attach click handlers for the freshly rendered "Apply Now" links
-    window.attachApplyLinkListeners?.();
-  });
+  // Preserve the user's current selection if it still exists after refresh
+  if ([...modalJobSelect.options].some((o) => o.value === previousValue)) {
+    modalJobSelect.value = previousValue;
+  }
 }
+
+onSnapshot(collection(db, "jobs"), (snap) => {
+  const docs = snap.docs
+    .map((d) => ({ id: d.id, data: d.data() }))
+    .filter((d) => d.data.status === "open");
+
+  // Always keep the modal dropdown in sync with live Firestore jobs
+  refreshModalJobSelect(docs);
+
+  if (!grid) return;
+
+  if (docs.length === 0) {
+    grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:2rem; opacity:0.6; font-family:'Poppins',sans-serif;">No openings right now — check back soon or send a general application below.</p>`;
+    return;
+  }
+
+  grid.innerHTML = docs.map(({ data }) => `
+    <article class="job-card reveal-fade-up revealed" data-type="${escapeHtml(data.type || "career")}" data-company="${escapeHtml(data.companyKey || "general")}">
+      <div class="job-card-top">
+        <span class="job-badge job-badge--${data.type === "volunteer" ? "volunteer" : "career"}">${data.type === "volunteer" ? "Volunteer" : "Career"}</span>
+        <span class="job-type">${escapeHtml(data.schedule || "")}</span>
+      </div>
+      <h3 class="job-title">${escapeHtml(data.title || "")}</h3>
+      <p class="job-company">${escapeHtml(data.companyLabel || "")}</p>
+      <p class="job-desc">${escapeHtml(data.description || "")}</p>
+      <div class="job-card-footer">
+        <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="${escapeHtml(data.title || "")} — ${escapeHtml(data.companyLabel || "")}" data-track="${escapeHtml(data.type || "career")}">Apply Now</a>
+      </div>
+    </article>
+  `).join("");
+
+  // Re-attach click handlers for the freshly rendered "Apply Now" links
+  window.attachApplyLinkListeners?.();
+});

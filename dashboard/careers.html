@@ -23,6 +23,13 @@
   .form-field textarea { resize: vertical; min-height: 70px; }
   .form-row2-modal { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   #jobStatus, #stageSelect { font-size:.85rem; color: var(--text-muted); margin-top:.5rem; min-height: 1.2em; }
+
+  .applicant-detail-row { display:flex; flex-direction:column; gap:.25rem; margin-bottom:1rem; }
+  .applicant-detail-row label { font-size:.78rem; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:var(--text-muted); }
+  .applicant-detail-row .value { font-size:.95rem; color:var(--text-primary); word-break:break-word; }
+  .applicant-detail-row .value a { color:#1a56ff; text-decoration:none; }
+  .applicant-cv-box { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:.9rem 1rem; border:1px solid var(--border); border-radius:10px; background:var(--bg-secondary); margin-top:.25rem; }
+  .applicant-cv-box span { font-size:.9rem; color:var(--text-secondary); }
 </style>
 
 </head>
@@ -137,6 +144,64 @@
 
 
   </main>
+</div>
+
+<!-- Applicant View Modal -->
+<div class="modal-overlay" id="applicantViewModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Applicant Details</h3>
+      <button class="modal-close" id="closeApplicantViewBtn" aria-label="Close">✕</button>
+    </div>
+
+    <div class="applicant-detail-row">
+      <label>Full Name</label>
+      <div class="value" id="viewApplicantName">—</div>
+    </div>
+    <div class="applicant-detail-row">
+      <label>Email</label>
+      <div class="value" id="viewApplicantEmail">—</div>
+    </div>
+    <div class="applicant-detail-row">
+      <label>Phone</label>
+      <div class="value" id="viewApplicantPhone">—</div>
+    </div>
+    <div class="applicant-detail-row">
+      <label>Role Applied For</label>
+      <div class="value" id="viewApplicantRole">—</div>
+    </div>
+    <div class="applicant-detail-row">
+      <label>Subsidiary</label>
+      <div class="value" id="viewApplicantSubsidiary">—</div>
+    </div>
+    <div class="applicant-detail-row">
+      <label>Type</label>
+      <div class="value" id="viewApplicantType">—</div>
+    </div>
+    <div class="applicant-detail-row">
+      <label>Stage</label>
+      <div class="value" id="viewApplicantStage">—</div>
+    </div>
+    <div class="applicant-detail-row" id="viewApplicantResumeLinkWrap" style="display:none;">
+      <label>Resume / Portfolio Link</label>
+      <div class="value" id="viewApplicantResumeLink">—</div>
+    </div>
+    <div class="applicant-detail-row" id="viewApplicantMessageWrap" style="display:none;">
+      <label>Message</label>
+      <div class="value" id="viewApplicantMessage">—</div>
+    </div>
+
+    <div class="applicant-detail-row">
+      <label>CV / Attached File</label>
+      <div class="applicant-cv-box" id="viewApplicantCvBox">
+        <span id="viewApplicantCvStatus">No CV attached.</span>
+        <a href="#" id="viewApplicantCvDownload" class="btn btn-outline btn-sm" download target="_blank" rel="noopener noreferrer" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Job Modal -->
