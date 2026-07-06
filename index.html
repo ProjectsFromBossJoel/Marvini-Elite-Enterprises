@@ -1745,20 +1745,59 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
     }, { threshold: 0.5 });
     document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
 
-    // ── CONTACT FORM (no Firebase yet) ──────────────────
-    document.getElementById('contactForm')?.addEventListener('submit', e => {
+    // ── CONTACT FORM (writes to Firestore "messages") ────
+    document.getElementById('contactForm')?.addEventListener('submit', async e => {
       e.preventDefault();
-      document.getElementById('formSuccess').style.display = 'block';
+      const form = e.target;
+      const submitBtn = document.getElementById('contactSubmit');
+      const btnText = submitBtn?.querySelector('.btn-text');
+      const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+      document.getElementById('formSuccess').style.display = 'none';
       document.getElementById('formError').style.display   = 'none';
-      e.target.reset();
-      setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.style.display = 'none';
+      if (btnSpinner) btnSpinner.style.display = 'inline-block';
+
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'messages'), {
+          name: document.getElementById('contactName').value,
+          email: document.getElementById('contactEmail').value,
+          phone: document.getElementById('contactPhone').value,
+          subject: document.getElementById('contactSubject').value,
+          message: document.getElementById('contactMessage').value,
+          read: false,
+          createdAt: serverTimestamp(),
+        });
+        document.getElementById('formSuccess').style.display = 'block';
+        form.reset();
+        setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+      } catch (err) {
+        console.error('Could not send message:', err);
+        document.getElementById('formError').style.display = 'block';
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.style.display = 'inline';
+        if (btnSpinner) btnSpinner.style.display = 'none';
+      }
     });
 
-    // ── NEWSLETTER FORM ──────────────────────────────────
-    document.getElementById('newsletterForm')?.addEventListener('submit', e => {
+    // ── NEWSLETTER FORM (writes to Firestore "newsletter") ──
+    document.getElementById('newsletterForm')?.addEventListener('submit', async e => {
       e.preventDefault();
-      document.getElementById('newsletterSuccess').style.display = 'block';
-      e.target.reset();
+      const form = e.target;
+      const emailInput = form.querySelector('.newsletter-input');
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'newsletter'), {
+          email: emailInput?.value || '',
+          createdAt: serverTimestamp(),
+        });
+        document.getElementById('newsletterSuccess').style.display = 'block';
+        form.reset();
+      } catch (err) {
+        console.error('Could not subscribe:', err);
+      }
     });
 
     // ── NEWS FALLBACK (no Firebase) ──────────────────────

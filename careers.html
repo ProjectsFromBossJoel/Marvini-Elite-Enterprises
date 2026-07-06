@@ -1067,14 +1067,46 @@
       });
     });
 
-    // ── APPLICATION FORM SUBMIT (no backend yet) ────────
-    document.getElementById('applyForm')?.addEventListener('submit', e => {
+    // ── APPLICATION FORM SUBMIT (writes to Firestore "applications") ──
+    document.getElementById('applyForm')?.addEventListener('submit', async e => {
       e.preventDefault();
-      document.getElementById('applySuccess').style.display = 'block';
+      const form = e.target;
+      const submitBtn = document.getElementById('applySubmit');
+      const btnText = submitBtn?.querySelector('.btn-text');
+      const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+      document.getElementById('applySuccess').style.display = 'none';
       document.getElementById('applyError').style.display = 'none';
-      e.target.reset();
-      document.querySelectorAll('.apply-toggle-option').forEach((o, i) => o.classList.toggle('active', i === 0));
-      setTimeout(() => document.getElementById('applySuccess').style.display = 'none', 5000);
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.style.display = 'none';
+      if (btnSpinner) btnSpinner.style.display = 'inline-block';
+
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        const type = form.querySelector('input[name="applyType"]:checked')?.value || 'career';
+        await addDoc(collection(db, 'applications'), {
+          applicantName: document.getElementById('applyName').value,
+          email: document.getElementById('applyEmail').value,
+          phone: document.getElementById('applyPhone').value,
+          subsidiary: document.getElementById('applyCompany').value,
+          role: document.getElementById('applyRole').value,
+          resumeLink: document.getElementById('applyResume').value,
+          message: document.getElementById('applyMessage').value,
+          type,
+          stage: 'submitted',
+          createdAt: serverTimestamp(),
+        });
+        document.getElementById('applySuccess').style.display = 'block';
+        form.reset();
+        document.querySelectorAll('.apply-toggle-option').forEach((o, i) => o.classList.toggle('active', i === 0));
+        setTimeout(() => document.getElementById('applySuccess').style.display = 'none', 5000);
+      } catch (err) {
+        console.error('Could not submit application:', err);
+        document.getElementById('applyError').style.display = 'block';
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.style.display = 'inline';
+        if (btnSpinner) btnSpinner.style.display = 'none';
+      }
     });
 
     // ── FOOTER YEAR ──────────────────────────────────────
@@ -1110,8 +1142,8 @@
     });
 
     // ── CLOUDINARY CONFIG ────────────────────────────────
-    const CLOUDINARY_CLOUD_NAME = 'YOUR_CLOUD_NAME';
-    const CLOUDINARY_UPLOAD_PRESET = 'YOUR_UNSIGNED_UPLOAD_PRESET';
+    const CLOUDINARY_CLOUD_NAME = 'dilb7jd6w';
+    const CLOUDINARY_UPLOAD_PRESET = 'marvini_publications';
 
     async function uploadCvToCloudinary(file) {
       const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
@@ -1252,15 +1284,23 @@
       try {
         const cvUrl = await uploadCvToCloudinary(file);
 
-        const payload = {
-          fullName: document.getElementById('modalFullName').value,
+        const jobValue = document.getElementById('modalJobSelect').value;
+        const trackedLink = document.querySelector(`.apply-link[data-role="${CSS.escape(jobValue)}"]`);
+        const inferredType = trackedLink?.dataset.track || 'career';
+        const inferredSubsidiary = trackedLink?.closest('.job-card')?.dataset.company || 'general';
+
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'applications'), {
+          applicantName: document.getElementById('modalFullName').value,
           email: document.getElementById('modalEmail').value,
           phone: document.getElementById('modalPhone').value,
-          job: document.getElementById('modalJobSelect').value,
-          cvUrl
-        };
-        console.log('Application submitted:', payload);
-        // TODO: send `payload` to your backend / Firestore / email service here
+          role: jobValue,
+          subsidiary: inferredSubsidiary,
+          type: inferredType,
+          cvUrl,
+          stage: 'submitted',
+          createdAt: serverTimestamp(),
+        });
 
         successEl.style.display = 'block';
         e.target.reset();
@@ -1268,6 +1308,7 @@
         document.getElementById('modalUploadProgress').style.display = 'none';
         setTimeout(() => { closeApplyModal(); successEl.style.display = 'none'; }, 2500);
       } catch (err) {
+        console.error('Could not submit application:', err);
         errorEl.style.display = 'block';
       } finally {
         submitBtn.disabled = false;

@@ -59,10 +59,25 @@ function whenAuthReady(cb) {
 }
 
 whenAuthReady(() => {
+  applyGreeting();
   watchTeamCount();
   watchCareersAndApplications();
   watchMessages();
+  watchNewsletter();
 });
+
+// ── Greeting: first name of the signed-in admin ─────────────────────
+function applyGreeting() {
+  const name = window.marviniUser?.name || "there";
+  setText("heroWelcomeName", name.split(" ")[0]);
+}
+
+// ── Newsletter subscribers count ────────────────────────────────────
+function watchNewsletter() {
+  onSnapshot(collection(db, "newsletter"), (snap) => {
+    setText("statNewsletter", snap.size);
+  });
+}
 
 // ── Team members count ──────────────────────────────────────────────
 function watchTeamCount() {

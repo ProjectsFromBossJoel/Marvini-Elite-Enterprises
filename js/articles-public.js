@@ -1,3 +1,4 @@
+//js/articles-public.js
 // ══════════════════════════════════════════════════════════
 // Public site — Articles & Reports section
 // Fetches only PUBLISHED publications from Firestore and renders
