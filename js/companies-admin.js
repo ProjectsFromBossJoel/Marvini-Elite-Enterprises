@@ -35,7 +35,17 @@ function openModal(editData = null, editId = null) {
     modalTitle.textContent = "Edit Company";
     document.getElementById("companyName").value = editData.name || "";
     document.getElementById("companyTag").value = editData.tag || "";
-    document.getElementById("companyIcon").value = editData.icon || "";
+    document.getElementById("companyLogoUrl").value = editData.logoUrl || "";
+    const previewImg = document.getElementById("companyLogoPreviewImg");
+    const previewEmpty = document.getElementById("companyLogoPreviewEmpty");
+    if (editData.logoUrl) {
+      previewImg.src = editData.logoUrl;
+      previewImg.style.display = "block";
+      previewEmpty.style.display = "none";
+    } else {
+      previewImg.style.display = "none";
+      previewEmpty.style.display = "flex";
+    }
     document.getElementById("companyDesc").value = editData.description || "";
     document.getElementById("companyWebsite").value = editData.websiteUrl || "";
     document.getElementById("companyLearnMore").value = editData.learnMoreUrl || "";
@@ -44,6 +54,9 @@ function openModal(editData = null, editId = null) {
   } else {
     modalTitle.textContent = "Add Company";
     document.getElementById("companyPublishNow").checked = true;
+    document.getElementById("companyLogoUrl").value = "";
+    document.getElementById("companyLogoPreviewImg").style.display = "none";
+    document.getElementById("companyLogoPreviewEmpty").style.display = "flex";
   }
   statusEl.textContent = "";
   modal.classList.add("open");
@@ -66,7 +79,8 @@ form?.addEventListener("submit", async (e) => {
   const data = {
     name: document.getElementById("companyName").value.trim(),
     tag: document.getElementById("companyTag").value.trim(),
-    icon: document.getElementById("companyIcon").value.trim() || "🏢",
+    logoUrl: document.getElementById("companyLogoUrl").value.trim(),
+    icon: "🏢", // fallback only, shown if logoUrl is empty
     description: document.getElementById("companyDesc").value.trim(),
     websiteUrl: document.getElementById("companyWebsite").value.trim(),
     learnMoreUrl: document.getElementById("companyLearnMore").value.trim(),
@@ -94,7 +108,7 @@ function buildCard(id, data) {
   const card = document.createElement("div");
   card.className = "content-card";
   card.innerHTML = `
-    <div class="content-card-media">${escapeHtml(data.icon || "🏢")}<span class="cc-badge">${data.status === "published" ? "Published" : "Draft"}</span></div>
+    <div class="content-card-media">${data.logoUrl ? `<img src="${escapeHtml(data.logoUrl)}" alt="${escapeHtml(data.name || "")}" style="width:100%; height:100%; object-fit:contain; border-radius:inherit;" />` : escapeHtml(data.icon || "🏢")}<span class="cc-badge">${data.status === "published" ? "Published" : "Draft"}</span></div>
     <div class="content-card-body">
       <span class="content-card-tag">${escapeHtml(data.tag || "")}</span>
       <h3 class="content-card-title">${escapeHtml(data.name || "Untitled")}</h3>

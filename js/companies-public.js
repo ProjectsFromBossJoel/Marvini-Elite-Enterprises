@@ -19,7 +19,12 @@ if (grid) {
       <div class="company-card reveal-fade-up revealed" data-company="${escapeHtml(c.name || "")}">
         <div class="company-card-glow" aria-hidden="true"></div>
         <div class="company-card-header">
-          <div class="company-icon-wrap company-icon-wrap--logo" style="font-size:2rem; display:flex; align-items:center; justify-content:center;">${escapeHtml(c.icon || "🏢")}</div>
+          <div class="company-icon-wrap company-icon-wrap--logo">
+            ${c.logoUrl
+              ? `<img src="${escapeHtml(c.logoUrl)}" alt="${escapeHtml(c.name || "")}" class="company-icon-logo" />`
+              : `<span style="font-size:2rem; display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${escapeHtml(c.icon || "🏢")}</span>`
+            }
+          </div>
           <div class="company-tag">${escapeHtml(c.tag || "")}</div>
         </div>
         <div class="company-card-body">

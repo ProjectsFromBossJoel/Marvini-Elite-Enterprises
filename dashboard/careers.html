@@ -9,6 +9,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
+<style>
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; padding: 1.5rem; }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-card { background: var(--bg-card); border-radius: 16px; padding: 2rem; width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: translateY(16px); transition: transform .25s ease; max-height: 90vh; overflow-y: auto; }
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; }
+  .modal-head h3 { font-size: 1.15rem; font-weight: 700; margin: 0; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:transparent; cursor:pointer; color:var(--text-secondary); }
+  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
+  .form-field label { font-size:.85rem; font-weight:600; color:var(--text-secondary); }
+  .form-field input, .form-field textarea, .form-field select { padding:.6rem .8rem; border:1px solid var(--border); border-radius:8px; font-size:.9rem; font-family:inherit; background: var(--bg-secondary); color: var(--text-primary); }
+  .form-field textarea { resize: vertical; min-height: 70px; }
+  .form-row2-modal { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  #jobStatus, #stageSelect { font-size:.85rem; color: var(--text-muted); margin-top:.5rem; min-height: 1.2em; }
+</style>
 
 </head>
 <body>
@@ -76,16 +91,16 @@
         <h1>Careers & Volunteering</h1>
         <p>Manage open roles/volunteer programs and review incoming applications.</p>
       </div>
-      <div class="page-head-actions"><button class="btn btn-primary" type="button">
+      <div class="page-head-actions"><button class="btn btn-primary" type="button" id="openJobBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       Post New Opening
     </button></div>
     </div>
     <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
-      <div class="stat-card"><div><p class="stat-label">Open Roles</p><p class="stat-value">6</p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Applications (30d)</p><p class="stat-value">142 <span class="stat-delta up">▲ 12%</span></p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Interviews Scheduled</p><p class="stat-value">34</p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Hired (YTD)</p><p class="stat-value">9</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Open Roles</p><p class="stat-value" id="statOpenRoles">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Applications (30d)</p><p class="stat-value" id="statApplications30d">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Interviews Scheduled</p><p class="stat-value" id="statInterviews">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Hired (YTD)</p><p class="stat-value" id="statHired">0</p></div></div>
     </div>
 
     <div class="panel" style="margin-bottom:18px;">
@@ -98,85 +113,8 @@
       <div class="admin-tabs" data-admin-tabs data-filter-target="#jobsTable tbody tr"><button class="admin-tab active" data-filter="all">All</button><button class="admin-tab" data-filter="Career">Career</button><button class="admin-tab" data-filter="Volunteer">Volunteer</button></div>
       <table id="jobsTable">
         <thead><tr><th>Title</th><th>Subsidiary</th><th>Type</th><th>Schedule</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-            <tr data-category="Career">
-              <td><strong>Frontend Engineer</strong></td>
-              <td>M-Smart Driving School Solution</td>
-              <td><span class="pill active">Career</span></td>
-              <td>Full-time · Accra</td>
-              <td><span class="pill completed">Open</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr data-category="Career">
-              <td><strong>Supply Chain Operations Associate</strong></td>
-              <td>M-Digital Food Chain</td>
-              <td><span class="pill active">Career</span></td>
-              <td>Full-time · Accra</td>
-              <td><span class="pill completed">Open</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr data-category="Career">
-              <td><strong>Training Program Facilitator</strong></td>
-              <td>M-Consultancy & Training</td>
-              <td><span class="pill active">Career</span></td>
-              <td>Part-time · Remote/Hybrid</td>
-              <td><span class="pill completed">Open</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr data-category="Volunteer">
-              <td><strong>Farmer Training Volunteer</strong></td>
-              <td>M-Farms</td>
-              <td><span class="pill completed">Volunteer</span></td>
-              <td>Weekends · Rotating regions</td>
-              <td><span class="pill completed">Open</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr data-category="Volunteer">
-              <td><strong>Festival Production Volunteer</strong></td>
-              <td>M-Events & Festivals</td>
-              <td><span class="pill completed">Volunteer</span></td>
-              <td>Event-based</td>
-              <td><span class="pill completed">Open</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr data-category="Volunteer">
-              <td><strong>Road Safety Outreach Volunteer</strong></td>
-              <td>M-Smart Driving School Solution</td>
-              <td><span class="pill completed">Volunteer</span></td>
-              <td>Ongoing</td>
-              <td><span class="pill draft">Draft</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
+        <tbody id="jobsTableBody">
+          <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted);">Loading postings…</td></tr>
         </tbody>
       </table>
     </div>
@@ -191,67 +129,8 @@
       </div>
       <table>
         <thead><tr><th>Applicant</th><th>Role</th><th>Subsidiary</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Ama+Serwaa&background=1a56ff&color=fff"/><div><strong>Ama Serwaa</strong><span>Career · Full-time</span></div></div></td>
-              <td>Frontend Engineer</td>
-              <td>M-Smart</td>
-              <td><span class="pill pending">Under Review</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Kwesi+Boateng&background=1a56ff&color=fff"/><div><strong>Kwesi Boateng</strong><span>Volunteer</span></div></div></td>
-              <td>Farmer Training Volunteer</td>
-              <td>M-Farms</td>
-              <td><span class="pill completed">Hired</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Linda+Mensah&background=1a56ff&color=fff"/><div><strong>Linda Mensah</strong><span>Career · Part-time</span></div></div></td>
-              <td>Training Program Facilitator</td>
-              <td>M-Consultancy</td>
-              <td><span class="pill pending">Interview Scheduled</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Yaw+Adjei&background=1a56ff&color=fff"/><div><strong>Yaw Adjei</strong><span>Career · Full-time</span></div></div></td>
-              <td>Supply Chain Operations Associate</td>
-              <td>M-Digital Food Chain</td>
-              <td><span class="pill active">New</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Efua+Owusu&background=1a56ff&color=fff"/><div><strong>Efua Owusu</strong><span>Volunteer</span></div></div></td>
-              <td>Festival Production Volunteer</td>
-              <td>M-Events</td>
-              <td><span class="pill active">New</span></td>
-              <td>
-                <div class="row-actions">
-                  <button aria-label="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                  <button aria-label="Remove" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
-                </div>
-              </td>
-            </tr>
+        <tbody id="applicantsTableBody">
+          <tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">Loading applicants…</td></tr>
         </tbody>
       </table>
     </div>
@@ -260,8 +139,65 @@
   </main>
 </div>
 
+<!-- Job Modal -->
+<div class="modal-overlay" id="jobModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="jobModalTitle">Post New Opening</h3>
+      <button class="modal-close" id="closeJobBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="jobForm">
+      <input type="hidden" id="jobDocId" value="" />
+      <div class="form-field">
+        <label for="jobTitle">Title *</label>
+        <input type="text" id="jobTitle" placeholder="e.g. Frontend Engineer" required />
+      </div>
+      <div class="form-row2-modal">
+        <div class="form-field">
+          <label for="jobCompanyKey">Subsidiary *</label>
+          <select id="jobCompanyKey" required>
+            <option value="">Select…</option>
+            <option value="msmart">M-Smart Driving School Solution</option>
+            <option value="mfood">M-Digital Food Chain</option>
+            <option value="mevents">M-Events & Festivals</option>
+            <option value="mfarms">M-Farms</option>
+            <option value="mconsultancy">M-Consultancy & Training</option>
+            <option value="general">General / Marvini Group</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="jobType">Type *</label>
+          <select id="jobType" required>
+            <option value="career">Career</option>
+            <option value="volunteer">Volunteer</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="jobSchedule">Schedule / Location *</label>
+        <input type="text" id="jobSchedule" placeholder="e.g. Full-time · Accra" required />
+      </div>
+      <div class="form-field">
+        <label for="jobDesc">Description *</label>
+        <textarea id="jobDesc" placeholder="Short description shown on the public site…" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="jobStatus">Status *</label>
+        <select id="jobStatus" required>
+          <option value="open">Open</option>
+          <option value="draft">Draft</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" id="jobSubmitBtn" style="width:100%; justify-content:center;">
+        Save Posting
+      </button>
+    </form>
+  </div>
+</div>
+
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
 <script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/careers-admin.js"></script>
 </body>
 </html>
