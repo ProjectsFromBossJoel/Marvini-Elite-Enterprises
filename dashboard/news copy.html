@@ -78,56 +78,63 @@
         <h1>News & Updates</h1>
         <p>Posts shown in the public site's News & Announcements section.</p>
       </div>
-      <div class="page-head-actions"><button class="btn btn-primary" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      New Post
-    </button></div>
+      <div class="page-head-actions">
+      <button class="btn btn-primary" type="button" id="openNewsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        New Post
+      </button>
     </div>
-    <div class="card-grid">
-      <div class="content-card">
-        <div class="content-card-media">📰<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Group Update · Jan 2025</span>
-          <h3 class="content-card-title">Marvini Elite Enterprises Officially Launches Five Subsidiaries</h3>
-          <p class="content-card-desc">The enterprise group marks a major milestone with the simultaneous launch of five technology-driven businesses.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media">💻<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Technology · Feb 2025</span>
-          <h3 class="content-card-title">M-Smart Becomes Ghana's First Fully Digital Driving School Platform</h3>
-          <p class="content-card-desc">M-Smart integrates end-to-end with Ghana's DVLA, automating compliance for driving schools nationwide.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-card">
-        <div class="content-card-media">🌾<span class="cc-badge">Published</span></div>
-        <div class="content-card-body">
-          <span class="content-card-tag">Agriculture · Mar 2025</span>
-          <h3 class="content-card-title">M-Farms Pilots Sustainable Farming Program Across Three Regions</h3>
-          <p class="content-card-desc">The initiative expands its farmer empowerment programme with modern techniques and direct market access.</p>
-          <div class="content-card-footer">
-            <button class="btn btn-outline btn-sm" type="button">Edit</button>
-            <button class="btn btn-danger-ghost btn-sm" type="button" data-confirm-remove>Remove</button>
-          </div>
-        </div>
-      </div>
     </div>
 
+    <div class="card-grid" id="newsAdminGrid"></div>
+    <div class="empty-state" id="newsEmptyState" style="display:none;">
+      <div class="es-icon">📰</div>
+      <h4>No posts yet</h4>
+      <p>Click <strong>New Post</strong> to publish your first update.</p>
+    </div>
 
   </main>
 </div>
 
+<!-- News Post Modal -->
+<div class="modal-overlay" id="newsModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="newsModalTitle">New Post</h3>
+      <button class="modal-close" id="closeNewsBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="newsForm">
+      <input type="hidden" id="newsDocId" value="" />
+      <div class="form-field">
+        <label for="newsTitle">Title *</label>
+        <input type="text" id="newsTitle" placeholder="e.g. M-Farms Pilots Sustainable Farming Program" required />
+      </div>
+      <div class="form-field">
+        <label for="newsTag">Category Tag *</label>
+        <input type="text" id="newsTag" placeholder="e.g. Group Update, Technology, Agriculture" required />
+      </div>
+      <div class="form-field">
+        <label for="newsExcerpt">Excerpt *</label>
+        <textarea id="newsExcerpt" placeholder="One or two sentences summarizing this update…" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="newsEmoji">Card Emoji</label>
+        <input type="text" id="newsEmoji" placeholder="📰" maxlength="4" />
+      </div>
+      <label class="form-check">
+        <input type="checkbox" id="newsPublishNow" checked />
+        Publish immediately (uncheck to save as draft)
+      </label>
+      <button type="submit" class="btn btn-primary" id="newsSubmitBtn" style="width:100%; justify-content:center;">
+        Save Post
+      </button>
+      <div id="newsStatus"></div>
+    </form>
+  </div>
+</div>
+
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
-<script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/news-admin.js"></script>
 </body>
 </html>
