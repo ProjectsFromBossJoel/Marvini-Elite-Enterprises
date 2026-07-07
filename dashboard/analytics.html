@@ -79,64 +79,73 @@
       <div class="page-head-actions"></div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card"><div><p class="stat-label">Visitors (30d)</p><p class="stat-value">24,680 <span class="stat-delta up">▲ 8.2%</span></p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Avg. Session</p><p class="stat-value">3m 42s <span class="stat-delta up">▲ 5%</span></p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Bounce Rate</p><p class="stat-value">38.4% <span class="stat-delta down">▼ 2.1%</span></p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Newsletter Signups</p><p class="stat-value">1,926 <span class="stat-delta up">▲ 4.1%</span></p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Visitors (30d)</p><p class="stat-value" id="statVisitors30d">—</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Total Applications</p><p class="stat-value" id="statLifetimeApplications">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Team Members</p><p class="stat-value" id="statTeamCount">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Newsletter Signups</p><p class="stat-value" id="statNewsletter">0</p></div></div>
     </div>
 
     <div class="panel" style="margin-bottom:18px;">
       <div class="panel-head">
         <div>
           <p class="panel-eyebrow">Traffic</p>
-          <h2 class="panel-title" style="font-size:1.15rem;">Visitors vs Applications</h2>
+          <h2 class="panel-title" style="font-size:1.15rem;">Applications Over Time</h2>
         </div>
-        <div class="dropdown">This Year <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div style="display:flex;gap:16px;align-items:center;">
+          <div class="legend">
+            <div class="legend-item" id="visitorsLegendItem" style="display:none;"><span class="legend-dot" style="background:var(--royal-blue)"></span>Visitors</div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--deep-teal)"></span>Applications</div>
+          </div>
+          <div class="dropdown">This Year <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
       </div>
-      <div class="chart-wrap">
-        <svg viewBox="0 0 760 260" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="gradBlue2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1a56ff" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#1a56ff" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <g stroke="var(--border)" stroke-width="1">
-            <line x1="0" y1="20" x2="760" y2="20"/><line x1="0" y1="75" x2="760" y2="75"/>
-            <line x1="0" y1="130" x2="760" y2="130"/><line x1="0" y1="185" x2="760" y2="185"/><line x1="0" y1="240" x2="760" y2="240"/>
-          </g>
-          <path d="M0,150 C60,110 100,190 160,150 C220,110 260,60 320,80 C380,100 420,150 480,120 C540,90 580,50 640,70 C690,86 720,60 760,40 L760,260 L0,260 Z" fill="url(#gradBlue2)"/>
-          <path d="M0,150 C60,110 100,190 160,150 C220,110 260,60 320,80 C380,100 420,150 480,120 C540,90 580,50 640,70 C690,86 720,60 760,40" fill="none" stroke="#1a56ff" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-        <div class="chart-months">
-          <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+      <div class="chart-wrap" style="display:flex; gap:8px; align-items:flex-start;">
+        <div class="chart-y-axis" id="chartYAxisLabels" style="display:flex; flex-direction:column; justify-content:space-between; height:260px; padding:0 6px 0 0; font-family:var(--font-body); font-size:0.7rem; color:var(--text-muted); text-align:right;"></div>
+        <div style="flex:1; min-width:0;">
+          <svg viewBox="0 0 760 260" preserveAspectRatio="none" id="trafficChartSvg">
+            <defs>
+              <linearGradient id="gradBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a56ff" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#1a56ff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="gradTeal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="var(--border)" stroke-width="1" stroke-dasharray="3,4">
+              <line x1="0" y1="20" x2="760" y2="20"/>
+              <line x1="0" y1="75" x2="760" y2="75"/>
+              <line x1="0" y1="130" x2="760" y2="130"/>
+              <line x1="0" y1="185" x2="760" y2="185"/>
+              <line x1="0" y1="240" x2="760" y2="240"/>
+            </g>
+            <path id="visitorsAreaPath" d="" fill="url(#gradBlue)" style="display:none;"/>
+            <path id="visitorsLinePath" d="" fill="none" stroke="#1a56ff" stroke-width="2.5" stroke-linecap="round" style="display:none;"/>
+            <path id="applicationsAreaPath" d="" fill="url(#gradTeal)"/>
+            <path id="applicationsLinePath" d="" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div class="chart-months" id="chartMonthsLabels" style="display:flex; justify-content:space-between; margin-top:8px; font-family:var(--font-body); font-size:0.72rem; color:var(--text-muted);"></div>
         </div>
       </div>
     </div>
 
     <div class="bottom-grid">
       <div class="panel">
-        <div class="panel-head"><div><p class="panel-eyebrow">Traffic Sources</p><h2 class="panel-title" style="font-size:1.15rem;">Where Visitors Come From</h2></div></div>
+        <div class="panel-head"><div><p class="panel-eyebrow">Careers & Volunteering</p><h2 class="panel-title" style="font-size:1.15rem;">Applications by Subsidiary</h2></div></div>
         <table>
-          <thead><tr><th>Source</th><th>Sessions</th><th>Share</th></tr></thead>
-          <tbody>
-            <tr><td>Direct</td><td>9,842</td><td><span class="pill active">40%</span></td></tr>
-            <tr><td>Google Search</td><td>7,404</td><td><span class="pill completed">30%</span></td></tr>
-            <tr><td>Social (LinkedIn/X)</td><td>4,936</td><td><span class="pill pending">20%</span></td></tr>
-            <tr><td>Referral</td><td>2,468</td><td><span class="pill draft">10%</span></td></tr>
+          <thead><tr><th>Subsidiary</th><th>Applications</th><th>Share</th></tr></thead>
+          <tbody id="subsidiaryBreakdownBody">
+            <tr><td colspan="3" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Loading…</td></tr>
           </tbody>
         </table>
       </div>
       <div class="panel">
-        <div class="panel-head"><div><p class="panel-eyebrow">Top Pages</p><h2 class="panel-title" style="font-size:1.15rem;">Most Visited</h2></div></div>
+        <div class="panel-head"><div><p class="panel-eyebrow">Site Content</p><h2 class="panel-title" style="font-size:1.15rem;">Content Overview</h2></div></div>
         <table>
-          <thead><tr><th>Page</th><th>Views</th></tr></thead>
-          <tbody>
-            <tr><td>Home</td><td>18,204</td></tr>
-            <tr><td>Careers & Volunteering</td><td>6,512</td></tr>
-            <tr><td>Companies</td><td>5,930</td></tr>
-            <tr><td>Team</td><td>3,108</td></tr>
-            <tr><td>Contact</td><td>2,244</td></tr>
+          <thead><tr><th>Content Type</th><th>Count</th></tr></thead>
+          <tbody id="contentOverviewBody">
+            <tr><td colspan="2" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -148,5 +157,7 @@
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
 <script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/analytics-admin.js"></script>
+<script type="module" src="../js/analytics-page.js"></script>
 </body>
 </html>

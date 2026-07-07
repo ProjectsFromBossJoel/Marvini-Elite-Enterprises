@@ -64,7 +64,67 @@ whenAuthReady(() => {
   watchCareersAndApplications();
   watchMessages();
   watchNewsletter();
+  watchTrafficChart();
 });
+
+// ── Traffic/Applications chart: monthly application counts for the current year ──
+function watchTrafficChart() {
+  const areaPath = document.getElementById("applicationsAreaPath");
+  const linePath = document.getElementById("applicationsLinePath");
+  const monthsWrap = document.getElementById("chartMonthsLabels");
+  const panelTitle = document.querySelector(".panel-title");
+  if (!areaPath || !linePath) return;
+
+  const MONTH_LABELS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  // Chart plot area (matches the gridlines already drawn in the SVG: y 20 → 240)
+  const CHART_TOP = 20;
+  const CHART_BOTTOM = 240;
+  const CHART_WIDTH = 760;
+
+  if (monthsWrap && !monthsWrap.dataset.built) {
+    monthsWrap.innerHTML = MONTH_LABELS.map((m) => `<span>${m}</span>`).join("");
+    monthsWrap.dataset.built = "true";
+  }
+
+  onSnapshot(collection(db, "applications"), (snap) => {
+    const currentYear = new Date().getFullYear();
+    const counts = new Array(12).fill(0);
+
+    snap.docs.forEach((d) => {
+      const created = d.data().createdAt?.toDate?.();
+      if (created && created.getFullYear() === currentYear) {
+        counts[created.getMonth()]++;
+      }
+    });
+
+    const maxCount = Math.max(...counts, 1); // avoid divide-by-zero when all months are empty
+    const stepX = CHART_WIDTH / (counts.length - 1);
+
+    const points = counts.map((count, i) => {
+      const x = i * stepX;
+      const y = CHART_BOTTOM - (count / maxCount) * (CHART_BOTTOM - CHART_TOP);
+      return { x, y };
+    });
+
+    const linePathD = points
+      .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+      .join(" ");
+
+    const areaPathD =
+      `M 0 ${CHART_BOTTOM} ` +
+      points.map((p) => `L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ") +
+      ` L ${CHART_WIDTH} ${CHART_BOTTOM} Z`;
+
+    linePath.setAttribute("d", linePathD);
+    areaPath.setAttribute("d", areaPathD);
+
+    const yearTotal = counts.reduce((sum, c) => sum + c, 0);
+    if (panelTitle) {
+      panelTitle.innerHTML = `${yearTotal} <span style="font-size:.85rem;color:var(--text-muted);font-weight:600;">Applications This Year</span>`;
+    }
+  });
+}
 
 // ── Greeting: first name of the signed-in admin ─────────────────────
 function applyGreeting() {
