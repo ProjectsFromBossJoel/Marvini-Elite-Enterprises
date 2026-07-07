@@ -95,7 +95,7 @@ INSTRUCTIONS:
     if (data.error) {
       console.error('Groq API error:', data.error);
       return res.status(500).json({
-        reply: 'I\'m having a bit of trouble. Please email info@marvini.com for assistance.'
+        reply: 'I\'m having a bit of trouble. Please email jakunor@hotmail.com for assistance.'
       });
     }
 
