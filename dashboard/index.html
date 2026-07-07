@@ -158,7 +158,7 @@
         </div>
 
         <div class="chart-wrap">
-          <svg viewBox="0 0 760 260" preserveAspectRatio="none">
+          <svg viewBox="0 0 760 260" preserveAspectRatio="none" id="trafficChartSvg">
             <defs>
               <linearGradient id="gradBlue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#1a56ff" stop-opacity="0.22"/>
@@ -176,14 +176,12 @@
               <line x1="0" y1="185" x2="760" y2="185"/>
               <line x1="0" y1="240" x2="760" y2="240"/>
             </g>
-            <path d="M0,150 C60,110 100,190 160,150 C220,110 260,60 320,80 C380,100 420,150 480,120 C540,90 580,50 640,70 C690,86 720,60 760,40 L760,260 L0,260 Z" fill="url(#gradBlue)"/>
-            <path d="M0,150 C60,110 100,190 160,150 C220,110 260,60 320,80 C380,100 420,150 480,120 C540,90 580,50 640,70 C690,86 720,60 760,40" fill="none" stroke="#1a56ff" stroke-width="3" stroke-linecap="round"/>
-            <path d="M0,210 C60,190 100,220 160,205 C220,190 260,160 320,175 C380,190 420,215 480,195 C540,175 580,150 640,165 C690,175 720,155 760,140 L760,260 L0,260 Z" fill="url(#gradTeal)"/>
-            <path d="M0,210 C60,190 100,220 160,205 C220,190 260,160 320,175 C380,190 420,215 480,195 C540,175 580,150 640,165 C690,175 720,155 760,140" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+            <path id="visitorsAreaPath" d="" fill="url(#gradBlue)"/>
+            <path id="visitorsLinePath" d="" fill="none" stroke="#1a56ff" stroke-width="3" stroke-linecap="round"/>
+            <path id="applicationsAreaPath" d="" fill="url(#gradTeal)"/>
+            <path id="applicationsLinePath" d="" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          <div class="chart-months">
-            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
-          </div>
+          <div class="chart-months" id="chartMonthsLabels"></div>
         </div>
       </div>
 

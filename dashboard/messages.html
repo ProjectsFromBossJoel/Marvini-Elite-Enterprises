@@ -1,3 +1,4 @@
+<!-- Contact Messages -->
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -9,6 +10,30 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
+
+<style>
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+    padding: 1.5rem;
+  }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-card {
+    background: var(--bg-card, #fff); border-radius: 16px;
+    padding: 2rem; width: 100%; max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: translateY(16px); transition: transform .25s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; gap: 1rem; }
+  .modal-head h3 { font-size: 1.1rem; font-weight: 700; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border,#e2e8f0); background:transparent; cursor:pointer; flex-shrink:0; }
+  .row-actions button { cursor: pointer; }
+  .row-actions .danger:hover { color: #dc2626; }
+</style>
 
 </head>
 <body>
@@ -50,11 +75,11 @@
       </div>
       <div class="topbar-actions">
         <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">☀</button>
-        <button class="icon-btn" aria-label="Notifications">
+        <button class="icon-btn" aria-label="Notifications" title="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
           <span class="icon-dot"></span>
         </button>
-        <button class="icon-btn" aria-label="Messages">
+        <button class="icon-btn" id="jumpToInboxBtn" aria-label="Jump to inbox" title="Jump to inbox">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
         </button>
         <button class="icon-btn" id="signOutBtn" aria-label="Sign out" title="Sign out">
@@ -79,9 +104,9 @@
       <div class="page-head-actions"></div>
     </div>
     <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-      <div class="stat-card"><div><p class="stat-label">Total Messages</p><p class="stat-value">38</p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Unread</p><p class="stat-value">4</p></div></div>
-      <div class="stat-card"><div><p class="stat-label">Avg. Response Time</p><p class="stat-value">6.2 hrs</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Total Messages</p><p class="stat-value" id="statTotalMessages">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Unread</p><p class="stat-value" id="statUnreadMessages">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">Avg. Response Time</p><p class="stat-value">—</p></div></div>
     </div>
 
     <div class="panel">
@@ -92,75 +117,41 @@
         </div>
         <div class="dropdown">All Time <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
       </div>
-      
-        <div class="lesson-item">
-          <div class="lesson-time"><div class="t">8:14</div><div class="m">AM</div></div>
-          <div class="lesson-bar" style="background:var(--royal-blue)"></div>
-          <div class="lesson-info" style="flex:1;">
-            <strong style="display:flex;align-items:center;gap:8px;">Kojo Antwi — Partnership Inquiry <span style="width:8px;height:8px;border-radius:50%;background:var(--royal-blue);flex-shrink:0;"></span></strong>
-            <span>Interested in a distribution partnership with M-Digital Food Chain</span>
-          </div>
-          <div class="row-actions">
-            <button aria-label="Reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a4 4 0 010 8h-1"/></svg></button>
-            <button aria-label="Archive" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg></button>
-          </div>
-        </div>
-        <div class="lesson-item">
-          <div class="lesson-time"><div class="t">9:47</div><div class="m">AM</div></div>
-          <div class="lesson-bar" style="background:var(--deep-teal)"></div>
-          <div class="lesson-info" style="flex:1;">
-            <strong style="display:flex;align-items:center;gap:8px;">Abena Frimpong — Media & Press <span style="width:8px;height:8px;border-radius:50%;background:var(--royal-blue);flex-shrink:0;"></span></strong>
-            <span>Requesting an interview about the M-Farms pilot programme</span>
-          </div>
-          <div class="row-actions">
-            <button aria-label="Reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a4 4 0 010 8h-1"/></svg></button>
-            <button aria-label="Archive" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg></button>
-          </div>
-        </div>
-        <div class="lesson-item">
-          <div class="lesson-time"><div class="t">11:22</div><div class="m">AM</div></div>
-          <div class="lesson-bar" style="background:var(--amber)"></div>
-          <div class="lesson-info" style="flex:1;">
-            <strong style="display:flex;align-items:center;gap:8px;">Selorm Mensah — Investment <span style="width:8px;height:8px;border-radius:50%;background:var(--royal-blue);flex-shrink:0;"></span></strong>
-            <span>Asking for the latest Marvini Annual Report</span>
-          </div>
-          <div class="row-actions">
-            <button aria-label="Reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a4 4 0 010 8h-1"/></svg></button>
-            <button aria-label="Archive" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg></button>
-          </div>
-        </div>
-        <div class="lesson-item">
-          <div class="lesson-time"><div class="t">2:05</div><div class="m">PM</div></div>
-          <div class="lesson-bar" style="background:var(--royal-blue)"></div>
-          <div class="lesson-info" style="flex:1;">
-            <strong style="display:flex;align-items:center;gap:8px;">Naana Boateng — General Inquiry <span style="width:8px;height:8px;border-radius:50%;background:var(--royal-blue);flex-shrink:0;"></span></strong>
-            <span>Question about M-Events booking for a community festival</span>
-          </div>
-          <div class="row-actions">
-            <button aria-label="Reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a4 4 0 010 8h-1"/></svg></button>
-            <button aria-label="Archive" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg></button>
-          </div>
-        </div>
-        <div class="lesson-item">
-          <div class="lesson-time"><div class="t">Yesterday</div><div class="m"></div></div>
-          <div class="lesson-bar" style="background:var(--deep-teal)"></div>
-          <div class="lesson-info" style="flex:1;">
-            <strong style="display:flex;align-items:center;gap:8px;">Yaw Owusu — Careers </strong>
-            <span>Following up on a Frontend Engineer application submitted last week</span>
-          </div>
-          <div class="row-actions">
-            <button aria-label="Reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a4 4 0 010 8h-1"/></svg></button>
-            <button aria-label="Archive" class="danger" data-confirm-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg></button>
-          </div>
-        </div>
+
+      <div id="messagesList">
+        <p style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Loading messages…</p>
+      </div>
     </div>
 
 
   </main>
 </div>
 
+<!-- Message View Modal -->
+<div class="modal-overlay" id="messageModal">
+  <div class="modal-card" style="max-width:560px;">
+    <div class="modal-head">
+      <h3 id="msgModalSubject">Message</h3>
+      <button class="modal-close" id="closeMessageModal" aria-label="Close" title="Close">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:.65rem; font-size:.92rem;">
+      <div><strong>From:</strong> <span id="msgModalName"></span></div>
+      <div><strong>Email:</strong> <a id="msgModalEmail" href="#"></a></div>
+      <div><strong>Phone:</strong> <span id="msgModalPhone"></span></div>
+      <div><strong>Received:</strong> <span id="msgModalDate"></span></div>
+      <hr style="border:none;border-top:1px solid var(--border,#e2e8f0);margin:.4rem 0;" />
+      <div id="msgModalBody" style="white-space:pre-wrap;line-height:1.6;"></div>
+    </div>
+    <div style="display:flex; gap:.6rem; margin-top:1.4rem;">
+      <a class="btn btn-primary" id="msgModalReplyBtn" href="#" title="Reply by email" style="flex:1; justify-content:center;">Reply by Email</a>
+      <button class="icon-btn" id="msgModalToggleRead" title="Toggle read status" style="width:auto;padding:0 1rem;">Mark Unread</button>
+    </div>
+  </div>
+</div>
+
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
 <script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="../js/messages-admin.js"></script>
 </body>
 </html>

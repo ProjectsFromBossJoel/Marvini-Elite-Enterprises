@@ -31,15 +31,28 @@ export default async function handler(req, res) {
     const client = getClient();
     const propertyId = process.env.GA_PROPERTY_ID;
 
-    const [response] = await client.runReport({
+    const [summary] = await client.runReport({
       property: `properties/${propertyId}`,
       dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }],
     });
+    const visitors = Number(summary.rows?.[0]?.metricValues?.[0]?.value || 0);
 
-    const visitors = Number(response.rows?.[0]?.metricValues?.[0]?.value || 0);
+    // Monthly breakdown for the last 8 months (for the traffic chart)
+    const [monthly] = await client.runReport({
+      property: `properties/${propertyId}`,
+      dateRanges: [{ startDate: '8monthsAgo', endDate: 'today' }],
+      dimensions: [{ name: 'yearMonth' }],
+      metrics: [{ name: 'activeUsers' }],
+      orderBys: [{ dimension: { dimensionName: 'yearMonth' } }],
+    });
 
-    res.status(200).json({ visitors, updatedAt: new Date().toISOString() });
+    const monthlyVisitors = (monthly.rows || []).map((row) => ({
+      yearMonth: row.dimensionValues[0].value, // e.g. "202607"
+      visitors: Number(row.metricValues[0].value),
+    }));
+
+    res.status(200).json({ visitors, monthlyVisitors, updatedAt: new Date().toISOString() });
   } catch (err) {
     console.error('GA4 analytics fetch failed:', err);
     res.status(500).json({ error: 'Could not fetch analytics data' });

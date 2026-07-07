@@ -1,3 +1,4 @@
+//dashboard/admin.js
 // Shared behavior for every /admin page.
 document.addEventListener('DOMContentLoaded', () => {
 
