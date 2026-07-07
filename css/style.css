@@ -2879,6 +2879,48 @@ html, body {
 .chat-send:hover { transform: scale(1.08); }
 .chat-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
+
+  /* ---------- Footer ---------- */
+  footer{ padding:60px 0 40px; border-top:1px solid var(--glass-border); }
+  .footer-top{ display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:40px; margin-bottom:40px; }
+  .footer-cols{ display:flex; gap:60px; flex-wrap:wrap; }
+  .footer-col h5{ font-family:'Space Mono',monospace; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:14px; }
+  .footer-col a{ display:block; font-size:0.92rem; color:var(--text-mid); margin-bottom:10px; transition:color 0.2s ease; }
+  .footer-col a:hover{ color:var(--gold-soft); }
+  .footer-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:0.8rem; color:var(--text-dim); padding-top:24px; border-top:1px solid var(--glass-border); }
+
+  /* ---------- Footer social icons ---------- */
+  .footer-social{ display:flex; gap:12px; margin-top:4px; }
+  .footer-social a{
+    width:40px; height:40px; border-radius:11px;
+    background:var(--glass-bg); border:1px solid var(--glass-border);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-mid); transition:color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    margin-bottom:0;
+  }
+  .footer-social a:hover{
+    color:var(--gold-soft); border-color:var(--glass-border-strong);
+    background:var(--glass-bg-strong); transform:translateY(-2px);
+  }
+  .footer-social a svg{ width:19px; height:19px; }
+
+  /* ---------- Footer company logos ---------- */
+  .footer-logos{ display:flex; flex-direction:column; gap:12px; }
+  .footer-logos a{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:0; color:var(--text-mid); font-size:0.92rem;
+    transition:color 0.2s ease;
+  }
+  .footer-logos a:hover{ color:var(--gold-soft); }
+  .footer-logos .company-logo{
+    width:28px; height:28px; border-radius:8px;
+    object-fit:cover; flex-shrink:0;
+    background:var(--glass-bg); border:1px solid var(--glass-border);
+    padding:2px;
+  }
+
+
+
 /* Mobile */
 @media (max-width: 480px) {
   .chat-widget { right: 12px; bottom: 12px; }
