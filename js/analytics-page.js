@@ -131,6 +131,15 @@ if (realtimeUsersEl && realtimePagesBody) {
     } catch (err) {
       console.error("Could not load realtime analytics:", err);
       realtimeUsersEl.textContent = "—";
+      realtimePagesBody.innerHTML =
+        '<tr><td colspan="2" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Realtime analytics unavailable.</td></tr>';
+      const realtimeLocationsBody = document.getElementById("realtimeLocationsBody");
+      if (realtimeLocationsBody) {
+        realtimeLocationsBody.innerHTML =
+          '<tr><td colspan="2" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Realtime analytics unavailable.</td></tr>';
+      }
+      const mapContainer = document.getElementById("realtimeMap");
+      if (mapContainer) mapContainer.innerHTML = '';
     }
   }
 
