@@ -3,5 +3,10 @@
     "api/message.js": {
       "maxDuration": 10
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/gtag/js", "destination": "https://www.googletagmanager.com/gtag/js" },
+    { "source": "/g/collect", "destination": "https://www.google-analytics.com/g/collect" },
+    { "source": "/mp/collect", "destination": "https://www.google-analytics.com/mp/collect" }
+  ]
 }
