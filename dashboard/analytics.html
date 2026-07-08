@@ -88,6 +88,27 @@
     <div class="panel" style="margin-bottom:18px;">
       <div class="panel-head">
         <div>
+          <p class="panel-eyebrow">Live</p>
+          <h2 class="panel-title" style="font-size:1.15rem;">
+            <span id="realtimeActiveUsers">—</span> Active Right Now
+          </h2>
+        </div>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text-muted);">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+          Live · updates every 25s
+        </span>
+      </div>
+      <table>
+        <thead><tr><th>Page</th><th>Active Users</th></tr></thead>
+        <tbody id="realtimePagesBody">
+          <tr><td colspan="2" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel" style="margin-bottom:18px;">
+      <div class="panel-head">
+        <div>
           <p class="panel-eyebrow">Traffic</p>
           <h2 class="panel-title" style="font-size:1.15rem;">Applications Over Time</h2>
         </div>

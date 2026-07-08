@@ -86,3 +86,38 @@ if (contentBody) {
     });
   });
 }
+
+// ── Realtime: active users right now, by page ────────────────────
+const realtimeUsersEl = document.getElementById("realtimeActiveUsers");
+const realtimePagesBody = document.getElementById("realtimePagesBody");
+
+if (realtimeUsersEl && realtimePagesBody) {
+  async function pollRealtime() {
+    try {
+      const res = await fetch("https://marvini-elite-enterprises-alpha.vercel.app/api/analytics-realtime");
+      if (!res.ok) throw new Error("Request failed");
+      const { totalActiveUsers, byPage } = await res.json();
+
+      realtimeUsersEl.textContent = totalActiveUsers;
+
+      if (!byPage || byPage.length === 0) {
+        realtimePagesBody.innerHTML =
+          '<tr><td colspan="2" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">No active visitors right now.</td></tr>';
+        return;
+      }
+
+      realtimePagesBody.innerHTML = byPage
+        .map(
+          ({ page, activeUsers }) =>
+            `<tr><td>${escapeHtml(page)}</td><td>${activeUsers}</td></tr>`
+        )
+        .join("");
+    } catch (err) {
+      console.error("Could not load realtime analytics:", err);
+      realtimeUsersEl.textContent = "—";
+    }
+  }
+
+  pollRealtime();
+  setInterval(pollRealtime, 25000); // poll every 25s
+}
