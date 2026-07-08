@@ -146,7 +146,7 @@ function renderRow(id, data) {
         <button aria-label="${isPublished ? "Unpublish" : "Publish"}" data-action="toggle-publish" title="${isPublished ? "Unpublish" : "Publish"}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${isPublished ? '<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/>' : '<path d="M5 12h14M12 5l7 7-7 7"/>'}</svg>
         </button>
-        <button aria-label="Remove" class="danger" data-action="delete" data-confirm-remove>
+        <button aria-label="Remove" title="Remove" class="danger" data-action="delete" data-confirm-remove>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
         </button>
       </div>
@@ -177,7 +177,9 @@ async function togglePublish(id, currentStatus) {
 
 // ── Delete ────────────────────────────────────────────────
 async function deleteItem(id, title) {
-  const confirmed = window.confirm(`Remove "${title || "this publication"}"? This cannot be undone.`);
+  const confirmed = await uiConfirm(`Remove "${title || "this publication"}"? This cannot be undone.`, {
+    title: "Remove Publication", confirmText: "Remove", danger: true
+  });
   if (!confirmed) return;
 
   await deleteDoc(doc(db, PUBLICATIONS_COLLECTION, id));

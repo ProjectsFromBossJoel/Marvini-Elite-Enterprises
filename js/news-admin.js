@@ -196,12 +196,15 @@ function buildCard(id, data) {
 
   card.querySelector("[data-edit]").addEventListener("click", () => openModal(data, id));
   card.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm("Remove this post? This cannot be undone.")) return;
+    const confirmed = await uiConfirm("Remove this post? This cannot be undone.", {
+      title: "Remove Post", confirmText: "Remove", danger: true
+    });
+    if (!confirmed) return;
     try {
       await deleteDoc(doc(db, "news", id));
     } catch (err) {
       console.error("Could not remove post:", err);
-      alert("Could not remove post. Check console for details.");
+      await uiAlert("Could not remove post. Check console for details.", { title: "Error", danger: true });
     }
   });
 

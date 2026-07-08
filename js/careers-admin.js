@@ -85,7 +85,7 @@ jobForm?.addEventListener("submit", async (e) => {
     closeJobModal();
   } catch (err) {
     console.error("Could not save job posting:", err);
-    alert("Could not save. Check console for details.");
+    await uiAlert("Could not save. Check console for details.", { title: "Error", danger: true });
   } finally {
     jobSubmitBtn.disabled = false;
   }
@@ -102,16 +102,19 @@ function buildJobRow(id, data) {
     <td><span class="pill ${data.status === "open" ? "completed" : "draft"}">${data.status === "open" ? "Open" : "Draft"}</span></td>
     <td>
       <div class="row-actions">
-        <button aria-label="Edit" data-edit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-        <button aria-label="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+        <button aria-label="Edit" title="Edit" data-edit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
+        <button aria-label="Remove" title="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
       </div>
     </td>
   `;
   tr.querySelector("[data-edit]").addEventListener("click", () => openJobModal(data, id));
   tr.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm(`Remove "${data.title || "this posting"}"? This cannot be undone.`)) return;
+    const confirmed = await uiConfirm(`Remove "${data.title || "this posting"}"? This cannot be undone.`, {
+      title: "Remove Posting", confirmText: "Remove", danger: true
+    });
+    if (!confirmed) return;
     try { await deleteDoc(doc(db, "jobs", id)); }
-    catch (err) { console.error(err); alert("Could not remove. Check console."); }
+    catch (err) { console.error(err); await uiAlert("Could not remove. Check console.", { title: "Error", danger: true }); }
   });
   return tr;
 }
@@ -161,7 +164,7 @@ function buildApplicantRow(id, data) {
       <div class="row-actions">
         <button aria-label="View applicant" data-view title="View details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
         <button aria-label="Advance stage" data-advance title="Advance stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-        <button aria-label="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+        <button aria-label="Remove" title="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
       </div>
     </td>
   `;
@@ -170,12 +173,15 @@ function buildApplicantRow(id, data) {
     const idx = STAGE_ORDER.indexOf(stage);
     const next = STAGE_ORDER[Math.min(idx + 1, STAGE_ORDER.length - 2)]; // stop before "rejected" on auto-advance
     try { await updateDoc(doc(db, "applications", id), { stage: next }); }
-    catch (err) { console.error(err); alert("Could not update stage."); }
+    catch (err) { console.error(err); await uiAlert("Could not update stage.", { title: "Error", danger: true }); }
   });
   tr.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm(`Remove application from ${data.applicantName || "this applicant"}?`)) return;
+    const confirmed = await uiConfirm(`Remove application from ${data.applicantName || "this applicant"}?`, {
+      title: "Remove Application", confirmText: "Remove", danger: true
+    });
+    if (!confirmed) return;
     try { await deleteDoc(doc(db, "applications", id)); }
-    catch (err) { console.error(err); alert("Could not remove. Check console."); }
+    catch (err) { console.error(err); await uiAlert("Could not remove. Check console.", { title: "Error", danger: true }); }
   });
   return tr;
 }

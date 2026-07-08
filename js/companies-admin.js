@@ -127,9 +127,13 @@ function buildCard(id, data) {
   `;
   card.querySelector("[data-edit]").addEventListener("click", () => openModal(data, id));
   card.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm(`Remove ${data.name || "this company"}? This cannot be undone.`)) return;
+    const confirmed = await uiConfirm(
+      `Remove ${data.name || "this company"}? This cannot be undone.`,
+      { title: "Remove Company", confirmText: "Remove", danger: true }
+    );
+    if (!confirmed) return;
     try { await deleteDoc(doc(db, "companies", id)); }
-    catch (err) { console.error(err); alert("Could not remove. Check console."); }
+    catch (err) { console.error(err); await uiAlert("Could not remove. Check console.", { title: "Error", danger: true }); }
   });
   return card;
 }

@@ -145,7 +145,15 @@ function renderTable(users) {
       const u = currentUsers.find((x) => x.id === uid);
       if (!u) return;
       const nextStatus = u.status === "disabled" ? "active" : "disabled";
-      if (!confirm(`${nextStatus === "disabled" ? "Disable" : "Re-enable"} dashboard access for ${u.name || u.email}?`)) return;
+      const confirmed = await uiConfirm(
+        `${nextStatus === "disabled" ? "Disable" : "Re-enable"} dashboard access for ${u.name || u.email}?`,
+        {
+          title: nextStatus === "disabled" ? "Disable User" : "Re-enable User",
+          confirmText: nextStatus === "disabled" ? "Disable" : "Re-enable",
+          danger: nextStatus === "disabled",
+        }
+      );
+      if (!confirmed) return;
       await updateDoc(doc(db, USERS_COLLECTION, uid), { status: nextStatus });
     });
   });
@@ -155,13 +163,17 @@ function renderTable(users) {
       const uid = e.currentTarget.closest("tr").dataset.uid;
       const u = currentUsers.find((x) => x.id === uid);
       if (!u || !u.email) return;
-      if (!confirm(`Send a password reset email to ${u.email}?`)) return;
+      const confirmed = await uiConfirm(`Send a password reset email to ${u.email}?`, {
+        title: "Reset Password",
+        confirmText: "Send Email",
+      });
+      if (!confirmed) return;
       try {
         await sendPasswordResetEmail(auth, u.email);
-        alert(`Reset email sent to ${u.email}.`);
+        await uiAlert(`Reset email sent to ${u.email}.`, { title: "Email Sent" });
       } catch (err) {
         console.error(err);
-        alert("Error: " + (err.message || "Could not send reset email."));
+        await uiAlert("Error: " + (err.message || "Could not send reset email."), { title: "Error", danger: true });
       }
     });
   });

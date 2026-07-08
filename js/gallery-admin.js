@@ -129,12 +129,15 @@ function buildCard(id, data) {
     </div>
   `;
   card.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm("Remove this photo? This cannot be undone.")) return;
+    const confirmed = await uiConfirm("Remove this photo? This cannot be undone.", {
+      title: "Remove Photo", confirmText: "Remove", danger: true
+    });
+    if (!confirmed) return;
     try {
       await deleteDoc(doc(db, "gallery", id));
     } catch (err) {
       console.error("Could not remove photo:", err);
-      alert("Could not remove photo. Check console for details.");
+      await uiAlert("Could not remove photo. Check console for details.", { title: "Error", danger: true });
     }
   });
   return card;

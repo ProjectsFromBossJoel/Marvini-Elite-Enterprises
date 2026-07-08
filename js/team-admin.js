@@ -202,20 +202,24 @@ function buildRow(id, data) {
     <td><span class="pill ${data.status === "published" ? "completed" : "draft"}">${data.status === "published" ? "Published" : "Draft"}</span></td>
     <td>
       <div class="row-actions">
-        <button aria-label="Edit" data-edit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
-        <button aria-label="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+        <button aria-label="Edit" title="Edit" data-edit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
+        <button aria-label="Remove" title="Remove" class="danger" data-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
       </div>
     </td>
   `;
 
   tr.querySelector("[data-edit]").addEventListener("click", () => openModal(data, id));
   tr.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm(`Remove ${data.name || "this team member"}? This cannot be undone.`)) return;
+    const confirmed = await uiConfirm(
+      `Remove ${data.name || "this team member"}? This cannot be undone.`,
+      { title: "Remove Team Member", confirmText: "Remove", danger: true }
+    );
+    if (!confirmed) return;
     try {
       await deleteDoc(doc(db, "team", id));
     } catch (err) {
       console.error("Could not remove team member:", err);
-      alert("Could not remove team member. Check console for details.");
+      await uiAlert("Could not remove team member. Check console for details.", { title: "Error", danger: true });
     }
   });
 

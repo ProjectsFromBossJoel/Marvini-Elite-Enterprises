@@ -141,12 +141,15 @@ function buildCard(id, data) {
   `;
   card.querySelector("[data-edit]").addEventListener("click", () => openModal(data, id));
   card.querySelector("[data-remove]").addEventListener("click", async () => {
-    if (!confirm(`Remove ${data.name || "this partner"}?`)) return;
+    const confirmed = await uiConfirm(`Remove ${data.name || "this partner"}?`, {
+      title: "Remove Partner", confirmText: "Remove", danger: true
+    });
+    if (!confirmed) return;
     try {
       await deleteDoc(doc(db, "partners", id));
     } catch (err) {
       console.error("Could not remove partner:", err);
-      alert("Could not remove partner. Check console for details.");
+      await uiAlert("Could not remove partner. Check console for details.", { title: "Error", danger: true });
     }
   });
   return card;
