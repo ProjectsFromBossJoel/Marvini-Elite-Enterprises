@@ -76,7 +76,7 @@
         <h1>Settings</h1>
         <p>Site-wide configuration for marvini-elite-enterprises.web.app.</p>
       </div>
-      <div class="page-head-actions"><button class="btn btn-primary" type="button">
+      <div class="page-head-actions"><button class="btn btn-primary" type="button" id="saveGeneralBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
       Save Changes
     </button></div>
@@ -85,14 +85,15 @@
       <h3>General</h3>
       <p class="fc-desc">Basic identity used across the public site and admin panel.</p>
       <div class="form-row2">
-        <div class="form-field"><label>Site Name</label><input type="text" value="Marvini Elite Enterprises"/></div>
-        <div class="form-field"><label>Tagline</label><input type="text" value="Innovating Africa's Future"/></div>
+        <div class="form-field"><label>Site Name</label><input type="text" id="settingSiteName"/></div>
+        <div class="form-field"><label>Tagline</label><input type="text" id="settingTagline"/></div>
       </div>
       <div class="form-row2">
-        <div class="form-field"><label>Contact Email</label><input type="email" value="jakunor@hotmail.com"/></div>
-        <div class="form-field"><label>Careers Email</label><input type="email" value="jakunor@hotmail.com"/></div>
+        <div class="form-field"><label>Contact Email</label><input type="email" id="settingContactEmail"/></div>
+        <div class="form-field"><label>Careers Email</label><input type="email" id="settingCareersEmail"/></div>
       </div>
-      <div class="form-field"><label>Headquarters Address</label><input type="text" value="Accra, Ghana, West Africa"/></div>
+      <div class="form-field"><label>Headquarters Address</label><input type="text" id="settingHqAddress"/></div>
+      <div id="generalStatus" style="font-size:.85rem;color:var(--text-muted,#64748b);margin-top:.5rem;min-height:1.2em;"></div>
     </div>
 
     <div class="form-card">
@@ -100,16 +101,17 @@
       <p class="fc-desc">Choose what triggers an alert to the admin team.</p>
       <div class="toggle-row">
         <div><strong>New contact message</strong><span>Email the admin inbox when a visitor submits the contact form.</span></div>
-        <label class="switch"><input type="checkbox" checked/><span class="switch-slider"></span></label>
+        <label class="switch"><input type="checkbox" id="toggleContactMessage"/><span class="switch-slider"></span></label>
       </div>
       <div class="toggle-row">
         <div><strong>New career application</strong><span>Notify subsidiary leads when a candidate applies.</span></div>
-        <label class="switch"><input type="checkbox" checked/><span class="switch-slider"></span></label>
+        <label class="switch"><input type="checkbox" id="toggleCareerApplication"/><span class="switch-slider"></span></label>
       </div>
       <div class="toggle-row">
         <div><strong>Newsletter signups</strong><span>Weekly digest of new subscribers.</span></div>
-        <label class="switch"><input type="checkbox"/><span class="switch-slider"></span></label>
+        <label class="switch"><input type="checkbox" id="toggleNewsletterSignup"/><span class="switch-slider"></span></label>
       </div>
+      <div id="notifStatus" style="font-size:.85rem;color:var(--text-muted,#64748b);margin-top:.5rem;min-height:1.2em;"></div>
     </div>
 
     <div class="form-card">
@@ -117,29 +119,17 @@
       <p class="fc-desc">Administrators with access to this dashboard.</p>
       <table>
         <thead><tr><th>Name</th><th>Role</th><th>Access</th><th></th></tr></thead>
-        <tbody>
-          <tr>
-            <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Nana+Yaa+Ofori&background=1a56ff&color=fff"/><div><strong>User</strong></div></div></td>
-            <td>Site Administrator</td>
-            <td><span class="pill completed">Full Access</span></td>
-            <td><div class="row-actions"><button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button></div></td>
-          </tr>
-          <tr>
-            <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=Jacob+Akunor&background=059669&color=fff"/><div><strong>Jacob T. Akunor</strong></div></div></td>
-            <td>Chief Executive Officer</td>
-            <td><span class="pill completed">Full Access</span></td>
-            <td><div class="row-actions"><button aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button></div></td>
-          </tr>
-        </tbody>
-      </table>
+        <tbody id="accessTableBody">
+          <tr><td colspan="4" style="text-align:center;color:var(--text-muted,#64748b);padding:1.5rem;">Loading…</td></tr>
+        </tbody>      </table>
     </div>
 
 
   </main>
 </div>
 
-<script type="module" src="../js/auth-guard.js"></script>
-<script src="admin.js"></script>
-<script type="module" src="../js/dashboard-admin.js"></script>
+<script type="module" src="/js/auth-guard.js"></script>
+<script src="/dashboard/admin.js"></script>
+<script type="module" src="/js/settings-admin.js"></script>
 </body>
 </html>

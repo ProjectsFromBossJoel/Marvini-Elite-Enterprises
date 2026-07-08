@@ -1720,16 +1720,38 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
       if (btnSpinner) btnSpinner.style.display = 'inline-block';
 
       try {
-        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        const { db, collection, addDoc, doc, getDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const phone = document.getElementById('contactPhone').value;
+        const subject = document.getElementById('contactSubject').value;
+        const message = document.getElementById('contactMessage').value;
+
         await addDoc(collection(db, 'messages'), {
-          name: document.getElementById('contactName').value,
-          email: document.getElementById('contactEmail').value,
-          phone: document.getElementById('contactPhone').value,
-          subject: document.getElementById('contactSubject').value,
-          message: document.getElementById('contactMessage').value,
+          name, email, phone, subject, message,
           read: false,
           createdAt: serverTimestamp(),
         });
+
+        // Check the admin's notification preference before emailing.
+        let shouldEmail = true;
+        try {
+          const notifSnap = await getDoc(doc(db, 'settings', 'notifications'));
+          shouldEmail = notifSnap.exists() ? notifSnap.data().contactMessageEmail !== false : true;
+        } catch (notifErr) {
+          console.error('notification check failed, defaulting to send', notifErr);
+        }
+
+        if (shouldEmail && window.emailjs) {
+          try {
+            await emailjs.send('YOUR_SERVICE_ID', 'YOUR_CONTACT_TEMPLATE_ID', {
+              from_name: name, from_email: email, phone, subject, message,
+            });
+          } catch (emailErr) {
+            console.error('EmailJS send failed (message still saved):', emailErr);
+          }
+        }
+
         document.getElementById('formSuccess').style.display = 'block';
         form.reset();
         setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
