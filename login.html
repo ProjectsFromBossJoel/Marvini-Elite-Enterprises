@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin Login | Marvini Admin</title>
+<title>Admin Login | Marvini Elite Enterprises</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="admin.css" />
+<link rel="stylesheet" href="dashboard/admin.css" />
 
 <style>
   body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
@@ -73,7 +73,7 @@
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "index.html";
+      window.location.href = "dashboard/index.html";
     } catch (err) {
       errorBox.textContent = "Incorrect email or password.";
       loginBtn.disabled = false;
