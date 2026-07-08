@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const client = getClient();
     const propertyId = process.env.GA_PROPERTY_ID;
 
-    const [report] = await client.runRealtimeReport({
+    const [pageReport] = await client.runRealtimeReport({
       property: `properties/${propertyId}`,
       dimensions: [{ name: 'unifiedScreenName' }], // page title/screen name
       metrics: [{ name: 'activeUsers' }],
@@ -33,17 +33,31 @@ export default async function handler(req, res) {
       limit: 10,
     });
 
-    const totalActiveUsers = (report.rows || []).reduce(
+    const [locationReport] = await client.runRealtimeReport({
+      property: `properties/${propertyId}`,
+      dimensions: [{ name: 'country' }, { name: 'city' }],
+      metrics: [{ name: 'activeUsers' }],
+      orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
+      limit: 10,
+    });
+
+    const totalActiveUsers = (pageReport.rows || []).reduce(
       (sum, row) => sum + Number(row.metricValues[0].value),
       0
     );
 
-    const byPage = (report.rows || []).map((row) => ({
+    const byPage = (pageReport.rows || []).map((row) => ({
       page: row.dimensionValues[0].value || '(not set)',
       activeUsers: Number(row.metricValues[0].value),
     }));
 
-    res.status(200).json({ totalActiveUsers, byPage, updatedAt: new Date().toISOString() });
+    const byLocation = (locationReport.rows || []).map((row) => ({
+      country: row.dimensionValues[0].value || 'Unknown',
+      city: row.dimensionValues[1].value || 'Unknown',
+      activeUsers: Number(row.metricValues[0].value),
+    }));
+
+    res.status(200).json({ totalActiveUsers, byPage, byLocation, updatedAt: new Date().toISOString() });
   } catch (err) {
     console.error('GA4 realtime fetch failed:', err);
     res.status(500).json({ error: 'Could not fetch realtime data' });
