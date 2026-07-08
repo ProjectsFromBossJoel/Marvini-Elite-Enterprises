@@ -96,7 +96,7 @@ if (realtimeUsersEl && realtimePagesBody) {
     try {
       const res = await fetch("https://marvini-elite-enterprises-alpha.vercel.app/api/analytics-realtime");
       if (!res.ok) throw new Error("Request failed");
-      const { totalActiveUsers, byPage, byLocation } = await res.json();
+      const { totalActiveUsers, byPage, byLocation, byCountry } = await res.json();
 
       realtimeUsersEl.textContent = totalActiveUsers;
 
@@ -126,6 +126,8 @@ if (realtimeUsersEl && realtimePagesBody) {
             .join("");
         }
       }
+
+      renderRealtimeMap(byCountry);
     } catch (err) {
       console.error("Could not load realtime analytics:", err);
       realtimeUsersEl.textContent = "—";
@@ -134,4 +136,46 @@ if (realtimeUsersEl && realtimePagesBody) {
 
   pollRealtime();
   setInterval(pollRealtime, 25000); // poll every 25s
+}
+
+
+// ── Realtime map: color countries by active user count ─────────────
+let realtimeMapInstance = null;
+
+function renderRealtimeMap(byCountry) {
+  const mapContainer = document.getElementById("realtimeMap");
+  if (!mapContainer || typeof svgMap === "undefined") return;
+
+  const values = {};
+  let maxUsers = 1;
+  Object.entries(byCountry || {}).forEach(([countryId, { activeUsers }]) => {
+    values[countryId] = { users: activeUsers };
+    if (activeUsers > maxUsers) maxUsers = activeUsers;
+  });
+
+  mapContainer.innerHTML = ""; // clear previous render before re-drawing
+
+  realtimeMapInstance = new svgMap({
+    targetElementID: "realtimeMap",
+    minZoom: 1,
+    maxZoom: 1,
+    initialZoom: 1,
+    colorMax: "#059669",
+    colorMin: "#d1fae5",
+    colorNoData: "#f1f5f9",
+    hideFlag: true,
+    data: {
+      data: {
+        users: {
+          name: "Active Users",
+          format: "{0}",
+          thousandSeparator: ",",
+          thresholdMax: maxUsers,
+          thresholdMin: 0,
+        },
+      },
+      applyData: "users",
+      values,
+    },
+  });
 }

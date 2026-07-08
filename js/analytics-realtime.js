@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
     const [locationReport] = await client.runRealtimeReport({
       property: `properties/${propertyId}`,
-      dimensions: [{ name: 'country' }, { name: 'city' }],
+      dimensions: [{ name: 'countryId' }, { name: 'country' }, { name: 'city' }],
       metrics: [{ name: 'activeUsers' }],
       orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
       limit: 10,
@@ -52,12 +52,21 @@ export default async function handler(req, res) {
     }));
 
     const byLocation = (locationReport.rows || []).map((row) => ({
-      country: row.dimensionValues[0].value || 'Unknown',
-      city: row.dimensionValues[1].value || 'Unknown',
+      countryId: row.dimensionValues[0].value || '',
+      country: row.dimensionValues[1].value || 'Unknown',
+      city: row.dimensionValues[2].value || 'Unknown',
       activeUsers: Number(row.metricValues[0].value),
     }));
 
-    res.status(200).json({ totalActiveUsers, byPage, byLocation, updatedAt: new Date().toISOString() });
+    // Aggregate by country for the map (city-level rows can duplicate a country)
+    const byCountry = {};
+    byLocation.forEach(({ countryId, country, activeUsers }) => {
+      if (!countryId) return;
+      if (!byCountry[countryId]) byCountry[countryId] = { country, activeUsers: 0 };
+      byCountry[countryId].activeUsers += activeUsers;
+    });
+
+    res.status(200).json({ totalActiveUsers, byPage, byLocation, byCountry, updatedAt: new Date().toISOString() });
   } catch (err) {
     console.error('GA4 realtime fetch failed:', err);
     res.status(500).json({ error: 'Could not fetch realtime data' });
