@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="dashboard/admin.css" />
+<link rel="stylesheet" href="/dashboard/admin.css" />
 
 <style>
   body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
@@ -31,7 +31,7 @@
 <body>
 
 <div class="login-card">
-  <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini" onerror="this.style.display='none'"/>
+  <img src="/img/marvini_elite_enterprise_logo2.png" alt="Marvini" onerror="this.style.display='none'"/>
   <h1>Admin Sign In</h1>
   <p class="sub">Marvini Elite Enterprises — Admin Dashboard</p>
 
@@ -52,11 +52,11 @@
 </div>
 
 <script type="module">
-  import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "../js/firebase-config.js";
+  import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "/js/firebase-config.js";
 
   // Already signed in? Skip straight to the dashboard.
   onAuthStateChanged(auth, (user) => {
-    if (user) window.location.href = "dashboard/index.html";
+    if (user) window.location.href = "/dashboard/index.html";
   });
 
   const form = document.getElementById("loginForm");
@@ -73,7 +73,7 @@
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "dashboard/index.html";
+      window.location.href = "/dashboard/index.html";
     } catch (err) {
       errorBox.textContent = "Incorrect email or password.";
       loginBtn.disabled = false;
