@@ -38,10 +38,10 @@ export default async function handler(req, res) {
     });
     const visitors = Number(summary.rows?.[0]?.metricValues?.[0]?.value || 0);
 
-    // Monthly breakdown for the last 8 months (for the traffic chart)
+    // GA4 only accepts YYYY-MM-DD, NdaysAgo, yesterday, or today — no NmonthsAgo.
     const [monthly] = await client.runReport({
       property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '8monthsAgo', endDate: 'today' }],
+      dateRanges: [{ startDate: '243daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'yearMonth' }],
       metrics: [{ name: 'activeUsers' }],
       orderBys: [{ dimension: { dimensionName: 'yearMonth' } }],
