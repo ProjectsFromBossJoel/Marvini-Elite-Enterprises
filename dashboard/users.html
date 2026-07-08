@@ -41,6 +41,21 @@
   .pages-grid label { display:flex; align-items:center; gap:.5rem; font-size:.85rem; font-weight:500; cursor:pointer; }
   .pages-fieldset.disabled { opacity:.55; pointer-events:none; }
   #userStatus { font-size:.85rem; color: var(--text-muted,#64748b); margin-top:.5rem; min-height: 1.2em; }
+  .avatar-upload-row { display:flex; align-items:center; gap:1rem; margin-bottom: 1.25rem; }
+  .avatar-preview {
+    width:64px; height:64px; border-radius:50%; object-fit:cover;
+    border:1px solid var(--border,#e2e8f0); background:#f1f5f9;
+    flex-shrink:0;
+  }
+  .avatar-upload-btns { display:flex; flex-direction:column; gap:.35rem; }
+  .avatar-upload-label {
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.4rem .8rem; border:1px solid var(--border,#e2e8f0);
+    border-radius:8px; font-size:.8rem; font-weight:600; cursor:pointer;
+    background: var(--bg-card,#fff); width:fit-content;
+  }
+  .avatar-upload-label input[type="file"] { display:none; }
+  #avatarUploadStatus { font-size:.75rem; color: var(--text-muted,#64748b); }
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
   .role-pill { display:inline-block; padding:.2rem .6rem; border-radius:999px; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
   .role-pill.admin { background: rgba(26,86,255,0.12); color:#1a56ff; }
@@ -141,6 +156,19 @@
     </div>
     <form id="userForm">
       <input type="hidden" id="userUid" value="" />
+      <input type="hidden" id="userPhotoURL" value="" />
+
+      <div class="avatar-upload-row">
+        <img id="avatarPreview" class="avatar-preview" src="https://ui-avatars.com/api/?name=New+User&background=1a56ff&color=fff" alt="Profile preview" />
+        <div class="avatar-upload-btns">
+          <label class="avatar-upload-label" for="avatarFileInput">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+            Upload Photo
+            <input type="file" id="avatarFileInput" accept="image/png,image/jpeg,image/webp" />
+          </label>
+          <span id="avatarUploadStatus"></span>
+        </div>
+      </div>
 
       <div class="form-field">
         <label for="userName">Full Name *</label>

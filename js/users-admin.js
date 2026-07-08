@@ -8,9 +8,10 @@
 // torn down immediately after.
 
 import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signOut as secondarySignOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut as secondarySignOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
+  auth,
   db,
   doc,
   setDoc,
@@ -23,6 +24,7 @@ import {
   firebaseConfig,
   USERS_COLLECTION,
 } from "./firebase-config.js";
+import { uploadToCloudinary } from "./cloudinary.js";
 
 const ROLE_LABELS = { admin: "Admin", hr: "HR", it_support: "IT Support" };
 
@@ -48,6 +50,10 @@ const pagesFieldset = document.getElementById("pagesFieldset");
 const pageChks = () => Array.from(document.querySelectorAll(".pageChk"));
 const statusBox = document.getElementById("userStatus");
 const submitBtn = document.getElementById("userSubmitBtn");
+const avatarFileInput = document.getElementById("avatarFileInput");
+const avatarPreview = document.getElementById("avatarPreview");
+const photoURLField = document.getElementById("userPhotoURL");
+const avatarUploadStatus = document.getElementById("avatarUploadStatus");
 
 let currentUsers = []; // cache of latest snapshot, for the self-protection checks
 
@@ -87,6 +93,7 @@ function initUsersPage() {
   modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 
   roleField.addEventListener("change", applyRoleDefaults);
+  avatarFileInput.addEventListener("change", handleAvatarUpload);
 
   form.addEventListener("submit", handleSubmit);
 }
@@ -100,16 +107,19 @@ function renderTable(users) {
       : '<span class="pill completed">Active</span>';
     return `
       <tr data-uid="${u.id}">
-        <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || u.email)}&background=1a56ff&color=fff"/><div><strong>${escapeHtml(u.name || "—")}</strong>${isSelf ? "<span>(you)</span>" : ""}</div></div></td>
+        <td><div class="student-cell"><img src="${u.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || u.email)}&background=1a56ff&color=fff`}"/><div><strong>${escapeHtml(u.name || "—")}</strong>${isSelf ? "<span>(you)</span>" : ""}</div></div></td>
         <td>${escapeHtml(u.email || "—")}</td>
         <td><span class="role-pill ${u.role}">${ROLE_LABELS[u.role] || u.role}</span></td>
         <td>${statusPill}</td>
         <td>
           <div class="row-actions">
-            <button aria-label="Edit" data-action="edit" ${isSelf ? "" : ""}>
+            <button aria-label="Edit" title="Edit" data-action="edit">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
             </button>
-            <button aria-label="${u.status === "disabled" ? "Enable" : "Disable"}" data-action="toggle-status" class="${u.status === "disabled" ? "" : "danger"}" ${isSelf ? "disabled title=\"You can't disable your own account\"" : ""}>
+            <button aria-label="Reset Password" title="Reset Password" data-action="reset-password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </button>
+            <button aria-label="${u.status === "disabled" ? "Enable" : "Disable"}" title="${u.status === "disabled" ? "Enable" : "Disable"}${isSelf ? " (unavailable for your own account)" : ""}" data-action="toggle-status" class="${u.status === "disabled" ? "" : "danger"}" ${isSelf ? "disabled" : ""}>
               ${u.status === "disabled"
                 ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>'
                 : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>'}
@@ -139,11 +149,30 @@ function renderTable(users) {
       await updateDoc(doc(db, USERS_COLLECTION, uid), { status: nextStatus });
     });
   });
+
+  tbody.querySelectorAll('[data-action="reset-password"]').forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const uid = e.currentTarget.closest("tr").dataset.uid;
+      const u = currentUsers.find((x) => x.id === uid);
+      if (!u || !u.email) return;
+      if (!confirm(`Send a password reset email to ${u.email}?`)) return;
+      try {
+        await sendPasswordResetEmail(auth, u.email);
+        alert(`Reset email sent to ${u.email}.`);
+      } catch (err) {
+        console.error(err);
+        alert("Error: " + (err.message || "Could not send reset email."));
+      }
+    });
+  });
 }
 
 function openModal(user = null) {
   form.reset();
   statusBox.textContent = "";
+
+  avatarUploadStatus.textContent = "";
+  avatarFileInput.value = "";
 
   if (user) {
     modalTitle.textContent = "Edit User";
@@ -155,6 +184,8 @@ function openModal(user = null) {
     passwordField.required = false;
     roleField.value = user.role || "it_support";
     setCheckedPages(user.pages || DEFAULT_PAGES[user.role] || []);
+    photoURLField.value = user.photoURL || "";
+    avatarPreview.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=1a56ff&color=fff`;
     submitBtn.textContent = "Save Changes";
   } else {
     modalTitle.textContent = "Add User";
@@ -164,6 +195,8 @@ function openModal(user = null) {
     passwordField.required = true;
     roleField.value = "it_support";
     setCheckedPages(DEFAULT_PAGES.it_support);
+    photoURLField.value = "";
+    avatarPreview.src = "https://ui-avatars.com/api/?name=New+User&background=1a56ff&color=fff";
     submitBtn.textContent = "Create User";
   }
 
@@ -173,6 +206,22 @@ function openModal(user = null) {
 
 function closeModal() {
   modal.classList.remove("open");
+}
+
+async function handleAvatarUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  avatarUploadStatus.textContent = "Uploading…";
+  try {
+    const result = await uploadToCloudinary(file, "image", "marvini/avatars", "marvini_avatars");
+    photoURLField.value = result.url;
+    avatarPreview.src = result.url;
+    avatarUploadStatus.textContent = "Uploaded ✓";
+  } catch (err) {
+    console.error(err);
+    avatarUploadStatus.textContent = "Upload failed — try again.";
+  }
 }
 
 function applyRoleDefaults() {
@@ -204,11 +253,17 @@ async function handleSubmit(e) {
   const name = nameField.value.trim();
   const role = roleField.value;
   const pages = role === "admin" ? DEFAULT_PAGES.admin : getCheckedPages();
+  const photoURL = photoURLField.value || null;
 
   try {
     if (uid) {
       // Editing an existing user — Firestore doc only.
-      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages });
+      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, photoURL });
+      if (window.marviniUser && uid === window.marviniUser.uid) {
+        window.marviniUser.photoURL = photoURL;
+        const profileImg = document.querySelector(".profile img");
+        if (profileImg && photoURL) profileImg.src = photoURL;
+      }
       statusBox.textContent = "User updated.";
     } else {
       // Creating a brand-new login — needs Auth account + Firestore doc.
@@ -224,6 +279,7 @@ async function handleSubmit(e) {
           email,
           role,
           pages,
+          photoURL,
           status: "active",
           createdAt: serverTimestamp(),
         });

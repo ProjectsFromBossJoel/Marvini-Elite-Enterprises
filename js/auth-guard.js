@@ -49,6 +49,7 @@ onAuthStateChanged(auth, async (user) => {
     role: profile.role,
     name: profile.name || user.email,
     pages: profile.pages || [],
+    photoURL: profile.photoURL || null,
   };
 
   // Admins always see every nav link. Everyone else only sees the pages
@@ -67,6 +68,12 @@ onAuthStateChanged(auth, async (user) => {
 
   const whoRole = document.querySelector(".profile .who span");
   if (whoRole) whoRole.textContent = ROLE_LABELS[profile.role] || profile.role;
+
+  const profileImg = document.querySelector(".profile img");
+  if (profileImg) {
+    profileImg.src = profile.photoURL ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name || user.email)}&background=1a56ff&color=fff`;
+  }
 
   const signOutBtn = document.getElementById("signOutBtn");
   signOutBtn?.addEventListener("click", async () => {

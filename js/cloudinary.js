@@ -1,3 +1,4 @@
+// js/cloudinary.js
 // ══════════════════════════════════════════════════════════
 // Cloudinary upload helper — unsigned upload (no backend server needed)
 // ══════════════════════════════════════════════════════════
