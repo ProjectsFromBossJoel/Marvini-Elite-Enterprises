@@ -9,14 +9,11 @@ import {
   orderBy,
   onSnapshot,
   doc,
-  addDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp,
 } from "./firebase-config.js";
 
 const LEADS_COLLECTION = "consultancyTrainingLeads";
-const PROGRAMS_COLLECTION = "consultancyPrograms";
 
 const tableBody = document.getElementById("leadsTableBody");
 const emptyState = document.getElementById("leadsEmptyState");
@@ -182,146 +179,4 @@ deleteLeadBtn.addEventListener("click", async () => {
   if (!confirm("Delete this enquiry? This can't be undone.")) return;
   await deleteDoc(doc(db, LEADS_COLLECTION, activeLeadId));
   closeLeadModal();
-});
-
-// =====================================================================
-// Upcoming Training Programs — shown live on the public
-// Consultancy & Training page's "Upcoming Programs" section.
-// =====================================================================
-
-const programsTableBody = document.getElementById("programsTableBody");
-const programsEmptyState = document.getElementById("programsEmptyState");
-let allPrograms = [];
-
-function renderProgramRows() {
-  programsTableBody.innerHTML = "";
-
-  if (allPrograms.length === 0) {
-    programsEmptyState.style.display = "block";
-    return;
-  }
-  programsEmptyState.style.display = "none";
-
-  allPrograms.forEach((p) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>
-        <strong>${escapeHtml(p.title || "—")}</strong>
-        <div class="row-sub">${escapeHtml(p.description || "")}</div>
-      </td>
-      <td>${escapeHtml(p.format || "—")}</td>
-      <td>${escapeHtml(p.duration || "—")}</td>
-      <td>${escapeHtml(p.note || "—")}</td>
-      <td>
-        <div class="row-actions">
-          <button class="btn btn-outline btn-sm" data-edit-program="${p.id}">Edit</button>
-          <button class="btn btn-danger btn-sm" data-delete-program="${p.id}">Delete</button>
-        </div>
-      </td>
-    `;
-    programsTableBody.appendChild(tr);
-  });
-
-  programsTableBody.querySelectorAll("[data-edit-program]").forEach((btn) => {
-    btn.addEventListener("click", () => openProgramModal(btn.dataset.editProgram));
-  });
-  programsTableBody.querySelectorAll("[data-delete-program]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      if (!confirm("Delete this program? It will be removed from the live page immediately.")) return;
-      await deleteDoc(doc(db, PROGRAMS_COLLECTION, btn.dataset.deleteProgram));
-    });
-  });
-}
-
-const programsQuery = query(collection(db, PROGRAMS_COLLECTION), orderBy("createdAt", "desc"));
-onSnapshot(programsQuery, (snapshot) => {
-  allPrograms = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-  renderProgramRows();
-}, (err) => {
-  console.error("Error loading training programs:", err);
-  programsEmptyState.textContent = "Couldn't load programs — check your connection or Firestore rules.";
-  programsEmptyState.style.display = "block";
-});
-
-// ---------------- Program add/edit modal ----------------
-const programModal = document.getElementById("programModal");
-const programModalTitle = document.getElementById("programModalTitle");
-const openProgramBtn = document.getElementById("openProgramBtn");
-const closeProgramBtn = document.getElementById("closeProgramBtn");
-const programForm = document.getElementById("programForm");
-const programIdField = document.getElementById("programId");
-const programTitleField = document.getElementById("programTitle");
-const programFormatField = document.getElementById("programFormat");
-const programDurationField = document.getElementById("programDuration");
-const programDescriptionField = document.getElementById("programDescription");
-const programNoteField = document.getElementById("programNote");
-const programSubmitBtn = document.getElementById("programSubmitBtn");
-const programFormStatus = document.getElementById("programFormStatus");
-
-function openProgramModal(programId) {
-  programForm.reset();
-  programFormStatus.textContent = "";
-
-  if (programId) {
-    const p = allPrograms.find((x) => x.id === programId);
-    if (!p) return;
-    programModalTitle.textContent = "Edit Training Program";
-    programIdField.value = p.id;
-    programTitleField.value = p.title || "";
-    programFormatField.value = p.format || "";
-    programDurationField.value = p.duration || "";
-    programDescriptionField.value = p.description || "";
-    programNoteField.value = p.note || "";
-    programSubmitBtn.textContent = "Save Changes";
-  } else {
-    programModalTitle.textContent = "Add Training Program";
-    programIdField.value = "";
-    programSubmitBtn.textContent = "Save Program";
-  }
-
-  programModal.classList.add("open");
-}
-
-function closeProgramModal() {
-  programModal.classList.remove("open");
-}
-
-openProgramBtn.addEventListener("click", () => openProgramModal(null));
-closeProgramBtn.addEventListener("click", closeProgramModal);
-programModal.addEventListener("click", (e) => {
-  if (e.target === programModal) closeProgramModal();
-});
-
-programForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  programSubmitBtn.disabled = true;
-  programFormStatus.textContent = "";
-  programFormStatus.style.color = "";
-
-  const payload = {
-    title: programTitleField.value.trim(),
-    format: programFormatField.value.trim(),
-    duration: programDurationField.value.trim(),
-    description: programDescriptionField.value.trim(),
-    note: programNoteField.value.trim(),
-  };
-
-  try {
-    const existingId = programIdField.value;
-    if (existingId) {
-      await updateDoc(doc(db, PROGRAMS_COLLECTION, existingId), payload);
-    } else {
-      await addDoc(collection(db, PROGRAMS_COLLECTION), {
-        ...payload,
-        createdAt: serverTimestamp(),
-      });
-    }
-    closeProgramModal();
-  } catch (err) {
-    console.error("Error saving program:", err);
-    programFormStatus.textContent = "Couldn't save — please try again.";
-    programFormStatus.style.color = "#A6542A";
-  } finally {
-    programSubmitBtn.disabled = false;
-  }
 });

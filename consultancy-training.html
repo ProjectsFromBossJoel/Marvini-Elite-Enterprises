@@ -815,27 +815,7 @@
     </div>
 
     <div class="programs-grid" id="programs-grid">
-      <div class="program-card">
-        <p class="fmt">Corporate · On-site</p>
-        <h3>Frontline Customer Service</h3>
-        <p>Practical service standards and difficult-conversation handling for customer-facing staff.</p>
-        <div class="meta"><span>2 days</span><span>Min. 8 staff</span></div>
-        <button class="interest-btn" data-program="Frontline Customer Service">Register interest</button>
-      </div>
-      <div class="program-card">
-        <p class="fmt">Open enrolment</p>
-        <h3>Leadership Essentials</h3>
-        <p>First-time managers learn delegation, feedback, and running a team meeting that actually decides things.</p>
-        <div class="meta"><span>3 days</span><span>Certificate</span></div>
-        <button class="interest-btn" data-program="Leadership Essentials">Register interest</button>
-      </div>
-      <div class="program-card">
-        <p class="fmt">Corporate · Remote or on-site</p>
-        <h3>Financial Literacy for Non-Finance Managers</h3>
-        <p>Reading a P&amp;L, building a defensible budget, and asking finance the right questions.</p>
-        <div class="meta"><span>1 day</span><span>Min. 6 staff</span></div>
-        <button class="interest-btn" data-program="Financial Literacy for Non-Finance Managers">Register interest</button>
-      </div>
+      <p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60;" id="programs-loading">Loading programs…</p>
     </div>
   </div>
 </section>
@@ -1025,25 +1005,10 @@
 
 <script type="module">
   // ---------------------------------------------------------------
-  // Firebase — reuse the SAME config/app already used on the main
-  // Marvini site so writes land in the same project. Replace the
-  // placeholder below with your existing firebaseConfig object
-  // (the one already used in your admin dashboard / main site JS).
+  // Reuse the SAME Firebase app/Firestore instance as the rest of the
+  // Marvini site, so writes land in the same project/collections.
   // ---------------------------------------------------------------
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "./js/firebase-config.js";
 
   // ---------------- Intent toggle ----------------
   const tabConsult = document.getElementById('tab-consultation');
@@ -1069,6 +1034,38 @@
   tabConsult.addEventListener('click', () => setIntent('consultation'));
   tabTraining.addEventListener('click', () => setIntent('training'));
 
+  // ---------------- Upcoming Programs (live from Firestore) ----------------
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  const programsGrid = document.getElementById('programs-grid');
+  const programsQuery = query(collection(db, 'consultancyPrograms'), orderBy('createdAt', 'desc'));
+
+  onSnapshot(programsQuery, (snapshot) => {
+    if (snapshot.empty){
+      programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60;">No programs scheduled right now — check back soon, or request a consultation and we\'ll advise on training.</p>';
+      return;
+    }
+    programsGrid.innerHTML = snapshot.docs.map(docSnap => {
+      const p = docSnap.data();
+      return `
+        <div class="program-card">
+          <p class="fmt">${escapeHtml(p.format)}</p>
+          <h3>${escapeHtml(p.title)}</h3>
+          <p>${escapeHtml(p.description)}</p>
+          <div class="meta"><span>${escapeHtml(p.duration)}</span><span>${escapeHtml(p.note)}</span></div>
+          <button class="interest-btn" data-program="${escapeHtml(p.title)}">Register interest</button>
+        </div>
+      `;
+    }).join('');
+  }, (err) => {
+    console.error('Error loading programs:', err);
+    programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:var(--rust);">Couldn\'t load programs right now.</p>';
+  });
+
   // Hero "Request a consultation" CTA jumps to the inline form with that intent
   document.querySelector('[data-intent="consultation"]').addEventListener('click', () => {
     setIntent('consultation');
@@ -1085,7 +1082,13 @@
   function openRegisterModal(programName){
     if (programName){
       const optionExists = Array.from(modalProgramSelect.options).some(o => o.value === programName);
-      if (optionExists) modalProgramSelect.value = programName;
+      if (!optionExists){
+        const opt = document.createElement('option');
+        opt.value = programName;
+        opt.textContent = programName;
+        modalProgramSelect.insertBefore(opt, modalProgramSelect.firstChild);
+      }
+      modalProgramSelect.value = programName;
     }
     modalOverlay.classList.add('open');
     modalOverlay.setAttribute('aria-hidden', 'false');
@@ -1099,9 +1102,11 @@
     document.body.style.overflow = '';
   }
 
-  // Program cards open the modal, pre-filled with that program
-  document.querySelectorAll('[data-program]').forEach(btn => {
-    btn.addEventListener('click', () => openRegisterModal(btn.dataset.program));
+  // Program cards open the modal, pre-filled with that program. Delegated
+  // on the grid container since cards are rendered live from Firestore.
+  document.getElementById('programs-grid').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-program]');
+    if (btn) openRegisterModal(btn.dataset.program);
   });
 
   modalClose.addEventListener('click', closeRegisterModal);

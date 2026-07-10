@@ -55,20 +55,6 @@
   .filter-tab.active { background: #1a56ff; border-color:#1a56ff; color:#fff; }
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
   #leadsTableBody td:last-child { white-space: nowrap; }
-  #programsTableBody td:last-child { white-space: nowrap; }
-
-  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
-  .form-field label { font-size:.85rem; font-weight:600; }
-  .form-field input, .form-field textarea, .form-field select {
-    padding:.6rem .8rem; border:1px solid var(--border,#e2e8f0); border-radius:8px; font-size:.9rem; font-family:inherit;
-  }
-  .form-field textarea { resize: vertical; min-height: 70px; }
-  .form-row-2 { display:grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
-  .section-heading {
-    display:flex; align-items:center; justify-content:space-between;
-    margin: 2.5rem 0 1rem;
-  }
-  .section-heading h2 { font-size: 1.15rem; font-weight: 700; margin:0; }
 </style>
 </head>
 
@@ -139,32 +125,8 @@
         <h1>M-Consultancy & Training</h1>
         <p>Consultation requests and training registrations submitted from the public M-Consultancy & Training page.</p>
       </div>
-      <div class="page-head-actions">
-        <button class="btn btn-primary" type="button" id="openProgramBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          Add Program
-        </button>
-      </div>
     </div>
 
-    <div class="section-heading">
-      <h2>Upcoming Training Programs</h2>
-    </div>
-    <div class="panel">
-      <table>
-        <thead><tr><th>Program</th><th>Format</th><th>Duration</th><th>Note</th><th></th></tr></thead>
-        <tbody id="programsTableBody">
-          <!-- Rows are rendered by ../js/consultancy-training-admin.js -->
-        </tbody>
-      </table>
-      <div class="empty-state" id="programsEmptyState" style="display:none;">
-        No programs published yet. Click <strong>Add Program</strong> to publish one to the live Consultancy &amp; Training page.
-      </div>
-    </div>
-
-    <div class="section-heading">
-      <h2>Enquiries</h2>
-    </div>
     <div class="filter-tabs" id="filterTabs">
       <button class="filter-tab active" data-filter="all">All</button>
       <button class="filter-tab" data-filter="consultation">Consultation</button>
@@ -234,45 +196,6 @@
       <button class="btn btn-outline" id="markClosedBtn" type="button">Mark Closed</button>
       <button class="btn btn-danger" id="deleteLeadBtn" type="button">Delete</button>
     </div>
-  </div>
-</div>
-
-<!-- Add / Edit Program Modal -->
-<div class="modal-overlay" id="programModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3 id="programModalTitle">Add Training Program</h3>
-      <button class="modal-close" id="closeProgramBtn" aria-label="Close">✕</button>
-    </div>
-    <form id="programForm">
-      <input type="hidden" id="programId" value="" />
-      <div class="form-field">
-        <label for="programTitle">Program title *</label>
-        <input type="text" id="programTitle" placeholder="e.g. Leadership Essentials" required />
-      </div>
-      <div class="form-row-2">
-        <div class="form-field">
-          <label for="programFormat">Format tag *</label>
-          <input type="text" id="programFormat" placeholder="e.g. Open enrolment" required />
-        </div>
-        <div class="form-field">
-          <label for="programDuration">Duration *</label>
-          <input type="text" id="programDuration" placeholder="e.g. 3 days" required />
-        </div>
-      </div>
-      <div class="form-field">
-        <label for="programDescription">Short description *</label>
-        <textarea id="programDescription" placeholder="One or two sentences describing this program…" required></textarea>
-      </div>
-      <div class="form-field">
-        <label for="programNote">Note (right-hand meta, e.g. "Min. 8 staff" or "Certificate")</label>
-        <input type="text" id="programNote" placeholder="e.g. Certificate" />
-      </div>
-      <button type="submit" class="btn btn-primary" id="programSubmitBtn" style="width:100%; justify-content:center;">
-        Save Program
-      </button>
-      <div id="programFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
-    </form>
   </div>
 </div>
 
