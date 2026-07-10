@@ -593,8 +593,11 @@
         <!-- Convergence emblem -->
         <g transform="translate(230,230)">
           <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" fill="#14213D"/>
-          <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="none" stroke="#B8892E" stroke-width="1.5"/>
-          <text x="0" y="6" text-anchor="middle" font-family="Fraunces, serif" font-weight="600" font-size="20" fill="#F6F3EC">M</text>
+          <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#FFFFFF" stroke="#B8892E" stroke-width="1.5"/>
+          <clipPath id="emblemClip">
+            <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15"/>
+          </clipPath>
+          <image href="img/marvini_elite_enterprise_logo2.png" x="-24" y="-24" width="48" height="48" clip-path="url(#emblemClip)" preserveAspectRatio="xMidYMid meet"/>
         </g>
 
         <path d="M230 230 L 230 300" stroke="#B8892E" stroke-width="1.5" stroke-dasharray="3 4"/>

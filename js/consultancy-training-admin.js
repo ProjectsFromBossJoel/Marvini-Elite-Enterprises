@@ -18,6 +18,37 @@ import {
 const LEADS_COLLECTION = "consultancyTrainingLeads";
 const PROGRAMS_COLLECTION = "consultancyPrograms";
 
+// ---------------- Reusable confirm modal (replaces confirm()) ----------------
+const confirmModal = document.getElementById("confirmModal");
+const confirmModalTitle = document.getElementById("confirmModalTitle");
+const confirmModalMessage = document.getElementById("confirmModalMessage");
+const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+const confirmOkBtn = document.getElementById("confirmOkBtn");
+let confirmResolver = null;
+
+function askConfirm(message, title = "Are you sure?") {
+  confirmModalTitle.textContent = title;
+  confirmModalMessage.textContent = message;
+  confirmModal.classList.add("open");
+  return new Promise((resolve) => {
+    confirmResolver = resolve;
+  });
+}
+
+function closeConfirmModal(result) {
+  confirmModal.classList.remove("open");
+  if (confirmResolver) {
+    confirmResolver(result);
+    confirmResolver = null;
+  }
+}
+
+confirmCancelBtn.addEventListener("click", () => closeConfirmModal(false));
+confirmOkBtn.addEventListener("click", () => closeConfirmModal(true));
+confirmModal.addEventListener("click", (e) => {
+  if (e.target === confirmModal) closeConfirmModal(false);
+});
+
 const tableBody = document.getElementById("leadsTableBody");
 const emptyState = document.getElementById("leadsEmptyState");
 const filterTabs = document.getElementById("filterTabs");
@@ -31,7 +62,7 @@ function formatDate(timestamp) {
   if (!timestamp || typeof timestamp.toDate !== "function") return "—";
   const d = timestamp.toDate();
   return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) +
-    " · " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    " · " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", hour12: true });
 }
 
 function statusLabel(status) {
@@ -77,7 +108,9 @@ function renderRows() {
       <td>${formatDate(lead.createdAt)}</td>
       <td>
         <div class="row-actions">
-          <button class="btn btn-outline btn-sm" data-view="${lead.id}">View</button>
+          <button class="btn btn-outline btn-icon" data-view="${lead.id}" title="View" aria-label="View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
       </td>
     `;
@@ -179,7 +212,8 @@ markClosedBtn.addEventListener("click", async () => {
 
 deleteLeadBtn.addEventListener("click", async () => {
   if (!activeLeadId) return;
-  if (!confirm("Delete this enquiry? This can't be undone.")) return;
+  const ok = await askConfirm("This enquiry will be permanently deleted.", "Delete this enquiry?");
+  if (!ok) return;
   await deleteDoc(doc(db, LEADS_COLLECTION, activeLeadId));
   closeLeadModal();
 });
@@ -210,12 +244,24 @@ function renderProgramRows() {
         <div class="row-sub">${escapeHtml(p.description || "")}</div>
       </td>
       <td>${escapeHtml(p.format || "—")}</td>
+      <td>
+        ${formatProgramDate(p.startDate)}
+        <div class="row-sub">${formatTime12h(p.startTime) || "—"}</div>
+      </td>
+      <td>
+        ${formatProgramDate(p.endDate)}
+        <div class="row-sub">${formatTime12h(p.endTime) || "—"}</div>
+      </td>
       <td>${escapeHtml(p.duration || "—")}</td>
       <td>${escapeHtml(p.note || "—")}</td>
       <td>
         <div class="row-actions">
-          <button class="btn btn-outline btn-sm" data-edit-program="${p.id}">Edit</button>
-          <button class="btn btn-danger btn-sm" data-delete-program="${p.id}">Delete</button>
+          <button class="btn btn-outline btn-icon" data-edit-program="${p.id}" title="Edit" aria-label="Edit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>
+          </button>
+          <button class="btn btn-danger btn-icon" data-delete-program="${p.id}" title="Delete" aria-label="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+          </button>
         </div>
       </td>
     `;
@@ -227,7 +273,8 @@ function renderProgramRows() {
   });
   programsTableBody.querySelectorAll("[data-delete-program]").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      if (!confirm("Delete this program? It will be removed from the live page immediately.")) return;
+      const ok = await askConfirm("It will be removed from the live page immediately.", "Delete this program?");
+      if (!ok) return;
       await deleteDoc(doc(db, PROGRAMS_COLLECTION, btn.dataset.deleteProgram));
     });
   });
@@ -253,14 +300,59 @@ const programIdField = document.getElementById("programId");
 const programTitleField = document.getElementById("programTitle");
 const programFormatField = document.getElementById("programFormat");
 const programDurationField = document.getElementById("programDuration");
+const programStartDateField = document.getElementById("programStartDate");
+const programEndDateField = document.getElementById("programEndDate");
+const programStartTimeField = document.getElementById("programStartTime");
+const programEndTimeField = document.getElementById("programEndTime");
 const programDescriptionField = document.getElementById("programDescription");
 const programNoteField = document.getElementById("programNote");
 const programSubmitBtn = document.getElementById("programSubmitBtn");
 const programFormStatus = document.getElementById("programFormStatus");
 
+// ---------------- Auto-calculated Duration ----------------
+function formatTime12h(hhmm) {
+  if (!hhmm) return "";
+  const [h, m] = hhmm.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const hour12 = h % 12 === 0 ? 12 : h % 12;
+  return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+function formatProgramDate(dateStr) {
+  if (!dateStr) return "—";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  return dateObj.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}
+
+function computeDuration() {
+  const start = programStartDateField.value;
+  const end = programEndDateField.value;
+  if (!start || !end) {
+    programDurationField.value = "";
+    return;
+  }
+  const startD = new Date(start + "T00:00:00");
+  const endD = new Date(end + "T00:00:00");
+  const dayCount = Math.round((endD - startD) / 86400000) + 1;
+
+  if (dayCount <= 1) {
+    const st = formatTime12h(programStartTimeField.value);
+    const et = formatTime12h(programEndTimeField.value);
+    programDurationField.value = st && et ? `${st} – ${et}` : "1 day";
+  } else {
+    programDurationField.value = `${dayCount} days`;
+  }
+}
+
+[programStartDateField, programEndDateField, programStartTimeField, programEndTimeField].forEach((field) => {
+  field.addEventListener("input", computeDuration);
+});
+
 function openProgramModal(programId) {
   programForm.reset();
   programFormStatus.textContent = "";
+  programDurationField.value = "";
 
   if (programId) {
     const p = allPrograms.find((x) => x.id === programId);
@@ -269,10 +361,14 @@ function openProgramModal(programId) {
     programIdField.value = p.id;
     programTitleField.value = p.title || "";
     programFormatField.value = p.format || "";
-    programDurationField.value = p.duration || "";
+    programStartDateField.value = p.startDate || "";
+    programEndDateField.value = p.endDate || "";
+    programStartTimeField.value = p.startTime || "";
+    programEndTimeField.value = p.endTime || "";
     programDescriptionField.value = p.description || "";
     programNoteField.value = p.note || "";
     programSubmitBtn.textContent = "Save Changes";
+    computeDuration();
   } else {
     programModalTitle.textContent = "Add Training Program";
     programIdField.value = "";
@@ -294,6 +390,7 @@ programModal.addEventListener("click", (e) => {
 
 programForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  computeDuration();
   programSubmitBtn.disabled = true;
   programFormStatus.textContent = "";
   programFormStatus.style.color = "";
@@ -301,6 +398,10 @@ programForm.addEventListener("submit", async (e) => {
   const payload = {
     title: programTitleField.value.trim(),
     format: programFormatField.value.trim(),
+    startDate: programStartDateField.value,
+    endDate: programEndDateField.value,
+    startTime: programStartTimeField.value,
+    endTime: programEndTimeField.value,
     duration: programDurationField.value.trim(),
     description: programDescriptionField.value.trim(),
     note: programNoteField.value.trim(),

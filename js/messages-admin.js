@@ -46,7 +46,7 @@ function formatFullDate(ts) {
   if (!ts?.toDate) return '—';
   const d = ts.toDate();
   return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) +
-    ' · ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    ' · ' + d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
 // Returns { top, bottom } for the small time badge on each row
@@ -55,7 +55,7 @@ function formatTimeParts(ts) {
   const d = ts.toDate();
   const now = new Date();
   if (d.toDateString() === now.toDateString()) {
-    const [time, ampm] = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }).split(' ');
+    const [time, ampm] = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true }).split(' ');
     return { top: time, bottom: ampm || '' };
   }
   return { top: d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), bottom: '' };

@@ -69,39 +69,6 @@
     margin: 2.5rem 0 1rem;
   }
   .section-heading h2 { font-size: 1.15rem; font-weight: 700; margin:0; }
-
-  /* ---------- Row action buttons ---------- */
-  .row-actions .btn {
-    display:inline-flex; align-items:center; justify-content:center;
-    padding: 6px 14px; font-size: 12.5px; font-weight: 600;
-    border-radius: 7px; line-height: 1.4; cursor:pointer;
-    transition: all .15s ease; border: 1px solid transparent;
-  }
-  .row-actions .btn-outline {
-    background: #fff; border-color: var(--border,#e2e8f0); color: var(--text-muted,#64748b);
-  }
-  .row-actions .btn-outline:hover { border-color:#1a56ff; color:#1a56ff; background: rgba(26,86,255,0.06); }
-  .row-actions .btn-danger {
-    background: #fff; border-color: rgba(220,38,38,0.3); color:#dc2626;
-  }
-  .row-actions .btn-danger:hover { background:#dc2626; border-color:#dc2626; color:#fff; }
-  .row-actions .btn-icon {
-    width: 30px; height: 30px; padding: 0;
-    display:inline-flex; align-items:center; justify-content:center;
-  }
-  .row-actions .btn-icon svg { width: 15px; height: 15px; }
-
-  /* ---------- Confirm modal ---------- */
-  .confirm-modal-card { max-width: 380px; text-align:center; padding: 2rem 1.75rem; }
-  .confirm-icon {
-    width:48px; height:48px; border-radius:50%; margin: 0 auto 1rem;
-    background: rgba(220,38,38,0.1); color:#dc2626;
-    display:flex; align-items:center; justify-content:center; font-size: 22px;
-  }
-  .confirm-modal-card h3 { font-size:1.05rem; margin: 0 0 .5rem; }
-  .confirm-modal-card p { font-size:.9rem; color: var(--text-muted,#64748b); margin: 0 0 1.5rem; }
-  .confirm-actions { display:flex; gap:.6rem; justify-content:center; }
-  .confirm-actions .btn { flex:1; justify-content:center; padding: 10px 16px; }
 </style>
 </head>
 
@@ -185,7 +152,7 @@
     </div>
     <div class="panel">
       <table>
-        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th></th>Duration</th><th>Note</th><th></th></tr></thead>
+        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th>Duration</th><th>Note</th><th></th></tr></thead>
         <tbody id="programsTableBody">
           <!-- Rows are rendered by ../js/consultancy-training-admin.js -->
         </tbody>
@@ -289,28 +256,8 @@
           <input type="text" id="programFormat" placeholder="e.g. Open enrolment" required />
         </div>
         <div class="form-field">
-          <label for="programDuration">Duration (auto-calculated)</label>
-          <input type="text" id="programDuration" placeholder="Set the dates/times below" readonly style="background:var(--bg-soft,#f8fafc); cursor:not-allowed;" />
-        </div>
-      </div>
-      <div class="form-row-2">
-        <div class="form-field">
-          <label for="programStartDate">Start date *</label>
-          <input type="date" id="programStartDate" required />
-        </div>
-        <div class="form-field">
-          <label for="programEndDate">End date *</label>
-          <input type="date" id="programEndDate" required />
-        </div>
-      </div>
-      <div class="form-row-2">
-        <div class="form-field">
-          <label for="programStartTime">Start time</label>
-          <input type="time" id="programStartTime" />
-        </div>
-        <div class="form-field">
-          <label for="programEndTime">End time</label>
-          <input type="time" id="programEndTime" />
+          <label for="programDuration">Duration *</label>
+          <input type="text" id="programDuration" placeholder="e.g. 3 days" required />
         </div>
       </div>
       <div class="form-field">
@@ -326,19 +273,6 @@
       </button>
       <div id="programFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
     </form>
-  </div>
-</div>
-
-<!-- Reusable Confirm Modal (replaces browser confirm()) -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal-card confirm-modal-card">
-    <div class="confirm-icon">!</div>
-    <h3 id="confirmModalTitle">Are you sure?</h3>
-    <p id="confirmModalMessage">This action can't be undone.</p>
-    <div class="confirm-actions">
-      <button type="button" class="btn btn-outline" id="confirmCancelBtn" style="border:1px solid var(--border,#e2e8f0);">Cancel</button>
-      <button type="button" class="btn btn-danger" id="confirmOkBtn" style="background:#dc2626; color:#fff;">Delete</button>
-    </div>
   </div>
 </div>
 
