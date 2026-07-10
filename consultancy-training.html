@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultancy &amp; Training | Marvini Elite Enterprises</title>
+<meta name="description" content="Marvini Consultancy & Training — advisory services and capability-building programs for organisations across Ghana.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:        #14213D;
+    --parchment:  #F6F3EC;
+    --parchment-2:#EFEAE0;
+    --gold:       #B8892E;
+    --gold-dark:  #93701F;
+    --rust:       #A6542A;
+    --sage:       #4F6B4F;
+    --sage-light: #7C9B7C;
+    --charcoal:   #262524;
+    --line:       rgba(20,33,61,0.14);
+    --white:      #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Source Sans 3', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--parchment);
+    color: var(--charcoal);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Nav ---------- */
+  .site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(246,243,236,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height: 76px;
+  }
+  .brand-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brand-link .arrow{
+    font-family: var(--font-body);
+    font-size: 16px;
+    transition: transform .2s ease;
+  }
+  .brand-link:hover .arrow{ transform: translateX(-3px); }
+  .page-tag{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.55;
+    display:none;
+  }
+  @media (min-width:720px){ .page-tag{ display:block; } }
+  .nav-cta{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration:none;
+    color: var(--white);
+    background: var(--ink);
+    padding: 11px 20px;
+    border-radius: 3px;
+    transition: background .2s ease;
+  }
+  .nav-cta:hover{ background: var(--gold-dark); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    padding: 88px 0 64px;
+    overflow: hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items:center;
+  }
+  @media (min-width: 980px){
+    .hero .wrap{ grid-template-columns: 1.05fr 0.95fr; gap:24px; }
+  }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin: 0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width: 22px; height: 1px;
+    background: var(--gold-dark);
+    display:inline-block;
+  }
+  .hero h1{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1.08;
+    margin: 0 0 22px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em{
+    font-style: italic;
+    font-weight: 500;
+    color: var(--rust);
+  }
+  .hero p.lede{
+    font-size: 19px;
+    line-height: 1.65;
+    color: #4A483F;
+    max-width: 46ch;
+    margin: 0 0 32px;
+  }
+  .hero-ctas{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .btn{
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration:none;
+    padding: 15px 26px;
+    border-radius: 3px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition: all .2s ease;
+    border: 1px solid transparent;
+    cursor:pointer;
+  }
+  .btn-primary{ background: var(--rust); color: var(--white); }
+  .btn-primary:hover{ background: #8C4522; }
+  .btn-ghost{ background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn-ghost:hover{ background: var(--ink); color: var(--white); }
+  .btn-sage{ background: var(--sage); color: var(--white); }
+  .btn-sage:hover{ background: #3C543C; }
+
+  /* Signature: converging paths */
+  .signature{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .signature svg{ width:100%; height:100%; }
+  .path-label{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .draw{
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: draw 1.8s ease forwards;
+  }
+  .draw-delay{ animation-delay: .25s; }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce){
+    .draw{ stroke-dashoffset: 0; animation: none; }
+  }
+
+  /* ---------- Section divider (thread motif) ---------- */
+  .thread-divider{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    padding: 0 0 8px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right:32px;
+  }
+  .thread-divider .node{
+    width:7px;height:7px;border-radius:50%;
+    background: var(--gold);
+    flex-shrink:0;
+  }
+  .thread-divider .line{
+    height:1px; background: var(--line); flex:1;
+  }
+
+  section{ padding: 76px 0; }
+  .section-head{
+    max-width: 640px;
+    margin-bottom: 52px;
+  }
+  .section-head h2{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 3.6vw, 38px);
+    color: var(--ink);
+    margin: 10px 0 14px;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{
+    color:#4A483F;
+    font-size:16.5px;
+    margin:0;
+  }
+
+  /* ---------- Two-track services ---------- */
+  .tracks{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  @media (min-width: 860px){
+    .tracks{ grid-template-columns: 1fr 1fr; }
+  }
+  .track{
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 40px 36px;
+    position: relative;
+  }
+  .track::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+  }
+  .track.consult::before{ background: var(--rust); }
+  .track.train::before{ background: var(--sage); }
+  .track-icon{
+    width:40px;height:40px;
+    margin-bottom: 22px;
+  }
+  .track h3{
+    font-family: var(--font-display);
+    font-weight:600;
+    font-size:24px;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .track .track-sub{
+    font-family: var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    margin: 0 0 22px;
+  }
+  .track.consult .track-sub{ color: var(--rust); }
+  .track.train .track-sub{ color: var(--sage); }
+  .track ul{
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .track li{
+    padding: 13px 0;
+    border-top: 1px solid var(--line);
+    font-size:15.5px;
+    display:flex;
+    gap:12px;
+  }
+  .track li:first-child{ border-top:none; }
+  .track li span.mark{
+    font-family: var(--font-mono);
+    font-size:13px;
+    color: var(--gold-dark);
+    flex-shrink:0;
+    padding-top:1px;
+  }
+
+  /* ---------- Process ---------- */
+  .process{ background: var(--ink); color: var(--parchment); }
+  .process .section-head p{ color: rgba(246,243,236,0.72); }
+  .process .eyebrow{ color: var(--gold); }
+  .process .eyebrow::before{ background: var(--gold); }
+  .process .section-head h2{ color: var(--white); }
+
+  .process-rail{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(246,243,236,0.14);
+    border-radius: 4px;
+    overflow:hidden;
+  }
+  @media (max-width: 860px){ .process-rail{ grid-template-columns: 1fr; } }
+  .stage{
+    background: #182548;
+    padding: 32px 26px 36px;
+    position:relative;
+  }
+  .stage .num{
+    font-family: var(--font-mono);
+    font-size:12.5px;
+    color: var(--gold);
+    letter-spacing:0.08em;
+  }
+  .stage h4{
+    font-family: var(--font-display);
+    font-size:20px;
+    font-weight:600;
+    margin: 14px 0 10px;
+    color: var(--white);
+  }
+  .stage p{
+    font-size:14.5px;
+    color: rgba(246,243,236,0.68);
+    margin:0;
+    line-height:1.55;
+  }
+
+  /* ---------- Programs ---------- */
+  .programs-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 24px;
+  }
+  .program-card{
+    background: var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding: 28px 26px;
+    display:flex;
+    flex-direction:column;
+  }
+  .program-card .fmt{
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color: var(--sage);
+    margin-bottom:14px;
+  }
+  .program-card h3{
+    font-family: var(--font-display);
+    font-size:20px;
+    font-weight:600;
+    margin:0 0 10px;
+    color:var(--ink);
+  }
+  .program-card p{
+    font-size:14.5px;
+    color:#4A483F;
+    margin:0 0 20px;
+    flex:1;
+  }
+  .program-card .meta{
+    display:flex;
+    justify-content:space-between;
+    font-family: var(--font-mono);
+    font-size:12px;
+    color: #6b6a60;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    margin-bottom:18px;
+  }
+  .program-card .interest-btn{
+    align-self:flex-start;
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    font-family: var(--font-body);
+    font-weight:600;
+    font-size:13.5px;
+    padding:10px 18px;
+    border-radius:3px;
+    cursor:pointer;
+    transition: all .2s ease;
+  }
+  .program-card .interest-btn:hover{ background:var(--ink); color:var(--white); }
+
+  /* ---------- Credibility strip ---------- */
+  .credibility{ background: var(--parchment-2); }
+  .stat-row{
+    display:grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 32px;
+  }
+  @media (min-width:760px){ .stat-row{ grid-template-columns: repeat(4,1fr); } }
+  .stat{ border-left: 2px solid var(--gold); padding-left:18px; }
+  .stat .num{
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight:600;
+    color: var(--ink);
+    line-height:1;
+  }
+  .stat .label{
+    font-family: var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:#5b5a51;
+    margin-top:8px;
+  }
+
+  /* ---------- Contact / lead form ---------- */
+  .contact-wrap{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+  @media (min-width:960px){ .contact-wrap{ grid-template-columns: 0.85fr 1.15fr; } }
+  .intent-toggle{
+    display:inline-flex;
+    background: var(--parchment-2);
+    border-radius: 4px;
+    padding:4px;
+    margin-bottom: 28px;
+    border:1px solid var(--line);
+  }
+  .intent-toggle button{
+    font-family: var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding: 10px 18px;
+    border:none;
+    background:transparent;
+    border-radius:3px;
+    cursor:pointer;
+    color: var(--ink);
+    opacity:0.55;
+    transition: all .2s ease;
+  }
+  .intent-toggle button.active{
+    background: var(--ink);
+    color: var(--white);
+    opacity:1;
+  }
+  form.lead-form{
+    background: var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding: 36px;
+  }
+  .field{ margin-bottom: 20px; }
+  .field label{
+    display:block;
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:#5b5a51;
+    margin-bottom:8px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%;
+    padding: 13px 14px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    font-family: var(--font-body);
+    font-size:15px;
+    background: var(--parchment);
+    color: var(--charcoal);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{
+    outline: 2px solid var(--gold-dark);
+    outline-offset: 1px;
+  }
+  .field textarea{ min-height:110px; resize:vertical; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:560px){ .form-row{ grid-template-columns:1fr; } }
+  .form-status{
+    font-family: var(--font-mono);
+    font-size:13px;
+    margin-top:16px;
+    min-height:18px;
+  }
+  .form-status.ok{ color: var(--sage); }
+  .form-status.err{ color: var(--rust); }
+
+  /* ---------- Register interest modal ---------- */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(20,33,61,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 200;
+  }
+  .modal-overlay.open{ display: flex; }
+  .modal-card{
+    background: var(--white);
+    border-radius: 6px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 36px;
+    position: relative;
+    box-shadow: 0 24px 60px rgba(20,33,61,0.3);
+  }
+  .modal-close{
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 6px;
+  }
+  .modal-eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 10px;
+  }
+  .modal-card h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--ink);
+    margin: 0 0 22px;
+  }
+  .modal-card .field select:disabled{
+    opacity: 0.85;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background: var(--ink);
+    color: rgba(246,243,236,0.7);
+    padding: 64px 0 32px;
+  }
+  footer a{ text-decoration:none; }
+  footer .back-link{
+    font-family: var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color: var(--gold);
+  }
+  footer .fine{
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    color: rgba(246,243,236,0.45);
+  }
+
+  .footer-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(246,243,236,0.14);
+    margin-bottom: 24px;
+  }
+  @media (min-width: 760px){
+    .footer-grid{ grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+  }
+  .footer-brand .brand-link{ display:inline-block; margin-bottom: 16px; }
+  .footer-tagline{
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold);
+    margin: 0 0 12px;
+  }
+  .footer-about{
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(246,243,236,0.65);
+    max-width: 34ch;
+    margin: 0 0 20px;
+  }
+  .footer-social{ display:flex; gap:10px; }
+  .fsocial-link{
+    width: 32px; height:32px;
+    border: 1px solid rgba(246,243,236,0.25);
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 13px;
+    color: rgba(246,243,236,0.8);
+    transition: all .2s ease;
+  }
+  .fsocial-link:hover{ background: var(--gold); border-color: var(--gold); color: var(--ink); }
+
+  .footer-col-title{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 18px;
+  }
+  .footer-links{ list-style:none; margin:0; padding:0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-link{
+    font-size: 14.5px;
+    color: rgba(246,243,236,0.7);
+    transition: color .2s ease;
+  }
+  .footer-link:hover{ color: var(--white); }
+
+  .footer-logos{ display:flex; flex-direction:column; gap: 12px; }
+  .footer-logos a{
+    font-size: 14px;
+    color: rgba(246,243,236,0.7);
+    transition: color .2s ease;
+  }
+  .footer-logos a:hover{ color: var(--gold); }
+
+  .footer-newsletter-text{
+    font-size: 14px;
+    line-height:1.6;
+    color: rgba(246,243,236,0.65);
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  .footer-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap: 12px;
+  }
+  .footer-legal a{ }
+
+  :focus-visible{ outline: 2px solid var(--gold-dark); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand-link" href="index.html">
+      <span class="arrow">&larr;</span> Marvini Elite Enterprises
+    </a>
+    <span class="page-tag">Consultancy &amp; Training</span>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Marvini Consultancy &amp; Training</p>
+      <h1>We advise the business.<br>We <em>equip</em> the people.</h1>
+      <p class="lede">Two disciplines under one roof: hands-on consultancy that fixes what's not working, and structured training that builds the capability to keep it working. Ghanaian organisations, built for growth.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary" data-intent="consultation">Request a consultation</a>
+        <a href="#programs" class="btn btn-ghost">Browse training programs</a>
+      </div>
+    </div>
+
+    <div class="signature" aria-hidden="true">
+      <svg viewBox="0 0 460 460" fill="none">
+        <!-- Consultancy path: compass arc, left -->
+        <path class="draw" d="M40 90 C 130 60, 190 140, 230 230" stroke="#A6542A" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="40" cy="90" r="5" fill="#A6542A"/>
+        <text x="18" y="72" class="path-label" fill="#A6542A">Consultancy</text>
+
+        <!-- Training path: stepped ladder, right -->
+        <path class="draw draw-delay" d="M420 90 L 340 90 L 340 140 L 300 140 L 300 190 L 260 190 L 230 230" stroke="#4F6B4F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="420" cy="90" r="5" fill="#4F6B4F"/>
+        <text x="330" y="72" class="path-label" fill="#4F6B4F">Training</text>
+
+        <!-- Convergence emblem -->
+        <g transform="translate(230,230)">
+          <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" fill="#14213D"/>
+          <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="none" stroke="#B8892E" stroke-width="1.5"/>
+          <text x="0" y="6" text-anchor="middle" font-family="Fraunces, serif" font-weight="600" font-size="20" fill="#F6F3EC">M</text>
+        </g>
+
+        <path d="M230 230 L 230 300" stroke="#B8892E" stroke-width="1.5" stroke-dasharray="3 4"/>
+        <text x="230" y="330" text-anchor="middle" class="path-label" fill="#93701F">Growth</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="thread-divider" aria-hidden="true"><span class="node"></span><span class="line"></span></div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What we offer</p>
+      <h2>Two tracks, one engagement</h2>
+      <p>Most clients start with one and grow into both — a consultancy engagement often surfaces the training a team needs, and training cohorts often surface the next problem worth consulting on.</p>
+    </div>
+
+    <div class="tracks">
+      <div class="track consult">
+        <svg class="track-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#A6542A" stroke-width="2"/><path d="M20 20 L28 12" stroke="#A6542A" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="20" r="2.5" fill="#A6542A"/></svg>
+        <p class="track-sub">Consultancy</p>
+        <h3>Advisory &amp; problem-solving</h3>
+        <ul>
+          <li><span class="mark">→</span> Management &amp; operations consulting</li>
+          <li><span class="mark">→</span> Business strategy &amp; growth planning</li>
+          <li><span class="mark">→</span> Financial &amp; budgeting advisory</li>
+          <li><span class="mark">→</span> HR &amp; organisational design</li>
+          <li><span class="mark">→</span> Process &amp; systems improvement</li>
+          <li><span class="mark">→</span> Compliance &amp; policy review</li>
+        </ul>
+      </div>
+
+      <div class="track train">
+        <svg class="track-icon" viewBox="0 0 40 40" fill="none"><path d="M8 32 L8 22 L20 22 L20 12 L32 12 L32 32 Z" stroke="#4F6B4F" stroke-width="2" stroke-linejoin="round"/></svg>
+        <p class="track-sub">Training</p>
+        <h3>Capability building</h3>
+        <ul>
+          <li><span class="mark">→</span> Corporate &amp; staff training programs</li>
+          <li><span class="mark">→</span> Leadership &amp; management development</li>
+          <li><span class="mark">→</span> Customer service &amp; sales skills</li>
+          <li><span class="mark">→</span> Technical &amp; digital skills workshops</li>
+          <li><span class="mark">→</span> Onboarding &amp; induction programs</li>
+          <li><span class="mark">→</span> Open-enrolment public courses</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="thread-divider" aria-hidden="true"><span class="node"></span><span class="line"></span></div>
+
+<section class="process">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">How an engagement runs</p>
+      <h2>From diagnosis to habit</h2>
+      <p>Every engagement — consultancy, training, or both — moves through the same four stages, so nothing gets built on a guess.</p>
+    </div>
+
+    <div class="process-rail">
+      <div class="stage">
+        <p class="num">01</p>
+        <h4>Assess</h4>
+        <p>We sit with the team, the numbers, and the process as it actually runs today — not as it's assumed to run.</p>
+      </div>
+      <div class="stage">
+        <p class="num">02</p>
+        <h4>Advise</h4>
+        <p>A written set of recommendations, prioritised by impact and what's realistic to change first.</p>
+      </div>
+      <div class="stage">
+        <p class="num">03</p>
+        <h4>Equip</h4>
+        <p>Where the fix is a skills gap, we design and run the training — for the specific team, not a generic course.</p>
+      </div>
+      <div class="stage">
+        <p class="num">04</p>
+        <h4>Sustain</h4>
+        <p>Follow-up review after the change has had time to bed in, so the improvement outlasts our involvement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="programs">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Upcoming programs</p>
+      <h2>Training you can register for now</h2>
+      <p>Open-enrolment and corporate-booked sessions currently scheduled. Dates are indicative — confirmed on registration.</p>
+    </div>
+
+    <div class="programs-grid" id="programs-grid">
+      <div class="program-card">
+        <p class="fmt">Corporate · On-site</p>
+        <h3>Frontline Customer Service</h3>
+        <p>Practical service standards and difficult-conversation handling for customer-facing staff.</p>
+        <div class="meta"><span>2 days</span><span>Min. 8 staff</span></div>
+        <button class="interest-btn" data-program="Frontline Customer Service">Register interest</button>
+      </div>
+      <div class="program-card">
+        <p class="fmt">Open enrolment</p>
+        <h3>Leadership Essentials</h3>
+        <p>First-time managers learn delegation, feedback, and running a team meeting that actually decides things.</p>
+        <div class="meta"><span>3 days</span><span>Certificate</span></div>
+        <button class="interest-btn" data-program="Leadership Essentials">Register interest</button>
+      </div>
+      <div class="program-card">
+        <p class="fmt">Corporate · Remote or on-site</p>
+        <h3>Financial Literacy for Non-Finance Managers</h3>
+        <p>Reading a P&amp;L, building a defensible budget, and asking finance the right questions.</p>
+        <div class="meta"><span>1 day</span><span>Min. 6 staff</span></div>
+        <button class="interest-btn" data-program="Financial Literacy for Non-Finance Managers">Register interest</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="credibility">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Why Marvini</p>
+      <h2>Built on the Marvini network</h2>
+      <p>Backed by the same operational discipline running across every Marvini subsidiary.</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="num">5</div><div class="label">Marvini subsidiaries</div></div>
+      <div class="stat"><div class="num">GH</div><div class="label">Ghana-based, Ghana-focused</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">disciplines, one team</div></div>
+      <div class="stat"><div class="num">1:1</div><div class="label">follow-up on every engagement</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="thread-divider" aria-hidden="true"><span class="node"></span><span class="line"></span></div>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-wrap">
+      <div>
+        <p class="eyebrow">Get started</p>
+        <h2 style="font-family:var(--font-display); font-weight:600; font-size:32px; color:var(--ink); margin:10px 0 16px;">Tell us what you need</h2>
+        <p style="color:#4A483F; max-width:38ch;">One form, two intents — request a consultation for your organisation, or register interest in a training program. We'll follow up within two working days.</p>
+      </div>
+
+      <div>
+        <div class="intent-toggle" role="tablist" aria-label="Enquiry type">
+          <button type="button" class="active" id="tab-consultation" role="tab" aria-selected="true">Request consultation</button>
+          <button type="button" id="tab-training" role="tab" aria-selected="false">Register for training</button>
+        </div>
+
+        <form class="lead-form" id="lead-form">
+          <div class="form-row">
+            <div class="field">
+              <label for="f-name">Full name</label>
+              <input id="f-name" name="name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="f-org">Organisation</label>
+              <input id="f-org" name="organisation" type="text">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" required>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input id="f-phone" name="phone" type="tel">
+            </div>
+          </div>
+
+          <div class="field" id="program-field" style="display:none;">
+            <label for="f-program">Program of interest</label>
+            <select id="f-program" name="program">
+              <option>Frontline Customer Service</option>
+              <option>Leadership Essentials</option>
+              <option>Financial Literacy for Non-Finance Managers</option>
+              <option>Not sure yet — advise me</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="f-message" id="message-label">What do you need help with?</label>
+            <textarea id="f-message" name="message" required></textarea>
+          </div>
+
+          <input type="hidden" id="f-type" name="type" value="consultation">
+
+          <button type="submit" class="btn btn-primary" id="submit-btn" style="width:100%; justify-content:center;">Send request</button>
+          <p class="form-status" id="form-status" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="registerModalOverlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="registerModalTitle">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="registerModalClose" aria-label="Close">&#10005;</button>
+    <p class="modal-eyebrow">Register interest</p>
+    <h3 id="registerModalTitle">Save your spot</h3>
+
+    <form class="lead-form" id="registerModalForm" style="padding:0; border:none;">
+      <div class="form-row">
+        <div class="field">
+          <label for="m-name">Full name</label>
+          <input id="m-name" name="name" type="text" required>
+        </div>
+        <div class="field">
+          <label for="m-org">Organisation</label>
+          <input id="m-org" name="organisation" type="text">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="m-email">Email</label>
+          <input id="m-email" name="email" type="email" required>
+        </div>
+        <div class="field">
+          <label for="m-phone">Phone</label>
+          <input id="m-phone" name="phone" type="tel">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m-program">Program of interest</label>
+        <select id="m-program" name="program">
+          <option>Frontline Customer Service</option>
+          <option>Leadership Essentials</option>
+          <option>Financial Literacy for Non-Finance Managers</option>
+          <option>Not sure yet — advise me</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="m-message">Anything specific you'd like covered?</label>
+        <textarea id="m-message" name="message"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="modalSubmitBtn" style="width:100%; justify-content:center;">Register interest</button>
+      <p class="form-status" id="modalFormStatus" role="status"></p>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand-link" style="color: var(--parchment);">
+          <img src="img/marvini_elite_enterprise_logo.png" alt="Marvini Elite Enterprises" style="height:34px; width:auto;">
+        </a>
+        <p class="footer-tagline">Innovating Africa's Future</p>
+        <p class="footer-about">Consultancy &amp; Training is a subsidiary of Marvini Elite Enterprises, building African-led solutions that are innovative, sustainable, and globally competitive.</p>
+        <div class="footer-social">
+          <a href="#" class="fsocial-link" aria-label="LinkedIn">in</a>
+          <a href="#" class="fsocial-link" aria-label="Twitter">𝕏</a>
+          <a href="#" class="fsocial-link" aria-label="Facebook">f</a>
+          <a href="#" class="fsocial-link" aria-label="Instagram">◎</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-title">This page</h4>
+        <ul class="footer-links">
+          <li><a href="#services" class="footer-link">Services</a></li>
+          <li><a href="#programs" class="footer-link">Training programs</a></li>
+          <li><a href="#contact" class="footer-link">Request consultation</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-title">Marvini Group</h4>
+        <div class="footer-logos">
+          <a href="index.html#companies">&larr; Back to Marvini Elite Enterprises</a>
+          <a href="https://marvini-smart-driving-school-solution.web.app/">M-Smart Driving School</a>
+          <a href="https://marvini-digital-food-chain.web.app">M-Digital Food Chain</a>
+          <a href="index.html#companies">M-Events &amp; Festivals</a>
+          <a href="index.html#companies">M-Farms</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-title">Get in touch</h4>
+        <p class="footer-newsletter-text">Prefer email? Reach the Marvini team directly and we'll route your enquiry.</p>
+        <a href="mailto:jakunor@hotmail.com" class="btn btn-ghost" style="border-color: rgba(246,243,236,0.3); color: var(--parchment); margin-top:8px;">jakunor@hotmail.com</a>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <p class="fine">&copy; <span id="year"></span> Marvini Elite Enterprises. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="index.html" class="fine" style="text-decoration:underline;">Privacy Policy</a>
+        <a href="index.html" class="fine" style="text-decoration:underline; margin-left:16px;">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  // ---------------------------------------------------------------
+  // Firebase — reuse the SAME config/app already used on the main
+  // Marvini site so writes land in the same project. Replace the
+  // placeholder below with your existing firebaseConfig object
+  // (the one already used in your admin dashboard / main site JS).
+  // ---------------------------------------------------------------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ---------------- Intent toggle ----------------
+  const tabConsult = document.getElementById('tab-consultation');
+  const tabTraining = document.getElementById('tab-training');
+  const programField = document.getElementById('program-field');
+  const messageLabel = document.getElementById('message-label');
+  const typeInput = document.getElementById('f-type');
+  const messageInput = document.getElementById('f-message');
+  const submitBtn = document.getElementById('submit-btn');
+
+  function setIntent(intent){
+    const isTraining = intent === 'training';
+    tabTraining.classList.toggle('active', isTraining);
+    tabConsult.classList.toggle('active', !isTraining);
+    tabTraining.setAttribute('aria-selected', String(isTraining));
+    tabConsult.setAttribute('aria-selected', String(!isTraining));
+    programField.style.display = isTraining ? 'block' : 'none';
+    messageLabel.textContent = isTraining ? "Anything specific you'd like covered?" : "What do you need help with?";
+    typeInput.value = intent;
+    submitBtn.textContent = isTraining ? "Register interest" : "Send request";
+  }
+
+  tabConsult.addEventListener('click', () => setIntent('consultation'));
+  tabTraining.addEventListener('click', () => setIntent('training'));
+
+  // Hero "Request a consultation" CTA jumps to the inline form with that intent
+  document.querySelector('[data-intent="consultation"]').addEventListener('click', () => {
+    setIntent('consultation');
+  });
+
+  // ---------------- Register Interest modal ----------------
+  const modalOverlay = document.getElementById('registerModalOverlay');
+  const modalClose = document.getElementById('registerModalClose');
+  const modalForm = document.getElementById('registerModalForm');
+  const modalProgramSelect = document.getElementById('m-program');
+  const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+  const modalStatus = document.getElementById('modalFormStatus');
+
+  function openRegisterModal(programName){
+    if (programName){
+      const optionExists = Array.from(modalProgramSelect.options).some(o => o.value === programName);
+      if (optionExists) modalProgramSelect.value = programName;
+    }
+    modalOverlay.classList.add('open');
+    modalOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('m-name').focus();
+  }
+
+  function closeRegisterModal(){
+    modalOverlay.classList.remove('open');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Program cards open the modal, pre-filled with that program
+  document.querySelectorAll('[data-program]').forEach(btn => {
+    btn.addEventListener('click', () => openRegisterModal(btn.dataset.program));
+  });
+
+  modalClose.addEventListener('click', closeRegisterModal);
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeRegisterModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeRegisterModal();
+  });
+
+  modalForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    modalStatus.textContent = '';
+    modalStatus.className = 'form-status';
+    modalSubmitBtn.disabled = true;
+    const originalLabel = modalSubmitBtn.textContent;
+    modalSubmitBtn.textContent = 'Sending…';
+
+    const payload = {
+      type: 'training',
+      name: document.getElementById('m-name').value.trim(),
+      organisation: document.getElementById('m-org').value.trim(),
+      email: document.getElementById('m-email').value.trim(),
+      phone: document.getElementById('m-phone').value.trim(),
+      program: modalProgramSelect.value,
+      message: document.getElementById('m-message').value.trim(),
+      createdAt: serverTimestamp(),
+      status: 'new'
+    };
+
+    try {
+      await addDoc(collection(db, 'consultancyTrainingLeads'), payload);
+      modalStatus.textContent = "Sent — we'll be in touch within two working days.";
+      modalStatus.classList.add('ok');
+      modalForm.reset();
+      setTimeout(closeRegisterModal, 1400);
+    } catch (err) {
+      console.error('Error saving training registration:', err);
+      modalStatus.textContent = "Something went wrong sending this — please try again or email us directly.";
+      modalStatus.classList.add('err');
+    } finally {
+      modalSubmitBtn.disabled = false;
+      modalSubmitBtn.textContent = originalLabel;
+    }
+  });
+
+  // ---------------- Form submission ----------------
+  const form = document.getElementById('lead-form');
+  const status = document.getElementById('form-status');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.textContent = '';
+    status.className = 'form-status';
+    submitBtn.disabled = true;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.textContent = 'Sending…';
+
+    const payload = {
+      type: typeInput.value,
+      name: document.getElementById('f-name').value.trim(),
+      organisation: document.getElementById('f-org').value.trim(),
+      email: document.getElementById('f-email').value.trim(),
+      phone: document.getElementById('f-phone').value.trim(),
+      program: typeInput.value === 'training' ? document.getElementById('f-program').value : null,
+      message: messageInput.value.trim(),
+      createdAt: serverTimestamp(),
+      status: 'new'
+    };
+
+    try {
+      await addDoc(collection(db, 'consultancyTrainingLeads'), payload);
+      status.textContent = "Sent — we'll be in touch within two working days.";
+      status.classList.add('ok');
+      form.reset();
+      setIntent(typeInput.value); // restore intent-dependent field state after reset
+    } catch (err) {
+      console.error('Error saving lead:', err);
+      status.textContent = "Something went wrong sending this — please try again or email us directly.";
+      status.classList.add('err');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    }
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

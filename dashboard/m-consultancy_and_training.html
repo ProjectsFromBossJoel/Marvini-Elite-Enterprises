@@ -1,0 +1,206 @@
+<!-- dashboard/consultancy-training.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Consultancy & Training | Marvini Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="admin.css" />
+
+<style>
+  /* Modal + status pills — self-contained so this page works even if
+     admin.css doesn't already define equivalents (same pattern as publications.html). */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+    padding: 1.5rem;
+  }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-card {
+    background: var(--bg-card, #fff); border-radius: 16px;
+    padding: 2rem; width: 100%; max-width: 560px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: translateY(16px); transition: transform .25s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; }
+  .modal-head h3 { font-size: 1.15rem; font-weight: 700; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:1px solid var(--border,#e2e8f0); background:transparent; cursor:pointer; }
+  .lead-detail-row { display:flex; flex-direction:column; gap:.3rem; margin-bottom: 1rem; }
+  .lead-detail-row label { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color: var(--text-muted,#64748b); }
+  .lead-detail-row p { margin:0; font-size:.95rem; }
+  .lead-detail-row .msg-box { white-space:pre-wrap; background: var(--bg-soft,#f8fafc); border:1px solid var(--border,#e2e8f0); border-radius:8px; padding:.75rem .9rem; }
+  .modal-actions { display:flex; gap:.6rem; flex-wrap:wrap; margin-top: 1.5rem; }
+  .pill { display:inline-block; padding:.25rem .6rem; border-radius:999px; font-size:.75rem; font-weight:600; white-space:nowrap; }
+  .pill.type-consultation { background: rgba(166,84,42,0.12); color:#A6542A; }
+  .pill.type-training { background: rgba(79,107,79,0.14); color:#3C543C; }
+  .pill.status-new { background: rgba(245,158,11,0.12); color:#B45309; }
+  .pill.status-contacted { background: rgba(26,86,255,0.12); color:#1a56ff; }
+  .pill.status-closed { background: rgba(5,150,105,0.12); color:#047857; }
+  .row-sub { font-size:.8rem; color: var(--text-muted,#64748b); margin-top:.15rem; }
+  .row-actions { display:flex; gap:.5rem; flex-wrap:nowrap; white-space:nowrap; }
+  .filter-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom: 1.25rem; }
+  .filter-tab {
+    padding:.5rem 1rem; border-radius:999px; border:1px solid var(--border,#e2e8f0);
+    background: var(--bg-card,#fff); font-size:.85rem; font-weight:600; cursor:pointer;
+    color: var(--text-muted,#64748b);
+  }
+  .filter-tab.active { background: #1a56ff; border-color:#1a56ff; color:#fff; }
+  .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
+  #leadsTableBody td:last-child { white-space: nowrap; }
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <img src="/img/marvini_elite_enterprise_logo2.png" alt="Marvini" onerror="this.style.display='none'"/>
+      <div class="side-brand-text">
+        <div class="name">Marvini Admin</div>
+        <div class="sub">Elite Enterprises</div>
+      </div>
+    </div>
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" href="index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span>Dashboard</a>
+    <div class="nav-section-label">Site Content</div>
+    <a class="nav-item" href="/dashboard/companies.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Companies</a>
+    <a class="nav-item" href="/dashboard/team.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>Team</a>
+    <a class="nav-item" href="/dashboard/news.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg></span>News & Updates</a>
+    <a class="nav-item" href="/dashboard/publications.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>Publications</a>
+    <a class="nav-item" href="/dashboard/gallery.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>Gallery</a>
+    <a class="nav-item" href="/dashboard/partners.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></svg></span>Partners</a>
+    <div class="nav-section-label">Engagement</div>
+    <a class="nav-item" href="/dashboard/careers.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>Careers & Volunteering<span class="nav-badge">12</span></a>
+    <a class="nav-item" href="/dashboard/messages.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></span>Contact Messages<span class="nav-badge" id="messagesNavBadge">0</span></a>
+    <a class="nav-item active" href="/dashboard/consultancy-training.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></span>Consultancy & Training<span class="nav-badge" id="consultancyNavBadge">0</span></a>
+    <a class="nav-item" href="/dashboard/analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Site Analytics</a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="/dashboard/settings.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Settings</a>
+    <a class="nav-item" href="/dashboard/users.html" data-page="users"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Users</a>
+</aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search pages, applications, messages…" />
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">☀</button>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="icon-dot"></span>
+        </button>
+        <button class="icon-btn" aria-label="Messages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+        </button>
+        <button class="icon-btn" id="signOutBtn" aria-label="Sign out" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+        <div class="profile">
+          <img src="/img/avatar727.png" alt="Admin" onerror="this.src='https://ui-avatars.com/api/?name=Admin+User&background=1a56ff&color=fff'"/>
+          <div class="who">
+            <strong>User</strong>
+            <span>Role</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <div>
+        <p class="page-head-eyebrow">Engagement</p>
+        <h1>Consultancy & Training</h1>
+        <p>Consultation requests and training registrations submitted from the public Consultancy & Training page.</p>
+      </div>
+    </div>
+
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="consultation">Consultation</button>
+      <button class="filter-tab" data-filter="training">Training</button>
+      <button class="filter-tab" data-filter="new">New</button>
+      <button class="filter-tab" data-filter="contacted">Contacted</button>
+      <button class="filter-tab" data-filter="closed">Closed</button>
+    </div>
+
+    <div class="panel">
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Program</th><th>Contact</th><th>Status</th><th>Received</th><th></th></tr></thead>
+        <tbody id="leadsTableBody">
+          <!-- Rows are rendered by ../js/consultancy-training-admin.js -->
+        </tbody>
+      </table>
+      <div class="empty-state" id="leadsEmptyState" style="display:none;">
+        No enquiries yet. New consultation requests and training registrations from the Consultancy &amp; Training page will show up here.
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Lead Detail Modal -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Enquiry Details</h3>
+      <button class="modal-close" id="closeLeadBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="lead-detail-row">
+      <label>Name</label>
+      <p id="leadName"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Organisation</label>
+      <p id="leadOrg"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Email</label>
+      <p id="leadEmail"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Phone</label>
+      <p id="leadPhone"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Type</label>
+      <p id="leadType"></p>
+    </div>
+    <div class="lead-detail-row" id="leadProgramRow">
+      <label>Program of Interest</label>
+      <p id="leadProgram"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Message</label>
+      <p class="msg-box" id="leadMessage"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Received</label>
+      <p id="leadDate"></p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="markContactedBtn" type="button">Mark Contacted</button>
+      <button class="btn btn-outline" id="markClosedBtn" type="button">Mark Closed</button>
+      <button class="btn btn-danger" id="deleteLeadBtn" type="button">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/ui-modal.js"></script>
+<script type="module" src="../js/auth-guard.js"></script>
+<script src="admin.js"></script>
+<script type="module" src="../js/consultancy-training-admin.js"></script>
+</body>
+</html>
