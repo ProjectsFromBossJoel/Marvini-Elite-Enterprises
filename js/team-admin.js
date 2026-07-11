@@ -133,6 +133,37 @@ document.querySelectorAll("[data-bold-target]").forEach((btn) => {
 let currentFilter = "all";
 let currentDocs = []; // [{id, data}]
 
+// ── Shared ordering: explicit "order" field first (ascending),
+// then unordered members fall back to createdAt (oldest first).
+// Mirrors the same logic used in team-public.js so admin order
+// matches what visitors see.
+function compareTeamDocs(a, b) {
+  const ao = typeof a.order === "number" ? a.order : Infinity;
+  const bo = typeof b.order === "number" ? b.order : Infinity;
+  if (ao !== bo) return ao - bo;
+  const at = a.createdAt?.seconds ?? 0;
+  const bt = b.createdAt?.seconds ?? 0;
+  return at - bt;
+}
+
+async function moveTeamMember(id, direction) {
+  const sorted = [...currentDocs].sort((a, b) => compareTeamDocs(a.data, b.data));
+  const idx = sorted.findIndex((d) => d.id === id);
+  const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+  if (idx === -1 || swapIdx < 0 || swapIdx >= sorted.length) return;
+
+  const current = sorted[idx];
+  const neighbor = sorted[swapIdx];
+  try {
+    await Promise.all([
+      updateDoc(doc(db, "team", current.id), { order: swapIdx }),
+      updateDoc(doc(db, "team", neighbor.id), { order: idx }),
+    ]);
+  } catch (err) {
+    console.error("Could not reorder team member:", err);
+  }
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
@@ -248,8 +279,14 @@ form?.addEventListener("submit", async (e) => {
     if (editId) {
       await updateDoc(doc(db, "team", editId), data);
     } else {
+      // New members go to the end of the current order.
+      const maxOrder = currentDocs.reduce(
+        (max, d) => (typeof d.data.order === "number" ? Math.max(max, d.data.order) : max),
+        -1
+      );
       await addDoc(collection(db, "team"), {
         ...data,
+        order: maxOrder + 1,
         createdAt: serverTimestamp(),
       });
     }
@@ -264,7 +301,7 @@ form?.addEventListener("submit", async (e) => {
 });
 
 // ── Render table row ─────────────────────────────────────
-function buildRow(id, data) {
+function buildRow(id, data, position, total) {
   const tr = document.createElement("tr");
   tr.dataset.category = data.category || "";
 
@@ -272,7 +309,20 @@ function buildRow(id, data) {
     ? data.photoUrl
     : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "?")}&background=1a56ff&color=fff`;
 
+  const canReorder = currentFilter === "all";
+  const atTop = position === 0;
+  const atBottom = position === total - 1;
+
   tr.innerHTML = `
+    <td>
+      <div class="order-cell">
+        <span class="order-num">${position + 1}</span>
+        <div class="order-btns">
+          <button class="order-btn" data-move="up" ${!canReorder || atTop ? "disabled" : ""} title="${canReorder ? "Move up" : "Switch to All tab to reorder"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 15l-6-6-6 6"/></svg></button>
+          <button class="order-btn" data-move="down" ${!canReorder || atBottom ? "disabled" : ""} title="${canReorder ? "Move down" : "Switch to All tab to reorder"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        </div>
+      </div>
+    </td>
     <td><div class="student-cell"><img src="${escapeHtml(avatarUrl)}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "?")}&background=1a56ff&color=fff'"/><div><strong>${escapeHtml(data.name || "—")}</strong><span>${escapeHtml(data.subsidiary || "")}</span></div></div></td>
     <td>${escapeHtml(data.role || "—")}</td>
     <td><span class="pill active">${escapeHtml(data.subsidiary || "—")}</span></td>
@@ -285,6 +335,8 @@ function buildRow(id, data) {
     </td>
   `;
 
+  tr.querySelector('[data-move="up"]')?.addEventListener("click", () => moveTeamMember(id, "up"));
+  tr.querySelector('[data-move="down"]')?.addEventListener("click", () => moveTeamMember(id, "down"));
   tr.querySelector("[data-edit]").addEventListener("click", () => openModal(data, id));
   tr.querySelector("[data-remove]").addEventListener("click", async () => {
     const confirmed = await uiConfirm(
@@ -305,16 +357,17 @@ function buildRow(id, data) {
 
 function render() {
   tbody.innerHTML = "";
+  const sorted = [...currentDocs].sort((a, b) => compareTeamDocs(a.data, b.data));
   const filtered = currentFilter === "all"
-    ? currentDocs
-    : currentDocs.filter((d) => d.data.category === currentFilter);
+    ? sorted
+    : sorted.filter((d) => d.data.category === currentFilter);
 
   if (filtered.length === 0) {
     emptyState.style.display = "block";
     return;
   }
   emptyState.style.display = "none";
-  filtered.forEach(({ id, data }) => tbody.appendChild(buildRow(id, data)));
+  filtered.forEach(({ id, data }, i) => tbody.appendChild(buildRow(id, data, i, filtered.length)));
 }
 
 // ── Tab filtering (overrides admin.js's generic version since rows

@@ -7,6 +7,17 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// Same ordering rule as the admin table: explicit "order" ascending,
+// unordered members fall back to createdAt (oldest first).
+function compareTeamDocs(a, b) {
+  const ao = typeof a.order === "number" ? a.order : Infinity;
+  const bo = typeof b.order === "number" ? b.order : Infinity;
+  if (ao !== bo) return ao - bo;
+  const at = a.createdAt?.seconds ?? 0;
+  const bt = b.createdAt?.seconds ?? 0;
+  return at - bt;
+}
+
 const grid = document.getElementById("teamGrid");
 const bioModal = document.getElementById("bioModal");
 
@@ -25,7 +36,9 @@ function openBioModal(data) {
 const featuredGrid = document.getElementById("featuredTeamGrid");
 function renderFeaturedCards(allDocs) {
   if (!featuredGrid) return;
-  const featured = allDocs.filter((d) => d.status === "published" && d.showAsFeatured);
+  const featured = allDocs
+    .filter((d) => d.status === "published" && d.showAsFeatured)
+    .sort(compareTeamDocs);
   if (featured.length === 0) return; // keep existing hardcoded fallback cards
 
   featuredGrid.innerHTML = featured.map((m, i) => {
@@ -92,7 +105,9 @@ if (grid) {
     renderLeadershipMessage(allDocs);
     renderFeaturedCards(allDocs);
 
-    const docs = allDocs.filter((d) => d.status === "published" && d.category !== "Leadership");
+    const docs = allDocs
+      .filter((d) => d.status === "published" && d.category !== "Leadership")
+      .sort(compareTeamDocs);
     if (docs.length === 0) return; // keep existing hardcoded fallback cards
 
     grid.innerHTML = docs.map((m) => {
