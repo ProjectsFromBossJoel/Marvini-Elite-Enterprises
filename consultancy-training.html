@@ -981,10 +981,7 @@
           <div class="field" id="program-field" style="display:none;">
             <label for="f-program">Program of interest</label>
             <select id="f-program" name="program">
-              <option>Frontline Customer Service</option>
-              <option>Leadership Essentials</option>
-              <option>Financial Literacy for Non-Finance Managers</option>
-              <option>Not sure yet — advise me</option>
+              <option>Loading programs…</option>
             </select>
           </div>
 
@@ -1034,10 +1031,7 @@
       <div class="field">
         <label for="m-program">Program of interest</label>
         <select id="m-program" name="program">
-          <option>Frontline Customer Service</option>
-          <option>Leadership Essentials</option>
-          <option>Financial Literacy for Non-Finance Managers</option>
-          <option>Not sure yet — advise me</option>
+          <option>Loading programs…</option>
         </select>
       </div>
 
@@ -1162,13 +1156,33 @@
   }
 
   const programsGrid = document.getElementById('programs-grid');
+  const fProgramSelect = document.getElementById('f-program');
+  const mProgramSelect = document.getElementById('m-program');
+
+  function populateProgramSelects(programs){
+    const optionsHtml = programs.map(p => `<option>${escapeHtml(p.title)}</option>`).join('')
+      + '<option>Not sure yet — advise me</option>';
+    // Preserve the currently selected value where possible (e.g. modal
+    // pre-filled from a card click) rather than always resetting to top.
+    [fProgramSelect, mProgramSelect].forEach(sel => {
+      const prevValue = sel.value;
+      sel.innerHTML = optionsHtml;
+      if (prevValue && Array.from(sel.options).some(o => o.value === prevValue)) {
+        sel.value = prevValue;
+      }
+    });
+  }
+
   const programsQuery = query(collection(db, 'consultancyPrograms'), orderBy('createdAt', 'desc'));
 
   onSnapshot(programsQuery, (snapshot) => {
     if (snapshot.empty){
       programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60;">No programs scheduled right now — check back soon, or request a consultation and we\'ll advise on training.</p>';
+      populateProgramSelects([]);
       return;
     }
+    const programsData = snapshot.docs.map(d => d.data());
+    populateProgramSelects(programsData);
     programsGrid.innerHTML = snapshot.docs.map(docSnap => {
       const p = docSnap.data();
       const imageHtml = p.coverImageUrl
