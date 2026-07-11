@@ -106,7 +106,7 @@ if (grid) {
     renderFeaturedCards(allDocs);
 
     const docs = allDocs
-      .filter((d) => d.status === "published" && d.category !== "Leadership")
+      .filter((d) => d.status === "published" && d.category !== "Leadership" && !d.showAsFeatured)
       .sort(compareTeamDocs);
     if (docs.length === 0) return; // keep existing hardcoded fallback cards
 
