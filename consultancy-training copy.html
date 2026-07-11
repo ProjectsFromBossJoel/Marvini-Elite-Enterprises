@@ -363,17 +363,50 @@
 
   /* ---------- Programs ---------- */
   .programs-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 24px;
+    display:flex;
+    flex-direction:column;
+    gap: 20px;
   }
   .program-card{
     background: var(--white);
     border:1px solid var(--line);
     border-radius:4px;
-    padding: 28px 26px;
+    display:flex;
+    flex-direction:row;
+    overflow:hidden;
+  }
+  @media (max-width:640px){
+    .program-card{ flex-direction:column; }
+  }
+  .program-card-image{
+    flex: 0 0 220px;
+    min-height: 180px;
+    background: var(--parchment-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  @media (max-width:640px){
+    .program-card-image{ flex-basis: auto; height: 160px; width: 100%; }
+  }
+  .program-card-image img{
+    width:100%; height:100%;
+    object-fit: cover;
+  }
+  .program-card-image .placeholder{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9a8e;
+  }
+  .program-card-body{
+    flex: 1;
+    padding: 26px 28px;
     display:flex;
     flex-direction:column;
+    min-width: 0;
   }
   .program-card .fmt{
     font-family: var(--font-mono);
@@ -381,7 +414,7 @@
     letter-spacing:0.06em;
     text-transform:uppercase;
     color: var(--sage);
-    margin-bottom:14px;
+    margin-bottom:12px;
   }
   .program-card h3{
     font-family: var(--font-display);
@@ -393,8 +426,24 @@
   .program-card p{
     font-size:14.5px;
     color:#4A483F;
-    margin:0 0 20px;
-    flex:1;
+    margin:0 0 14px;
+  }
+  .program-card .venue{
+    font-family: var(--font-mono);
+    font-size:12px;
+    color:#6b6a60;
+    margin: -6px 0 14px;
+  }
+  .program-card .partner-tag{
+    display:inline-block;
+    font-family: var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding: 5px 11px;
+    border-radius:999px;
+    margin-bottom:16px;
+    align-self:flex-start;
   }
   .program-card .meta{
     display:flex;
@@ -404,6 +453,7 @@
     color: #6b6a60;
     border-top:1px solid var(--line);
     padding-top:14px;
+    margin-top:auto;
     margin-bottom:18px;
   }
   .program-card .interest-btn{

@@ -94,6 +94,24 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// Deterministic color per partner name — same partner always gets the
+// same tag color, no manual color picking needed in the admin form.
+const PARTNER_TAG_PALETTE = [
+  { bg: "rgba(26,86,255,0.12)", fg: "#1a56ff" },
+  { bg: "rgba(166,84,42,0.12)", fg: "#A6542A" },
+  { bg: "rgba(79,107,79,0.14)", fg: "#3C543C" },
+  { bg: "rgba(180,83,9,0.12)", fg: "#B45309" },
+  { bg: "rgba(5,150,105,0.12)", fg: "#047857" },
+  { bg: "rgba(147,51,234,0.12)", fg: "#7C3AED" },
+];
+
+function partnerTagColor(name) {
+  if (!name) return PARTNER_TAG_PALETTE[0];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  return PARTNER_TAG_PALETTE[hash % PARTNER_TAG_PALETTE.length];
+}
+
 function updateNavBadge() {
   if (!consultancyNavBadge) return;
   const newCount = allLeads.filter((l) => (l.status || "new") === "new").length;

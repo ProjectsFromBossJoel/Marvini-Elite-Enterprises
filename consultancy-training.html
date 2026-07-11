@@ -362,17 +362,50 @@
 
   /* ---------- Programs ---------- */
   .programs-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 24px;
+    display:flex;
+    flex-direction:column;
+    gap: 20px;
   }
   .program-card{
     background: var(--white);
     border:1px solid var(--line);
     border-radius:4px;
-    padding: 28px 26px;
+    display:flex;
+    flex-direction:row;
+    overflow:hidden;
+  }
+  @media (max-width:640px){
+    .program-card{ flex-direction:column; }
+  }
+  .program-card-image{
+    flex: 0 0 220px;
+    min-height: 180px;
+    background: var(--parchment-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  @media (max-width:640px){
+    .program-card-image{ flex-basis: auto; height: 160px; width: 100%; }
+  }
+  .program-card-image img{
+    width:100%; height:100%;
+    object-fit: cover;
+  }
+  .program-card-image .placeholder{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9a8e;
+  }
+  .program-card-body{
+    flex: 1;
+    padding: 26px 28px;
     display:flex;
     flex-direction:column;
+    min-width: 0;
   }
   .program-card .fmt{
     font-family: var(--font-mono);
@@ -380,7 +413,7 @@
     letter-spacing:0.06em;
     text-transform:uppercase;
     color: var(--sage);
-    margin-bottom:14px;
+    margin-bottom:12px;
   }
   .program-card h3{
     font-family: var(--font-display);
@@ -392,8 +425,24 @@
   .program-card p{
     font-size:14.5px;
     color:#4A483F;
-    margin:0 0 20px;
-    flex:1;
+    margin:0 0 14px;
+  }
+  .program-card .venue{
+    font-family: var(--font-mono);
+    font-size:12px;
+    color:#6b6a60;
+    margin: -6px 0 14px;
+  }
+  .program-card .partner-tag{
+    display:inline-block;
+    font-family: var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding: 5px 11px;
+    border-radius:999px;
+    margin-bottom:16px;
+    align-self:flex-start;
   }
   .program-card .meta{
     display:flex;
@@ -403,6 +452,7 @@
     color: #6b6a60;
     border-top:1px solid var(--line);
     padding-top:14px;
+    margin-top:auto;
     margin-bottom:18px;
   }
   .program-card .interest-btn{
@@ -1044,6 +1094,22 @@
     return div.innerHTML;
   }
 
+  // Deterministic color per partner name — matches the admin dashboard's
+  // partner tag palette so a given partner reads the same way everywhere.
+  const PARTNER_TAG_PALETTE = [
+    { bg: 'rgba(166,84,42,0.12)', fg: '#A6542A' },
+    { bg: 'rgba(79,107,79,0.14)', fg: '#4F6B4F' },
+    { bg: 'rgba(184,137,46,0.16)', fg: '#93701F' },
+    { bg: 'rgba(20,33,61,0.10)', fg: '#14213D' },
+    { bg: 'rgba(124,155,124,0.18)', fg: '#3C543C' },
+  ];
+  function partnerTagColor(name){
+    if (!name) return PARTNER_TAG_PALETTE[0];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    return PARTNER_TAG_PALETTE[hash % PARTNER_TAG_PALETTE.length];
+  }
+
   const programsGrid = document.getElementById('programs-grid');
   const programsQuery = query(collection(db, 'consultancyPrograms'), orderBy('createdAt', 'desc'));
 
@@ -1054,13 +1120,27 @@
     }
     programsGrid.innerHTML = snapshot.docs.map(docSnap => {
       const p = docSnap.data();
+      const imageHtml = p.coverImageUrl
+        ? `<img src="${escapeHtml(p.coverImageUrl)}" alt="${escapeHtml(p.title)}" />`
+        : `<span class="placeholder">No image</span>`;
+      const venueHtml = p.venue ? `<p class="venue">📍 ${escapeHtml(p.venue)}</p>` : '';
+      let partnerHtml = '';
+      if (p.partner){
+        const c = partnerTagColor(p.partner);
+        partnerHtml = `<span class="partner-tag" style="background:${c.bg};color:${c.fg};">${escapeHtml(p.partner)}</span>`;
+      }
       return `
         <div class="program-card">
-          <p class="fmt">${escapeHtml(p.format)}</p>
-          <h3>${escapeHtml(p.title)}</h3>
-          <p>${escapeHtml(p.description)}</p>
-          <div class="meta"><span>${escapeHtml(p.duration)}</span><span>${escapeHtml(p.note)}</span></div>
-          <button class="interest-btn" data-program="${escapeHtml(p.title)}">Register interest</button>
+          <div class="program-card-image">${imageHtml}</div>
+          <div class="program-card-body">
+            <p class="fmt">${escapeHtml(p.format)}</p>
+            <h3>${escapeHtml(p.title)}</h3>
+            <p>${escapeHtml(p.description)}</p>
+            ${venueHtml}
+            ${partnerHtml}
+            <div class="meta"><span>${escapeHtml(p.duration)}</span><span>${escapeHtml(p.note)}</span></div>
+            <button class="interest-btn" data-program="${escapeHtml(p.title)}">Register interest</button>
+          </div>
         </div>
       `;
     }).join('');
