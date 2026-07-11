@@ -87,22 +87,30 @@
     transition: transform .2s ease;
   }
   .brand-link:hover .arrow{ transform: translateX(-3px); }
+
+  .page-tag span{
+    display:inline-block;
+    margin-top: 10px;
+    font-size: 20px;
+  }
   .page-tag{
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink);
-    opacity: 0.55;
+    opacity: 1;
     display:none;
     align-items:center;
-    gap:8px;
+    gap:0px;
+    top: 1px;
   }
   .page-tag img{
-    width: 20px;
-    height: 20px;
+    width: 70px;
+    height: 70px;
     object-fit: contain;
     opacity: 1;
+    margin-right: -8px;
   }
   @media (min-width:720px){ .page-tag{ display:flex; } }
   .nav-cta{
@@ -778,7 +786,7 @@
     <a class="brand-link" href="index.html">
       <span class="arrow">&larr;</span> Marvini Elite Enterprises
     </a>
-    <span class="page-tag"><img src="img/M-Consultancy & Training1.png" alt="" />Consultancy &amp; Training</span>
+    <div class="page-tag"><img src="img/others/All Logos/Logo/all-logos-png/M-Consultancy & Training.png" alt="" /><span>Consultancy &amp; Training</span></div>
     <a class="nav-cta" href="#contact">Get in touch</a>
   </div>
 </nav>
