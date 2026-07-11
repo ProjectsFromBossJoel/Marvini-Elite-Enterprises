@@ -96,8 +96,16 @@
     color: var(--ink);
     opacity: 0.55;
     display:none;
+    align-items:center;
+    gap:8px;
   }
-  @media (min-width:720px){ .page-tag{ display:block; } }
+  .page-tag img{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    opacity: 1;
+  }
+  @media (min-width:720px){ .page-tag{ display:flex; } }
   .nav-cta{
     font-family: var(--font-mono);
     font-size: 12.5px;
@@ -379,20 +387,20 @@
     .program-card{ flex-direction:column; }
   }
   .program-card-image{
-    flex: 0 0 220px;
-    min-height: 180px;
-    background: var(--parchment-2);
+    flex: 0 0 240px;
+    min-height: 240px;
+    background: #0d1524;
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
   }
   @media (max-width:640px){
-    .program-card-image{ flex-basis: auto; height: 160px; width: 100%; }
+    .program-card-image{ flex-basis: auto; height: 220px; width: 100%; }
   }
   .program-card-image img{
     width:100%; height:100%;
-    object-fit: cover;
+    object-fit: contain;
   }
   .program-card-image .placeholder{
     font-family: var(--font-mono);
@@ -623,7 +631,7 @@
     <a class="brand-link" href="index.html">
       <span class="arrow">&larr;</span> Marvini Elite Enterprises
     </a>
-    <span class="page-tag">Consultancy &amp; Training</span>
+    <span class="page-tag"><img src="img/M-Consultancy & Training1.png" alt="" />Consultancy &amp; Training</span>
     <a class="nav-cta" href="#contact">Get in touch</a>
   </div>
 </nav>

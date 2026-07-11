@@ -95,8 +95,16 @@
     color: var(--ink);
     opacity: 0.55;
     display:none;
+    align-items:center;
+    gap:8px;
   }
-  @media (min-width:720px){ .page-tag{ display:block; } }
+  .page-tag img{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    opacity: 1;
+  }
+  @media (min-width:720px){ .page-tag{ display:flex; } }
   .nav-cta{
     font-family: var(--font-mono);
     font-size: 12.5px;
@@ -378,20 +386,20 @@
     .program-card{ flex-direction:column; }
   }
   .program-card-image{
-    flex: 0 0 220px;
-    min-height: 180px;
-    background: var(--parchment-2);
+    flex: 0 0 240px;
+    min-height: 240px;
+    background: #0d1524;
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
   }
   @media (max-width:640px){
-    .program-card-image{ flex-basis: auto; height: 160px; width: 100%; }
+    .program-card-image{ flex-basis: auto; height: 220px; width: 100%; }
   }
   .program-card-image img{
     width:100%; height:100%;
-    object-fit: cover;
+    object-fit: contain;
   }
   .program-card-image .placeholder{
     font-family: var(--font-mono);
@@ -718,8 +726,18 @@
     font-size: 14px;
     color: rgba(246,243,236,0.7);
     transition: color .2s ease;
+    display:flex;
+    align-items:center;
+    gap:10px;
   }
   .footer-logos a:hover{ color: var(--gold); }
+  .footer-logos a img{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
 
   .footer-newsletter-text{
     font-size: 14px;
@@ -736,6 +754,18 @@
     align-items:center;
     gap: 12px;
   }
+  .footer-powered{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: rgba(246,243,236,0.45);
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+  .footer-powered a{
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .footer-powered a:hover{ text-decoration: underline; }
   .footer-legal a{ }
 
   :focus-visible{ outline: 2px solid var(--gold-dark); outline-offset: 2px; }
@@ -748,7 +778,7 @@
     <a class="brand-link" href="index.html">
       <span class="arrow">&larr;</span> Marvini Elite Enterprises
     </a>
-    <span class="page-tag">Consultancy &amp; Training</span>
+    <span class="page-tag"><img src="img/M-Consultancy & Training1.png" alt="" />Consultancy &amp; Training</span>
     <a class="nav-cta" href="#contact">Get in touch</a>
   </div>
 </nav>
@@ -1044,10 +1074,10 @@
         <h4 class="footer-col-title">Marvini Group</h4>
         <div class="footer-logos">
           <a href="index.html#companies">&larr; Back to Marvini Elite Enterprises</a>
-          <a href="https://marvini-smart-driving-school-solution.web.app/">M-Smart Driving School</a>
-          <a href="https://marvini-digital-food-chain.web.app">M-Digital Food Chain</a>
-          <a href="index.html#companies">M-Events &amp; Festivals</a>
-          <a href="index.html#companies">M-Farms</a>
+          <a href="https://marvini-smart-driving-school-solution.web.app/"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School</a>
+          <a href="https://marvini-digital-food-chain.web.app"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+          <a href="index.html#companies"><img src="img/M-Events & Festivals0.png" alt="" />M-Events &amp; Festivals</a>
+          <a href="index.html#companies"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
         </div>
       </div>
 
@@ -1060,6 +1090,7 @@
 
     <div class="footer-row">
       <p class="fine">&copy; <span id="year"></span> Marvini Elite Enterprises. All rights reserved.</p>
+      <p class="footer-powered">Powered By <a href="https://myportfolio-theta-topaz-43.vercel.app/" target="_blank" rel="noopener noreferrer">TrevorMiles</a></p>
       <div class="footer-legal">
         <a href="index.html" class="fine" style="text-decoration:underline;">Privacy Policy</a>
         <a href="index.html" class="fine" style="text-decoration:underline; margin-left:16px;">Terms of Use</a>
