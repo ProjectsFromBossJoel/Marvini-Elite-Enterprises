@@ -192,16 +192,16 @@
             <svg class="nav-dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
           </a>
           <div class="nav-dropdown-menu">
-            <a href="index.html#companies"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
-            <a href="index.html#companies"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+            <a href="https://marvini-smart-driving-school-solution.web.app/"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+            <a href="https://marvini-digital-food-chain.web.app/"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
             <a href="index.html#companies"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
             <a href="index.html#companies"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
             <a href="consultancy-training.html"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
           </div>
         </li>
+        <li><a href="consultancy-training.html" class="nav-link">M-Consultancy & Training</a></li>
         <li><a href="#news" class="nav-link">News</a></li>
         <li><a href="publications.html" class="nav-link">Publications</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
         <li><a href="careers.html" class="nav-link">Careers/ Volunteer</a></li>
       </ul>
 
@@ -224,11 +224,11 @@
       <li><a href="#home" class="mobile-link">Home</a></li>
       <li><a href="#about" class="mobile-link">About</a></li>
       <li><a href="#companies" class="mobile-link">Companies</a></li>
+      <li><a href="consultancy-training.html" class="mobile-link">M-Consultancy & Training</a></li>
       <li><a href="#news" class="mobile-link">News</a></li>
       <li><a href="#partners" class="mobile-link">Partners</a></li>
       <li><a href="#team" class="mobile-link">Team</a></li>
       <li><a href="careers.html" class="nav-link active">Careers</a></li>
-      <li><a href="#contact" class="mobile-link">Contact</a></li>
     </ul>
   </div>
 
@@ -1440,7 +1440,7 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
               <div class="contact-icon" aria-hidden="true">📧</div>
               <div>
                 <strong>Email</strong>
-                <p><a href="mailto:info@marvini.com">info@marvini.com</a></p>
+                <p><a href="mailto:jakunor@hotmail.com">jakunor@hotmail.com</a></p>
               </div>
             </div>
             <div class="contact-info-item">
@@ -1541,13 +1541,28 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
 
           <div class="footer-col">
             <h4 class="footer-col-title">Our Companies</h4>
-            <ul class="footer-links" role="list">
-              <li><a href="https://marvini-smart-driving-school-solution.web.app/" class="footer-link">M-Smart Driving School</a></li>
-              <li><a href="#" class="footer-link">M-Digital Food Chain</a></li>
-              <li><a href="#" class="footer-link">M-Events & Festivals</a></li>
-              <li><a href="#" class="footer-link">M-Consultancy & Training</a></li>
-              <li><a href="#" class="footer-link">M-Farms</a></li>
-            </ul>
+            <div class="footer-logos">
+              <a href="https://marvini-smart-driving-school-solution.web.app/">
+                <img src="img/m-smart_driving_solution -logo.png" alt="M-Smart Driving School" class="company-logo" />
+                M-Smart Driving School
+              </a>
+              <a href="https://marvini-digital-food-chain.web.app">
+                <img src="img/M-Digital Food Chain .png" alt="M-Digital Food Chain" class="company-logo" />
+                M-Digital Food Chain
+              </a>
+              <a href="#companies">
+                <img src="img/M-Events & Festivals0.png" alt="M-Events & Festivals" class="company-logo" />
+                M-Events & Festivals
+              </a>
+              <a href="#companies">
+                <img src="img/M-Consultancy & Training0.png" alt="M-Consultancy & Training" class="company-logo" />
+                M-Consultancy & Training
+              </a>
+              <a href="#companies">
+                <img src="img/M-Farms0.png" alt="M-Farms" class="company-logo" />
+                M-Farms
+              </a>
+            </div>
           </div>
 
           <div class="footer-col">
@@ -1782,16 +1797,38 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
       if (btnSpinner) btnSpinner.style.display = 'inline-block';
 
       try {
-        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        const { db, collection, addDoc, doc, getDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const phone = document.getElementById('contactPhone').value;
+        const subject = document.getElementById('contactSubject').value;
+        const message = document.getElementById('contactMessage').value;
+
         await addDoc(collection(db, 'messages'), {
-          name: document.getElementById('contactName').value,
-          email: document.getElementById('contactEmail').value,
-          phone: document.getElementById('contactPhone').value,
-          subject: document.getElementById('contactSubject').value,
-          message: document.getElementById('contactMessage').value,
+          name, email, phone, subject, message,
           read: false,
           createdAt: serverTimestamp(),
         });
+
+        // Check the admin's notification preference before emailing.
+        let shouldEmail = true;
+        try {
+          const notifSnap = await getDoc(doc(db, 'settings', 'notifications'));
+          shouldEmail = notifSnap.exists() ? notifSnap.data().contactMessageEmail !== false : true;
+        } catch (notifErr) {
+          console.error('notification check failed, defaulting to send', notifErr);
+        }
+
+        if (shouldEmail && window.emailjs) {
+          try {
+            await emailjs.send('YOUR_SERVICE_ID', 'YOUR_CONTACT_TEMPLATE_ID', {
+              from_name: name, from_email: email, phone, subject, message,
+            });
+          } catch (emailErr) {
+            console.error('EmailJS send failed (message still saved):', emailErr);
+          }
+        }
+
         document.getElementById('formSuccess').style.display = 'block';
         form.reset();
         setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
@@ -2248,4 +2285,4 @@ chatInput.addEventListener('keydown', (e) => {
 <script type="module" src="js/partners-public.js"></script>
 <script type="module" src="js/articles-public.js"></script>
 </body>
-</html>
+</html> 

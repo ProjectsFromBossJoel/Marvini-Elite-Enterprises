@@ -896,14 +896,14 @@ input, textarea, select { font-family: inherit; }
 }
 
 .orbit-img {
-  width: 44px;
-  height: 44px;
+  width: 62px;
+  height: 62px;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 14px;
   background: rgba(255,255,255,0.07);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.15);
-  padding: 4px;
+  padding: 5px;
   box-shadow: 0 4px 20px rgba(26, 86, 255, 0.35);
   filter: drop-shadow(0 2px 8px rgba(26,86,255,0.4));
 }
