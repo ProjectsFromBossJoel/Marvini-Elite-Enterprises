@@ -56,6 +56,13 @@
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
   #leadsTableBody td:last-child { white-space: nowrap; }
   #programsTableBody td:last-child { white-space: nowrap; }
+  .program-desc-line {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+  }
 
   .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
   .form-field label { font-size:.85rem; font-weight:600; }
@@ -152,7 +159,7 @@
     </div>
     <div class="panel">
       <table>
-        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th>Duration</th><th>Note</th><th></th></tr></thead>
+        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th>Venue</th><th>Partner</th><th>Duration</th><th>Note</th><th></th></tr></thead>
         <tbody id="programsTableBody">
           <!-- Rows are rendered by ../js/consultancy-training-admin.js -->
         </tbody>

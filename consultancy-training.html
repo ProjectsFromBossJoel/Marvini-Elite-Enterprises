@@ -427,11 +427,36 @@
     color:#4A483F;
     margin:0 0 14px;
   }
+  .program-card .meta-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap: 10px 16px;
+    font-family: var(--font-mono);
+    font-size:12px;
+    color: #6b6a60;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    margin-top:auto;
+    margin-bottom:18px;
+  }
+  .program-card .meta-left{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap: 10px 14px;
+    flex: 1;
+  }
+  .program-card .meta-right{
+    display:flex;
+    align-items:center;
+    gap: 16px;
+    margin-left:auto;
+  }
   .program-card .venue{
     font-family: var(--font-mono);
     font-size:12px;
     color:#6b6a60;
-    margin: -6px 0 14px;
   }
   .program-card .partner-tag{
     display:inline-block;
@@ -441,19 +466,6 @@
     text-transform:uppercase;
     padding: 5px 11px;
     border-radius:999px;
-    margin-bottom:16px;
-    align-self:flex-start;
-  }
-  .program-card .meta{
-    display:flex;
-    justify-content:space-between;
-    font-family: var(--font-mono);
-    font-size:12px;
-    color: #6b6a60;
-    border-top:1px solid var(--line);
-    padding-top:14px;
-    margin-top:auto;
-    margin-bottom:18px;
   }
   .program-card .interest-btn{
     align-self:flex-start;
@@ -1123,7 +1135,7 @@
       const imageHtml = p.coverImageUrl
         ? `<img src="${escapeHtml(p.coverImageUrl)}" alt="${escapeHtml(p.title)}" />`
         : `<span class="placeholder">No image</span>`;
-      const venueHtml = p.venue ? `<p class="venue">📍 ${escapeHtml(p.venue)}</p>` : '';
+      const venueHtml = p.venue ? `<span class="venue">📍 ${escapeHtml(p.venue)}</span>` : '';
       let partnerHtml = '';
       if (p.partner){
         const c = partnerTagColor(p.partner);
@@ -1136,9 +1148,10 @@
             <p class="fmt">${escapeHtml(p.format)}</p>
             <h3>${escapeHtml(p.title)}</h3>
             <p>${escapeHtml(p.description)}</p>
-            ${venueHtml}
-            ${partnerHtml}
-            <div class="meta"><span>${escapeHtml(p.duration)}</span><span>${escapeHtml(p.note)}</span></div>
+            <div class="meta-row">
+              <div class="meta-left">${venueHtml}${partnerHtml}</div>
+              <div class="meta-right"><span>${escapeHtml(p.duration)}</span><span>${escapeHtml(p.note)}</span></div>
+            </div>
             <button class="interest-btn" data-program="${escapeHtml(p.title)}">Register interest</button>
           </div>
         </div>

@@ -260,15 +260,13 @@ function renderProgramRows() {
     const partnerTagHtml = p.partner
       ? (() => {
           const c = partnerTagColor(p.partner);
-          return `<span class="pill" style="background:${c.bg};color:${c.fg};margin-top:.35rem;display:inline-block;">${escapeHtml(p.partner)}</span>`;
+          return `<span class="pill" style="background:${c.bg};color:${c.fg};display:inline-block;">${escapeHtml(p.partner)}</span>`;
         })()
-      : "";
+      : "—";
     tr.innerHTML = `
       <td>
         <strong>${escapeHtml(p.title || "—")}</strong>
-        <div class="row-sub">${escapeHtml(p.description || "")}</div>
-        ${p.venue ? `<div class="row-sub">📍 ${escapeHtml(p.venue)}</div>` : ""}
-        ${partnerTagHtml}
+        <div class="row-sub program-desc-line">${escapeHtml(p.description || "")}</div>
       </td>
       <td>${escapeHtml(p.format || "—")}</td>
       <td>
@@ -279,10 +277,15 @@ function renderProgramRows() {
         ${formatProgramDate(p.endDate)}
         <div class="row-sub">${formatTime12h(p.endTime) || "—"}</div>
       </td>
+      <td>${p.venue ? escapeHtml(p.venue) : "—"}</td>
+      <td>${partnerTagHtml}</td>
       <td>${escapeHtml(p.duration || "—")}</td>
       <td>${escapeHtml(p.note || "—")}</td>
       <td>
         <div class="row-actions">
+          <button class="btn btn-outline btn-icon" data-view-program="${p.id}" title="View" aria-label="View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
           <button class="btn btn-outline btn-icon" data-edit-program="${p.id}" title="Edit" aria-label="Edit">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>
           </button>
@@ -295,6 +298,9 @@ function renderProgramRows() {
     programsTableBody.appendChild(tr);
   });
 
+  programsTableBody.querySelectorAll("[data-view-program]").forEach((btn) => {
+    btn.addEventListener("click", () => openProgramDetailModal(btn.dataset.viewProgram));
+  });
   programsTableBody.querySelectorAll("[data-edit-program]").forEach((btn) => {
     btn.addEventListener("click", () => openProgramModal(btn.dataset.editProgram));
   });
@@ -338,6 +344,45 @@ const programCoverField = document.getElementById("programCover");
 const programNoteField = document.getElementById("programNote");
 const programSubmitBtn = document.getElementById("programSubmitBtn");
 const programFormStatus = document.getElementById("programFormStatus");
+
+// ---------------- Program detail (view) modal ----------------
+const programDetailModal = document.getElementById("programDetailModal");
+const closeProgramDetailBtn = document.getElementById("closeProgramDetailBtn");
+const detailTitle = document.getElementById("detailTitle");
+const detailFormat = document.getElementById("detailFormat");
+const detailStart = document.getElementById("detailStart");
+const detailEnd = document.getElementById("detailEnd");
+const detailDuration = document.getElementById("detailDuration");
+const detailVenue = document.getElementById("detailVenue");
+const detailPartner = document.getElementById("detailPartner");
+const detailNote = document.getElementById("detailNote");
+const detailDescription = document.getElementById("detailDescription");
+
+function openProgramDetailModal(programId) {
+  const p = allPrograms.find((x) => x.id === programId);
+  if (!p) return;
+
+  detailTitle.textContent = p.title || "—";
+  detailFormat.textContent = p.format || "—";
+  detailStart.textContent = `${formatProgramDate(p.startDate)}${p.startTime ? " · " + formatTime12h(p.startTime) : ""}`;
+  detailEnd.textContent = `${formatProgramDate(p.endDate)}${p.endTime ? " · " + formatTime12h(p.endTime) : ""}`;
+  detailDuration.textContent = p.duration || "—";
+  detailVenue.textContent = p.venue || "—";
+  detailPartner.textContent = p.partner || "—";
+  detailNote.textContent = p.note || "—";
+  detailDescription.textContent = p.description || "—";
+
+  programDetailModal.classList.add("open");
+}
+
+function closeProgramDetailModal() {
+  programDetailModal.classList.remove("open");
+}
+
+closeProgramDetailBtn.addEventListener("click", closeProgramDetailModal);
+programDetailModal.addEventListener("click", (e) => {
+  if (e.target === programDetailModal) closeProgramDetailModal();
+});
 
 // ---------------- Auto-calculated Duration ----------------
 function formatTime12h(hhmm) {

@@ -302,6 +302,45 @@ const programNoteField = document.getElementById("programNote");
 const programSubmitBtn = document.getElementById("programSubmitBtn");
 const programFormStatus = document.getElementById("programFormStatus");
 
+// ---------------- Program detail (view) modal ----------------
+const programDetailModal = document.getElementById("programDetailModal");
+const closeProgramDetailBtn = document.getElementById("closeProgramDetailBtn");
+const detailTitle = document.getElementById("detailTitle");
+const detailFormat = document.getElementById("detailFormat");
+const detailStart = document.getElementById("detailStart");
+const detailEnd = document.getElementById("detailEnd");
+const detailDuration = document.getElementById("detailDuration");
+const detailVenue = document.getElementById("detailVenue");
+const detailPartner = document.getElementById("detailPartner");
+const detailNote = document.getElementById("detailNote");
+const detailDescription = document.getElementById("detailDescription");
+
+function openProgramDetailModal(programId) {
+  const p = allPrograms.find((x) => x.id === programId);
+  if (!p) return;
+
+  detailTitle.textContent = p.title || "—";
+  detailFormat.textContent = p.format || "—";
+  detailStart.textContent = `${formatProgramDate(p.startDate)}${p.startTime ? " · " + formatTime12h(p.startTime) : ""}`;
+  detailEnd.textContent = `${formatProgramDate(p.endDate)}${p.endTime ? " · " + formatTime12h(p.endTime) : ""}`;
+  detailDuration.textContent = p.duration || "—";
+  detailVenue.textContent = p.venue || "—";
+  detailPartner.textContent = p.partner || "—";
+  detailNote.textContent = p.note || "—";
+  detailDescription.textContent = p.description || "—";
+
+  programDetailModal.classList.add("open");
+}
+
+function closeProgramDetailModal() {
+  programDetailModal.classList.remove("open");
+}
+
+closeProgramDetailBtn.addEventListener("click", closeProgramDetailModal);
+programDetailModal.addEventListener("click", (e) => {
+  if (e.target === programDetailModal) closeProgramDetailModal();
+});
+
 function openProgramModal(programId) {
   programForm.reset();
   programFormStatus.textContent = "";

@@ -30,6 +30,22 @@
   .applicant-detail-row .value a { color:#1a56ff; text-decoration:none; }
   .applicant-cv-box { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:.9rem 1rem; border:1px solid var(--border); border-radius:10px; background:var(--bg-secondary); margin-top:.25rem; }
   .applicant-cv-box span { font-size:.9rem; color:var(--text-secondary); }
+
+  .pipeline-mini { display:flex; align-items:flex-start; gap:6px; }
+  .pipeline-mini-step { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:56px; }
+  .pipeline-mini-circle {
+    width:34px; height:34px; border-radius:50%;
+    background: linear-gradient(135deg,#1a56ff,#059669);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:.82rem; font-weight:700; box-shadow: 0 4px 10px rgba(26,86,255,0.25);
+  }
+  .pipeline-mini-circle.empty { background: var(--bg-secondary, #f1f5f9); color: var(--text-muted, #64748b); box-shadow:none; }
+  .pipeline-mini-label {
+    font-size:.66rem; font-weight:600; text-transform:uppercase; letter-spacing:.03em;
+    color: var(--text-muted, #64748b); white-space:nowrap;
+  }
+  .pipeline-mini-line { width:26px; height:2px; background: var(--border, #e2e8f0); margin-top:16px; }
+  @media (max-width: 980px){ .pipeline-mini{ display:none; } }
 </style>
 
 </head>
@@ -133,6 +149,27 @@
         <div>
           <p class="panel-eyebrow">Pipeline</p>
           <h2 class="panel-title" style="font-size:1.15rem;">Recent Applicants</h2>
+        </div>
+        <div class="pipeline-mini" id="pipelineMini" aria-label="Application stages roadmap">
+          <div class="pipeline-mini-step">
+            <div class="pipeline-mini-circle" id="pmSubmitted">0</div>
+            <span class="pipeline-mini-label">Submitted</span>
+          </div>
+          <div class="pipeline-mini-line"></div>
+          <div class="pipeline-mini-step">
+            <div class="pipeline-mini-circle" id="pmReviewed">0</div>
+            <span class="pipeline-mini-label">Reviewed</span>
+          </div>
+          <div class="pipeline-mini-line"></div>
+          <div class="pipeline-mini-step">
+            <div class="pipeline-mini-circle" id="pmInterview">0</div>
+            <span class="pipeline-mini-label">Interview</span>
+          </div>
+          <div class="pipeline-mini-line"></div>
+          <div class="pipeline-mini-step">
+            <div class="pipeline-mini-circle" id="pmHired">0</div>
+            <span class="pipeline-mini-label">Hired</span>
+          </div>
         </div>
         <div class="dropdown">This Week <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
       </div>

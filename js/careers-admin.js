@@ -255,4 +255,25 @@ onSnapshot(collection(db, "applications"), (snap) => {
   document.getElementById("statApplications30d").textContent = recent;
   document.getElementById("statInterviews").textContent = interviews;
   document.getElementById("statHired").textContent = hired;
+
+  // Mini pipeline roadmap — mirrors the dashboard's stage widget so the
+  // admin can see where applications stand without leaving this page.
+  const stageCounts = { submitted: 0, under_review: 0, interview: 0, hired: 0 };
+  docs.forEach(({ data }) => {
+    const stage = data.stage || "submitted";
+    if (stage in stageCounts) stageCounts[stage]++;
+  });
+
+  const pmMap = {
+    pmSubmitted: stageCounts.submitted,
+    pmReviewed: stageCounts.under_review,
+    pmInterview: stageCounts.interview,
+    pmHired: stageCounts.hired,
+  };
+  Object.entries(pmMap).forEach(([id, count]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = count;
+    el.classList.toggle("empty", count === 0);
+  });
 });
