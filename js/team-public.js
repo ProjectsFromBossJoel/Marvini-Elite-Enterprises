@@ -1,3 +1,4 @@
+//team-public.js
 import { db, collection, onSnapshot } from "./firebase-config.js";
 
 function escapeHtml(str) {
@@ -38,6 +39,7 @@ if (grid) {
               <div class="team-avatar-bg"></div>
               <img src="${escapeHtml(avatar)}" alt="${escapeHtml(m.name || "")}" class="team-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(m.name || "?")}&background=1a56ff&color=fff'" />
               <div class="team-avatar-ring"></div>
+              ${m.subsidiaryLogoUrl ? `<span class="team-avatar-badge-link" aria-label="${escapeHtml(m.subsidiary || "")}"><img src="${escapeHtml(m.subsidiaryLogoUrl)}" alt="" class="team-avatar-badge" /></span>` : ""}
             </div>
             <div class="team-info">
               <div class="team-company-badge">

@@ -28,14 +28,14 @@ const submitBtn = document.getElementById("teamSubmitBtn");
 const CLOUDINARY_CLOUD_NAME = "dilb7jd6w";
 const CLOUDINARY_UPLOAD_PRESET = "team_avatar";
 
-async function uploadPhotoToCloudinary(file) {
+async function uploadPhotoToCloudinary(file, progressWrapId = "teamPhotoProgress", progressBarId = "teamPhotoProgressBar") {
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
-  const progressWrap = document.getElementById("teamPhotoProgress");
-  const progressBar = document.getElementById("teamPhotoProgressBar");
+  const progressWrap = document.getElementById(progressWrapId);
+  const progressBar = document.getElementById(progressBarId);
   progressWrap.style.display = "block";
   progressBar.style.width = "0%";
 
@@ -83,6 +83,28 @@ teamPhotoFile?.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
+// ── Subsidiary logo picker: preview + filename ──────────
+const teamSubsidiaryLogoFile = document.getElementById("teamSubsidiaryLogoFile");
+const teamSubsidiaryLogoFileName = document.getElementById("teamSubsidiaryLogoFileName");
+const teamSubsidiaryLogoPreviewWrap = document.getElementById("teamSubsidiaryLogoPreviewWrap");
+const teamSubsidiaryLogoPreview = document.getElementById("teamSubsidiaryLogoPreview");
+
+document.getElementById("teamSubsidiaryLogoLabel")?.addEventListener("click", (e) => {
+  if (e.target !== teamSubsidiaryLogoFile) teamSubsidiaryLogoFile.click();
+});
+
+teamSubsidiaryLogoFile?.addEventListener("change", () => {
+  const file = teamSubsidiaryLogoFile.files[0];
+  if (!file) return;
+  teamSubsidiaryLogoFileName.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    teamSubsidiaryLogoPreview.src = ev.target.result;
+    teamSubsidiaryLogoPreviewWrap.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
+
 let currentFilter = "all";
 let currentDocs = []; // [{id, data}]
 
@@ -100,6 +122,10 @@ function openModal(editData = null, editId = null) {
   teamPhotoPreviewWrap.style.display = "none";
   document.getElementById("teamPhotoProgress").style.display = "none";
   document.getElementById("teamPhotoProgressBar").style.width = "0%";
+  teamSubsidiaryLogoFileName.textContent = "Choose a logo image…";
+  teamSubsidiaryLogoPreviewWrap.style.display = "none";
+  document.getElementById("teamSubsidiaryLogoProgress").style.display = "none";
+  document.getElementById("teamSubsidiaryLogoProgressBar").style.width = "0%";
 
   if (editData) {
     modalTitle.textContent = "Edit Team Member";
@@ -113,6 +139,12 @@ function openModal(editData = null, editId = null) {
       teamPhotoPreviewWrap.style.display = "block";
       teamPhotoFileName.textContent = "Current photo (choose a file to replace)";
     }
+    document.getElementById("teamSubsidiaryLogo").value = editData.subsidiaryLogoUrl || "";
+    if (editData.subsidiaryLogoUrl) {
+      teamSubsidiaryLogoPreview.src = editData.subsidiaryLogoUrl;
+      teamSubsidiaryLogoPreviewWrap.style.display = "block";
+      teamSubsidiaryLogoFileName.textContent = "Current logo (choose a file to replace)";
+    }
     document.getElementById("teamShortBio").value = editData.shortBio || "";
     document.getElementById("teamFullBio").value = editData.fullBio || "";
     document.getElementById("teamLinkedin").value = editData.linkedin || "";
@@ -121,6 +153,7 @@ function openModal(editData = null, editId = null) {
   } else {
     modalTitle.textContent = "Add Team Member";
     document.getElementById("teamPhoto").value = "";
+    document.getElementById("teamSubsidiaryLogo").value = "";
     document.getElementById("teamPublishNow").checked = true;
   }
   statusEl.textContent = "";
@@ -154,12 +187,20 @@ form?.addEventListener("submit", async (e) => {
       photoUrl = await uploadPhotoToCloudinary(file);
     }
 
+    const logoFile = teamSubsidiaryLogoFile.files[0];
+    let subsidiaryLogoUrl = document.getElementById("teamSubsidiaryLogo").value.trim();
+    if (logoFile) {
+      statusEl.textContent = "Uploading subsidiary logo…";
+      subsidiaryLogoUrl = await uploadPhotoToCloudinary(logoFile, "teamSubsidiaryLogoProgress", "teamSubsidiaryLogoProgressBar");
+    }
+
     const data = {
       name: document.getElementById("teamName").value.trim(),
       role: document.getElementById("teamRole").value.trim(),
       category: document.getElementById("teamCategory").value,
       subsidiary: document.getElementById("teamSubsidiary").value.trim(),
       photoUrl,
+      subsidiaryLogoUrl,
       shortBio: document.getElementById("teamShortBio").value.trim(),
       fullBio: document.getElementById("teamFullBio").value.trim(),
       linkedin: document.getElementById("teamLinkedin").value.trim(),
