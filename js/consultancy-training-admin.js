@@ -341,6 +341,9 @@ const programDescriptionField = document.getElementById("programDescription");
 const programVenueField = document.getElementById("programVenue");
 const programPartnerField = document.getElementById("programPartner");
 const programCoverField = document.getElementById("programCover");
+const programImagePreviewWrap = document.getElementById("programImagePreviewWrap");
+const programImagePreview = document.getElementById("programImagePreview");
+const programImagePreviewLabel = document.getElementById("programImagePreviewLabel");
 const programNoteField = document.getElementById("programNote");
 const programSubmitBtn = document.getElementById("programSubmitBtn");
 const programFormStatus = document.getElementById("programFormStatus");
@@ -348,6 +351,8 @@ const programFormStatus = document.getElementById("programFormStatus");
 // ---------------- Program detail (view) modal ----------------
 const programDetailModal = document.getElementById("programDetailModal");
 const closeProgramDetailBtn = document.getElementById("closeProgramDetailBtn");
+const detailImageWrap = document.getElementById("detailImageWrap");
+const detailImage = document.getElementById("detailImage");
 const detailTitle = document.getElementById("detailTitle");
 const detailFormat = document.getElementById("detailFormat");
 const detailStart = document.getElementById("detailStart");
@@ -361,6 +366,14 @@ const detailDescription = document.getElementById("detailDescription");
 function openProgramDetailModal(programId) {
   const p = allPrograms.find((x) => x.id === programId);
   if (!p) return;
+
+  if (p.coverImageUrl) {
+    detailImage.src = p.coverImageUrl;
+    detailImageWrap.classList.add("has-image");
+  } else {
+    detailImage.src = "";
+    detailImageWrap.classList.remove("has-image");
+  }
 
   detailTitle.textContent = p.title || "—";
   detailFormat.textContent = p.format || "—";
@@ -424,10 +437,21 @@ function computeDuration() {
   field.addEventListener("input", computeDuration);
 });
 
+programCoverField.addEventListener("change", () => {
+  const file = programCoverField.files[0];
+  if (!file) return;
+  programImagePreviewLabel.textContent = "New image (not saved yet)";
+  programImagePreview.src = URL.createObjectURL(file);
+  programImagePreviewWrap.classList.add("has-image");
+});
+
 function openProgramModal(programId) {
   programForm.reset();
   programFormStatus.textContent = "";
   programDurationField.value = "";
+  programImagePreviewWrap.classList.remove("has-image");
+  programImagePreview.src = "";
+  programImagePreviewLabel.textContent = "Current image";
 
   if (programId) {
     const p = allPrograms.find((x) => x.id === programId);
@@ -446,6 +470,11 @@ function openProgramModal(programId) {
     programNoteField.value = p.note || "";
     programSubmitBtn.textContent = "Save Changes";
     computeDuration();
+
+    if (p.coverImageUrl) {
+      programImagePreview.src = p.coverImageUrl;
+      programImagePreviewWrap.classList.add("has-image");
+    }
   } else {
     programModalTitle.textContent = "Add Training Program";
     programIdField.value = "";

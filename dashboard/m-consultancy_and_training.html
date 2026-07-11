@@ -109,6 +109,17 @@
   .confirm-modal-card p { font-size:.9rem; color: var(--text-muted,#64748b); margin: 0 0 1.5rem; }
   .confirm-actions { display:flex; gap:.6rem; justify-content:center; }
   .confirm-actions .btn { flex:1; justify-content:center; padding: 10px 16px; }
+
+  .program-image-preview {
+    width: 100%; max-height: 220px; object-fit: cover;
+    border-radius: 10px; border: 1px solid var(--border,#e2e8f0);
+    display: block; margin-bottom: .5rem;
+  }
+  .program-image-preview-wrap { display:none; }
+  .program-image-preview-wrap.has-image { display:block; }
+  .current-image-label {
+    font-size:.75rem; color: var(--text-muted,#64748b); margin: 0 0 .35rem;
+  }
 </style>
 </head>
 
@@ -336,6 +347,10 @@
       </div>
       <div class="form-field">
         <label for="programCover">Program Image (optional)</label>
+        <div class="program-image-preview-wrap" id="programImagePreviewWrap">
+          <p class="current-image-label" id="programImagePreviewLabel">Current image</p>
+          <img class="program-image-preview" id="programImagePreview" src="" alt="Program image preview" />
+        </div>
         <input type="file" id="programCover" accept="image/*" />
       </div>
       <div class="form-field">
@@ -356,6 +371,9 @@
     <div class="modal-head">
       <h3>Program Details</h3>
       <button class="modal-close" id="closeProgramDetailBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="lead-detail-row program-image-preview-wrap" id="detailImageWrap">
+      <img class="program-image-preview" id="detailImage" src="" alt="Program image" />
     </div>
     <div class="lead-detail-row">
       <label>Title</label>
