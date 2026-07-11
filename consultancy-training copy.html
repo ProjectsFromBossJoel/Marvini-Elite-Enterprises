@@ -1,4 +1,3 @@
-<!-- Consultancy & Training -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,22 +87,30 @@
     transition: transform .2s ease;
   }
   .brand-link:hover .arrow{ transform: translateX(-3px); }
+
+  .page-tag span{
+    display:inline-block;
+    margin-top: 10px;
+    font-size: 20px;
+  }
   .page-tag{
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink);
-    opacity: 0.55;
+    opacity: 1;
     display:none;
     align-items:center;
-    gap:8px;
+    gap:0px;
+    top: 1px;
   }
   .page-tag img{
-    width: 20px;
-    height: 20px;
+    width: 70px;
+    height: 70px;
     object-fit: contain;
     opacity: 1;
+    margin-right: -8px;
   }
   @media (min-width:720px){ .page-tag{ display:flex; } }
   .nav-cta{
@@ -592,20 +599,66 @@
   .form-status.ok{ color: var(--sage); }
   .form-status.err{ color: var(--rust); }
 
+  /* ---------- Register interest modal ---------- */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(20,33,61,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 200;
+  }
+  .modal-overlay.open{ display: flex; }
+  .modal-card{
+    background: var(--white);
+    border-radius: 6px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 36px;
+    position: relative;
+    box-shadow: 0 24px 60px rgba(20,33,61,0.3);
+  }
+  .modal-close{
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 6px;
+  }
+  .modal-eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 10px;
+  }
+  .modal-card h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--ink);
+    margin: 0 0 22px;
+  }
+  .modal-card .field select:disabled{
+    opacity: 0.85;
+    cursor: not-allowed;
+  }
+
   /* ---------- Footer ---------- */
   footer{
     background: var(--ink);
     color: rgba(246,243,236,0.7);
-    padding: 48px 0 32px;
-  }
-  .footer-row{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:space-between;
-    gap: 24px;
-    padding-bottom: 28px;
-    border-bottom: 1px solid rgba(246,243,236,0.14);
-    margin-bottom: 22px;
+    padding: 64px 0 32px;
   }
   footer a{ text-decoration:none; }
   footer .back-link{
@@ -621,6 +674,108 @@
     color: rgba(246,243,236,0.45);
   }
 
+  .footer-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(246,243,236,0.14);
+    margin-bottom: 24px;
+  }
+  @media (min-width: 760px){
+    .footer-grid{ grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+  }
+  .footer-brand .brand-link{ display:inline-block; margin-bottom: 16px; }
+  .footer-tagline{
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold);
+    margin: 0 0 12px;
+  }
+  .footer-about{
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(246,243,236,0.65);
+    max-width: 34ch;
+    margin: 0 0 20px;
+  }
+  .footer-social{ display:flex; gap:10px; }
+  .fsocial-link{
+    width: 32px; height:32px;
+    border: 1px solid rgba(246,243,236,0.25);
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 13px;
+    color: rgba(246,243,236,0.8);
+    transition: all .2s ease;
+  }
+  .fsocial-link:hover{ background: var(--gold); border-color: var(--gold); color: var(--ink); }
+
+  .footer-col-title{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 18px;
+  }
+  .footer-links{ list-style:none; margin:0; padding:0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-link{
+    font-size: 14.5px;
+    color: rgba(246,243,236,0.7);
+    transition: color .2s ease;
+  }
+  .footer-link:hover{ color: var(--white); }
+
+  .footer-logos{ display:flex; flex-direction:column; gap: 12px; }
+  .footer-logos a{
+    font-size: 14px;
+    color: rgba(246,243,236,0.7);
+    transition: color .2s ease;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .footer-logos a:hover{ color: var(--gold); }
+  .footer-logos a img{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .footer-newsletter-text{
+    font-size: 14px;
+    line-height:1.6;
+    color: rgba(246,243,236,0.65);
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  .footer-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap: 12px;
+  }
+  .footer-powered{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: rgba(246,243,236,0.45);
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+  .footer-powered a{
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .footer-powered a:hover{ text-decoration: underline; }
+  .footer-legal a{ }
+
   :focus-visible{ outline: 2px solid var(--gold-dark); outline-offset: 2px; }
 </style>
 </head>
@@ -631,7 +786,7 @@
     <a class="brand-link" href="index.html">
       <span class="arrow">&larr;</span> Marvini Elite Enterprises
     </a>
-    <span class="page-tag"><img src="img/M-Consultancy & Training1.png" alt="" />Consultancy &amp; Training</span>
+    <div class="page-tag"><img src="img/others/All Logos/Logo/all-logos-png/M-Consultancy & Training.png" alt="" /><span>Consultancy &amp; Training</span></div>
     <a class="nav-cta" href="#contact">Get in touch</a>
   </div>
 </nav>
@@ -667,7 +822,7 @@
           <clipPath id="emblemClip">
             <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15"/>
           </clipPath>
-          <image href="img/marvini_elite_enterprise_logo2.png" x="-24" y="-24" width="48" height="48" clip-path="url(#emblemClip)" preserveAspectRatio="xMidYMid meet"/>
+          <image href="img/M-Consultancy & Training1.png" x="-19" y="-19" width="38" height="38" clip-path="url(#emblemClip)" preserveAspectRatio="xMidYMid meet"/>
         </g>
 
         <path d="M230 230 L 230 300" stroke="#B8892E" stroke-width="1.5" stroke-dasharray="3 4"/>
@@ -763,27 +918,7 @@
     </div>
 
     <div class="programs-grid" id="programs-grid">
-      <div class="program-card">
-        <p class="fmt">Corporate · On-site</p>
-        <h3>Frontline Customer Service</h3>
-        <p>Practical service standards and difficult-conversation handling for customer-facing staff.</p>
-        <div class="meta"><span>2 days</span><span>Min. 8 staff</span></div>
-        <button class="interest-btn" data-program="Frontline Customer Service">Register interest</button>
-      </div>
-      <div class="program-card">
-        <p class="fmt">Open enrolment</p>
-        <h3>Leadership Essentials</h3>
-        <p>First-time managers learn delegation, feedback, and running a team meeting that actually decides things.</p>
-        <div class="meta"><span>3 days</span><span>Certificate</span></div>
-        <button class="interest-btn" data-program="Leadership Essentials">Register interest</button>
-      </div>
-      <div class="program-card">
-        <p class="fmt">Corporate · Remote or on-site</p>
-        <h3>Financial Literacy for Non-Finance Managers</h3>
-        <p>Reading a P&amp;L, building a defensible budget, and asking finance the right questions.</p>
-        <div class="meta"><span>1 day</span><span>Min. 6 staff</span></div>
-        <button class="interest-btn" data-program="Financial Literacy for Non-Finance Managers">Register interest</button>
-      </div>
+      <p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60;" id="programs-loading">Loading programs…</p>
     </div>
   </div>
 </section>
@@ -865,37 +1000,113 @@
   </div>
 </section>
 
+<div class="modal-overlay" id="registerModalOverlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="registerModalTitle">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="registerModalClose" aria-label="Close">&#10005;</button>
+    <p class="modal-eyebrow">Register interest</p>
+    <h3 id="registerModalTitle">Save your spot</h3>
+
+    <form class="lead-form" id="registerModalForm" style="padding:0; border:none;">
+      <div class="form-row">
+        <div class="field">
+          <label for="m-name">Full name</label>
+          <input id="m-name" name="name" type="text" required>
+        </div>
+        <div class="field">
+          <label for="m-org">Organisation</label>
+          <input id="m-org" name="organisation" type="text">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="m-email">Email</label>
+          <input id="m-email" name="email" type="email" required>
+        </div>
+        <div class="field">
+          <label for="m-phone">Phone</label>
+          <input id="m-phone" name="phone" type="tel">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m-program">Program of interest</label>
+        <select id="m-program" name="program">
+          <option>Loading programs…</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="m-message">Anything specific you'd like covered?</label>
+        <textarea id="m-message" name="message"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="modalSubmitBtn" style="width:100%; justify-content:center;">Register interest</button>
+      <p class="form-status" id="modalFormStatus" role="status"></p>
+    </form>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
-    <div class="footer-row">
-      <a class="back-link" href="index.html">&larr; Back to Marvini Elite Enterprises</a>
-      <span class="fine">Consultancy &amp; Training is a Marvini Elite Enterprises subsidiary</span>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand-link" style="color: var(--parchment);">
+          <img src="img/marvini_elite_enterprise_logo.png" alt="Marvini Elite Enterprises" style="height:80px; width:auto;">
+        </a>
+        <p class="footer-tagline">Innovating Africa's Future</p>
+        <p class="footer-about">Consultancy &amp; Training is a subsidiary of Marvini Elite Enterprises, building African-led solutions that are innovative, sustainable, and globally competitive.</p>
+        <div class="footer-social">
+          <a href="#" class="fsocial-link" aria-label="LinkedIn">in</a>
+          <a href="#" class="fsocial-link" aria-label="Twitter">𝕏</a>
+          <a href="#" class="fsocial-link" aria-label="Facebook">f</a>
+          <a href="#" class="fsocial-link" aria-label="Instagram">◎</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-title">This page</h4>
+        <ul class="footer-links">
+          <li><a href="#services" class="footer-link">Services</a></li>
+          <li><a href="#programs" class="footer-link">Training programs</a></li>
+          <li><a href="#contact" class="footer-link">Request consultation</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-title">Other Companies</h4>
+        <div class="footer-logos">
+          <a href="index.html#companies">&larr; Back to Marvini Elite Enterprises</a>
+          <a href="https://marvini-smart-driving-school-solution.web.app/"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School</a>
+          <a href="https://marvini-digital-food-chain.web.app"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+          <a href="index.html#companies"><img src="img/M-Events & Festivals0.png" alt="" />M-Events &amp; Festivals</a>
+          <a href="index.html#companies"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-title">Get in touch</h4>
+        <p class="footer-newsletter-text">Prefer email? Reach the Marvini team directly and we'll route your enquiry.</p>
+        <a href="mailto:jakunor@hotmail.com" class="btn btn-ghost" style="border-color: rgba(246,243,236,0.3); color: var(--parchment); margin-top:8px;">jakunor@hotmail.com</a>
+      </div>
     </div>
-    <p class="fine">&copy; <span id="year"></span> Marvini Elite Enterprises. All rights reserved.</p>
+
+    <div class="footer-row">
+      <p class="fine">&copy; <span id="year"></span> Marvini Elite Enterprises. All rights reserved.</p>
+      <p class="footer-powered">Powered By <a href="https://myportfolio-theta-topaz-43.vercel.app/" target="_blank" rel="noopener noreferrer">TrevorMiles</a></p>
+      <div class="footer-legal">
+        <a href="index.html" class="fine" style="text-decoration:underline;">Privacy Policy</a>
+        <a href="index.html" class="fine" style="text-decoration:underline; margin-left:16px;">Terms of Use</a>
+      </div>
+    </div>
   </div>
 </footer>
 
 <script type="module">
   // ---------------------------------------------------------------
-  // Firebase — reuse the SAME config/app already used on the main
-  // Marvini site so writes land in the same project. Replace the
-  // placeholder below with your existing firebaseConfig object
-  // (the one already used in your admin dashboard / main site JS).
+  // Reuse the SAME Firebase app/Firestore instance as the rest of the
+  // Marvini site, so writes land in the same project/collections.
   // ---------------------------------------------------------------
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "./js/firebase-config.js";
 
   // ---------------- Intent toggle ----------------
   const tabConsult = document.getElementById('tab-consultation');
@@ -921,17 +1132,174 @@
   tabConsult.addEventListener('click', () => setIntent('consultation'));
   tabTraining.addEventListener('click', () => setIntent('training'));
 
-  // Hero CTA / program card buttons jump to the form with the right intent
-  document.querySelectorAll('[data-program]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setIntent('training');
-      document.getElementById('f-program').value = btn.dataset.program;
-      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-      document.getElementById('f-name').focus();
+  // ---------------- Upcoming Programs (live from Firestore) ----------------
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  // Deterministic color per partner name — matches the admin dashboard's
+  // partner tag palette so a given partner reads the same way everywhere.
+  const PARTNER_TAG_PALETTE = [
+    { bg: 'rgba(166,84,42,0.12)', fg: '#A6542A' },
+    { bg: 'rgba(79,107,79,0.14)', fg: '#4F6B4F' },
+    { bg: 'rgba(184,137,46,0.16)', fg: '#93701F' },
+    { bg: 'rgba(20,33,61,0.10)', fg: '#14213D' },
+    { bg: 'rgba(124,155,124,0.18)', fg: '#3C543C' },
+  ];
+  function partnerTagColor(name){
+    if (!name) return PARTNER_TAG_PALETTE[0];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    return PARTNER_TAG_PALETTE[hash % PARTNER_TAG_PALETTE.length];
+  }
+
+  const programsGrid = document.getElementById('programs-grid');
+  const fProgramSelect = document.getElementById('f-program');
+  const mProgramSelect = document.getElementById('m-program');
+
+  function populateProgramSelects(programs){
+    const optionsHtml = programs.map(p => `<option>${escapeHtml(p.title)}</option>`).join('')
+      + '<option>Not sure yet — advise me</option>';
+    // Preserve the currently selected value where possible (e.g. modal
+    // pre-filled from a card click) rather than always resetting to top.
+    [fProgramSelect, mProgramSelect].forEach(sel => {
+      const prevValue = sel.value;
+      sel.innerHTML = optionsHtml;
+      if (prevValue && Array.from(sel.options).some(o => o.value === prevValue)) {
+        sel.value = prevValue;
+      }
     });
+  }
+
+  const programsQuery = query(collection(db, 'consultancyPrograms'), orderBy('createdAt', 'desc'));
+
+  onSnapshot(programsQuery, (snapshot) => {
+    if (snapshot.empty){
+      programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60;">No programs scheduled right now — check back soon, or request a consultation and we\'ll advise on training.</p>';
+      populateProgramSelects([]);
+      return;
+    }
+    const programsData = snapshot.docs.map(d => d.data());
+    populateProgramSelects(programsData);
+    programsGrid.innerHTML = snapshot.docs.map(docSnap => {
+      const p = docSnap.data();
+      const imageHtml = p.coverImageUrl
+        ? `<img src="${escapeHtml(p.coverImageUrl)}" alt="${escapeHtml(p.title)}" />`
+        : `<span class="placeholder">No image</span>`;
+      const venueHtml = p.venue ? `<span class="venue">📍 ${escapeHtml(p.venue)}</span>` : '';
+      let partnerHtml = '';
+      if (p.partner){
+        const c = partnerTagColor(p.partner);
+        partnerHtml = `<span class="partner-tag" style="background:${c.bg};color:${c.fg};">${escapeHtml(p.partner)}</span>`;
+      }
+      return `
+        <div class="program-card">
+          <div class="program-card-image">${imageHtml}</div>
+          <div class="program-card-body">
+            <p class="fmt">${escapeHtml(p.format)}</p>
+            <h3>${escapeHtml(p.title)}</h3>
+            <p>${escapeHtml(p.description)}</p>
+            <div class="meta-row">
+              <div class="meta-left">${venueHtml}${partnerHtml}</div>
+              <div class="meta-right"><span>${escapeHtml(p.duration)}</span><span>${escapeHtml(p.note)}</span></div>
+            </div>
+            <button class="interest-btn" data-program="${escapeHtml(p.title)}">Register interest</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }, (err) => {
+    console.error('Error loading programs:', err);
+    programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:var(--rust);">Couldn\'t load programs right now.</p>';
   });
-  document.querySelector('[data-intent="consultation"]').addEventListener('click', (e) => {
+
+  // Hero "Request a consultation" CTA jumps to the inline form with that intent
+  document.querySelector('[data-intent="consultation"]').addEventListener('click', () => {
     setIntent('consultation');
+  });
+
+  // ---------------- Register Interest modal ----------------
+  const modalOverlay = document.getElementById('registerModalOverlay');
+  const modalClose = document.getElementById('registerModalClose');
+  const modalForm = document.getElementById('registerModalForm');
+  const modalProgramSelect = document.getElementById('m-program');
+  const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+  const modalStatus = document.getElementById('modalFormStatus');
+
+  function openRegisterModal(programName){
+    if (programName){
+      const optionExists = Array.from(modalProgramSelect.options).some(o => o.value === programName);
+      if (!optionExists){
+        const opt = document.createElement('option');
+        opt.value = programName;
+        opt.textContent = programName;
+        modalProgramSelect.insertBefore(opt, modalProgramSelect.firstChild);
+      }
+      modalProgramSelect.value = programName;
+    }
+    modalOverlay.classList.add('open');
+    modalOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('m-name').focus();
+  }
+
+  function closeRegisterModal(){
+    modalOverlay.classList.remove('open');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Program cards open the modal, pre-filled with that program. Delegated
+  // on the grid container since cards are rendered live from Firestore.
+  document.getElementById('programs-grid').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-program]');
+    if (btn) openRegisterModal(btn.dataset.program);
+  });
+
+  modalClose.addEventListener('click', closeRegisterModal);
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeRegisterModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeRegisterModal();
+  });
+
+  modalForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    modalStatus.textContent = '';
+    modalStatus.className = 'form-status';
+    modalSubmitBtn.disabled = true;
+    const originalLabel = modalSubmitBtn.textContent;
+    modalSubmitBtn.textContent = 'Sending…';
+
+    const payload = {
+      type: 'training',
+      name: document.getElementById('m-name').value.trim(),
+      organisation: document.getElementById('m-org').value.trim(),
+      email: document.getElementById('m-email').value.trim(),
+      phone: document.getElementById('m-phone').value.trim(),
+      program: modalProgramSelect.value,
+      message: document.getElementById('m-message').value.trim(),
+      createdAt: serverTimestamp(),
+      status: 'new'
+    };
+
+    try {
+      await addDoc(collection(db, 'consultancyTrainingLeads'), payload);
+      modalStatus.textContent = "Sent — we'll be in touch within two working days.";
+      modalStatus.classList.add('ok');
+      modalForm.reset();
+      setTimeout(closeRegisterModal, 1400);
+    } catch (err) {
+      console.error('Error saving training registration:', err);
+      modalStatus.textContent = "Something went wrong sending this — please try again or email us directly.";
+      modalStatus.classList.add('err');
+    } finally {
+      modalSubmitBtn.disabled = false;
+      modalSubmitBtn.textContent = originalLabel;
+    }
   });
 
   // ---------------- Form submission ----------------
