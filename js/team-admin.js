@@ -105,6 +105,31 @@ teamSubsidiaryLogoFile?.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
+// ── Leadership message toggle: show/hide quote field ────
+const teamShowLeadership = document.getElementById("teamShowLeadership");
+const teamLeadershipQuoteWrap = document.getElementById("teamLeadershipQuoteWrap");
+teamShowLeadership?.addEventListener("change", () => {
+  teamLeadershipQuoteWrap.style.display = teamShowLeadership.checked ? "flex" : "none";
+});
+
+// ── Bio toolbar: wrap selected textarea text in <strong> tags ──
+document.querySelectorAll("[data-bold-target]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const ta = document.getElementById(btn.dataset.boldTarget);
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    if (start === end) return; // nothing selected
+    const before = ta.value.slice(0, start);
+    const selected = ta.value.slice(start, end);
+    const after = ta.value.slice(end);
+    ta.value = `${before}<strong>${selected}</strong>${after}`;
+    ta.focus();
+    ta.selectionStart = start;
+    ta.selectionEnd = end + "<strong></strong>".length;
+  });
+});
+
 let currentFilter = "all";
 let currentDocs = []; // [{id, data}]
 
@@ -126,6 +151,10 @@ function openModal(editData = null, editId = null) {
   teamSubsidiaryLogoPreviewWrap.style.display = "none";
   document.getElementById("teamSubsidiaryLogoProgress").style.display = "none";
   document.getElementById("teamSubsidiaryLogoProgressBar").style.width = "0%";
+  document.getElementById("teamShowLeadership").checked = false;
+  document.getElementById("teamLeadershipQuoteWrap").style.display = "none";
+  document.getElementById("teamLeadershipQuote").value = "";
+  document.getElementById("teamShowFeatured").checked = false;
 
   if (editData) {
     modalTitle.textContent = "Edit Team Member";
@@ -150,6 +179,10 @@ function openModal(editData = null, editId = null) {
     document.getElementById("teamLinkedin").value = editData.linkedin || "";
     document.getElementById("teamTwitter").value = editData.twitter || "";
     document.getElementById("teamPublishNow").checked = editData.status === "published";
+    document.getElementById("teamShowLeadership").checked = !!editData.showAsLeadershipMessage;
+    document.getElementById("teamLeadershipQuote").value = editData.leadershipQuote || "";
+    document.getElementById("teamLeadershipQuoteWrap").style.display = editData.showAsLeadershipMessage ? "flex" : "none";
+    document.getElementById("teamShowFeatured").checked = !!editData.showAsFeatured;
   } else {
     modalTitle.textContent = "Add Team Member";
     document.getElementById("teamPhoto").value = "";
@@ -206,6 +239,9 @@ form?.addEventListener("submit", async (e) => {
       linkedin: document.getElementById("teamLinkedin").value.trim(),
       twitter: document.getElementById("teamTwitter").value.trim(),
       status: publishNow ? "published" : "draft",
+      showAsLeadershipMessage: document.getElementById("teamShowLeadership").checked,
+      leadershipQuote: document.getElementById("teamLeadershipQuote").value.trim(),
+      showAsFeatured: document.getElementById("teamShowFeatured").checked,
     };
 
     statusEl.textContent = "Saving…";

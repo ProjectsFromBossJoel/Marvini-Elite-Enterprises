@@ -1950,19 +1950,94 @@ input, textarea, select { font-family: inherit; }
 .bio-readmore {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.6rem;
   margin-top: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--royal-blue);
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
-  transition: gap var(--duration) var(--ease);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--royal-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: color var(--duration) var(--ease);
 }
-.bio-readmore:hover { gap: 0.5rem; color: var(--emerald-light); }
-.bio-readmore svg { width: 14px; height: 14px; }
+.bio-readmore:hover { color: var(--emerald-light); }
+.bio-readmore svg {
+  width: 14px;
+  height: 14px;
+  padding: 7px;
+  box-sizing: content-box;
+  border-radius: 50%;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  stroke: currentColor;
+  flex-shrink: 0;
+  transition: all var(--duration) var(--ease-spring);
+}
+.bio-readmore:hover svg {
+  transform: translateX(4px);
+  background: var(--grad-blue-green);
+  border-color: transparent;
+  stroke: #fff;
+}
+.bio-readmore:focus-visible {
+  outline: 2px solid var(--royal-blue);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.bio-readmore-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--royal-blue);
+  transition: color var(--duration) var(--ease);
+}
+.bio-readmore-live:hover { color: var(--emerald-light); }
+.bio-readmore-live:hover .bio-readmore-arrow {
+  transform: translateX(4px);
+  background: var(--grad-blue-green);
+  border-color: transparent;
+}
+.bio-readmore-live:hover .bio-readmore-arrow svg { stroke: #fff; }
+.bio-readmore-live:focus-visible {
+  outline: 2px solid var(--royal-blue);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+.bio-readmore-text {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.bio-readmore-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  transition: all var(--duration) var(--ease-spring);
+}
+.bio-readmore-arrow svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  transition: stroke var(--duration) var(--ease);
+}
 
 /* Bio Modal */
 .bio-modal {

@@ -52,6 +52,15 @@
     overflow:hidden; margin-top:8px; display:none;
   }
   .modal-upload-progress-bar { height:100%; width:0%; background: var(--grad-blue-green); transition: width .2s ease; }
+  .bio-toolbar { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .bio-toolbar-btn {
+    width:28px; height:28px; border-radius:6px; border:1px solid var(--border);
+    background: var(--bg-secondary); color: var(--text-primary); font-size:.8rem;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .bio-toolbar-btn:hover { background: var(--bg-card-hover); border-color: var(--royal-blue); }
+  .bio-toolbar-hint { font-size:.75rem; color: var(--text-muted); }
 </style>
 
 </head>
@@ -226,6 +235,10 @@
       </div>
       <div class="form-field">
         <label for="teamFullBio">Full Bio (modal / Read More)</label>
+        <div class="bio-toolbar">
+          <button type="button" class="bio-toolbar-btn" data-bold-target="teamFullBio" title="Bold selected text"><strong>B</strong></button>
+          <span class="bio-toolbar-hint">Select a name or phrase, then click B to bold it</span>
+        </div>
         <textarea id="teamFullBio" placeholder="Full biography shown when a visitor clicks Read More…" style="min-height:130px;"></textarea>
       </div>
       <div class="form-row2-modal">
@@ -241,6 +254,18 @@
       <label class="form-check">
         <input type="checkbox" id="teamPublishNow" checked />
         Published (uncheck to hide from public site)
+      </label>
+      <label class="form-check">
+        <input type="checkbox" id="teamShowLeadership" />
+        Feature as Leadership Message (About section quote card)
+      </label>
+      <div class="form-field" id="teamLeadershipQuoteWrap" style="display:none;">
+        <label for="teamLeadershipQuote">Leadership Message / Quote</label>
+        <textarea id="teamLeadershipQuote" style="min-height:120px;" placeholder="The quote shown in the About section's leadership card…"></textarea>
+      </div>
+      <label class="form-check">
+        <input type="checkbox" id="teamShowFeatured" />
+        Feature in Team section (large horizontal profile card, top of Team)
       </label>
       <button type="submit" class="btn btn-primary" id="teamSubmitBtn" style="width:100%; justify-content:center;">
         Save Team Member

@@ -377,16 +377,16 @@
           <p class="section-subtitle">A bold enterprise group building African-led solutions that transform industries and empower communities.</p>
         </div>
 
-        <!-- CEO Message -->
+        <!-- CEO Message (live from Firestore "team" collection — see js/team-public.js) -->
         <div class="ceo-card reveal-fade-up" id="ceo">
           <div class="ceo-card-inner">
             <div class="ceo-avatar" aria-hidden="true">
-              <img src="img/ceo_mee121.png" alt="Jacob T. Akunor - CEO, Marvini Elite Enterprises" class="ceo-photo" />
+              <img id="ceoQuotePhoto" src="img/ceo_mee121.png" alt="Jacob T. Akunor - CEO, Marvini Elite Enterprises" class="ceo-photo" />
               <div class="ceo-ring"></div>
             </div>
             <div class="ceo-content">
               <div class="quote-mark" aria-hidden="true">"</div>
-              <blockquote class="ceo-quote">
+              <blockquote class="ceo-quote" id="ceoQuoteText">
                 Marvini Elite Enterprises is driven by a bold vision to build African-led solutions that are innovative, sustainable, and globally competitive. Our mission is to transform industries by combining technology, creativity, and disciplined execution. Every business we create is designed to solve real challenges, empower communities, and deliver long-term value.
                 <br />
                 Our commitment is excellence. Our passion is innovation. Our purpose is impact.
@@ -394,8 +394,8 @@
                 Together, we are building a smarter, stronger, and more prosperous Africa.
               </blockquote>
               <div class="ceo-attribution">
-                <strong>Jacob T. Akunor</strong>
-                <span>Chief Executive Officer, Marvini Elite Enterprises</span>
+                <strong id="ceoQuoteName">Jacob T. Akunor</strong>
+                <span id="ceoQuoteTitle">Chief Executive Officer, Marvini Elite Enterprises</span>
               </div>
             </div>
           </div>
@@ -903,6 +903,8 @@
         </div>
 
         
+        <!-- Featured Team Members (live from Firestore "team" collection where showAsFeatured == true — see js/team-public.js) -->
+        <div id="featuredTeamGrid">
         <!-- Featured Team Member -->
 <div class="featured-profile-card reveal-fade-up">
   <div class="featured-avatar-wrap">
@@ -973,6 +975,7 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
     </div>
   </div>
 </div>
+        </div><!-- /#featuredTeamGrid -->
 
 
         <div class="team-grid" id="teamGrid">
