@@ -211,6 +211,122 @@
       object-fit: contain;
       flex-shrink: 0;
     }
+
+    /* ── Floating Newsletter Widget ── */
+    .float-news-widget {
+      position: fixed;
+      top: 110px;
+      right: 24px;
+      z-index: 460;
+      max-width: 320px;
+      font-family: var(--font-body);
+    }
+    .float-news-collapsed {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid rgba(26,86,255,0.3);
+      border-radius: 999px;
+      padding: 11px 18px 11px 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(26,86,255,0.22);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .float-news-collapsed::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: 999px;
+      padding: 1.5px;
+      background: linear-gradient(120deg, #1A56FF, #059669, #F59E0B, #1A56FF);
+      background-size: 300% 300%;
+      animation: floatNewsBorderFlow 6s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    @keyframes floatNewsBorderFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+    .float-news-collapsed:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(26,86,255,0.32);
+    }
+    .float-news-icon {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--grad-blue-green);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; flex-shrink: 0;
+    }
+    .float-news-icon svg { width: 15px; height: 15px; }
+    .float-news-typing {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      border-right: 2px solid rgba(26,86,255,0.6);
+      padding-right: 3px;
+    }
+    
+    .float-news-expanded {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid rgba(26,86,255,0.3);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      margin-top: 10px;
+      animation: floatNewsPop 0.3s ease;
+    }
+    @keyframes floatNewsPop {
+      from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .float-news-widget.open .float-news-collapsed { display: none; }
+    .float-news-widget.open .float-news-expanded { display: flex; }
+    .float-news-title {
+      font-family: var(--font-heading);
+      font-weight: 700; font-size: 1rem;
+      color: var(--text-primary); margin: 0;
+    }
+    .float-news-sub { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 4px; }
+    .float-news-inputrow { display: flex; gap: 8px; }
+    .float-news-input {
+      flex: 1;
+      background: var(--bg-secondary);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+    .float-news-input:focus { outline: none; border-color: var(--royal-blue); }
+    .float-news-submit {
+      width: 38px; height: 38px;
+      border-radius: 50%; flex-shrink: 0;
+      background: var(--grad-blue-green);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    .float-news-submit svg { width: 16px; height: 16px; }
+    .float-news-submit:hover { transform: scale(1.08); }
+    .float-news-status { font-size: 0.78rem; min-height: 1em; }
+    .float-news-status.ok { color: var(--emerald-light); }
+    .float-news-status.err { color: #F87171; }
+
+    @media (max-width: 640px) {
+      .float-news-widget { top: 88px; right: 12px; max-width: calc(100vw - 24px); }
+    }
   </style>
 
 
@@ -1712,6 +1828,30 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
 
 
   <!-- ═══════════════════════════════════════════════════ -->
+  <!-- FLOATING NEWSLETTER WIDGET -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="float-news-widget" id="floatNewsWidget">
+    <div class="float-news-collapsed" id="floatNewsCollapsed">
+      <span class="float-news-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+      </span>
+      <span class="float-news-typing" id="floatNewsTyping"></span>
+    </div>
+
+    <form class="float-news-expanded" id="floatNewsForm" novalidate aria-label="Subscribe to newsletter">
+      <p class="float-news-title">Stay in the loop</p>
+      <p class="float-news-sub">Get Marvini updates straight to your inbox.</p>
+      <div class="float-news-inputrow">
+        <input type="email" id="floatNewsEmail" class="float-news-input" placeholder="your@email.com" required aria-label="Email address" autocomplete="email" />
+        <button type="submit" class="float-news-submit" aria-label="Subscribe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="float-news-status" id="floatNewsStatus"></div>
+    </form>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
 <!-- AI CHATBOT WIDGET -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="chat-widget" id="chatWidget">
@@ -2302,6 +2442,82 @@ document.getElementById('bioModalClose')?.addEventListener('click', closeBioModa
 bioModal?.addEventListener('click', e => { if (e.target === bioModal) closeBioModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBioModal(); });
 
+
+// ── FLOATING NEWSLETTER WIDGET ──────────────────────
+(function () {
+  const widget = document.getElementById('floatNewsWidget');
+  if (!widget) return;
+
+  const collapsed = document.getElementById('floatNewsCollapsed');
+  const typingEl = document.getElementById('floatNewsTyping');
+  const form = document.getElementById('floatNewsForm');
+  const emailInput = document.getElementById('floatNewsEmail');
+  const statusEl = document.getElementById('floatNewsStatus');
+
+  // ── Typewriter cycling phrases ──
+  const phrases = [
+    '📬 Get Marvini updates...',
+    '🚀 Join our newsletter',
+    '✨ Never miss an update',
+    '🌍 Africa\'s future, in your inbox'
+  ];
+  let phraseIndex = 0, charIndex = 0, deleting = false;
+
+  function typeLoop() {
+    const current = phrases[phraseIndex];
+    if (!deleting) {
+      charIndex++;
+      typingEl.textContent = current.slice(0, charIndex);
+      if (charIndex === current.length) {
+        deleting = true;
+        setTimeout(typeLoop, 1800);
+        return;
+      }
+    } else {
+      charIndex--;
+      typingEl.textContent = current.slice(0, charIndex);
+      if (charIndex === 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }
+    }
+    setTimeout(typeLoop, deleting ? 30 : 55);
+  }
+  typeLoop();
+
+  collapsed.addEventListener('click', () => {
+    widget.classList.add('open');
+    setTimeout(() => emailInput.focus(), 150);
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusEl.textContent = '';
+    statusEl.className = 'float-news-status';
+    const email = emailInput.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      statusEl.textContent = 'Please enter a valid email.';
+      statusEl.classList.add('err');
+      return;
+    }
+    try {
+      const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+      await addDoc(collection(db, 'newsletter'), { email, createdAt: serverTimestamp() });
+      statusEl.textContent = "✅ You're subscribed!";
+      statusEl.classList.add('ok');
+      form.reset();
+      setTimeout(() => {
+        widget.classList.remove('open');
+        statusEl.textContent = '';
+      }, 2200);
+    } catch (err) {
+      console.error('Could not subscribe:', err);
+      statusEl.textContent = 'Something went wrong — try again.';
+      statusEl.classList.add('err');
+    }
+  });
+})();
 
 // ── CHAT WIDGET ──────────────────────────────────────
 const chatToggle = document.getElementById('chatToggle');
