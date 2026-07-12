@@ -175,9 +175,31 @@
   </div>
 </div>
 
+<!-- Newsletter Agent Widget -->
+<div class="nl-widget" id="nlWidget" style="display:none;">
+  <button class="nl-toggle" id="nlToggle" aria-label="Newsletter agent">
+    <img src="/img/marvini_ai.gif" alt="Newsletter Agent" class="nl-toggle-img" />
+    <span class="nl-toggle-dot" id="nlToggleDot"></span>
+  </button>
+  <div class="nl-window" id="nlWindow" aria-hidden="true">
+    <div class="nl-header">
+      <div class="nl-header-info">
+        <div class="nl-header-icon"><img src="/img/marvini_ai.png" alt="" style="width:20px;height:20px;object-fit:contain;" /></div>
+        <div>
+          <strong>Newsletter Agent</strong>
+          <span class="nl-status">Watching for new posts</span>
+        </div>
+      </div>
+      <button class="nl-minimize" id="nlMinimize" aria-label="Minimize">−</button>
+    </div>
+    <div class="nl-messages" id="nlMessages"></div>
+  </div>
+</div>
+
 <script src="../js/ui-modal.js"></script>
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
 <script type="module" src="../js/news-admin.js"></script>
+<script type="module" src="../js/newsletter-trigger-admin.js"></script>
 </body>
 </html>

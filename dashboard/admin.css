@@ -448,6 +448,7 @@ tr:last-child td{border-bottom:none;}
 }
 .nl-toggle:hover{transform:scale(1.08);}
 .nl-toggle svg{width:24px;height:24px;}
+.nl-toggle-img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
 @keyframes nlPulse{0%,100%{box-shadow:0 8px 24px rgba(26,86,255,0.35);}50%{box-shadow:0 8px 32px rgba(26,86,255,0.55);}}
 .nl-toggle-dot{
   position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;

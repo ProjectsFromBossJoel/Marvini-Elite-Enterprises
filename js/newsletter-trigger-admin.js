@@ -23,9 +23,11 @@ const win = document.getElementById("nlWindow");
 const messages = document.getElementById("nlMessages");
 const minimizeBtn = document.getElementById("nlMinimize");
 
+const DISMISSED_KEY = "nlWidgetDismissedNewsId";
+
 let latestNews = null;
 let lastSentAtMillis = 0;
-let dismissedNewsId = null;
+let dismissedNewsId = localStorage.getItem(DISMISSED_KEY) || null;
 let currentPromptNewsId = null;
 
 function millisFromTimestamp(ts) {
@@ -84,6 +86,8 @@ function showPrompt(newsItem) {
 async function handleSend(newsItem) {
   document.getElementById("nlSendBtn").disabled = true;
   document.getElementById("nlDismissBtn").disabled = true;
+  dismissedNewsId = newsItem.id;
+  localStorage.setItem(DISMISSED_KEY, newsItem.id);
   addMessage("Sending now…");
 
   try {
@@ -109,6 +113,7 @@ async function handleSend(newsItem) {
 
 function handleDismiss(newsItem) {
   dismissedNewsId = newsItem.id;
+  localStorage.setItem(DISMISSED_KEY, newsItem.id);
   addMessage("Okay, I won't send it. I'll ask again if another article is published.");
   toggleDot.style.display = "none";
 }
