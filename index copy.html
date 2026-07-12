@@ -140,6 +140,77 @@
     @media (max-width: 980px) {
       .nav-dropdown-menu { display: none; }
     }
+
+    /* Mobile Companies accordion */
+    .mobile-dropdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .mobile-link-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mobile-dropdown-toggle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-glass, rgba(255,255,255,0.06));
+      border: 1px solid var(--border, rgba(255,255,255,0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, background 0.2s ease;
+      flex-shrink: 0;
+    }
+    .mobile-dropdown-toggle svg {
+      width: 14px;
+      height: 14px;
+      color: var(--text-secondary, #94A3B8);
+      transition: transform 0.3s ease;
+    }
+    .mobile-dropdown-toggle.open svg {
+      transform: rotate(180deg);
+    }
+    .mobile-dropdown-submenu {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      width: 100%;
+      transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.35s ease;
+      margin-top: 0;
+    }
+    .mobile-dropdown-submenu.open {
+      max-height: 400px;
+      opacity: 1;
+      margin-top: 0.75rem;
+    }
+    .mobile-sublink {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary, #94A3B8);
+      padding: 0.5rem 1rem;
+      transition: color 0.2s ease;
+    }
+    .mobile-sublink:hover {
+      color: var(--text-primary, #F1F5F9);
+    }
+    .mobile-sublink img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
   </style>
 
 
@@ -223,7 +294,21 @@
     <ul class="mobile-links" role="list">
       <li><a href="#home" class="mobile-link">Home</a></li>
       <li><a href="#about" class="mobile-link">About</a></li>
-      <li><a href="#companies" class="mobile-link">Companies</a></li>
+      <li class="mobile-dropdown-item" id="mobileCompaniesItem">
+        <div class="mobile-link-row">
+          <a href="#companies" class="mobile-link" id="mobileCompaniesLink">Companies</a>
+          <button class="mobile-dropdown-toggle" id="mobileCompaniesToggle" aria-label="Toggle companies submenu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="mobile-dropdown-submenu" id="mobileCompaniesSubmenu">
+          <a href="https://marvini-smart-driving-school-solution.web.app/" class="mobile-sublink"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+          <a href="https://marvini-digital-food-chain.web.app/" class="mobile-sublink"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+          <a href="index.html#companies" class="mobile-sublink"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
+          <a href="index.html#companies" class="mobile-sublink"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+          <a href="consultancy-training.html" class="mobile-sublink"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
+        </div>
+      </li>
       <li><a href="consultancy-training.html" class="mobile-link">M-Consultancy & Training</a></li>
       <li><a href="#news" class="mobile-link">News</a></li>
       <li><a href="#partners" class="mobile-link">Partners</a></li>
@@ -1712,15 +1797,33 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
       mobileMenu.setAttribute('aria-hidden', !isOpen);
       document.body.classList.toggle('no-scroll', isOpen);
     });
-    document.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('no-scroll');
-      });
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+
+    document.querySelectorAll('.mobile-link:not(#mobileCompaniesLink), .mobile-sublink').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
     });
+
+    // ── MOBILE COMPANIES DROPDOWN ───────────────────────
+    const mobileCompaniesToggle = document.getElementById('mobileCompaniesToggle');
+    const mobileCompaniesSubmenu = document.getElementById('mobileCompaniesSubmenu');
+    const mobileCompaniesLink = document.getElementById('mobileCompaniesLink');
+
+    function toggleMobileCompanies(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = mobileCompaniesSubmenu.classList.toggle('open');
+      mobileCompaniesToggle.classList.toggle('open', isOpen);
+      mobileCompaniesToggle.setAttribute('aria-expanded', isOpen);
+    }
+
+    mobileCompaniesToggle?.addEventListener('click', toggleMobileCompanies);
+    mobileCompaniesLink?.addEventListener('click', toggleMobileCompanies);
 
     // ── ACTIVE NAV ON SCROLL ────────────────────────────
     const sections = document.querySelectorAll('section[id]');
