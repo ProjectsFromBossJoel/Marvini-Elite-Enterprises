@@ -1796,19 +1796,35 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
       const submitBtn = document.getElementById('contactSubmit');
       const btnText = submitBtn?.querySelector('.btn-text');
       const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+      const formErrorEl = document.getElementById('formError');
       document.getElementById('formSuccess').style.display = 'none';
-      document.getElementById('formError').style.display   = 'none';
+      formErrorEl.style.display = 'none';
+
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      const subject = document.getElementById('contactSubject').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!name || !email || !subject || !message) {
+        formErrorEl.textContent = '❌ Please fill in all required fields.';
+        formErrorEl.style.display = 'block';
+        return;
+      }
+      if (!emailPattern.test(email)) {
+        formErrorEl.textContent = '⚠️ Please enter a valid email address.';
+        formErrorEl.style.display = 'block';
+        document.getElementById('contactEmail').focus();
+        return;
+      }
+
       if (submitBtn) submitBtn.disabled = true;
       if (btnText) btnText.style.display = 'none';
       if (btnSpinner) btnSpinner.style.display = 'inline-block';
 
       try {
         const { db, collection, addDoc, doc, getDoc, serverTimestamp } = await import('./js/firebase-config.js');
-        const name = document.getElementById('contactName').value;
-        const email = document.getElementById('contactEmail').value;
-        const phone = document.getElementById('contactPhone').value;
-        const subject = document.getElementById('contactSubject').value;
-        const message = document.getElementById('contactMessage').value;
 
         await addDoc(collection(db, 'messages'), {
           name, email, phone, subject, message,
@@ -1840,7 +1856,8 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
         setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
       } catch (err) {
         console.error('Could not send message:', err);
-        document.getElementById('formError').style.display = 'block';
+        formErrorEl.textContent = '❌ Something went wrong. Please try again or email us directly.';
+        formErrorEl.style.display = 'block';
       } finally {
         if (submitBtn) submitBtn.disabled = false;
         if (btnText) btnText.style.display = 'inline';
