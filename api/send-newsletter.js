@@ -15,6 +15,7 @@
 
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
 // ── Init Firebase Admin (once per cold start) ──
 if (!getApps().length) {
@@ -29,9 +30,42 @@ if (!getApps().length) {
 const db = getFirestore();
 
 export default async function handler(req, res) {
-  // ── Simple shared-secret protection (swap for Vercel Cron's built-in auth later) ──
+  // ── CORS: allow the admin dashboard origin to call this endpoint ──
+  const allowedOrigins = [
+    'https://marvini-elite-enterprises.web.app',
+    'http://127.0.0.1:5500',
+    'http://localhost:5500',
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-newsletter-secret');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // ── Authorized via EITHER the static secret (for Vercel Cron) OR a logged-in
+  //    admin's Firebase ID token (for the dashboard "Send Newsletter?" prompt) ──
   const providedSecret = req.query.secret || req.headers['x-newsletter-secret'];
-  if (providedSecret !== process.env.NEWSLETTER_TRIGGER_SECRET) {
+  const authHeader = req.headers.authorization || '';
+  const bearerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+
+  let authorized = providedSecret === process.env.NEWSLETTER_TRIGGER_SECRET;
+
+  if (!authorized && bearerToken) {
+    try {
+      await getAuth().verifyIdToken(bearerToken);
+      authorized = true;
+    } catch (err) {
+      console.error('ID token verification failed:', err.message);
+    }
+  }
+
+  if (!authorized) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

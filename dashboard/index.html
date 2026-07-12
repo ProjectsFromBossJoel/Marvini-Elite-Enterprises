@@ -266,9 +266,31 @@
   </main>
 </div>
 
+<!-- Newsletter Agent Widget -->
+<div class="nl-widget" id="nlWidget" style="display:none;">
+  <button class="nl-toggle" id="nlToggle" aria-label="Newsletter agent">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    <span class="nl-toggle-dot" id="nlToggleDot"></span>
+  </button>
+  <div class="nl-window" id="nlWindow" aria-hidden="true">
+    <div class="nl-header">
+      <div class="nl-header-info">
+        <div class="nl-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div>
+          <strong>Newsletter Agent</strong>
+          <span class="nl-status">Watching for new posts</span>
+        </div>
+      </div>
+      <button class="nl-minimize" id="nlMinimize" aria-label="Minimize">−</button>
+    </div>
+    <div class="nl-messages" id="nlMessages"></div>
+  </div>
+</div>
+
 <script type="module" src="/js/auth-guard.js"></script>
 <script src="/dashboard/admin.js"></script>
 <script type="module" src="/js/dashboard-admin.js"></script>
 <script type="module" src="/js/analytics-admin.js"></script>
+<script type="module" src="/js/newsletter-trigger-admin.js"></script>
 </body>
 </html>
