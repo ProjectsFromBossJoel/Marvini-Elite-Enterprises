@@ -29,8 +29,8 @@ import { uploadToCloudinary } from "./cloudinary.js";
 const ROLE_LABELS = { admin: "Admin", hr: "HR", it_support: "IT Support" };
 
 const DEFAULT_PAGES = {
-  admin: ["dashboard","companies","team","news","publications","gallery","partners","careers","messages","analytics","settings","users"],
-  hr: ["dashboard", "team", "careers", "messages"],
+  admin: ["dashboard","companies","team","news","publications","gallery","partners","careers","messages","newsletter","analytics","settings","users"],
+  hr: ["dashboard", "team", "careers", "messages", "newsletter"],
   it_support: ["dashboard", "companies", "news", "publications", "gallery", "partners", "analytics", "settings"],
 };
 

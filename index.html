@@ -1578,6 +1578,9 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
             <div class="newsletter-success" id="newsletterSuccess" role="alert" aria-live="polite" style="display:none;">
               ✅ You're subscribed!
             </div>
+            <div class="newsletter-error" id="newsletterError" role="alert" aria-live="polite" style="display:none; color:#F87171; font-size:0.85rem; margin-top:0.5rem;">
+              ⚠️ Please enter a valid email address.
+            </div>
           </div>
 
         </div>
@@ -1850,16 +1853,31 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
       e.preventDefault();
       const form = e.target;
       const emailInput = form.querySelector('.newsletter-input');
+      const email = (emailInput?.value || '').trim();
+      const successEl = document.getElementById('newsletterSuccess');
+      const errorEl = document.getElementById('newsletterError');
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        errorEl.style.display = 'block';
+        emailInput?.focus();
+        return;
+      }
+
       try {
         const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
         await addDoc(collection(db, 'newsletter'), {
-          email: emailInput?.value || '',
+          email,
           createdAt: serverTimestamp(),
         });
-        document.getElementById('newsletterSuccess').style.display = 'block';
+        successEl.style.display = 'block';
         form.reset();
       } catch (err) {
         console.error('Could not subscribe:', err);
+        errorEl.textContent = '⚠️ Something went wrong — please try again.';
+        errorEl.style.display = 'block';
       }
     });
 

@@ -1,18 +1,31 @@
-<!-- news.html -->
-
+<!-- dashboard/newsletter.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>News & Updates | Marvini Admin</title>
+<title>Email Subscriptions | Marvini Admin</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
 
+<style>
+  .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
+  #subsTableBody td:last-child { white-space: nowrap; }
+  .row-actions .btn-icon {
+    width: 30px; height: 30px; padding: 0;
+    display:inline-flex; align-items:center; justify-content:center;
+    border-radius: 7px; border: 1px solid var(--border,#e2e8f0);
+    background: #fff; color: var(--text-muted,#64748b); cursor:pointer;
+    transition: all .15s ease;
+  }
+  .row-actions .btn-icon:hover { border-color:#dc2626; color:#dc2626; background: rgba(220,38,38,0.06); }
+  .row-actions .btn-icon svg { width: 15px; height: 15px; }
+</style>
 </head>
+
 <body>
 
 <div class="shell">
@@ -26,24 +39,24 @@
       </div>
     </div>
     <div class="nav-section-label">Overview</div>
-    <a class="nav-item" href="index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span>Dashboard</a>
+    <a class="nav-item" href="/dashboard/index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span>Dashboard</a>
     <div class="nav-section-label">Site Content</div>
     <a class="nav-item" href="/dashboard/companies.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Companies</a>
     <a class="nav-item" href="/dashboard/team.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>Team</a>
-    <a class="nav-item active" href="/dashboard/news.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg></span>News & Updates</a>
+    <a class="nav-item" href="/dashboard/news.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg></span>News & Updates</a>
     <a class="nav-item" href="/dashboard/publications.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>Publications</a>
     <a class="nav-item" href="/dashboard/gallery.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>Gallery</a>
     <a class="nav-item" href="/dashboard/partners.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></svg></span>Partners</a>
     <div class="nav-section-label">Engagement</div>
     <a class="nav-item" href="/dashboard/careers.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>Careers & Volunteering<span class="nav-badge">12</span></a>
     <a class="nav-item" href="/dashboard/messages.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></span>Contact Messages<span class="nav-badge" id="messagesNavBadge">0</span></a>
-    <a class="nav-item" href="/dashboard/newsletter.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Email Subscriptions<span class="nav-badge" id="newsletterNavBadge">0</span></a>
+    <a class="nav-item active" href="/dashboard/newsletter.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Email Subscriptions<span class="nav-badge" id="newsletterNavBadge">0</span></a>
     <a class="nav-item" href="/dashboard/analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Site Analytics</a>
     <div class="nav-section-label">Subsidiaries</div>
     <a class="nav-item" href="/dashboard/m-consultancy_and_training.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></span>M-Consultancy & Training<span class="nav-badge" id="consultancyNavBadge">0</span></a>
     <div class="nav-section-label">System</div>
     <a class="nav-item" href="/dashboard/settings.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Settings</a>
-  <a class="nav-item" href="/dashboard/users.html" data-page="users"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Users</a>
+    <a class="nav-item" href="/dashboard/users.html" data-page="users"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Users</a>
   </aside>
 
   <main class="main">
@@ -55,13 +68,6 @@
       </div>
       <div class="topbar-actions">
         <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">☀</button>
-        <button class="icon-btn" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
-          <span class="icon-dot"></span>
-        </button>
-        <button class="icon-btn" aria-label="Messages">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
-        </button>
         <button class="icon-btn" id="signOutBtn" aria-label="Sign out" title="Sign out">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
         </button>
@@ -69,7 +75,7 @@
           <img src="/img/avatar727.png" alt="Admin" onerror="this.src='https://ui-avatars.com/api/?name=Admin+User&background=1a56ff&color=fff'"/>
           <div class="who">
             <strong>User</strong>
-            <span>Role</span>
+            <span>Site Administrator</span>
           </div>
         </div>
       </div>
@@ -77,68 +83,55 @@
 
     <div class="page-head">
       <div>
-        <p class="page-head-eyebrow">Site Content</p>
-        <h1>News & Updates</h1>
-        <p>Posts shown in the public site's News & Announcements section.</p>
+        <p class="page-head-eyebrow">Engagement</p>
+        <h1>Email Subscriptions</h1>
+        <p>Everyone who subscribed to the Marvini newsletter from the public site's footer form.</p>
       </div>
-      <div class="page-head-actions">
-      <button class="btn btn-primary" type="button" id="openNewsBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        New Post
-      </button>
-    </div>
     </div>
 
-    <div class="card-grid" id="newsAdminGrid"></div>
-    <div class="empty-state" id="newsEmptyState" style="display:none;">
-      <div class="es-icon">📰</div>
-      <h4>No posts yet</h4>
-      <p>Click <strong>New Post</strong> to publish your first update.</p>
+    <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
+      <div class="stat-card"><div><p class="stat-label">Total Subscribers</p><p class="stat-value" id="statTotalSubs">0</p></div></div>
+      <div class="stat-card"><div><p class="stat-label">New (Last 7 Days)</p><p class="stat-value" id="statRecentSubs">0</p></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="panel-eyebrow">Subscribers</p>
+          <h2 class="panel-title" style="font-size:1.15rem;">All Subscriptions</h2>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Email</th><th>Subscribed</th><th></th></tr></thead>
+        <tbody id="subsTableBody">
+          <tr><td colspan="3" style="text-align:center; padding:2rem; color:var(--text-muted);">Loading subscribers…</td></tr>
+        </tbody>
+      </table>
+      <div class="empty-state" id="subsEmptyState" style="display:none;">
+        No subscribers yet. New signups from the public site's newsletter form will show up here.
+      </div>
     </div>
 
   </main>
 </div>
 
-<!-- News Post Modal -->
-<div class="modal-overlay" id="newsModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3 id="newsModalTitle">New Post</h3>
-      <button class="modal-close" id="closeNewsBtn" aria-label="Close">✕</button>
+<!-- Reusable Confirm Modal -->
+<div class="modal-overlay" id="confirmModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index:2000; opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease; padding:1.5rem;">
+  <div class="modal-card" style="background:var(--bg-card,#fff); border-radius:16px; padding:2rem; width:100%; max-width:380px; text-align:center;">
+    <h3 id="confirmModalTitle" style="margin:0 0 .5rem;">Remove subscriber?</h3>
+    <p id="confirmModalMessage" style="font-size:.9rem; color:var(--text-muted,#64748b); margin:0 0 1.5rem;">This action can't be undone.</p>
+    <div style="display:flex; gap:.6rem; justify-content:center;">
+      <button type="button" id="confirmCancelBtn" style="flex:1; padding:10px 16px; border-radius:8px; border:1px solid var(--border,#e2e8f0); background:#fff; cursor:pointer;">Cancel</button>
+      <button type="button" id="confirmOkBtn" style="flex:1; padding:10px 16px; border-radius:8px; border:none; background:#dc2626; color:#fff; cursor:pointer;">Remove</button>
     </div>
-    <form id="newsForm">
-      <input type="hidden" id="newsDocId" value="" />
-      <div class="form-field">
-        <label for="newsTitle">Title *</label>
-        <input type="text" id="newsTitle" placeholder="e.g. M-Farms Pilots Sustainable Farming Program" required />
-      </div>
-      <div class="form-field">
-        <label for="newsTag">Category Tag *</label>
-        <input type="text" id="newsTag" placeholder="e.g. Group Update, Technology, Agriculture" required />
-      </div>
-      <div class="form-field">
-        <label for="newsExcerpt">Excerpt *</label>
-        <textarea id="newsExcerpt" placeholder="One or two sentences summarizing this update…" required></textarea>
-      </div>
-      <div class="form-field">
-        <label for="newsEmoji">Card Emoji</label>
-        <input type="text" id="newsEmoji" placeholder="📰" maxlength="4" />
-      </div>
-      <label class="form-check">
-        <input type="checkbox" id="newsPublishNow" checked />
-        Publish immediately (uncheck to save as draft)
-      </label>
-      <button type="submit" class="btn btn-primary" id="newsSubmitBtn" style="width:100%; justify-content:center;">
-        Save Post
-      </button>
-      <div id="newsStatus"></div>
-    </form>
   </div>
 </div>
 
-<script src="../js/ui-modal.js"></script>
+<script>
+  document.getElementById('confirmModal')?.classList.add(''); // no-op, styles applied via inline .open toggle below
+</script>
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
-<script type="module" src="../js/news-admin.js"></script>
+<script type="module" src="../js/newsletter-admin.js"></script>
 </body>
 </html>
