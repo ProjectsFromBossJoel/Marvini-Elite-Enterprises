@@ -234,6 +234,20 @@
       transition: all 0.3s ease;
       position: relative;
     }
+    .float-news-collapsed::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(26,86,255,0.22) 0%, transparent 70%);
+      z-index: -1;
+      animation: floatNewsPulseRing 2.4s ease-in-out infinite;
+    }
+    @keyframes floatNewsPulseRing {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 0; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
     .float-news-collapsed::before {
       content: '';
       position: absolute;
@@ -273,6 +287,17 @@
       display: inline-block;
       border-right: 2px solid rgba(26,86,255,0.6);
       padding-right: 3px;
+    }
+    .float-news-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--royal-blue, #1A56FF);
+      flex-shrink: 0;
+      animation: floatNewsChevronBounce 1.6s ease-in-out infinite;
+    }
+    @keyframes floatNewsChevronBounce {
+      0%, 100% { transform: translateX(0); opacity: 0.6; }
+      50%      { transform: translateX(3px); opacity: 1; }
     }
     
     .float-news-expanded {
@@ -323,6 +348,56 @@
     .float-news-status { font-size: 0.78rem; min-height: 1em; }
     .float-news-status.ok { color: var(--emerald-light); }
     .float-news-status.err { color: #F87171; }
+
+    .float-news-hint {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--ink, #14213D);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.9);
+      animation: floatNewsHintPop 0.4s ease forwards, floatNewsHintFade 6s ease forwards;
+      animation-delay: 0.6s, 5s;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .float-news-hint::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      right: 20px;
+      width: 10px;
+      height: 10px;
+      background: var(--ink, #14213D);
+      transform: rotate(45deg);
+    }
+    .float-news-hint svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      animation: floatNewsHintPoint 1.2s ease-in-out infinite;
+    }
+    @keyframes floatNewsHintPop {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes floatNewsHintFade {
+      to { opacity: 0; transform: translateY(-4px) scale(0.95); }
+    }
+    @keyframes floatNewsHintPoint {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-3px); }
+    }
+    .float-news-widget.open .float-news-hint { display: none; }
 
     @media (max-width: 640px) {
       .float-news-widget { top: 88px; right: 12px; max-width: calc(100vw - 24px); }
@@ -1831,11 +1906,17 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
   <!-- FLOATING NEWSLETTER WIDGET -->
   <!-- ═══════════════════════════════════════════════════ -->
   <div class="float-news-widget" id="floatNewsWidget">
-    <div class="float-news-collapsed" id="floatNewsCollapsed">
+    <div class="float-news-collapsed" id="floatNewsCollapsed" role="button" tabindex="0" title="Click to subscribe to our newsletter" aria-label="Click to subscribe to our newsletter">
       <span class="float-news-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
       </span>
       <span class="float-news-typing" id="floatNewsTyping"></span>
+      <svg class="float-news-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </div>
+
+    <div class="float-news-hint" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      Click here to subscribe
     </div>
 
     <form class="float-news-expanded" id="floatNewsForm" novalidate aria-label="Subscribe to newsletter">
@@ -2485,9 +2566,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBioModa
   }
   typeLoop();
 
-  collapsed.addEventListener('click', () => {
+  function openWidget() {
     widget.classList.add('open');
     setTimeout(() => emailInput.focus(), 150);
+  }
+  collapsed.addEventListener('click', openWidget);
+  collapsed.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openWidget();
+    }
   });
 
   form.addEventListener('submit', async (e) => {
