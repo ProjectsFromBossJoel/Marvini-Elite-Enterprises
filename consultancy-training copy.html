@@ -160,6 +160,72 @@
     border-color: var(--gold-dark);
   }
 
+  /* ---------- Mobile hamburger ---------- */
+  .nav-hamburger{
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 3px;
+    background: transparent;
+    border: 1px solid var(--line);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  @media (max-width: 979px){
+    .nav-hamburger{ display: flex; }
+  }
+  .nav-hamburger span{
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 99px;
+    transition: all .25s ease;
+  }
+  .nav-hamburger.open span:nth-child(1){ transform: rotate(45deg) translate(4px, 4px); }
+  .nav-hamburger.open span:nth-child(2){ opacity: 0; }
+  .nav-hamburger.open span:nth-child(3){ transform: rotate(-45deg) translate(4px, -4px); }
+
+  .mobile-menu{
+    position: fixed;
+    inset: 0;
+    background: var(--parchment);
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform .35s ease;
+  }
+  .mobile-menu.open{ transform: translateX(0); }
+  .mobile-links{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-link{
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: color .2s ease;
+  }
+  .mobile-link:hover{ color: var(--rust); }
+
+  @media (min-width: 980px){
+    .mobile-menu{ display: none; }
+  }
+
   /* ---------- Hero ---------- */
   .hero{
     position: relative;
@@ -823,11 +889,23 @@
     <ul class="site-nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#programs">Programs</a></li>
-      <li><a href="#contact">Request / Register</a></li>
+      <li><a href="#contact">Request/Register</a></li>
     </ul>
     <a class="nav-cta" href="#contact">Get in touch</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
+  <ul class="mobile-links" role="list">
+    <li><a href="index.html" class="mobile-link">&larr; Marvini Elite Enterprises</a></li>
+    <li><a href="#services" class="mobile-link">Services</a></li>
+    <li><a href="#programs" class="mobile-link">Programs</a></li>
+    <li><a href="#contact" class="mobile-link">Request/Register</a></li>
+  </ul>
+</div>
 
 <header class="hero">
   <div class="wrap">
@@ -1145,6 +1223,26 @@
   // Marvini site, so writes land in the same project/collections.
   // ---------------------------------------------------------------
   import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "./js/firebase-config.js";
+
+  // ---------------- Mobile menu ----------------
+  const hamburger = document.getElementById('navHamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger?.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  });
 
   // ---------------- Intent toggle ----------------
   const tabConsult = document.getElementById('tab-consultation');
