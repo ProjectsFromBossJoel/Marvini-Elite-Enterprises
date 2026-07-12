@@ -100,6 +100,8 @@ async function handleSend(newsItem) {
 
     if (data.success) {
       addMessage(`✅ Sent to ${data.sentCount ?? 0} subscriber(s).`);
+      addMessage("My task here is done — I'll step back now, but I'm still quietly watching for the next new post.");
+      scheduleVanish();
     } else {
       addMessage(`⚠️ ${escapeHtml(data.error || "Could not send newsletter.")}`);
     }
@@ -109,6 +111,15 @@ async function handleSend(newsItem) {
   }
 
   toggleDot.style.display = "none";
+}
+
+function scheduleVanish() {
+  setTimeout(() => {
+    closeWidget();
+    setTimeout(() => {
+      widget.style.display = "none";
+    }, 300); // let the close transition finish before fully hiding
+  }, 3500);
 }
 
 function handleDismiss(newsItem) {

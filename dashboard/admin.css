@@ -440,9 +440,9 @@ tr:last-child td{border-bottom:none;}
 .nl-widget{position:fixed;bottom:24px;right:24px;z-index:1000;font-family:var(--font-body);}
 .nl-toggle{
   width:56px;height:56px;border-radius:50%;
-  background:var(--grad-blue-green);color:#fff;border:none;
+  background:transparent;color:#fff;border:none;
   display:flex;align-items:center;justify-content:center;position:relative;
-  box-shadow:0 8px 24px rgba(26,86,255,0.35);
+  box-shadow:0 8px 24px rgba(26,86,255,0.25);
   animation:nlPulse 2.4s ease-in-out infinite;
   transition:transform .2s ease;
 }
