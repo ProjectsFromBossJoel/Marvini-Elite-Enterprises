@@ -439,23 +439,22 @@ tr:last-child td{border-bottom:none;}
 /* ── Newsletter Agent Widget ─────────────────────── */
 .nl-widget{position:fixed;bottom:24px;right:24px;z-index:1000;font-family:var(--font-body);}
 .nl-toggle{
-  width:56px;height:56px;border-radius:50%;
+  width:88px;height:88px;border-radius:50%;
   background:transparent;color:#fff;border:none;
   display:flex;align-items:center;justify-content:center;position:relative;
-  box-shadow:0 8px 24px rgba(26,86,255,0.25);
-  animation:nlPulse 2.4s ease-in-out infinite;
+  box-shadow:none;
   transition:transform .2s ease;
 }
-.nl-toggle:hover{transform:scale(1.08);}
+.nl-toggle:hover{transform:scale(1.12);}
 .nl-toggle svg{width:24px;height:24px;}
-.nl-toggle-img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
-@keyframes nlPulse{0%,100%{box-shadow:0 8px 24px rgba(26,86,255,0.35);}50%{box-shadow:0 8px 32px rgba(26,86,255,0.55);}}
+.nl-toggle-img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(26,86,255,0.35));}
+@keyframes nlPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
 .nl-toggle-dot{
-  position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;
+  position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;
   background:var(--red);border:2px solid var(--bg-card);display:none;
 }
 .nl-window{
-  position:absolute;bottom:70px;right:0;width:340px;max-width:calc(100vw - 32px);
+  position:absolute;bottom:100px;right:0;width:340px;max-width:calc(100vw - 32px);
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);
   box-shadow:var(--shadow-lg);overflow:hidden;
   opacity:0;visibility:hidden;transform:translateY(16px) scale(0.97);

@@ -119,14 +119,15 @@ function scheduleVanish() {
     setTimeout(() => {
       widget.style.display = "none";
     }, 300); // let the close transition finish before fully hiding
-  }, 3500);
+  }, 5500);
 }
 
 function handleDismiss(newsItem) {
   dismissedNewsId = newsItem.id;
   localStorage.setItem(DISMISSED_KEY, newsItem.id);
-  addMessage("Okay, I won't send it. I'll ask again if another article is published.");
+  addMessage("Okay, I won't send it. I'll step back now, but I'm still quietly watching for the next new post.");
   toggleDot.style.display = "none";
+  scheduleVanish();
 }
 
 function evaluate() {
