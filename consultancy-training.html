@@ -178,6 +178,9 @@
   @media (max-width: 979px){
     .nav-hamburger{ display: flex; }
   }
+  @media (max-width: 640px){
+    .nav-cta{ display: none; }
+  }
   .nav-hamburger span{
     display: block;
     width: 20px;
@@ -222,8 +225,21 @@
   }
   .mobile-link:hover{ color: var(--rust); }
 
+  .mobile-menu-cta{
+    margin-top: 24px;
+    font-size: 14px;
+    padding: 14px 30px;
+  }
+
   @media (min-width: 980px){
     .mobile-menu{ display: none; }
+  }
+
+  @media (max-width: 400px){
+    .wrap{ padding: 0 18px; }
+    .site-nav .wrap{ height: 68px; }
+    .brand-link{ font-size: 11px; }
+    .brand-link .arrow{ font-size: 14px; }
   }
 
   /* ---------- Hero ---------- */
@@ -905,6 +921,7 @@
     <li><a href="#programs" class="mobile-link">Programs</a></li>
     <li><a href="#contact" class="mobile-link">Request / Register</a></li>
   </ul>
+  <a href="#contact" class="btn btn-primary mobile-menu-cta">Get in touch</a>
 </div>
 
 <header class="hero">
@@ -1234,7 +1251,7 @@
     mobileMenu.setAttribute('aria-hidden', String(!isOpen));
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
-  document.querySelectorAll('.mobile-link').forEach(link => {
+  document.querySelectorAll('.mobile-link, .mobile-menu-cta').forEach(link => {
     link.addEventListener('click', () => {
       mobileMenu.classList.remove('open');
       hamburger.classList.remove('open');
