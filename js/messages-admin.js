@@ -110,12 +110,17 @@ async function markRead(id, readValue) {
 }
 
 async function archiveMessage(id) {
-  if (!confirm('Archive and delete this message? This cannot be undone.')) return;
+  const msg = currentMessages.find(m => m.id === id);
+  const confirmed = await uiConfirm(
+    `Delete the message from ${msg?.name || 'this sender'}? This cannot be undone.`,
+    { title: 'Delete Message', confirmText: 'Delete', danger: true }
+  );
+  if (!confirmed) return;
   try {
     await deleteDoc(doc(db, 'messages', id));
   } catch (err) {
     console.error('Could not delete message:', err);
-    alert('Could not delete this message. Please try again.');
+    await uiAlert('Could not delete this message. Please try again.', { title: 'Error', danger: true });
   }
 }
 

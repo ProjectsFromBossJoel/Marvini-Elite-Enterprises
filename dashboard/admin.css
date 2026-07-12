@@ -147,7 +147,8 @@ button{font-family:inherit;cursor:pointer;}
 .icon-btn svg{width:17px;height:17px;}
 .icon-dot{position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--bg-card);}
 
-.theme-btn{width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.theme-btn{width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);transition:color .2s ease,background .2s ease;}
+.theme-btn:hover{background:var(--bg-glass);}
 
 .profile{display:flex;align-items:center;gap:11px;padding-left:6px;border-left:1px solid var(--border);}
 .profile img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--bg-card);box-shadow:var(--shadow);}
