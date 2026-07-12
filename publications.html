@@ -186,6 +186,195 @@
   .form-field textarea { resize: vertical; min-height:70px; }
   #publicSubmitStatus { font-size:.85rem; color: var(--text-muted,#64748b); margin-top:.5rem; min-height:1.2em; }
   .empty-state { text-align:center; padding:3rem 1rem; color: var(--text-muted,#64748b); grid-column: 1 / -1; }
+
+  /* ── Floating Newsletter Widget ── */
+  .float-news-widget {
+    position: fixed;
+    top: 110px;
+    right: 24px;
+    z-index: 460;
+    max-width: 320px;
+    font-family: var(--font-body);
+  }
+  .float-news-collapsed {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid rgba(26,86,255,0.3);
+    border-radius: 999px;
+    padding: 11px 18px 11px 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(26,86,255,0.22);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .float-news-collapsed::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 999px;
+    padding: 1.5px;
+    background: linear-gradient(120deg, #1A56FF, #059669, #F59E0B, #1A56FF);
+    background-size: 300% 300%;
+    animation: floatNewsBorderFlow 6s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  @keyframes floatNewsBorderFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+  .float-news-collapsed::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(26,86,255,0.22) 0%, transparent 70%);
+    z-index: -1;
+    animation: floatNewsPulseRing 2.4s ease-in-out infinite;
+  }
+  @keyframes floatNewsPulseRing {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.25); opacity: 0; }
+    100% { transform: scale(1); opacity: 0.8; }
+  }
+  .float-news-collapsed:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(26,86,255,0.32);
+  }
+  .float-news-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--grad-blue-green);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; flex-shrink: 0;
+  }
+  .float-news-icon svg { width: 15px; height: 15px; }
+  .float-news-typing {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    border-right: 2px solid rgba(26,86,255,0.6);
+    padding-right: 3px;
+  }
+  .float-news-chevron {
+    width: 16px;
+    height: 16px;
+    color: var(--royal-blue, #1A56FF);
+    flex-shrink: 0;
+    animation: floatNewsChevronBounce 1.6s ease-in-out infinite;
+  }
+  @keyframes floatNewsChevronBounce {
+    0%, 100% { transform: translateX(0); opacity: 0.6; }
+    50%      { transform: translateX(3px); opacity: 1; }
+  }
+  .float-news-hint {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink, #14213D);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    opacity: 0;
+    transform: translateY(-6px) scale(0.9);
+    animation: floatNewsHintPop 0.4s ease forwards, floatNewsHintFade 6s ease forwards;
+    animation-delay: 0.6s, 5s;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .float-news-hint::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: 20px;
+    width: 10px;
+    height: 10px;
+    background: var(--ink, #14213D);
+    transform: rotate(45deg);
+  }
+  .float-news-hint svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    animation: floatNewsHintPoint 1.2s ease-in-out infinite;
+  }
+  @keyframes floatNewsHintPop {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes floatNewsHintFade {
+    to { opacity: 0; transform: translateY(-4px) scale(0.95); }
+  }
+  @keyframes floatNewsHintPoint {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+  .float-news-widget.open .float-news-hint { display: none; }
+  .float-news-expanded {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid rgba(26,86,255,0.3);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    margin-top: 10px;
+    animation: floatNewsPop 0.3s ease;
+  }
+  @keyframes floatNewsPop {
+    from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .float-news-widget.open .float-news-collapsed { display: none; }
+  .float-news-widget.open .float-news-expanded { display: flex; }
+  .float-news-title {
+    font-family: var(--font-heading);
+    font-weight: 700; font-size: 1rem;
+    color: var(--text-primary); margin: 0;
+  }
+  .float-news-sub { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 4px; }
+  .float-news-inputrow { display: flex; gap: 8px; }
+  .float-news-input {
+    flex: 1;
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+  }
+  .float-news-input:focus { outline: none; border-color: var(--royal-blue); }
+  .float-news-submit {
+    width: 38px; height: 38px;
+    border-radius: 50%; flex-shrink: 0;
+    background: var(--grad-blue-green);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s ease;
+  }
+  .float-news-submit svg { width: 16px; height: 16px; }
+  .float-news-submit:hover { transform: scale(1.08); }
+  .float-news-status { font-size: 0.78rem; min-height: 1em; }
+  .float-news-status.ok { color: var(--emerald-light); }
+  .float-news-status.err { color: #F87171; }
+
+  @media (max-width: 640px) {
+    .float-news-widget { top: 88px; right: 12px; max-width: calc(100vw - 24px); }
+  }
 </style>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z8NS6CY134"></script>
@@ -339,6 +528,79 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FLOATING NEWSLETTER WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="float-news-widget" id="floatNewsWidget">
+  <div class="float-news-collapsed" id="floatNewsCollapsed" role="button" tabindex="0" title="Click to subscribe to our newsletter" aria-label="Click to subscribe to our newsletter">
+    <span class="float-news-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+    </span>
+    <span class="float-news-typing" id="floatNewsTyping"></span>
+    <svg class="float-news-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </div>
+
+  <div class="float-news-hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    Click here to subscribe
+  </div>
+
+  <form class="float-news-expanded" id="floatNewsForm" novalidate aria-label="Subscribe to newsletter">
+    <p class="float-news-title">Stay in the loop</p>
+    <p class="float-news-sub">Get Marvini updates straight to your inbox.</p>
+    <div class="float-news-inputrow">
+      <input type="email" id="floatNewsEmail" class="float-news-input" placeholder="your@email.com" required aria-label="Email address" autocomplete="email" />
+      <button type="submit" class="float-news-submit" aria-label="Subscribe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="float-news-status" id="floatNewsStatus"></div>
+  </form>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- AI CHATBOT WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="chat-widget" id="chatWidget">
+  <button class="chat-toggle" id="chatToggle" aria-label="Open chat">
+    <span class="chat-icon">
+      <img src="img/marvini_ai.gif" alt="Marvini AI" class="chat-icon-img" />
+    </span>
+    <span class="chat-close-icon">✕</span>
+  </button>
+
+  <div class="chat-prompt" id="chatPrompt">
+    <span class="prompt-emoji">👋</span>
+    <span class="prompt-text">Hi! Ask me anything</span>
+  </div>
+
+  <div class="chat-window" id="chatWindow" aria-hidden="true">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <img src="img/marvini_ai.png" alt="Marvini AI" class="chat-avatar-img" />
+        <div>
+          <strong>Marvini AI</strong>
+          <span class="chat-status">Online</span>
+        </div>
+      </div>
+      <button class="chat-minimize" id="chatMinimize" aria-label="Minimize chat">−</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message bot">
+        <div class="message-bubble">
+          👋 Hi there! I'm Marvini's AI assistant. Ask me about our companies, mission, team, or anything about Marvini Elite Enterprises!
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..." />
+      <button class="chat-send" id="chatSend" aria-label="Send message">➤</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const submitModal = document.getElementById("submitModal");
   document.getElementById("openSubmitBtn")?.addEventListener("click", () => {
@@ -401,6 +663,177 @@
 
   mobileCompaniesToggle?.addEventListener('click', toggleMobileCompanies);
   mobileCompaniesLink?.addEventListener('click', toggleMobileCompanies);
+
+  // ── FLOATING NEWSLETTER WIDGET ──────────────────────
+  (function () {
+    const widget = document.getElementById('floatNewsWidget');
+    if (!widget) return;
+
+    const collapsed = document.getElementById('floatNewsCollapsed');
+    const typingEl = document.getElementById('floatNewsTyping');
+    const form = document.getElementById('floatNewsForm');
+    const emailInput = document.getElementById('floatNewsEmail');
+    const statusEl = document.getElementById('floatNewsStatus');
+
+    const phrases = [
+      '📬 Get Marvini updates...',
+      '🚀 Join our newsletter',
+      '✨ Never miss an update',
+      '🌍 Africa\'s future, in your inbox'
+    ];
+    let phraseIndex = 0, charIndex = 0, deleting = false;
+
+    function typeLoop() {
+      const current = phrases[phraseIndex];
+      if (!deleting) {
+        charIndex++;
+        typingEl.textContent = current.slice(0, charIndex);
+        if (charIndex === current.length) {
+          deleting = true;
+          setTimeout(typeLoop, 1800);
+          return;
+        }
+      } else {
+        charIndex--;
+        typingEl.textContent = current.slice(0, charIndex);
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+      setTimeout(typeLoop, deleting ? 30 : 55);
+    }
+    typeLoop();
+
+    function openWidget() {
+      widget.classList.add('open');
+      setTimeout(() => emailInput.focus(), 150);
+    }
+    collapsed.addEventListener('click', openWidget);
+    collapsed.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openWidget();
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = '';
+      statusEl.className = 'float-news-status';
+      const email = emailInput.value.trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        statusEl.textContent = 'Please enter a valid email.';
+        statusEl.classList.add('err');
+        return;
+      }
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'newsletter'), { email, createdAt: serverTimestamp() });
+        statusEl.textContent = "✅ You're subscribed!";
+        statusEl.classList.add('ok');
+        form.reset();
+        setTimeout(() => {
+          widget.classList.remove('open');
+          statusEl.textContent = '';
+        }, 2200);
+      } catch (err) {
+        console.error('Could not subscribe:', err);
+        statusEl.textContent = 'Something went wrong — try again.';
+        statusEl.classList.add('err');
+      }
+    });
+  })();
+
+  // ── CHAT WIDGET ──────────────────────────────────────
+  const chatToggle = document.getElementById('chatToggle');
+  const chatWindow = document.getElementById('chatWindow');
+  const chatMinimize = document.getElementById('chatMinimize');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  const chatMessages = document.getElementById('chatMessages');
+
+  chatToggle?.addEventListener('click', () => {
+    const isOpen = chatWindow.classList.toggle('open');
+    chatToggle.classList.toggle('active', isOpen);
+    const prompt = document.getElementById('chatPrompt');
+    if (prompt) {
+      prompt.style.opacity = '0';
+      prompt.style.transform = 'translateY(-8px) scale(0.95)';
+      prompt.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      setTimeout(() => { prompt.style.display = 'none'; }, 300);
+    }
+  });
+
+  chatMinimize?.addEventListener('click', () => {
+    chatWindow.classList.remove('open');
+    chatToggle.classList.remove('active');
+  });
+
+  function appendChatMessage(text, sender) {
+    const div = document.createElement('div');
+    div.className = `chat-message ${sender}`;
+    div.innerHTML = `<div class="message-bubble">${text}</div>`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showChatTyping() {
+    const id = Date.now();
+    const div = document.createElement('div');
+    div.className = 'chat-message bot';
+    div.id = `typing-${id}`;
+    div.innerHTML = `<div class="message-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return id;
+  }
+
+  function removeChatTyping(id) {
+    const el = document.getElementById(`typing-${id}`);
+    if (el) el.remove();
+  }
+
+  async function sendChatMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    appendChatMessage(text, 'user');
+    chatInput.value = '';
+    chatSend.disabled = true;
+
+    const typingId = showChatTyping();
+
+    try {
+      const response = await fetch('https://marvini-elite-enterprises-alpha.vercel.app/api/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      });
+
+      const data = await response.json();
+      removeChatTyping(typingId);
+
+      if (response.ok) {
+        appendChatMessage(data.reply || 'Thanks for your question!', 'bot');
+      } else {
+        appendChatMessage('⚠️ ' + (data.error || 'Something went wrong.'), 'bot');
+      }
+    } catch (error) {
+      removeChatTyping(typingId);
+      appendChatMessage('⚠️ Connection error. Please try again.', 'bot');
+    }
+
+    chatSend.disabled = false;
+  }
+
+  chatSend?.addEventListener('click', sendChatMessage);
+  chatInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
+  });
+
+  document.getElementById('chatWidget')?.classList.add('ready');
 </script>
 
 <script type="module" src="js/articles-public.js"></script>
