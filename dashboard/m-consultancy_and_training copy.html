@@ -5,7 +5,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>M-Consultancy & Training | Marvini Admin</title>
-
+<link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="favicon_io/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -55,6 +58,71 @@
   .filter-tab.active { background: #1a56ff; border-color:#1a56ff; color:#fff; }
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
   #leadsTableBody td:last-child { white-space: nowrap; }
+  #programsTableBody td:last-child { white-space: nowrap; }
+  .program-desc-line {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+  }
+
+  .form-field { display:flex; flex-direction:column; gap:.4rem; margin-bottom: 1rem; }
+  .form-field label { font-size:.85rem; font-weight:600; }
+  .form-field input, .form-field textarea, .form-field select {
+    padding:.6rem .8rem; border:1px solid var(--border,#e2e8f0); border-radius:8px; font-size:.9rem; font-family:inherit;
+  }
+  .form-field textarea { resize: vertical; min-height: 70px; }
+  .form-row-2 { display:grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .section-heading {
+    display:flex; align-items:center; justify-content:space-between;
+    margin: 2.5rem 0 1rem;
+  }
+  .section-heading h2 { font-size: 1.15rem; font-weight: 700; margin:0; }
+
+  /* ---------- Row action buttons ---------- */
+  .row-actions .btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    padding: 6px 14px; font-size: 12.5px; font-weight: 600;
+    border-radius: 7px; line-height: 1.4; cursor:pointer;
+    transition: all .15s ease; border: 1px solid transparent;
+  }
+  .row-actions .btn-outline {
+    background: #fff; border-color: var(--border,#e2e8f0); color: var(--text-muted,#64748b);
+  }
+  .row-actions .btn-outline:hover { border-color:#1a56ff; color:#1a56ff; background: rgba(26,86,255,0.06); }
+  .row-actions .btn-danger {
+    background: #fff; border-color: rgba(220,38,38,0.3); color:#dc2626;
+  }
+  .row-actions .btn-danger:hover { background:#dc2626; border-color:#dc2626; color:#fff; }
+  .row-actions .btn-icon {
+    width: 30px; height: 30px; padding: 0;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .row-actions .btn-icon svg { width: 15px; height: 15px; }
+
+  /* ---------- Confirm modal ---------- */
+  .confirm-modal-card { max-width: 380px; text-align:center; padding: 2rem 1.75rem; }
+  .confirm-icon {
+    width:48px; height:48px; border-radius:50%; margin: 0 auto 1rem;
+    background: rgba(220,38,38,0.1); color:#dc2626;
+    display:flex; align-items:center; justify-content:center; font-size: 22px;
+  }
+  .confirm-modal-card h3 { font-size:1.05rem; margin: 0 0 .5rem; }
+  .confirm-modal-card p { font-size:.9rem; color: var(--text-muted,#64748b); margin: 0 0 1.5rem; }
+  .confirm-actions { display:flex; gap:.6rem; justify-content:center; }
+  .confirm-actions .btn { flex:1; justify-content:center; padding: 10px 16px; }
+
+  .program-image-preview {
+    width: 160px; height: 220px; object-fit: cover;
+    border-radius: 10px; border: 1px solid var(--border,#e2e8f0);
+    display: block; margin: 0 auto .5rem;
+  }
+  .program-image-preview-wrap { display:none; }
+  .program-image-preview-wrap.has-image { display:block; }
+  .current-image-label {
+    font-size:.75rem; color: var(--text-muted,#64748b); margin: 0 0 .35rem;
+  }
 </style>
 </head>
 
@@ -126,8 +194,32 @@
         <h1>M-Consultancy & Training</h1>
         <p>Consultation requests and training registrations submitted from the public M-Consultancy & Training page.</p>
       </div>
+      <div class="page-head-actions">
+        <button class="btn btn-primary" type="button" id="openProgramBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Add Program
+        </button>
+      </div>
     </div>
 
+    <div class="section-heading">
+      <h2>Upcoming Training Programs</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th></th>Duration</th><th>Note</th><th></th></tr></thead>
+        <tbody id="programsTableBody">
+          <!-- Rows are rendered by ../js/consultancy-training-admin.js -->
+        </tbody>
+      </table>
+      <div class="empty-state" id="programsEmptyState" style="display:none;">
+        No programs published yet. Click <strong>Add Program</strong> to publish one to the live Consultancy &amp; Training page.
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h2>Enquiries</h2>
+    </div>
     <div class="filter-tabs" id="filterTabs">
       <button class="filter-tab active" data-filter="all">All</button>
       <button class="filter-tab" data-filter="consultation">Consultation</button>
@@ -196,6 +288,145 @@
       <button class="btn btn-outline" id="markContactedBtn" type="button">Mark Contacted</button>
       <button class="btn btn-outline" id="markClosedBtn" type="button">Mark Closed</button>
       <button class="btn btn-danger" id="deleteLeadBtn" type="button">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Program Modal -->
+<div class="modal-overlay" id="programModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="programModalTitle">Add Training Program</h3>
+      <button class="modal-close" id="closeProgramBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="programForm">
+      <input type="hidden" id="programId" value="" />
+      <div class="form-field">
+        <label for="programTitle">Program title *</label>
+        <input type="text" id="programTitle" placeholder="e.g. Leadership Essentials" required />
+      </div>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="programFormat">Format tag *</label>
+          <input type="text" id="programFormat" placeholder="e.g. Open enrolment" required />
+        </div>
+        <div class="form-field">
+          <label for="programDuration">Duration (auto-calculated)</label>
+          <input type="text" id="programDuration" placeholder="Set the dates/times below" readonly style="background:var(--bg-soft,#f8fafc); cursor:not-allowed;" />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="programStartDate">Start date *</label>
+          <input type="date" id="programStartDate" required />
+        </div>
+        <div class="form-field">
+          <label for="programEndDate">End date *</label>
+          <input type="date" id="programEndDate" required />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="programStartTime">Start time</label>
+          <input type="time" id="programStartTime" />
+        </div>
+        <div class="form-field">
+          <label for="programEndTime">End time</label>
+          <input type="time" id="programEndTime" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="programDescription">Short description *</label>
+        <textarea id="programDescription" placeholder="One or two sentences describing this program…" required></textarea>
+      </div>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="programVenue">Venue</label>
+          <input type="text" id="programVenue" placeholder="e.g. Marvini Training Hall, Accra" />
+        </div>
+        <div class="form-field">
+          <label for="programPartner">Partner Organisation</label>
+          <input type="text" id="programPartner" placeholder="e.g. GTEC" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="programCover">Program Image (optional)</label>
+        <div class="program-image-preview-wrap" id="programImagePreviewWrap">
+          <p class="current-image-label" id="programImagePreviewLabel">Current image</p>
+          <img class="program-image-preview" id="programImagePreview" src="" alt="Program image preview" />
+        </div>
+        <input type="file" id="programCover" accept="image/*" />
+      </div>
+      <div class="form-field">
+        <label for="programNote">Note (right-hand meta, e.g. "Min. 8 staff" or "Certificate")</label>
+        <input type="text" id="programNote" placeholder="e.g. Certificate" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="programSubmitBtn" style="width:100%; justify-content:center;">
+        Save Program
+      </button>
+      <div id="programFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Program Detail Modal -->
+<div class="modal-overlay" id="programDetailModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Program Details</h3>
+      <button class="modal-close" id="closeProgramDetailBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="lead-detail-row program-image-preview-wrap" id="detailImageWrap">
+      <img class="program-image-preview" id="detailImage" src="" alt="Program image" />
+    </div>
+    <div class="lead-detail-row">
+      <label>Title</label>
+      <p id="detailTitle"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Format</label>
+      <p id="detailFormat"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Start</label>
+      <p id="detailStart"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>End</label>
+      <p id="detailEnd"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Duration</label>
+      <p id="detailDuration"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Venue</label>
+      <p id="detailVenue"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Partner Organisation</label>
+      <p id="detailPartner"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Note</label>
+      <p id="detailNote"></p>
+    </div>
+    <div class="lead-detail-row">
+      <label>Description</label>
+      <p class="msg-box" id="detailDescription"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Reusable Confirm Modal (replaces browser confirm()) -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-card confirm-modal-card">
+    <div class="confirm-icon">!</div>
+    <h3 id="confirmModalTitle">Are you sure?</h3>
+    <p id="confirmModalMessage">This action can't be undone.</p>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-outline" id="confirmCancelBtn" style="border:1px solid var(--border,#e2e8f0);">Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirmOkBtn" style="background:#dc2626; color:#fff;">Delete</button>
     </div>
   </div>
 </div>
