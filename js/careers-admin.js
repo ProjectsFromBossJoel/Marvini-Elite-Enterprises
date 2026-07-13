@@ -99,7 +99,7 @@ function buildJobRow(id, data) {
     <td>${escapeHtml(data.companyLabel || "")}</td>
     <td><span class="pill ${data.type === "volunteer" ? "completed" : "active"}">${data.type === "volunteer" ? "Volunteer" : "Career"}</span></td>
     <td>${escapeHtml(data.schedule || "")}</td>
-    <td><span class="pill ${data.status === "open" ? "completed" : "draft"}">${data.status === "open" ? "Open" : "Draft"}</span></td>
+    <td><span class="pill ${isOpenStatus(data.status) ? "completed" : "draft"}">${isOpenStatus(data.status) ? "Open" : "Draft"}</span></td>
     <td>
       <div class="row-actions">
         <button aria-label="Edit" title="Edit" data-edit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
@@ -119,6 +119,10 @@ function buildJobRow(id, data) {
   return tr;
 }
 
+function isOpenStatus(status) {
+  return String(status || "").trim().toLowerCase() === "open";
+}
+
 let jobDocs = [];
 onSnapshot(collection(db, "jobs"), (snap) => {
   jobDocs = snap.docs.map((d) => ({ id: d.id, data: d.data() }));
@@ -129,7 +133,7 @@ onSnapshot(collection(db, "jobs"), (snap) => {
     jobDocs.forEach(({ id, data }) => jobsTableBody.appendChild(buildJobRow(id, data)));
   }
   document.getElementById("statOpenRoles").textContent =
-    jobDocs.filter((j) => j.data.status === "open").length;
+    jobDocs.filter((j) => isOpenStatus(j.data.status)).length;
 });
 
 /* ── APPLICANTS ───────────────────────────────────────── */
