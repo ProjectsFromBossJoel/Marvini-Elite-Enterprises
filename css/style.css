@@ -413,6 +413,11 @@ input, textarea, select { font-family: inherit; }
   align-items: center;
   gap: 0.25rem;
 }
+.nav-links li {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 .nav-link {
   padding: 0.5rem 0.875rem;
   font-size: 0.875rem;
