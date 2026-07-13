@@ -148,10 +148,14 @@ function watchTeamCount() {
 
 // ── Careers: open roles, application counts, pipeline stages, recent list ──
 function watchCareersAndApplications() {
-  onSnapshot(
-    query(collection(db, "careers"), where("status", "==", "open")),
-    (snap) => setText("statOpenRoles", snap.size)
-  );
+  // Only the main dashboard (index.html) owns #statOpenRoles here — careers.html
+  // computes its own count from the "jobs" collection via careers-admin.js.
+  if (document.getElementById("recentApplicationsBody")) {
+    onSnapshot(
+      query(collection(db, "careers"), where("status", "==", "open")),
+      (snap) => setText("statOpenRoles", snap.size)
+    );
+  }
 
   onSnapshot(collection(db, "applications"), (snap) => {
     const apps = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
