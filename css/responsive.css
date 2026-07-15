@@ -46,6 +46,9 @@
   /* Companies */
   .companies-grid { grid-template-columns: 1fr 1fr; }
 
+  /* Articles / Publications */
+  .articles-grid { grid-template-columns: repeat(2, 1fr); }
+
   /* Innovation */
   .innovation-inner {
     grid-template-columns: 1fr;
@@ -138,6 +141,9 @@
 
   /* Companies */
   .companies-grid { grid-template-columns: 1fr; }
+
+  /* Articles / Publications */
+  .articles-grid { grid-template-columns: 1fr; }
 
   /* Contact */
   .contact-inner {

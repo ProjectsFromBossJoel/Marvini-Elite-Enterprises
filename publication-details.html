@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Publication | Marvini Elite Enterprises</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="img/favicon_io/site.webmanifest">
+<meta name="description" content="Read the full publication from Marvini Elite Enterprises." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/animations.css" />
+<link rel="stylesheet" href="css/responsive.css?v=2" />
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
+
+<style>
+  /* Companies nav dropdown (kept in sync with index.html / publications.html) */
+  .nav-item-dropdown { position: relative; display: flex; align-items: center; }
+  .nav-item-dropdown .nav-link { display: inline-flex; align-items: center; gap: 5px; height: 100%; }
+  .nav-dropdown-caret { width: 10px; height: 10px; transition: transform 0.2s ease; }
+  .nav-item-dropdown.open .nav-dropdown-caret,
+  .nav-item-dropdown:hover .nav-dropdown-caret { transform: rotate(180deg); }
+  .nav-dropdown-menu {
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(8px); min-width: 240px;
+    background: var(--bg-card, #fff); border: 1px solid var(--border, rgba(0,0,0,0.08));
+    border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.14); padding: 8px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease; z-index: 300;
+  }
+  .nav-item-dropdown:hover .nav-dropdown-menu,
+  .nav-item-dropdown.open .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+  .nav-dropdown-menu a {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+    font-size: 14px; color: var(--text-primary, #14213D); text-decoration: none;
+    white-space: nowrap; transition: background 0.15s ease;
+  }
+  .nav-dropdown-menu a:hover { background: var(--bg-secondary, rgba(26,86,255,0.08)); }
+  .nav-dropdown-menu img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+  @media (max-width: 980px) { .nav-dropdown-menu { display: none; } }
+
+  /* Mobile Companies accordion */
+  .mobile-dropdown-item { display: flex; flex-direction: column; align-items: center; width: 100%; }
+  .mobile-link-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .mobile-dropdown-toggle {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--bg-glass, rgba(255,255,255,0.06)); border: 1px solid var(--border, rgba(255,255,255,0.1));
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s ease, background 0.2s ease; flex-shrink: 0;
+  }
+  .mobile-dropdown-toggle svg { width: 14px; height: 14px; color: var(--text-secondary, #94A3B8); transition: transform 0.3s ease; }
+  .mobile-dropdown-toggle.open svg { transform: rotate(180deg); }
+  .mobile-dropdown-submenu {
+    max-height: 0; overflow: hidden; opacity: 0; display: flex; flex-direction: column;
+    align-items: center; gap: 0.15rem; width: 100%;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.35s ease; margin-top: 0;
+  }
+  .mobile-dropdown-submenu.open { max-height: 400px; opacity: 1; margin-top: 0.75rem; }
+  .mobile-sublink {
+    display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600;
+    color: var(--text-secondary, #94A3B8); padding: 0.5rem 1rem; transition: color 0.2s ease;
+  }
+  .mobile-sublink:hover { color: var(--text-primary, #F1F5F9); }
+  .mobile-sublink img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+
+  /* ── Publication detail layout ── */
+  .pub-detail-section { padding-top: 8rem; }
+  .pub-back-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-heading); font-size: 0.85rem; font-weight: 700;
+    color: var(--text-muted, #64748b); text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 2rem; transition: color 0.2s ease;
+  }
+  .pub-back-link:hover { color: var(--royal-blue); }
+  .pub-back-link svg { width: 16px; height: 16px; }
+
+  .pub-detail-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 3rem;
+    align-items: flex-start;
+  }
+  .pub-detail-cover {
+    position: sticky;
+    top: 100px;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg-secondary, #e2e8f0);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  }
+  .pub-detail-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .pub-detail-badge {
+    display: inline-block;
+    background: rgba(26,86,255,0.1);
+    color: var(--royal-blue);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .pub-detail-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+  .pub-detail-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted, #64748b);
+    margin-bottom: 2rem;
+  }
+  .pub-detail-body {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--text-secondary, #4a4a4a);
+    white-space: pre-line;
+    margin-bottom: 2.5rem;
+  }
+  .pub-detail-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .pub-detail-loading, .pub-detail-error {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted, #64748b);
+  }
+
+  @media (max-width: 768px) {
+    .pub-detail-grid { grid-template-columns: 1fr; }
+    .pub-detail-cover { position: static; max-width: 260px; margin: 0 auto 2rem; }
+  }
+
+  /* ── Floating Newsletter Widget (same as publications.html) ── */
+  .float-news-widget { position: fixed; top: 110px; right: 24px; z-index: 460; max-width: 320px; font-family: var(--font-body); }
+  .float-news-collapsed {
+    display: flex; align-items: center; gap: 10px; background: var(--bg-card);
+    border: 1px solid rgba(26,86,255,0.3); border-radius: 999px; padding: 11px 18px 11px 12px;
+    cursor: pointer; box-shadow: 0 8px 28px rgba(26,86,255,0.22); transition: all 0.3s ease; position: relative;
+  }
+  .float-news-collapsed::before {
+    content: ''; position: absolute; inset: -1.5px; border-radius: 999px; padding: 1.5px;
+    background: linear-gradient(120deg, #1A56FF, #059669, #F59E0B, #1A56FF); background-size: 300% 300%;
+    animation: floatNewsBorderFlow 6s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  }
+  @keyframes floatNewsBorderFlow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+  .float-news-collapsed::after {
+    content: ''; position: absolute; inset: -6px; border-radius: 999px;
+    background: radial-gradient(circle, rgba(26,86,255,0.22) 0%, transparent 70%);
+    z-index: -1; animation: floatNewsPulseRing 2.4s ease-in-out infinite;
+  }
+  @keyframes floatNewsPulseRing { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.25); opacity: 0; } 100% { transform: scale(1); opacity: 0.8; } }
+  .float-news-collapsed:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(26,86,255,0.32); }
+  .float-news-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--grad-blue-green); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+  .float-news-icon svg { width: 15px; height: 15px; }
+  .float-news-typing { font-size: 0.82rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; display: inline-block; border-right: 2px solid rgba(26,86,255,0.6); padding-right: 3px; }
+  .float-news-chevron { width: 16px; height: 16px; color: var(--royal-blue, #1A56FF); flex-shrink: 0; animation: floatNewsChevronBounce 1.6s ease-in-out infinite; }
+  @keyframes floatNewsChevronBounce { 0%, 100% { transform: translateX(0); opacity: 0.6; } 50% { transform: translateX(3px); opacity: 1; } }
+  .float-news-hint {
+    position: absolute; top: calc(100% + 10px); right: 8px; display: flex; align-items: center; gap: 6px;
+    background: var(--ink, #14213D); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 7px 14px;
+    border-radius: 999px; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    opacity: 0; transform: translateY(-6px) scale(0.9);
+    animation: floatNewsHintPop 0.4s ease forwards, floatNewsHintFade 6s ease forwards;
+    animation-delay: 0.6s, 5s; pointer-events: none; z-index: 2;
+  }
+  .float-news-hint::before { content: ''; position: absolute; top: -5px; right: 20px; width: 10px; height: 10px; background: var(--ink, #14213D); transform: rotate(45deg); }
+  .float-news-hint svg { width: 13px; height: 13px; flex-shrink: 0; animation: floatNewsHintPoint 1.2s ease-in-out infinite; }
+  @keyframes floatNewsHintPop { to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes floatNewsHintFade { to { opacity: 0; transform: translateY(-4px) scale(0.95); } }
+  @keyframes floatNewsHintPoint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  .float-news-widget.open .float-news-hint { display: none; }
+  .float-news-expanded {
+    display: none; flex-direction: column; gap: 10px; background: var(--bg-card);
+    border: 1px solid rgba(26,86,255,0.3); border-radius: 18px; padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35); margin-top: 10px; animation: floatNewsPop 0.3s ease;
+  }
+  @keyframes floatNewsPop { from { opacity: 0; transform: translateY(-8px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .float-news-widget.open .float-news-collapsed { display: none; }
+  .float-news-widget.open .float-news-expanded { display: flex; }
+  .float-news-title { font-family: var(--font-heading); font-weight: 700; font-size: 1rem; color: var(--text-primary); margin: 0; }
+  .float-news-sub { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 4px; }
+  .float-news-inputrow { display: flex; gap: 8px; }
+  .float-news-input { flex: 1; background: var(--bg-secondary); border: 1.5px solid var(--border); border-radius: 999px; padding: 0.6rem 1rem; font-size: 0.85rem; color: var(--text-primary); }
+  .float-news-input:focus { outline: none; border-color: var(--royal-blue); }
+  .float-news-submit { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; background: var(--grad-blue-green); color: #fff; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; }
+  .float-news-submit svg { width: 16px; height: 16px; }
+  .float-news-submit:hover { transform: scale(1.08); }
+  .float-news-status { font-size: 0.78rem; min-height: 1em; }
+  .float-news-status.ok { color: var(--emerald-light); }
+  .float-news-status.err { color: #F87171; }
+  @media (max-width: 640px) { .float-news-widget { top: 88px; right: 12px; max-width: calc(100vw - 24px); } }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z8NS6CY134"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z8NS6CY134');
+</script>
+
+</head>
+<body>
+
+<header class="site-header" id="site-header" role="banner">
+  <nav class="navbar" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+      <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini Elite Enterprises" class="nav-logo-img" />
+      <span class="nav-logo-text">
+        <span class="logo-name">Marvini</span>
+        <span class="logo-sub">Elite Enterprises</span>
+      </span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#home" class="nav-link">Home</a></li>
+      <li><a href="index.html#about" class="nav-link">About</a></li>
+      <li class="nav-item-dropdown" id="companiesNavDropdown">
+          <a href="#companies" class="nav-link">
+            Subsidiaries
+            <svg class="nav-dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="https://marvini-smart-driving-school-solution.web.app/"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+            <a href="https://marvini-digital-food-chain.web.app/"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+            <a href="index.html#companies"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
+            <a href="https://marvini--farms.web.app/"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+            <a href="consultancy-training.html"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
+          </div>
+        </li>
+        <li><a href="consultancy-training.html" class="nav-link">M-Consultancy & Training</a></li>
+        <li><a href="index.html#news" class="nav-link">News</a></li>
+      <li><a href="publications.html" class="nav-link active">Publications</a></li>
+      <li><a href="careers.html" class="nav-link">Careers/ Volunteer</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <span class="theme-icon sun">☀</span>
+        <span class="theme-icon moon">☽</span>
+      </button>
+      <a href="index.html#contact" class="btn btn-primary btn-sm">Get In Touch</a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
+  <ul class="mobile-links" role="list">
+    <li><a href="index.html#home" class="mobile-link">Home</a></li>
+    <li><a href="index.html#about" class="mobile-link">About</a></li>
+    <li class="mobile-dropdown-item" id="mobileCompaniesItem">
+      <div class="mobile-link-row">
+        <a href="index.html#companies" class="mobile-link" id="mobileCompaniesLink">Subsidiaries</a>
+        <button class="mobile-dropdown-toggle" id="mobileCompaniesToggle" aria-label="Toggle subsidiaries submenu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+      <div class="mobile-dropdown-submenu" id="mobileCompaniesSubmenu">
+        <a href="https://marvini-smart-driving-school-solution.web.app/" class="mobile-sublink"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+        <a href="https://marvini-digital-food-chain.web.app/" class="mobile-sublink"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+        <a href="index.html#companies" class="mobile-sublink"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
+        <a href="https://marvini--farms.web.app/" class="mobile-sublink"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+        <a href="consultancy-training.html" class="mobile-sublink"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
+      </div>
+    </li>
+    <li><a href="consultancy-training.html" class="mobile-link">M-Consultancy & Training</a></li>
+    <li><a href="index.html#news" class="mobile-link">News</a></li>
+    <li><a href="publications.html" class="mobile-link active">Publications</a></li>
+    <li><a href="careers.html" class="mobile-link">Careers/ Volunteer</a></li>
+  </ul>
+</div>
+
+<main>
+  <section class="section pub-detail-section" aria-label="Publication detail">
+    <div class="container">
+
+      <a href="publications.html" class="pub-back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to Publications
+      </a>
+
+      <div id="pubDetailLoading" class="pub-detail-loading">Loading publication…</div>
+      <div id="pubDetailError" class="pub-detail-error" style="display:none;">
+        We couldn't find that publication. <a href="publications.html">Return to Publications</a>.
+      </div>
+
+      <div id="pubDetailGrid" class="pub-detail-grid" style="display:none;">
+        <div class="pub-detail-cover">
+          <img id="pubDetailCoverImg" src="" alt="" />
+        </div>
+        <div class="pub-detail-content">
+          <span class="pub-detail-badge" id="pubDetailBadge">PDF</span>
+          <h1 class="pub-detail-title" id="pubDetailTitle"></h1>
+          <p class="pub-detail-meta" id="pubDetailMeta"></p>
+          <p class="pub-detail-body" id="pubDetailBody"></p>
+          <a href="#" id="pubDetailDownload" class="btn btn-primary btn-lg pub-detail-download" target="_blank" rel="noopener noreferrer" download>
+            Download Now
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FLOATING NEWSLETTER WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="float-news-widget" id="floatNewsWidget">
+  <div class="float-news-collapsed" id="floatNewsCollapsed" role="button" tabindex="0" title="Click to subscribe to our newsletter" aria-label="Click to subscribe to our newsletter">
+    <span class="float-news-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+    </span>
+    <span class="float-news-typing" id="floatNewsTyping"></span>
+    <svg class="float-news-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </div>
+
+  <div class="float-news-hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    Click here to subscribe
+  </div>
+
+  <form class="float-news-expanded" id="floatNewsForm" novalidate aria-label="Subscribe to newsletter">
+    <p class="float-news-title">Stay in the loop</p>
+    <p class="float-news-sub">Get Marvini updates straight to your inbox.</p>
+    <div class="float-news-inputrow">
+      <input type="email" id="floatNewsEmail" class="float-news-input" placeholder="richid@gmail.com" required aria-label="Email address" autocomplete="email" />
+      <button type="submit" class="float-news-submit" aria-label="Subscribe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="float-news-status" id="floatNewsStatus"></div>
+  </form>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- AI CHATBOT WIDGET -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="chat-widget" id="chatWidget">
+  <button class="chat-toggle" id="chatToggle" aria-label="Open chat">
+    <span class="chat-icon">
+      <img src="img/marvini_ai.gif" alt="Marvini AI" class="chat-icon-img" />
+    </span>
+    <span class="chat-close-icon">✕</span>
+  </button>
+
+  <div class="chat-prompt" id="chatPrompt">
+    <span class="prompt-emoji">👋</span>
+    <span class="prompt-text">Hi! Ask me anything</span>
+  </div>
+
+  <div class="chat-window" id="chatWindow" aria-hidden="true">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <img src="img/marvini_ai.png" alt="Marvini AI" class="chat-avatar-img" />
+        <div>
+          <strong>Marvini AI</strong>
+          <span class="chat-status">Online</span>
+        </div>
+      </div>
+      <button class="chat-minimize" id="chatMinimize" aria-label="Minimize chat">−</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message bot">
+        <div class="message-bubble">
+          👋 Hi there! I'm Marvini's AI assistant. Ask me about our companies, mission, team, or anything about Marvini Elite Enterprises!
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..." />
+      <button class="chat-send" id="chatSend" aria-label="Send message">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const themeToggle = document.getElementById("themeToggle");
+  themeToggle?.addEventListener("click", () => {
+    const html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+  });
+
+  // ── STICKY HEADER ───────────────────────────────────
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── MOBILE MENU ─────────────────────────────────────
+  const hamburger = document.getElementById('navHamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger?.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    mobileMenu.setAttribute('aria-hidden', !isOpen);
+    document.body.classList.toggle('no-scroll', isOpen);
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  }
+
+  document.querySelectorAll('.mobile-link:not(#mobileCompaniesLink), .mobile-sublink').forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+
+  // ── MOBILE COMPANIES DROPDOWN ───────────────────────
+  const mobileCompaniesToggle = document.getElementById('mobileCompaniesToggle');
+  const mobileCompaniesSubmenu = document.getElementById('mobileCompaniesSubmenu');
+  const mobileCompaniesLink = document.getElementById('mobileCompaniesLink');
+
+  function toggleMobileCompanies(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const isOpen = mobileCompaniesSubmenu.classList.toggle('open');
+    mobileCompaniesToggle.classList.toggle('open', isOpen);
+    mobileCompaniesToggle.setAttribute('aria-expanded', isOpen);
+  }
+
+  mobileCompaniesToggle?.addEventListener('click', toggleMobileCompanies);
+  mobileCompaniesLink?.addEventListener('click', toggleMobileCompanies);
+
+  // ── FLOATING NEWSLETTER WIDGET ──────────────────────
+  (function () {
+    const widget = document.getElementById('floatNewsWidget');
+    if (!widget) return;
+
+    const collapsed = document.getElementById('floatNewsCollapsed');
+    const typingEl = document.getElementById('floatNewsTyping');
+    const form = document.getElementById('floatNewsForm');
+    const emailInput = document.getElementById('floatNewsEmail');
+    const statusEl = document.getElementById('floatNewsStatus');
+
+    const phrases = [
+      '📬 Get Marvini updates...',
+      '🚀 Join our newsletter',
+      '✨ Never miss an update',
+      '🌍 Africa\'s future, in your inbox'
+    ];
+    let phraseIndex = 0, charIndex = 0, deleting = false;
+
+    function typeLoop() {
+      const current = phrases[phraseIndex];
+      if (!deleting) {
+        charIndex++;
+        typingEl.textContent = current.slice(0, charIndex);
+        if (charIndex === current.length) {
+          deleting = true;
+          setTimeout(typeLoop, 1800);
+          return;
+        }
+      } else {
+        charIndex--;
+        typingEl.textContent = current.slice(0, charIndex);
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+      setTimeout(typeLoop, deleting ? 30 : 55);
+    }
+    typeLoop();
+
+    function openWidget() {
+      widget.classList.add('open');
+      setTimeout(() => emailInput.focus(), 150);
+    }
+    collapsed.addEventListener('click', openWidget);
+    collapsed.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openWidget();
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = '';
+      statusEl.className = 'float-news-status';
+      const email = emailInput.value.trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        statusEl.textContent = 'Please enter a valid email.';
+        statusEl.classList.add('err');
+        return;
+      }
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'newsletter'), { email, createdAt: serverTimestamp() });
+        statusEl.textContent = "✅ You're subscribed!";
+        statusEl.classList.add('ok');
+        form.reset();
+        setTimeout(() => {
+          widget.classList.remove('open');
+          statusEl.textContent = '';
+        }, 2200);
+      } catch (err) {
+        console.error('Could not subscribe:', err);
+        statusEl.textContent = 'Something went wrong — try again.';
+        statusEl.classList.add('err');
+      }
+    });
+  })();
+
+  // ── CHAT WIDGET ──────────────────────────────────────
+  const chatToggle = document.getElementById('chatToggle');
+  const chatWindow = document.getElementById('chatWindow');
+  const chatMinimize = document.getElementById('chatMinimize');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  const chatMessages = document.getElementById('chatMessages');
+
+  chatToggle?.addEventListener('click', () => {
+    const isOpen = chatWindow.classList.toggle('open');
+    chatToggle.classList.toggle('active', isOpen);
+    const prompt = document.getElementById('chatPrompt');
+    if (prompt) {
+      prompt.style.opacity = '0';
+      prompt.style.transform = 'translateY(-8px) scale(0.95)';
+      prompt.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      setTimeout(() => { prompt.style.display = 'none'; }, 300);
+    }
+  });
+
+  chatMinimize?.addEventListener('click', () => {
+    chatWindow.classList.remove('open');
+    chatToggle.classList.remove('active');
+  });
+
+  function appendChatMessage(text, sender) {
+    const div = document.createElement('div');
+    div.className = `chat-message ${sender}`;
+    div.innerHTML = `<div class="message-bubble">${text}</div>`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showChatTyping() {
+    const id = Date.now();
+    const div = document.createElement('div');
+    div.className = 'chat-message bot';
+    div.id = `typing-${id}`;
+    div.innerHTML = `<div class="message-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return id;
+  }
+
+  function removeChatTyping(id) {
+    const el = document.getElementById(`typing-${id}`);
+    if (el) el.remove();
+  }
+
+  async function sendChatMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    appendChatMessage(text, 'user');
+    chatInput.value = '';
+    chatSend.disabled = true;
+
+    const typingId = showChatTyping();
+
+    try {
+      const response = await fetch('https://marvini-elite-enterprises-alpha.vercel.app/api/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      });
+
+      const data = await response.json();
+      removeChatTyping(typingId);
+
+      if (response.ok) {
+        appendChatMessage(data.reply || 'Thanks for your question!', 'bot');
+      } else {
+        appendChatMessage('⚠️ ' + (data.error || 'Something went wrong.'), 'bot');
+      }
+    } catch (error) {
+      removeChatTyping(typingId);
+      appendChatMessage('⚠️ Connection error. Please try again.', 'bot');
+    }
+
+    chatSend.disabled = false;
+  }
+
+  chatSend?.addEventListener('click', sendChatMessage);
+  chatInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
+  });
+
+  document.getElementById('chatWidget')?.classList.add('ready');
+</script>
+
+<script type="module" src="js/publication-details.js"></script>
+</body>
+</html>

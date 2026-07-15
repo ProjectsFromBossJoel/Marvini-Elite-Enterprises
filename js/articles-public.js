@@ -42,7 +42,7 @@ async function renderPublishedArticles() {
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      grid.appendChild(buildArticleCard(data));
+      grid.appendChild(buildArticleCard(data, docSnap.id));
     });
   } catch (err) {
     // If Firestore is unreachable, keep whatever static cards are
@@ -51,7 +51,7 @@ async function renderPublishedArticles() {
   }
 }
 
-function buildArticleCard(data) {
+function buildArticleCard(data, id) {
   const article = document.createElement("article");
   article.className = "article-card reveal-fade-up";
 
@@ -66,6 +66,10 @@ function buildArticleCard(data) {
     <div class="article-body">
       <h3 class="article-title">${escapeHtml(data.title || "Untitled")}</h3>
       <p class="article-desc">${escapeHtml(data.description || "")}</p>
+      <a href="publication-details.html?id=${encodeURIComponent(id)}" class="article-readmore">
+        Read More
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
       <a href="${data.fileUrl}" class="btn btn-primary btn-sm article-download" target="_blank" rel="noopener noreferrer" download>
         Download Now
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
