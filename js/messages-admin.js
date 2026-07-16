@@ -157,7 +157,7 @@ function renderMessages() {
           <button aria-label="Reply" title="Reply by email" class="reply-msg-btn" data-id="${msg.id}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a4 4 0 010 8h-1"/></svg>
           </button>
-          <button aria-label="Archive" title="Archive message" class="danger archive-msg-btn" data-id="${msg.id}">
+          <button aria-label="Archive" title="Delete message" class="danger archive-msg-btn" data-id="${msg.id}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
           </button>
         </div>
