@@ -4,7 +4,8 @@
 // - "post": Takes the final text and publishes it to LinkedIn.
 // Both require a valid Firebase Auth token for admin access.
 
-import { verifyIdToken } from '../../lib/firebaseAdmin';
+import { verifyIdToken } from '../../lib/firebaseAdmin.js';
+
 
 // ---------- LinkedIn API helper ----------
 async function createLinkedInPost(text, accessToken, personUrn) {

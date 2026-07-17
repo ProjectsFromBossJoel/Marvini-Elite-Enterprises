@@ -5,6 +5,13 @@
     },
     "api/send-newsletter.js": {
       "maxDuration": 30
+    },
+    "api/admin/linkedin-post.js": {
+      "maxDuration": 30,
+      "includeFiles": "lib/**"
+    },
+    "api/admin/linkedin-callback.js": {
+      "includeFiles": "lib/**"
     }
   },
   "rewrites": [
