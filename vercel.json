@@ -8,10 +8,10 @@
     },
     "api/admin/linkedin-post.js": {
       "maxDuration": 30,
-      "includeFiles": "lib/**"
+      "includeFiles": "{lib/**,node_modules/firebase-admin/**,node_modules/@google-cloud/**,node_modules/@grpc/**,node_modules/protobufjs/**,node_modules/farmhash-modern/**}"
     },
     "api/admin/linkedin-callback.js": {
-      "includeFiles": "lib/**"
+      "includeFiles": "{lib/**,node_modules/firebase-admin/**,node_modules/@google-cloud/**,node_modules/@grpc/**,node_modules/protobufjs/**,node_modules/farmhash-modern/**}"
     }
   },
   "rewrites": [
