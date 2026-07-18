@@ -27,7 +27,7 @@ async function createLinkedInPost(text, accessToken, personUrn) {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'X-Restli-Protocol-Version': '2.0.0',
       'LinkedIn-Version': '202305', // Use a recent version
     },
@@ -80,6 +80,22 @@ async function generatePost(prompt) {
 
 // ---------- Main handler ----------
 export default async function handler(req, res) {
+  // ---------- CORS ----------
+  // Browsers block cross-origin requests unless the server explicitly allows
+  // it. This lets your dashboard (local dev on 127.0.0.1, or your real
+  // domain) call this endpoint. The actual security boundary is still the
+  // Firebase Auth check below — CORS only controls which sites' JS is
+  // allowed to make the request, not who can call the API directly.
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Browsers send a preflight OPTIONS request before the real POST — answer
+  // it immediately with no body, before any auth checks run.
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
