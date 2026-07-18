@@ -39,8 +39,14 @@ async function createLinkedInPost(text, accessToken, personUrn) {
     throw new Error(`LinkedIn API error (${res.status}): ${errorBody}`);
   }
 
-  const data = await res.json();
-  return data;
+  // LinkedIn returns 201 Created with an EMPTY body on success — the new
+  // post's ID comes back in the response headers, not a JSON payload.
+  // Calling res.json() here throws on the empty body, so read the header
+  // instead and only fall back to parsing JSON if there actually is one.
+  const postId = res.headers.get('x-restli-id') || res.headers.get('x-linkedin-id');
+  const rawBody = await res.text();
+  const data = rawBody ? JSON.parse(rawBody) : {};
+  return { id: postId || data.id, ...data };
 }
 
 // ---------- Groq helper ----------
