@@ -188,3 +188,46 @@ promptEl.addEventListener("keydown", (e) => {
 // Reflect auth state on load (auth-guard.js already redirects if signed out,
 // this just flips the connection pill once Firebase confirms the session)
 auth.onAuthStateChanged((user) => setConnected(!!user));
+
+// Update this date each time you refresh LINKEDIN_ACCESS_TOKEN via the OAuth flow.
+// LinkedIn tokens last 60 days from issuance.
+const TOKEN_EXPIRES_AT = new Date("2026-09-16T00:00:00Z");
+
+function daysUntilExpiry() {
+  const msLeft = TOKEN_EXPIRES_AT - new Date();
+  return Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
+}
+
+function renderTokenCountdown() {
+  const days = daysUntilExpiry();
+  const el = document.getElementById("lpTokenNote");
+  const banner = document.getElementById("lpExpiryBanner");
+
+  if (el) {
+    if (days <= 0) {
+      el.textContent = "⚠ LinkedIn token expired";
+      el.style.color = "#f87171";
+    } else if (days <= 7) {
+      el.textContent = `⚠ token expires in ${days}d`;
+      el.style.color = "#f59e0b";
+    } else {
+      el.textContent = `token valid · ${days}d left`;
+    }
+  }
+
+  if (banner) {
+    if (days <= 0) {
+      banner.className = "lp-banner expired";
+      banner.style.display = "flex";
+      banner.textContent = "⚠ LinkedIn access token has expired. Publishing will fail until you reauthorize.";
+    } else if (days <= 7) {
+      banner.className = "lp-banner warn";
+      banner.style.display = "flex";
+      banner.textContent = `⚠ LinkedIn access token expires in ${days} day${days === 1 ? "" : "s"}. Reauthorize soon to avoid an interruption.`;
+    } else {
+      banner.style.display = "none";
+    }
+  }
+}
+
+renderTokenCountdown();
