@@ -305,104 +305,6 @@
   .lp-result.success { background: rgba(5,150,105,0.08); border: 1px solid rgba(5,150,105,0.25); color: #047857; }
   .lp-result.error { background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.25); color: #b91c1c; }
   .lp-result a { color: inherit; font-weight: 600; text-decoration: underline; }
-
-
-  .lp-toggle {
-  display: inline-flex;
-  background: #f1f5f9;
-  border-radius: 10px;
-  padding: 4px;
-  gap: 4px;
-  margin-bottom: 20px;
-}
-.lp-toggle-btn {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 7px;
-  background: transparent;
-  color: #64748b;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  transition: all .15s;
-}
-.lp-toggle-btn.active {
-  background: #fff;
-  color: #0f172a;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-.lp-toggle-btn:hover:not(.active) { color: #334155; }
-
-#lpCharLimit { color: #64748b; }
-#lpCharLimit.over { color: #f87171; font-weight: 700; }
-#lpCostNote { color: #475569; }
-
-
-.lp-auto-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
-  color: #94a3b8;
-  margin-left: 8px;
-}
-.lp-auto-badge svg { width: 11px; height: 11px; }
-
-.lp-history-item {
-  background: #fff;
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-.lp-history-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.lp-history-platform {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--royal-blue, #1a56ff);
-  font-weight: 700;
-}
-.lp-history-time {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  color: #94a3b8;
-}
-.lp-history-text {
-  font-family: "Poppins", sans-serif;
-  font-size: 0.88rem;
-  line-height: 1.5;
-  color: #334155;
-  margin: 0 0 8px;
-  white-space: pre-wrap;
-}
-.lp-history-link {
-  font-family: "Poppins", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--deep-teal, #059669);
-  text-decoration: none;
-}
-.lp-history-link:hover { text-decoration: underline; }
-.lp-history-empty {
-  text-align: center;
-  color: #94a3b8;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.85rem;
-  padding: 40px 0;
-}
-
 </style>
 </head>
 <body>
@@ -443,38 +345,16 @@
 
     <div class="lp-head">
       <div>
-        <h1><span id="lpPlatformIcon"></span><span id="lpPlatformTitle">LinkedIn Posts</span></h1>
-        <p id="lpPlatformSub">Describe what to post. Review the draft. Publish when it's ready.</p>
+        <h1>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v2c1-1.5 2.5-2.5 4.5-2.5 3.5 0 5.5 2 5.5 6.5V21h-4v-5.5c0-1.5-.5-2.5-2-2.5s-2 1-2 2.5V21h-4z"/></svg>
+          LinkedIn Posts
+        </h1>
+        <p>Describe what to post. Review the draft. Publish when it's ready.</p>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div class="lp-toggle" role="tablist" style="margin-bottom:0;">
-          <button type="button" class="lp-toggle-btn active" id="lpViewCompose">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-            Compose
-          </button>
-          <button type="button" class="lp-toggle-btn" id="lpViewHistory">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            History
-          </button>
-        </div>
-        <span class="lp-pill idle" id="lpConnPill"><span class="dot"></span><span id="lpConnText">checking connection</span></span>
-      </div>
-    </div>
-
-    <div class="lp-toggle" role="tablist">
-      <button type="button" class="lp-toggle-btn active" id="lpTabLinkedin" data-platform="linkedin">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v2c1-1.5 2.5-2.5 4.5-2.5 3.5 0 5.5 2 5.5 6.5V21h-4v-5.5c0-1.5-.5-2.5-2-2.5s-2 1-2 2.5V21h-4z"/></svg>
-        LinkedIn
-      </button>
-      <button type="button" class="lp-toggle-btn" id="lpTabX" data-platform="x">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22H16.7l-5.2-6.8L5.6 22H2.4l8.2-9.3L1.7 2h6.8l4.7 6.2L18.9 2z"/></svg>
-        X (Twitter)
-      </button>
+      <span class="lp-pill idle" id="lpConnPill"><span class="dot"></span><span id="lpConnText">checking connection</span></span>
     </div>
 
     <div class="lp-banner" id="lpExpiryBanner" style="display:none;"></div>
-
-    <div id="lpComposeView">
 
     <div class="lp-shell">
 
@@ -515,8 +395,7 @@
 
         <div class="lp-console-footer">
           <div class="lp-meta">
-            <span><b id="lpCharCount">0</b><span id="lpCharLimit"></span> chars</span>
-            <span id="lpCostNote"></span>
+            <span><b id="lpCharCount">0</b> chars</span>
             <span id="lpTokenNote"></span>
           </div>
           <div class="lp-console-actions">
@@ -535,16 +414,10 @@
     <div class="lp-publish-row" style="max-width: 50%;">
       <button type="button" class="lp-btn lp-btn-publish" id="lpPublishBtn" disabled>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
-        <span id="lpPublishLabel">Post to LinkedIn</span>
+        Post to LinkedIn
       </button>
     </div>
     <div class="lp-result" id="lpResult" style="max-width: 50%;"></div>
-
-    </div>
-
-    <div id="lpHistoryView" style="display:none;">
-      <div id="lpHistoryList"></div>
-    </div>
 
   </main>
 </div>

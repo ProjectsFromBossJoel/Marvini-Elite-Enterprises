@@ -75,3 +75,5 @@ export { firebaseConfig };
 
 export const PUBLICATIONS_COLLECTION = "publications";
 export const USERS_COLLECTION = "users";
+export const LINKEDIN_POSTS_COLLECTION = "linkedin_posts";
+export const X_POSTS_COLLECTION = "x_posts";
