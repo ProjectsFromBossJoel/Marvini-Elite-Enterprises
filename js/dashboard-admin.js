@@ -152,8 +152,13 @@ function watchCareersAndApplications() {
   // computes its own count from the "jobs" collection via careers-admin.js.
   if (document.getElementById("recentApplicationsBody")) {
     onSnapshot(
-      query(collection(db, "careers"), where("status", "==", "open")),
-      (snap) => setText("statOpenRoles", snap.size)
+      collection(db, "jobs"),
+      (snap) => {
+        const openCount = snap.docs.filter(
+          (d) => String(d.data().status || "").trim().toLowerCase() === "open"
+        ).length;
+        setText("statOpenRoles", openCount);
+      }
     );
   }
 
