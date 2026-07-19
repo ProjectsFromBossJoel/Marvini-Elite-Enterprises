@@ -55,7 +55,7 @@ onSnapshot(collection(db, "jobs"), (snap) => {
 
 
   grid.innerHTML = docs.map(({ data }) => {
-    const jobType = data.type || "career";
+    const jobType = String(data.type || "career").trim().toLowerCase();
     const typeLabel = TYPE_LABELS[jobType] || "Career";
 
     const responsibilitiesHtml = (data.responsibilities || []).length
