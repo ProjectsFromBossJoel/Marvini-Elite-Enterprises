@@ -50,20 +50,28 @@ onSnapshot(collection(db, "jobs"), (snap) => {
     return;
   }
 
-  grid.innerHTML = docs.map(({ data }) => `
-    <article class="job-card reveal-fade-up revealed" data-type="${escapeHtml(data.type || "career")}" data-company="${escapeHtml(data.companyKey || "general")}">
+  const TYPE_LABELS = { career: "Career", volunteer: "Volunteer", internship: "Internship" };
+  const TYPE_BADGE_CLASS = { career: "career", volunteer: "volunteer", internship: "internship" };
+
+
+  grid.innerHTML = docs.map(({ data }) => {
+    const jobType = data.type || "career";
+    const typeLabel = TYPE_LABELS[jobType] || "Career";
+    return `
+    <article class="job-card reveal-fade-up revealed" data-type="${escapeHtml(jobType)}" data-company="${escapeHtml(data.companyKey || "general")}">
       <div class="job-card-top">
-        <span class="job-badge job-badge--${data.type === "volunteer" ? "volunteer" : "career"}">${data.type === "volunteer" ? "Volunteer" : "Career"}</span>
+        <span class="job-badge job-badge--${escapeHtml(jobType)}">${typeLabel}</span>
         <span class="job-type">${escapeHtml(data.schedule || "")}</span>
       </div>
       <h3 class="job-title">${escapeHtml(data.title || "")}</h3>
       <p class="job-company">${escapeHtml(data.companyLabel || "")}</p>
       <p class="job-desc">${escapeHtml(data.description || "")}</p>
       <div class="job-card-footer">
-        <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="${escapeHtml(data.title || "")} — ${escapeHtml(data.companyLabel || "")}" data-track="${escapeHtml(data.type || "career")}">Apply Now</a>
+        <a href="#apply" class="btn btn-outline btn-sm apply-link" data-role="${escapeHtml(data.title || "")} — ${escapeHtml(data.companyLabel || "")}" data-track="${escapeHtml(jobType)}">Apply Now</a>
       </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
 
   // Re-attach click handlers for the freshly rendered "Apply Now" links
   window.attachApplyLinkListeners?.();
