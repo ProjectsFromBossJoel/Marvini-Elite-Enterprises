@@ -47,11 +47,30 @@
   .pill.pending { background: rgba(245,158,11,0.12); color:#B45309; }
   .pill.published { background: rgba(5,150,105,0.12); color:#047857; }
   .row-sub { font-size:.8rem; color: var(--text-muted,#64748b); margin-top:.15rem; }
+  .row-sub-trunc {
+    font-size:.8rem; color: var(--text-muted,#64748b); margin-top:.15rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:block;
+  }
   .row-actions { display:flex; gap:.5rem; flex-wrap:wrap; }
   #uploadStatus { font-size:.85rem; color: var(--text-muted,#64748b); margin-top:.5rem; min-height: 1.2em; }
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
   #pubTableBody .row-actions { flex-wrap: nowrap; white-space: nowrap; }
   #pubTableBody td:last-child { white-space: nowrap; }
+  #pubTableBody td:first-child { max-width: 320px; }
+  #pubTableBody .student-cell { min-width: 0; }
+  #pubTableBody .student-cell > div:last-child { min-width: 0; flex: 1; }
+  #pubTableBody .student-cell strong { display:block; white-space: nowrap; overflow:hidden; text-overflow:ellipsis; }
+  table { table-layout: fixed; width: 100%; }
+
+  /* View modal */
+  .view-cover { width:100%; max-height:220px; border-radius:12px; overflow:hidden; background: var(--bg-secondary,#f6f8fc); margin-bottom:1rem; display:flex; align-items:center; justify-content:center; }
+  .view-cover img { width:100%; height:100%; object-fit:cover; display:block; }
+  .view-cover.empty { padding:2.5rem 0; color: var(--text-muted,#64748b); font-size:.85rem; }
+  .view-row { margin-bottom:1rem; }
+  .view-label { font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color: var(--text-muted,#64748b); margin-bottom:.3rem; }
+  .view-value { font-size:.92rem; color: var(--text-primary,#0f1729); line-height:1.55; }
+  .view-actions { display:flex; gap:.6rem; margin-top:1.25rem; }
+  .view-actions .btn { flex:1; justify-content:center; }
 </style>
 </head>
 
@@ -134,7 +153,7 @@
 
     <div class="panel">
       <table>
-        <thead><tr><th>Document</th><th>Type</th><th>File</th><th>Downloads</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>Document</th><th>Type</th><th>File</th><th>Downloads</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="pubTableBody">
           <!-- Rows are rendered by ../js/articles-admin.js -->
         </tbody>
@@ -188,6 +207,73 @@
         Upload
       </button>
       <div id="uploadStatus"></div>
+    </form>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal-overlay" id="viewModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Publication Details</h3>
+      <button class="modal-close" id="closeViewBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="view-cover" id="viewCoverWrap"></div>
+    <div class="view-row">
+      <div class="view-label">Title</div>
+      <div class="view-value" id="viewTitle"></div>
+    </div>
+    <div class="view-row">
+      <div class="view-label">Short Description</div>
+      <div class="view-value" id="viewDescription"></div>
+    </div>
+    <div class="view-row">
+      <div class="view-label">Type</div>
+      <div class="view-value"><span class="pill" id="viewCategoryPill"></span></div>
+    </div>
+    <div class="view-actions">
+      <button type="button" class="btn btn-outline" id="viewEditBtn">Edit</button>
+      <button type="button" class="btn btn-primary" id="viewDownloadBtn">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Edit Publication</h3>
+      <button class="modal-close" id="closeEditBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="editForm">
+      <div class="form-field">
+        <label for="editTitle">Title *</label>
+        <input type="text" id="editTitle" required />
+      </div>
+      <div class="form-field">
+        <label for="editDescription">Short Description</label>
+        <textarea id="editDescription"></textarea>
+      </div>
+      <div class="form-field">
+        <label for="editCategory">Type *</label>
+        <select id="editCategory" required>
+          <option value="article">Article</option>
+          <option value="journal">Journal</option>
+          <option value="news">News</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="editCover">Replace Cover Image (optional)</label>
+        <input type="file" id="editCover" accept="image/*" />
+      </div>
+      <div class="form-field">
+        <label for="editPdf">Replace PDF File (optional)</label>
+        <input type="file" id="editPdf" accept="application/pdf" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="editSubmitBtn" style="width:100%; justify-content:center;">
+        Save Changes
+      </button>
+      <div id="editStatus"></div>
     </form>
   </div>
 </div>
