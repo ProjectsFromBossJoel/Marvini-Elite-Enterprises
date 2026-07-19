@@ -49,6 +49,12 @@ const COMPANY_LABELS = {
   general: "Marvini Group",
 };
 
+const APPLICANT_TYPE_LABELS = {
+  career: "Career",
+  volunteer: "Volunteer",
+  internship: "Internship",
+};
+
 /* ── JOB POSTINGS ─────────────────────────────────────── */
 
 const jobModal = document.getElementById("jobModal");
@@ -212,7 +218,7 @@ function buildApplicantRow(id, data) {
   const stage = data.stage || "submitted";
   const initials = encodeURIComponent(data.applicantName || "Applicant");
   tr.innerHTML = `
-    <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=${initials}&background=1a56ff&color=fff"/><div><strong>${escapeHtml(data.applicantName || "Unknown")}</strong><span>${data.type === "volunteer" ? "Volunteer" : "Career"}</span></div></div></td>
+    <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=${initials}&background=1a56ff&color=fff"/><div><strong>${escapeHtml(data.applicantName || "Unknown")}</strong><span>${APPLICANT_TYPE_LABELS[data.type] || "Career"}</span></div></div></td>
     <td>${escapeHtml(roleOnly(data.role))}</td>
     <td>${escapeHtml(COMPANY_LABELS[data.subsidiary] || data.subsidiary || "")}</td>
     <td><span class="pill ${STAGE_PILL_CLASS[stage] || "active"}">${STAGE_LABELS[stage] || stage}</span></td>
@@ -254,7 +260,7 @@ function openApplicantModal(data) {
     ? `<a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a>` : "—";
   document.getElementById("viewApplicantRole").textContent = roleOnly(data.role) || "—";
   document.getElementById("viewApplicantSubsidiary").textContent = COMPANY_LABELS[data.subsidiary] || data.subsidiary || "—";
-  document.getElementById("viewApplicantType").textContent = data.type === "volunteer" ? "Volunteer" : "Career";
+  document.getElementById("viewApplicantType").textContent = APPLICANT_TYPE_LABELS[data.type] || "Career";
   document.getElementById("viewApplicantStage").textContent = STAGE_LABELS[data.stage || "submitted"] || data.stage;
 
   const resumeWrap = document.getElementById("viewApplicantResumeLinkWrap");
