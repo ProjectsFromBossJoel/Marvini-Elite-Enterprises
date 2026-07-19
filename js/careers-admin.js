@@ -20,6 +20,19 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// Cloudinary serves files cross-origin, so a plain `download` attribute is
+// often ignored by the browser. Asking Cloudinary itself to attach the file
+// under a specific name (fl_attachment) is the reliable way to make the
+// downloaded file keep the applicant's original filename.
+function buildCloudinaryDownloadUrl(url, filename) {
+  if (!url || !filename) return url;
+  const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+  const safeName = encodeURIComponent(nameWithoutExt);
+  return url.includes("/upload/")
+    ? url.replace("/upload/", `/upload/fl_attachment:${safeName}/`)
+    : url;
+}
+
 const COMPANY_LABELS = {
   msmart: "M-Smart Driving School Solution",
   mfood: "M-Digital Food Chain",
@@ -259,11 +272,24 @@ function openApplicantModal(data) {
   const cvDownload = document.getElementById("viewApplicantCvDownload");
   if (data.cvUrl) {
     cvStatus.textContent = "CV attached.";
-    cvDownload.href = data.cvUrl;
+    cvDownload.href = buildCloudinaryDownloadUrl(data.cvUrl, data.cvFileName);
+    cvDownload.setAttribute("download", data.cvFileName || "");
     cvDownload.style.display = "inline-flex";
   } else {
     cvStatus.textContent = "No CV attached.";
     cvDownload.style.display = "none";
+  }
+
+  const coverStatus = document.getElementById("viewApplicantCoverStatus");
+  const coverDownload = document.getElementById("viewApplicantCoverDownload");
+  if (data.coverLetterUrl) {
+    coverStatus.textContent = "Cover letter attached.";
+    coverDownload.href = buildCloudinaryDownloadUrl(data.coverLetterUrl, data.coverLetterFileName);
+    coverDownload.setAttribute("download", data.coverLetterFileName || "");
+    coverDownload.style.display = "inline-flex";
+  } else {
+    coverStatus.textContent = "No cover letter attached.";
+    coverDownload.style.display = "none";
   }
 
   applicantViewModal.classList.add("open");

@@ -345,7 +345,8 @@
       color: var(--text-primary, #14213D);
       margin-bottom: 6px;
     }
-    .job-detail-block ul { margin: 0; padding-left: 18px; }
+    .job-detail-block ul { margin: 0; padding-left: 18px; list-style: disc outside; }
+    .job-detail-block ul li::marker { color: #1a56ff; }
     .job-detail-block li {
       font-family: 'Poppins', sans-serif;
       font-size: 13.5px;
@@ -1364,6 +1365,18 @@
           <p class="form-file-hint">PDF or Word, up to 10MB.</p>
         </div>
 
+        <div class="form-group" style="margin-bottom:0.4rem;">
+          <label class="form-label">Upload Cover Letter</label>
+          <label class="apply-modal-file" id="modalCoverFileLabel">
+            📎 <span class="apply-modal-file-name" id="modalCoverFileName">Choose a PDF or Word file…</span>
+            <input type="file" id="modalCoverFile" name="coverLetter" accept=".pdf,.doc,.docx" />
+          </label>
+          <div class="apply-modal-progress" id="modalCoverUploadProgress">
+            <div class="apply-modal-progress-bar" id="modalCoverUploadProgressBar"></div>
+          </div>
+          <p class="form-file-hint">Optional — PDF or Word, up to 10MB.</p>
+        </div>
+
         <button type="submit" class="btn btn-primary btn-lg btn-full" id="modalSubmitBtn" style="margin-top:1.1rem;">
           <span class="btn-text">Submit Application</span>
           <span class="btn-spinner" style="display:none;" aria-hidden="true">⟳</span>
@@ -1594,18 +1607,24 @@
       nameEl.textContent = modalCvFile.files[0] ? modalCvFile.files[0].name : 'Choose a PDF or Word file…';
     });
 
+    const modalCoverFile = document.getElementById('modalCoverFile');
+    modalCoverFile?.addEventListener('change', () => {
+      const nameEl = document.getElementById('modalCoverFileName');
+      nameEl.textContent = modalCoverFile.files[0] ? modalCoverFile.files[0].name : 'Choose a PDF or Word file…';
+    });
+
     // ── CLOUDINARY CONFIG ────────────────────────────────
     const CLOUDINARY_CLOUD_NAME = 'dilb7jd6w';
     const CLOUDINARY_UPLOAD_PRESET = 'marvini_publications';
 
-    async function uploadCvToCloudinary(file) {
+    async function uploadCvToCloudinary(file, progressWrapId = 'modalUploadProgress', progressBarId = 'modalUploadProgressBar') {
       const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-      const progressWrap = document.getElementById('modalUploadProgress');
-      const progressBar = document.getElementById('modalUploadProgressBar');
+      const progressWrap = document.getElementById(progressWrapId);
+      const progressBar = document.getElementById(progressBarId);
       progressWrap.style.display = 'block';
       progressBar.style.width = '0%';
 
@@ -1811,6 +1830,7 @@
 
       const file = document.getElementById('modalCvFile').files[0];
       if (!file) return;
+      const coverFile = document.getElementById('modalCoverFile').files[0];
 
       submitBtn.disabled = true;
       btnText.style.display = 'none';
@@ -1818,6 +1838,9 @@
 
       try {
         const cvUrl = await uploadCvToCloudinary(file);
+        const coverLetterUrl = coverFile
+          ? await uploadCvToCloudinary(coverFile, 'modalCoverUploadProgress', 'modalCoverUploadProgressBar')
+          : null;
 
         const jobValue = document.getElementById('modalJobSelect').value;
         const trackedLink = document.querySelector(`.apply-link[data-role="${CSS.escape(jobValue)}"]`);
@@ -1833,6 +1856,9 @@
           subsidiary: inferredSubsidiary,
           type: inferredType,
           cvUrl,
+          cvFileName: file.name,
+          coverLetterUrl,
+          coverLetterFileName: coverFile ? coverFile.name : null,
           stage: 'submitted',
           createdAt: serverTimestamp(),
         });
@@ -1841,6 +1867,8 @@
         e.target.reset();
         document.getElementById('modalFileName').textContent = 'Choose a PDF or Word file…';
         document.getElementById('modalUploadProgress').style.display = 'none';
+        document.getElementById('modalCoverFileName').textContent = 'Choose a PDF or Word file…';
+        document.getElementById('modalCoverUploadProgress').style.display = 'none';
         setTimeout(() => { closeApplyModal(); successEl.style.display = 'none'; }, 2500);
       } catch (err) {
         console.error('Could not submit application:', err);
