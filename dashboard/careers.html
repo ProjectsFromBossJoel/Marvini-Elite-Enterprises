@@ -140,7 +140,7 @@
           <h2 class="panel-title" style="font-size:1.15rem;">Open Roles & Volunteer Programs</h2>
         </div>
       </div>
-      <div class="admin-tabs" data-admin-tabs data-filter-target="#jobsTable tbody tr"><button class="admin-tab active" data-filter="all">All</button><button class="admin-tab" data-filter="Career">Career</button><button class="admin-tab" data-filter="Volunteer">Volunteer</button></div>
+      <div class="admin-tabs" data-admin-tabs data-filter-target="#jobsTable tbody tr"><button class="admin-tab active" data-filter="all">All</button><button class="admin-tab" data-filter="Career">Career</button><button class="admin-tab" data-filter="Volunteer">Volunteer</button><button class="admin-tab" data-filter="Internship">Internship</button></div>
       <table id="jobsTable">
         <thead><tr><th>Title</th><th>Subsidiary</th><th>Type</th><th>Schedule</th><th>Status</th><th></th></tr></thead>
         <tbody id="jobsTableBody">
@@ -279,12 +279,26 @@
           <select id="jobType" required>
             <option value="career">Career</option>
             <option value="volunteer">Volunteer</option>
+            <option value="internship">Internship</option>
           </select>
         </div>
       </div>
       <div class="form-field">
-        <label for="jobSchedule">Schedule / Location *</label>
-        <input type="text" id="jobSchedule" placeholder="e.g. Full-time · Accra" required />
+        <label for="jobSchedule">Location *</label>
+        <input type="text" id="jobSchedule" placeholder="e.g. Accra / Remote" required />
+      </div>
+      <div class="form-row2-modal">
+        <div class="form-field">
+          <label for="jobDurationValue">Duration</label>
+          <input type="number" id="jobDurationValue" min="1" placeholder="e.g. 6" />
+        </div>
+        <div class="form-field">
+          <label for="jobDurationUnit">Duration Unit</label>
+          <select id="jobDurationUnit">
+            <option value="months">Month(s)</option>
+            <option value="years">Year(s)</option>
+          </select>
+        </div>
       </div>
       <div class="form-field">
         <label for="jobDesc">Description *</label>

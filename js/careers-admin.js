@@ -48,6 +48,8 @@ function openJobModal(editData = null, editId = null) {
     document.getElementById("jobSchedule").value = editData.schedule || "";
     document.getElementById("jobDesc").value = editData.description || "";
     document.getElementById("jobStatus").value = editData.status || "open";
+    document.getElementById("jobDurationValue").value = editData.durationValue || "";
+    document.getElementById("jobDurationUnit").value = editData.durationUnit || "months";
   } else {
     jobModalTitle.textContent = "Post New Opening";
   }
@@ -66,6 +68,8 @@ jobForm?.addEventListener("submit", async (e) => {
   const editId = document.getElementById("jobDocId").value;
   const companyKey = document.getElementById("jobCompanyKey").value;
 
+  const durationValue = document.getElementById("jobDurationValue").value.trim();
+
   const data = {
     title: document.getElementById("jobTitle").value.trim(),
     companyKey,
@@ -74,6 +78,8 @@ jobForm?.addEventListener("submit", async (e) => {
     schedule: document.getElementById("jobSchedule").value.trim(),
     description: document.getElementById("jobDesc").value.trim(),
     status: document.getElementById("jobStatus").value,
+    durationValue: durationValue ? Number(durationValue) : null,
+    durationUnit: document.getElementById("jobDurationUnit").value,
   };
 
   try {
@@ -91,14 +97,27 @@ jobForm?.addEventListener("submit", async (e) => {
   }
 });
 
+const TYPE_LABELS = { career: "Career", volunteer: "Volunteer", internship: "Internship" };
+const TYPE_PILL_CLASS = { career: "active", volunteer: "completed", internship: "pending" };
+
+function formatDuration(data) {
+  if (!data.durationValue) return "";
+  const unitLabel = data.durationUnit === "years"
+    ? (data.durationValue === 1 ? "year" : "years")
+    : (data.durationValue === 1 ? "month" : "months");
+  return `${data.durationValue} ${unitLabel}`;
+}
+
 function buildJobRow(id, data) {
   const tr = document.createElement("tr");
-  tr.dataset.category = data.type === "volunteer" ? "Volunteer" : "Career";
+  const typeLabel = TYPE_LABELS[data.type] || "Career";
+  tr.dataset.category = typeLabel;
+  const durationStr = formatDuration(data);
   tr.innerHTML = `
     <td><strong>${escapeHtml(data.title || "")}</strong></td>
     <td>${escapeHtml(data.companyLabel || "")}</td>
-    <td><span class="pill ${data.type === "volunteer" ? "completed" : "active"}">${data.type === "volunteer" ? "Volunteer" : "Career"}</span></td>
-    <td>${escapeHtml(data.schedule || "")}</td>
+    <td><span class="pill ${TYPE_PILL_CLASS[data.type] || "active"}">${typeLabel}</span></td>
+    <td>${escapeHtml(data.schedule || "")}${durationStr ? ` · ${durationStr}` : ""}</td>
     <td><span class="pill ${isOpenStatus(data.status) ? "completed" : "draft"}">${isOpenStatus(data.status) ? "Open" : "Draft"}</span></td>
     <td>
       <div class="row-actions">
