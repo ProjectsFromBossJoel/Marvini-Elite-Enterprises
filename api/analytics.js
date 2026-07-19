@@ -38,6 +38,16 @@ export default async function handler(req, res) {
     });
     const visitors = Number(summary.rows?.[0]?.metricValues?.[0]?.value || 0);
 
+    // All-time total — GA4 only returns data from whenever the property was
+    // actually created, so an early fixed date like this just means "since
+    // tracking began" rather than requiring you to know the exact launch date.
+    const [allTime] = await client.runReport({
+      property: `properties/${propertyId}`,
+      dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
+      metrics: [{ name: 'activeUsers' }],
+    });
+    const visitorsAllTime = Number(allTime.rows?.[0]?.metricValues?.[0]?.value || 0);
+
     // GA4 only accepts YYYY-MM-DD, NdaysAgo, yesterday, or today — no NmonthsAgo.
     const [monthly] = await client.runReport({
       property: `properties/${propertyId}`,
@@ -52,7 +62,7 @@ export default async function handler(req, res) {
       visitors: Number(row.metricValues[0].value),
     }));
 
-    res.status(200).json({ visitors, monthlyVisitors, updatedAt: new Date().toISOString() });
+    res.status(200).json({ visitors, visitorsAllTime, monthlyVisitors, updatedAt: new Date().toISOString() });
   } catch (err) {
     console.error('GA4 analytics fetch failed:', err);
     res.status(500).json({ error: 'Could not fetch analytics data' });

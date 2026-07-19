@@ -3,19 +3,21 @@
 // and displays it on the dashboard.
 
 const statEl = document.getElementById('statVisitors30d');
+const statAllTimeEl = document.getElementById('statVisitorsAllTime');
 
-if (statEl) {
+if (statEl || statAllTimeEl) {
   fetch('https://marvini-elite-enterprises-alpha.vercel.app/api/analytics')
     .then((res) => {
       if (!res.ok) throw new Error('Request failed');
       return res.json();
     })
-    .then(({ visitors }) => {
-      statEl.textContent = Number(visitors).toLocaleString();
+    .then(({ visitors, visitorsAllTime }) => {
+      if (statEl) statEl.textContent = Number(visitors).toLocaleString();
+      if (statAllTimeEl) statAllTimeEl.textContent = Number(visitorsAllTime).toLocaleString();
     })
     .catch((err) => {
       console.error('Could not load analytics:', err);
-      statEl.textContent = '—';
-      statEl.title = 'Analytics temporarily unavailable';
+      if (statEl) { statEl.textContent = '—'; statEl.title = 'Analytics temporarily unavailable'; }
+      if (statAllTimeEl) { statAllTimeEl.textContent = '—'; statAllTimeEl.title = 'Analytics temporarily unavailable'; }
     });
 }
