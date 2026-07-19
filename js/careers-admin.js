@@ -46,7 +46,10 @@ function openJobModal(editData = null, editId = null) {
     document.getElementById("jobCompanyKey").value = editData.companyKey || "";
     document.getElementById("jobType").value = editData.type || "career";
     document.getElementById("jobSchedule").value = editData.schedule || "";
-    document.getElementById("jobDesc").value = editData.description || "";
+    document.getElementById("jobOverview").value = editData.overview || editData.description || "";
+    document.getElementById("jobResponsibilities").value = (editData.responsibilities || []).join("\n");
+    document.getElementById("jobRequirements").value = (editData.requirements || []).join("\n");
+    document.getElementById("jobReportingLine").value = editData.reportingLine || "";
     document.getElementById("jobStatus").value = editData.status || "open";
     document.getElementById("jobDurationValue").value = editData.durationValue || "";
     document.getElementById("jobDurationUnit").value = editData.durationUnit || "months";
@@ -70,13 +73,23 @@ jobForm?.addEventListener("submit", async (e) => {
 
   const durationValue = document.getElementById("jobDurationValue").value.trim();
 
+  const responsibilities = document.getElementById("jobResponsibilities").value
+    .split("\n").map((line) => line.trim()).filter(Boolean);
+  const requirements = document.getElementById("jobRequirements").value
+    .split("\n").map((line) => line.trim()).filter(Boolean);
+  const overview = document.getElementById("jobOverview").value.trim();
+
   const data = {
     title: document.getElementById("jobTitle").value.trim(),
     companyKey,
     companyLabel: COMPANY_LABELS[companyKey] || companyKey,
     type: document.getElementById("jobType").value,
     schedule: document.getElementById("jobSchedule").value.trim(),
-    description: document.getElementById("jobDesc").value.trim(),
+    overview,
+    description: overview, // kept for backward compatibility with the card front-face text
+    responsibilities,
+    requirements,
+    reportingLine: document.getElementById("jobReportingLine").value.trim(),
     status: document.getElementById("jobStatus").value,
     durationValue: durationValue ? Number(durationValue) : null,
     durationUnit: document.getElementById("jobDurationUnit").value,

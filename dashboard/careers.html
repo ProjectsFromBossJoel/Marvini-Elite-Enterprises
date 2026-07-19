@@ -49,6 +49,15 @@
   }
   .pipeline-mini-line { width:26px; height:2px; background: var(--border, #e2e8f0); margin-top:16px; }
   @media (max-width: 980px){ .pipeline-mini{ display:none; } }
+
+  .jobform-section-label{
+    display:flex;align-items:center;gap:10px;
+    margin:22px 0 12px;
+    font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--royal-blue);
+  }
+  .jobform-section-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+  .jobform-hint{ font-size:.74rem; color:var(--text-muted); margin:-6px 0 12px; }
 </style>
 
 </head>
@@ -300,10 +309,27 @@
           </select>
         </div>
       </div>
+      <div class="jobform-section-label">Job Description</div>
       <div class="form-field">
-        <label for="jobDesc">Description *</label>
-        <textarea id="jobDesc" placeholder="Short description shown on the public site…" required></textarea>
+        <label for="jobOverview">Role Overview *</label>
+        <textarea id="jobOverview" placeholder="A short 1–3 sentence summary shown on the public job card…" required></textarea>
       </div>
+      <div class="form-field">
+        <label for="jobResponsibilities">Key Responsibilities</label>
+        <textarea id="jobResponsibilities" placeholder="One responsibility per line…" rows="4"></textarea>
+        <p class="jobform-hint">Each line becomes its own bullet point on the site.</p>
+      </div>
+      <div class="form-field">
+        <label for="jobRequirements">Requirements</label>
+        <textarea id="jobRequirements" placeholder="One requirement per line…" rows="4"></textarea>
+        <p class="jobform-hint">Each line becomes its own bullet point on the site.</p>
+      </div>
+      <div class="form-field">
+        <label for="jobReportingLine">Reporting Line</label>
+        <input type="text" id="jobReportingLine" placeholder="e.g. Reports to the Project Manager – M-Digital Food Chain" />
+      </div>
+
+      <div class="jobform-section-label">Status</div>
       <div class="form-field">
         <label for="jobStatus">Status *</label>
         <select id="jobStatus" required>
