@@ -49,9 +49,12 @@ export default async function handler(req, res) {
     const visitorsAllTime = Number(allTime.rows?.[0]?.metricValues?.[0]?.value || 0);
 
     // GA4 only accepts YYYY-MM-DD, NdaysAgo, yesterday, or today — no NmonthsAgo.
+    // Same start date as the all-time total above — GA4 only returns data
+    // from whenever the property actually started tracking, so this just
+    // means "every month since tracking began" rather than a real limit.
     const [monthly] = await client.runReport({
       property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '243daysAgo', endDate: 'today' }],
+      dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
       dimensions: [{ name: 'yearMonth' }],
       metrics: [{ name: 'activeUsers' }],
       orderBys: [{ dimension: { dimensionName: 'yearMonth' } }],

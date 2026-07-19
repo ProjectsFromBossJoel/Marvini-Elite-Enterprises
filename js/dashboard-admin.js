@@ -91,7 +91,8 @@ function watchTrafficChart() {
   const monthsWrap = document.getElementById("chartMonthsLabels");
   const yAxisWrap = document.getElementById("chartYAxisLabels");
   const yearSelect = document.getElementById("chartYearSelect");
-  const panelTitle = document.querySelector(".panel-title");
+  const panelTitle = document.getElementById("trafficPanelTitle") || document.querySelector(".panel-title");
+
   if (!areaPath || !linePath) return;
 
   const MONTH_LABELS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
