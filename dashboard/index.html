@@ -159,13 +159,17 @@
           </div>
           <div style="display:flex;gap:16px;align-items:center;">
             <div class="legend">
+              <div class="legend-item" id="visitorsLegendItem" style="display:none;"><span class="legend-dot" style="background:var(--royal-blue)"></span>Visitors</div>
               <div class="legend-item"><span class="legend-dot" style="background:var(--deep-teal)"></span>Applications</div>
             </div>
-            <div class="dropdown">This Year <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+            <select id="chartYearSelect" class="dropdown" style="border:1px solid var(--border);cursor:pointer;appearance:none;background:var(--bg-secondary);font-family:inherit;"></select>
           </div>
         </div>
 
-        <div class="chart-wrap">
+        <div class="chart-wrap" style="display:flex;gap:8px;align-items:flex-start;overflow:visible;">
+        <div id="chartYAxisLabels" style="display:flex;flex-direction:column;justify-content:space-between;height:260px;padding:0 6px 0 0;font-family:var(--font-body);font-size:0.7rem;color:var(--text-muted);text-align:right;"></div>
+        <div style="flex:1;min-width:0;position:relative;">
+          <div id="chartTooltip" style="display:none;position:absolute;background:#0f1729;color:#fff;padding:8px 12px;border-radius:8px;font-family:var(--font-body);font-size:0.78rem;font-weight:600;pointer-events:none;white-space:nowrap;transform:translate(-50%,-115%);z-index:10;box-shadow:0 8px 20px rgba(0,0,0,0.25);"></div>
           <svg viewBox="0 0 760 260" preserveAspectRatio="none" id="trafficChartSvg">
             <defs>
               <linearGradient id="gradBlue" x1="0" y1="0" x2="0" y2="1">
@@ -191,8 +195,8 @@
           </svg>
           <div class="chart-months" id="chartMonthsLabels"></div>
         </div>
+        </div>
       </div>
-
       <div>
         <div class="pipeline-card">
           <div class="pipeline-top">
