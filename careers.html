@@ -1847,9 +1847,9 @@
           : null;
 
         const jobValue = document.getElementById('modalJobSelect').value;
-        const trackedLink = document.querySelector(`.apply-link[data-role="${CSS.escape(jobValue)}"]`);
-        const inferredType = trackedLink?.dataset.track || 'career';
-        const inferredSubsidiary = trackedLink?.closest('.job-card')?.dataset.company || 'general';
+        const jobLookup = window.marviniJobLookup?.[jobValue];
+        const inferredType = jobLookup?.type || 'career';
+        const inferredSubsidiary = jobLookup?.companyKey || 'general';
 
         const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
         await addDoc(collection(db, 'applications'), {

@@ -40,6 +40,18 @@ onSnapshot(collection(db, "jobs"), (snap) => {
     .map((d) => ({ id: d.id, data: d.data() }))
     .filter((d) => d.data.status === "open");
 
+  // Direct Firestore-backed lookup (Title — Subsidiary → type/subsidiary),
+  // so the Apply modal can read the real values instead of re-parsing them
+  // out of the DOM via a fragile CSS attribute-selector match.
+  window.marviniJobLookup = {};
+  docs.forEach(({ data }) => {
+    const value = `${data.title || ""} — ${data.companyLabel || ""}`;
+    window.marviniJobLookup[value] = {
+      type: String(data.type || "career").trim().toLowerCase(),
+      companyKey: data.companyKey || "general",
+    };
+  });
+
   // Always keep the modal dropdown in sync with live Firestore jobs
   refreshModalJobSelect(docs);
 
