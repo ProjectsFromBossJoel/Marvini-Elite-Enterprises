@@ -368,7 +368,7 @@ function watchCareersAndApplications() {
           return `
             <tr>
               <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a56ff&color=fff"/><div><strong>${escapeHtml(name)}</strong><span>${escapeHtml(a.type || "")}</span></div></div></td>
-              <td>${escapeHtml(a.role || "—")}</td>
+              <td>${escapeHtml(String(a.role || "—").split(" — ")[0].trim())}</td>
               <td>${escapeHtml(a.subsidiary || "—")}</td>
               <td><span class="pill pending">${escapeHtml(a.stage || "submitted")}</span></td>
             </tr>`;

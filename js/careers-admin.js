@@ -20,6 +20,13 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// "role" is stored as "Title — Subsidiary" (needed elsewhere to match the
+// job card), but the Subsidiary is already shown in its own field/column —
+// so strip that suffix wherever the role is displayed on its own.
+function roleOnly(role) {
+  return String(role || "").split(" — ")[0].trim();
+}
+
 // Cloudinary serves files cross-origin, so a plain `download` attribute is
 // often ignored by the browser. Asking Cloudinary itself to attach the file
 // under a specific name (fl_attachment) is the reliable way to make the
@@ -206,7 +213,7 @@ function buildApplicantRow(id, data) {
   const initials = encodeURIComponent(data.applicantName || "Applicant");
   tr.innerHTML = `
     <td><div class="student-cell"><img src="https://ui-avatars.com/api/?name=${initials}&background=1a56ff&color=fff"/><div><strong>${escapeHtml(data.applicantName || "Unknown")}</strong><span>${data.type === "volunteer" ? "Volunteer" : "Career"}</span></div></div></td>
-    <td>${escapeHtml(data.role || "")}</td>
+    <td>${escapeHtml(roleOnly(data.role))}</td>
     <td>${escapeHtml(COMPANY_LABELS[data.subsidiary] || data.subsidiary || "")}</td>
     <td><span class="pill ${STAGE_PILL_CLASS[stage] || "active"}">${STAGE_LABELS[stage] || stage}</span></td>
     <td>
@@ -245,7 +252,7 @@ function openApplicantModal(data) {
     ? `<a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a>` : "—";
   document.getElementById("viewApplicantPhone").innerHTML = data.phone
     ? `<a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a>` : "—";
-  document.getElementById("viewApplicantRole").textContent = data.role || "—";
+  document.getElementById("viewApplicantRole").textContent = roleOnly(data.role) || "—";
   document.getElementById("viewApplicantSubsidiary").textContent = COMPANY_LABELS[data.subsidiary] || data.subsidiary || "—";
   document.getElementById("viewApplicantType").textContent = data.type === "volunteer" ? "Volunteer" : "Career";
   document.getElementById("viewApplicantStage").textContent = STAGE_LABELS[data.stage || "submitted"] || data.stage;
