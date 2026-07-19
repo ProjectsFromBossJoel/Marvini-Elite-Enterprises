@@ -8,11 +8,11 @@
 import {
   db,
   collection,
-  getDocs,
   addDoc,
   query,
   where,
   orderBy,
+  onSnapshot,
   serverTimestamp,
   PUBLICATIONS_COLLECTION,
 } from "./firebase-config.js";
@@ -20,35 +20,39 @@ import { uploadToCloudinary } from "./cloudinary.js";
 
 const grid = document.querySelector(".articles-grid");
 
-async function renderPublishedArticles() {
+function renderPublishedArticles() {
   if (!grid) return;
 
-  try {
-    const q = query(
-      collection(db, PUBLICATIONS_COLLECTION),
-      where("status", "==", "published"),
-      orderBy("publishedAt", "desc")
-    );
-    const snapshot = await getDocs(q);
+  const q = query(
+    collection(db, PUBLICATIONS_COLLECTION),
+    where("status", "==", "published"),
+    orderBy("publishedAt", "desc")
+  );
 
-    // Always clear whatever is currently in the grid (including any
-    // dummy/static cards left in the HTML) before rendering live data.
-    grid.innerHTML = "";
+  // Real-time listener: the grid updates live whenever a publication is
+  // published, unpublished, edited, or deleted in the admin dashboard —
+  // no page refresh required.
+  onSnapshot(
+    q,
+    (snapshot) => {
+      grid.innerHTML = "";
 
-    if (snapshot.empty) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-muted,#64748b);">No publications available yet. Check back soon.</div>`;
-      return;
+      if (snapshot.empty) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-muted,#64748b);">No publications available yet. Check back soon.</div>`;
+        return;
+      }
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        grid.appendChild(buildArticleCard(data, docSnap.id));
+      });
+    },
+    (err) => {
+      // If Firestore is unreachable, keep whatever static cards are
+      // already in the HTML rather than showing a broken section.
+      console.error("Could not load publications:", err);
     }
-
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      grid.appendChild(buildArticleCard(data, docSnap.id));
-    });
-  } catch (err) {
-    // If Firestore is unreachable, keep whatever static cards are
-    // already in the HTML rather than showing a broken section.
-    console.error("Could not load publications:", err);
-  }
+  );
 }
 
 function buildArticleCard(data, id) {

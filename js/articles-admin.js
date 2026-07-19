@@ -6,12 +6,12 @@ import {
   db,
   collection,
   addDoc,
-  getDocs,
   doc,
   updateDoc,
   deleteDoc,
   orderBy,
   query,
+  onSnapshot,
   serverTimestamp,
   PUBLICATIONS_COLLECTION,
 } from "./firebase-config.js";
@@ -157,7 +157,6 @@ editForm?.addEventListener("submit", async (e) => {
     editStatus.textContent = "Saved successfully.";
     setTimeout(() => {
       closeEditModal();
-      loadPublications();
     }, 600);
   } catch (err) {
     console.error(err);
@@ -214,7 +213,6 @@ uploadForm?.addEventListener("submit", async (e) => {
     uploadStatus.textContent = "Uploaded successfully.";
     setTimeout(() => {
       closeModal();
-      loadPublications();
     }, 600);
   } catch (err) {
     console.error(err);
@@ -224,24 +222,28 @@ uploadForm?.addEventListener("submit", async (e) => {
   }
 });
 
-// ── Load & render publications ───────────────────────────
-async function loadPublications() {
+// ── Load & render publications (real-time) ───────────────
+function loadPublications() {
   tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted);">Loading…</td></tr>`;
 
   const q = query(collection(db, PUBLICATIONS_COLLECTION), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
 
-  if (snapshot.empty) {
+  // Real-time listener: the table reflects new uploads, edits, publish
+  // toggles, and deletes instantly — including changes made from another
+  // browser tab or by another admin — with no manual refresh needed.
+  onSnapshot(q, (snapshot) => {
+    if (snapshot.empty) {
+      tableBody.innerHTML = "";
+      emptyState.style.display = "block";
+      return;
+    }
+
+    emptyState.style.display = "none";
     tableBody.innerHTML = "";
-    emptyState.style.display = "block";
-    return;
-  }
 
-  emptyState.style.display = "none";
-  tableBody.innerHTML = "";
-
-  snapshot.forEach((docSnap) => {
-    tableBody.appendChild(renderRow(docSnap.id, docSnap.data()));
+    snapshot.forEach((docSnap) => {
+      tableBody.appendChild(renderRow(docSnap.id, docSnap.data()));
+    });
   });
 }
 
@@ -302,8 +304,6 @@ async function togglePublish(id, currentStatus) {
     status: nextStatus,
     publishedAt: nextStatus === "published" ? serverTimestamp() : null,
   });
-
-  loadPublications();
 }
 
 // ── Delete ────────────────────────────────────────────────
@@ -314,7 +314,6 @@ async function deleteItem(id, title) {
   if (!confirmed) return;
 
   await deleteDoc(doc(db, PUBLICATIONS_COLLECTION, id));
-  loadPublications();
 
   // Note: this removes the Firestore record (and therefore the listing
   // on both the admin dashboard and the public site). The underlying
