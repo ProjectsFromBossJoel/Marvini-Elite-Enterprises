@@ -34,7 +34,10 @@ function roleOnly(role) {
 function buildCloudinaryDownloadUrl(url, filename) {
   if (!url || !filename) return url;
   const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
-  const safeName = encodeURIComponent(nameWithoutExt);
+  // Cloudinary transformation segments only tolerate letters, numbers, hyphens
+  // and underscores — spaces, parentheses, etc. break the transformation
+  // parser and cause a 400, even though encodeURIComponent leaves them alone.
+  const safeName = nameWithoutExt.replace(/[^a-zA-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, "") || "file";
   return url.includes("/upload/")
     ? url.replace("/upload/", `/upload/fl_attachment:${safeName}/`)
     : url;
