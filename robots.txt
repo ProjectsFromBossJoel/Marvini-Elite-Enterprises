@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marvini-elite-enterprises.web.app/sitemap.xml
