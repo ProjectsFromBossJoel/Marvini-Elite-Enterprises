@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /js/
 
 Sitemap: https://marvini-elite-enterprises.web.app/sitemap.xml
