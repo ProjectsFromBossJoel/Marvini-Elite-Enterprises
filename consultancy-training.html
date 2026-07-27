@@ -685,6 +685,14 @@
     border-radius: 4px;
     padding: 18px 24px;
     min-width: 220px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .partner-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(20,33,61,0.08);
+    border-color: var(--gold-dark);
   }
   .partner-card img{
     width: 40px;
@@ -1129,19 +1137,19 @@
   </div>
   <div class="partners-carousel-wrap">
     <div class="partners-carousel" aria-label="Partner logos carousel">
-      <div class="partner-card"><img src="img/M-Consultancy and Training/img/Excelsis_logo.png" alt="Excelsis" /><span class="partner-name">Excelsis</span></div>
-      <div class="partner-card"><img src="img/others/All Logos/partners/mofa.png" alt="Ministry of Food and Agriculture" /><span class="partner-name"></span></div>
-      <div class="partner-card"><img src="img/others/All Logos/partners/gipc.png" alt="Ghana Investment Promotion Centre" /><span class="partner-name"></span></div>
-      <div class="partner-card"><img src="img/others/All Logos/partners/nbssi.png" alt="National Board for Small Scale Industries" /><span class="partner-name"></span></div>
-      <div class="partner-card"><img src="img/others/All Logos/partners/gta.png" alt="Ghana Tourism Authority" /><span class="partner-name">GTA</span></div>
-      <div class="partner-card"><img src="img/others/All Logos/partners/gepa.png" alt="Ghana Export Promotion Authority" /><span class="partner-name"></span></div>
+      <a class="partner-card" href="partner-detail.html?id=excelsis"><img src="img/M-Consultancy and Training/img/Excelsis_logo.png" alt="Excelsis" /><span class="partner-name">Excelsis</span></a>
+      <a class="partner-card" href="partner-detail.html?id=mofa"><img src="img/others/All Logos/partners/mofa.png" alt="Ministry of Food and Agriculture" /><span class="partner-name">MoFA</span></a>
+      <a class="partner-card" href="partner-detail.html?id=gipc"><img src="img/others/All Logos/partners/gipc.png" alt="Ghana Investment Promotion Centre" /><span class="partner-name">GIPC</span></a>
+      <a class="partner-card" href="partner-detail.html?id=nbssi"><img src="img/others/All Logos/partners/nbssi.png" alt="National Board for Small Scale Industries" /><span class="partner-name">NBSSI</span></a>
+      <a class="partner-card" href="partner-detail.html?id=gta"><img src="img/others/All Logos/partners/gta.png" alt="Ghana Tourism Authority" /><span class="partner-name">GTA</span></a>
+      <a class="partner-card" href="partner-detail.html?id=gepa"><img src="img/others/All Logos/partners/gepa.png" alt="Ghana Export Promotion Authority" /><span class="partner-name">GEPA</span></a>
       <!-- Duplicate set for seamless loop -->
-      <div class="partner-card" aria-hidden="true"><img src="img/M-Consultancy and Training/img/Excelsis_logo.png" alt="" /><span class="partner-name">Excelsis</span></div>
-      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/mofa.png" alt="" /><span class="partner-name"></span></div>
-      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/gipc.png" alt="" /><span class="partner-name"></span></div>
-      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/nbssi.png" alt="" /><span class="partner-name"></span></div>
-      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/gta.png" alt="" /><span class="partner-name"></span></div>
-      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/gepa.png" alt="" /><span class="partner-name"></span></div>
+      <a class="partner-card" href="partner-detail.html?id=excelsis" aria-hidden="true" tabindex="-1"><img src="img/M-Consultancy and Training/img/Excelsis_logo.png" alt="" /><span class="partner-name">Excelsis</span></a>
+      <a class="partner-card" href="partner-detail.html?id=mofa" aria-hidden="true" tabindex="-1"><img src="img/others/All Logos/partners/mofa.png" alt="" /><span class="partner-name">MoFA</span></a>
+      <a class="partner-card" href="partner-detail.html?id=gipc" aria-hidden="true" tabindex="-1"><img src="img/others/All Logos/partners/gipc.png" alt="" /><span class="partner-name">GIPC</span></a>
+      <a class="partner-card" href="partner-detail.html?id=nbssi" aria-hidden="true" tabindex="-1"><img src="img/others/All Logos/partners/nbssi.png" alt="" /><span class="partner-name">NBSSI</span></a>
+      <a class="partner-card" href="partner-detail.html?id=gta" aria-hidden="true" tabindex="-1"><img src="img/others/All Logos/partners/gta.png" alt="" /><span class="partner-name">GTA</span></a>
+      <a class="partner-card" href="partner-detail.html?id=gepa" aria-hidden="true" tabindex="-1"><img src="img/others/All Logos/partners/gepa.png" alt="" /><span class="partner-name">GEPA</span></a>
     </div>
   </div>
 </section>
