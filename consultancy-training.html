@@ -656,6 +656,53 @@
     margin-top:8px;
   }
 
+  /* ---------- Partners carousel ---------- */
+  .partners-section{ background: var(--parchment); }
+  .partners-carousel-wrap{
+    overflow: hidden;
+    position: relative;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .partners-carousel{
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: partnersScroll 32s linear infinite;
+  }
+  .partners-carousel-wrap:hover .partners-carousel{ animation-play-state: paused; }
+  @keyframes partnersScroll{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  .partner-card{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 18px 24px;
+    min-width: 220px;
+  }
+  .partner-card img{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .partner-card .partner-name{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .partners-carousel{ animation: none; }
+  }
+
   /* ---------- Contact / lead form ---------- */
   .contact-wrap{
     display:grid;
@@ -1066,6 +1113,35 @@
           <li><span class="mark">→</span> Open-enrolment public courses</li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<div class="thread-divider" aria-hidden="true"><span class="node"></span><span class="line"></span></div>
+
+<section class="partners-section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Partners</p>
+      <h2>Organisations we've worked alongside</h2>
+      <p>Trusted by institutions and businesses across Ghana's public and private sectors.</p>
+    </div>
+  </div>
+  <div class="partners-carousel-wrap">
+    <div class="partners-carousel" aria-label="Partner logos carousel">
+      <div class="partner-card"><img src="img/M-Consultancy and Training/img/Excelsis_logo.png" alt="Excelsis" /><span class="partner-name">Excelsis</span></div>
+      <div class="partner-card"><img src="img/others/All Logos/partners/mofa.png" alt="Ministry of Food and Agriculture" /><span class="partner-name">MoFA</span></div>
+      <div class="partner-card"><img src="img/others/All Logos/partners/gipc.png" alt="Ghana Investment Promotion Centre" /><span class="partner-name">GIPC</span></div>
+      <div class="partner-card"><img src="img/others/All Logos/partners/nbssi.png" alt="National Board for Small Scale Industries" /><span class="partner-name">NBSSI</span></div>
+      <div class="partner-card"><img src="img/others/All Logos/partners/gta.png" alt="Ghana Tourism Authority" /><span class="partner-name">GTA</span></div>
+      <div class="partner-card"><img src="img/others/All Logos/partners/gepa.png" alt="Ghana Export Promotion Authority" /><span class="partner-name">GEPA</span></div>
+      <!-- Duplicate set for seamless loop -->
+      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/dvla.png" alt="" /><span class="partner-name">DVLA Ghana</span></div>
+      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/mofa.png" alt="" /><span class="partner-name">MoFA</span></div>
+      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/gipc.png" alt="" /><span class="partner-name">GIPC</span></div>
+      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/nbssi.png" alt="" /><span class="partner-name">NBSSI</span></div>
+      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/gta.png" alt="" /><span class="partner-name">GTA</span></div>
+      <div class="partner-card" aria-hidden="true"><img src="img/others/All Logos/partners/gepa.png" alt="" /><span class="partner-name">GEPA</span></div>
     </div>
   </div>
 </section>
