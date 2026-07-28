@@ -670,7 +670,11 @@
     display: flex;
     gap: 20px;
     width: max-content;
+    margin: 0 auto;
     animation: partnersScroll 32s linear infinite;
+  }
+  .partners-carousel.static{
+    animation: none;
   }
   .partners-carousel-wrap:hover .partners-carousel{ animation-play-state: paused; }
   @keyframes partnersScroll{
@@ -1387,7 +1391,7 @@
   // Reuse the SAME Firebase app/Firestore instance as the rest of the
   // Marvini site, so writes land in the same project/collections.
   // ---------------------------------------------------------------
-  import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "./js/firebase-config.js";
+  import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc } from "./js/firebase-config.js";
 
   // ---------------- Mobile menu ----------------
   const hamburger = document.getElementById('navHamburger');
@@ -1519,6 +1523,12 @@
   // ---------------- Partners (live from Firestore) ----------------
   const partnersCarousel = document.getElementById('partners-carousel');
   const partnersQuery = query(collection(db, 'consultancyPartners'), orderBy('createdAt', 'desc'));
+  const partnersSettingsRef = doc(db, 'publicSettings', 'consultancyTraining');
+
+  // Admin-controlled "Scroll" switch (dashboard) decides whether the strip
+  // animates; latestPartners lets either listener re-render without a refetch.
+  let latestPartners = null;
+  let partnersScrollEnabled = true;
 
   function renderPartnerCard(p, hidden){
     const hiddenAttrs = hidden ? 'aria-hidden="true" tabindex="-1"' : '';
@@ -1533,19 +1543,31 @@
     `;
   }
 
-  onSnapshot(partnersQuery, (snapshot) => {
-    if (snapshot.empty){
+  function renderPartners(){
+    if (latestPartners === null) return;
+    if (latestPartners.length === 0){
       partnersCarousel.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60; padding: 0 24px;">No partners published yet.</p>';
       return;
     }
-    const partners = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-    // Render the set twice so the CSS marquee (translateX(-50%)) loops seamlessly.
-    const cardsHtml = partners.map(p => renderPartnerCard(p, false)).join('');
-    const hiddenCardsHtml = partners.map(p => renderPartnerCard(p, true)).join('');
+    partnersCarousel.classList.toggle('static', !partnersScrollEnabled);
+    const cardsHtml = latestPartners.map(p => renderPartnerCard(p, false)).join('');
+    const hiddenCardsHtml = partnersScrollEnabled ? latestPartners.map(p => renderPartnerCard(p, true)).join('') : '';
     partnersCarousel.innerHTML = cardsHtml + hiddenCardsHtml;
+  }
+
+  onSnapshot(partnersQuery, (snapshot) => {
+    latestPartners = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderPartners();
   }, (err) => {
     console.error('Error loading partners:', err);
     partnersCarousel.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:var(--rust);">Couldn\'t load partners right now.</p>';
+  });
+
+  onSnapshot(partnersSettingsRef, (snap) => {
+    partnersScrollEnabled = snap.exists() ? snap.data().partnersScrollEnabled !== false : true;
+    renderPartners();
+  }, (err) => {
+    console.error('Error loading partners scroll setting:', err);
   });
 
   // Hero "Request a consultation" CTA jumps to the inline form with that intent

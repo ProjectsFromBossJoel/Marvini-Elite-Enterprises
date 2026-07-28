@@ -6,7 +6,7 @@
 
 import {
   db, collection, addDoc, updateDoc, deleteDoc, doc,
-  onSnapshot, query, orderBy, serverTimestamp
+  onSnapshot, query, orderBy, serverTimestamp, setDoc
 } from "../js/firebase-config.js";
 
 // ---------------------------------------------------------------
@@ -262,6 +262,24 @@ document.addEventListener("DOMContentLoaded", () => {
       statusEl.style.color = "var(--red,#e5484d)";
     } finally {
       submitBtn.disabled = false;
+    }
+  });
+
+  // ---------------- Partners scroll toggle ----------------
+  const scrollToggle = document.getElementById("partnersScrollToggle");
+  const partnersSettingsRef = doc(db, "publicSettings", "consultancyTraining");
+
+  onSnapshot(partnersSettingsRef, (snap) => {
+    const enabled = snap.exists() ? snap.data().partnersScrollEnabled !== false : true;
+    if (scrollToggle) scrollToggle.checked = enabled;
+  });
+
+  scrollToggle?.addEventListener("change", async () => {
+    try {
+      await setDoc(partnersSettingsRef, { partnersScrollEnabled: scrollToggle.checked }, { merge: true });
+    } catch (err) {
+      console.error("Error saving partners scroll setting:", err);
+      scrollToggle.checked = !scrollToggle.checked; // revert on failure
     }
   });
 });
