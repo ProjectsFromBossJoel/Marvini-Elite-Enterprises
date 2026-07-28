@@ -37,6 +37,30 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+const PARTNERS_PAGE_SIZE = 5;
+let partnersPage = 1;
+
+function renderPartnersPaginationControls(container, totalItems, page, pageSize, onChange) {
+  if (!container) return;
+  if (totalItems === 0) {
+    container.innerHTML = "";
+    return;
+  }
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const start = (page - 1) * pageSize + 1;
+  const end = Math.min(page * pageSize, totalItems);
+  container.innerHTML = `
+    <div class="pagination-info">Showing ${start}–${end} of ${totalItems}</div>
+    <div class="pagination-controls">
+      <button type="button" class="pg-btn" data-pg="prev" ${page <= 1 ? "disabled" : ""}>‹ Prev</button>
+      <span class="pg-page">Page ${page} of ${totalPages}</span>
+      <button type="button" class="pg-btn" data-pg="next" ${page >= totalPages ? "disabled" : ""}>Next ›</button>
+    </div>
+  `;
+  container.querySelector('[data-pg="prev"]').addEventListener("click", () => onChange(Math.max(1, page - 1)));
+  container.querySelector('[data-pg="next"]').addEventListener("click", () => onChange(Math.min(totalPages, page + 1)));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("partnerModal");
   const modalTitle = document.getElementById("partnerModalTitle");
@@ -142,21 +166,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const emptyState = document.getElementById("partnersEmptyState");
   const partnersQuery = query(collection(db, "consultancyPartners"), orderBy("createdAt", "desc"));
   let partnersCache = {};
+  let allPartners = [];
+  const partnersPaginationEl = document.getElementById("partnersPagination");
 
-  onSnapshot(partnersQuery, (snapshot) => {
-    if (snapshot.empty) {
+  function renderPartnersTable() {
+    if (allPartners.length === 0) {
       tableBody.innerHTML = "";
       emptyState.style.display = "block";
-      partnersCache = {};
+      partnersPaginationEl.innerHTML = "";
       return;
     }
     emptyState.style.display = "none";
-    partnersCache = {};
 
-    tableBody.innerHTML = snapshot.docs.map((docSnap) => {
-      const p = { id: docSnap.id, ...docSnap.data() };
-      partnersCache[p.id] = p;
+    const totalPages = Math.max(1, Math.ceil(allPartners.length / PARTNERS_PAGE_SIZE));
+    if (partnersPage > totalPages) partnersPage = totalPages;
+    const start = (partnersPage - 1) * PARTNERS_PAGE_SIZE;
+    const pageItems = allPartners.slice(start, start + PARTNERS_PAGE_SIZE);
 
+    renderPartnersPaginationControls(
+      partnersPaginationEl,
+      allPartners.length,
+      partnersPage,
+      PARTNERS_PAGE_SIZE,
+      (p) => { partnersPage = p; renderPartnersTable(); }
+    );
+
+    tableBody.innerHTML = pageItems.map((p) => {
       const logoHtml = p.logoUrl
         ? `<img src="${escapeHtml(p.logoUrl)}" alt="${escapeHtml(p.name)}" style="width:36px;height:36px;object-fit:contain;border-radius:6px;border:1px solid var(--border,#e2e8f0);" />`
         : `<span style="font-size:.7rem;color:var(--text-muted,#64748b);">No logo</span>`;
@@ -184,9 +219,17 @@ document.addEventListener("DOMContentLoaded", () => {
         </tr>
       `;
     }).join("");
+  }
+
+  onSnapshot(partnersQuery, (snapshot) => {
+    allPartners = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    partnersCache = {};
+    allPartners.forEach((p) => { partnersCache[p.id] = p; });
+    renderPartnersTable();
   }, (err) => {
     console.error("Error loading partners:", err);
     tableBody.innerHTML = `<tr><td colspan="5" style="color:var(--red,#e5484d);">Couldn't load partners right now.</td></tr>`;
+    partnersPaginationEl.innerHTML = "";
   });
 
   tableBody?.addEventListener("click", async (e) => {

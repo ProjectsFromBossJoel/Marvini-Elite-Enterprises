@@ -28,6 +28,7 @@ const consultancyNavBadge = document.getElementById("consultancyNavBadge");
 let allLeads = [];
 let activeFilter = "all";
 let activeLeadId = null;
+let leadsPage = 1;
 
 function formatDate(timestamp) {
   if (!timestamp || typeof timestamp.toDate !== "function") return "—";
@@ -53,14 +54,25 @@ function matchesFilter(lead) {
 }
 
 function renderRows() {
-  const rows = allLeads.filter(matchesFilter);
+  const filtered = allLeads.filter(matchesFilter);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (leadsPage > totalPages) leadsPage = totalPages;
+  const rows = paginate(filtered, leadsPage, PAGE_SIZE);
   tableBody.innerHTML = "";
 
-  if (rows.length === 0) {
+  if (filtered.length === 0) {
     emptyState.style.display = "block";
+    document.getElementById("leadsPagination").innerHTML = "";
     return;
   }
   emptyState.style.display = "none";
+  renderPaginationControls(
+    document.getElementById("leadsPagination"),
+    filtered.length,
+    leadsPage,
+    PAGE_SIZE,
+    (p) => { leadsPage = p; renderRows(); }
+  );
 
   rows.forEach((lead) => {
     const tr = document.createElement("tr");
@@ -152,16 +164,28 @@ const registrationsTableBody = document.getElementById("registrationsTableBody")
 const registrationsEmptyState = document.getElementById("registrationsEmptyState");
 let allRegistrations = [];
 let activeRegistrationId = null;
+let registrationsPage = 1;
 
 function renderRegistrationRows() {
+  const totalPages = Math.max(1, Math.ceil(allRegistrations.length / PAGE_SIZE));
+  if (registrationsPage > totalPages) registrationsPage = totalPages;
+  const rows = paginate(allRegistrations, registrationsPage, PAGE_SIZE);
   registrationsTableBody.innerHTML = "";
   if (allRegistrations.length === 0) {
     registrationsEmptyState.style.display = "block";
+    document.getElementById("registrationsPagination").innerHTML = "";
     return;
   }
   registrationsEmptyState.style.display = "none";
+  renderPaginationControls(
+    document.getElementById("registrationsPagination"),
+    allRegistrations.length,
+    registrationsPage,
+    PAGE_SIZE,
+    (p) => { registrationsPage = p; renderRegistrationRows(); }
+  );
 
-  allRegistrations.forEach((reg) => {
+  rows.forEach((reg) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>
@@ -261,6 +285,7 @@ filterTabs.querySelectorAll(".filter-tab").forEach((tab) => {
     filterTabs.querySelectorAll(".filter-tab").forEach((t) => t.classList.remove("active"));
     tab.classList.add("active");
     activeFilter = tab.dataset.filter;
+    leadsPage = 1;
     renderRows();
   });
 });
@@ -333,17 +358,29 @@ deleteLeadBtn.addEventListener("click", async () => {
 const programsTableBody = document.getElementById("programsTableBody");
 const programsEmptyState = document.getElementById("programsEmptyState");
 let allPrograms = [];
+let programsPage = 1;
 
 function renderProgramRows() {
+  const totalPages = Math.max(1, Math.ceil(allPrograms.length / PAGE_SIZE));
+  if (programsPage > totalPages) programsPage = totalPages;
+  const rows = paginate(allPrograms, programsPage, PAGE_SIZE);
   programsTableBody.innerHTML = "";
 
   if (allPrograms.length === 0) {
     programsEmptyState.style.display = "block";
+    document.getElementById("programsPagination").innerHTML = "";
     return;
   }
   programsEmptyState.style.display = "none";
+  renderPaginationControls(
+    document.getElementById("programsPagination"),
+    allPrograms.length,
+    programsPage,
+    PAGE_SIZE,
+    (p) => { programsPage = p; renderProgramRows(); }
+  );
 
-  allPrograms.forEach((p) => {
+  rows.forEach((p) => {
     const tr = document.createElement("tr");
     const partnerTagHtml = p.partner
       ? (() => {

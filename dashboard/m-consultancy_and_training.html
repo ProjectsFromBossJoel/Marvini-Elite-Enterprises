@@ -57,6 +57,23 @@
   }
   .filter-tab.active { background: #1a56ff; border-color:#1a56ff; color:#fff; }
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
+  .pagination {
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:.75rem;
+    padding: 1rem 0 .25rem;
+    border-top: 1px solid var(--border,#e2e8f0);
+    margin-top: .5rem;
+  }
+  .pagination-info { font-size:.8rem; color: var(--text-muted,#64748b); }
+  .pagination-controls { display:flex; align-items:center; gap:.75rem; }
+  .pg-btn {
+    padding:.4rem .9rem; border-radius:7px; border:1px solid var(--border,#e2e8f0);
+    background: var(--bg-card,#fff); font-size:.8rem; font-weight:600; cursor:pointer;
+    color: var(--text-muted,#64748b);
+  }
+  .pg-btn:hover:not(:disabled) { border-color:#1a56ff; color:#1a56ff; }
+  .pg-btn:disabled { opacity:.4; cursor:not-allowed; }
+  .pg-page { font-size:.8rem; font-weight:600; color: var(--text-muted,#64748b); white-space:nowrap; }
   #leadsTableBody td:last-child { white-space: nowrap; }
   #programsTableBody td:last-child { white-space: nowrap; }
   .program-desc-line {
@@ -214,7 +231,7 @@
     </div>
     <div class="panel">
       <table>
-        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th></th>Duration</th><th>Note</th><th></th></tr></thead>
+        <thead><tr><th>Program</th><th>Format</th><th>Start</th><th>End</th><th>Venue</th><th>Partner</th><th>Duration</th><th>Note</th><th></th></tr></thead>
         <tbody id="programsTableBody">
           <!-- Rows are rendered by ../js/consultancy-training-admin.js -->
         </tbody>
@@ -222,6 +239,7 @@
       <div class="empty-state" id="programsEmptyState" style="display:none;">
         No programs published yet. Click <strong>Add Program</strong> to publish one to the live Consultancy &amp; Training page.
       </div>
+      <div class="pagination" id="programsPagination"></div>
     </div>
 
     <div class="section-heading">
@@ -244,6 +262,7 @@
       <div class="empty-state" id="partnersEmptyState" style="display:none;">
         No partners yet. Click <strong>Add Partner</strong> to publish one to the live Consultancy &amp; Training page.
       </div>
+      <div class="pagination" id="partnersPagination"></div>
     </div>
 
     <div class="section-heading">
@@ -259,6 +278,7 @@
       <div class="empty-state" id="registrationsEmptyState" style="display:none;">
         No training registrations yet. New sign-ups from the Consultancy &amp; Training page will show up here.
       </div>
+      <div class="pagination" id="registrationsPagination"></div>
     </div>
 
     <div class="section-heading">
@@ -283,6 +303,7 @@
       <div class="empty-state" id="leadsEmptyState" style="display:none;">
         No enquiries yet. New consultation requests and training registrations from the Consultancy &amp; Training page will show up here.
       </div>
+      <div class="pagination" id="leadsPagination"></div>
     </div>
 
   </main>
