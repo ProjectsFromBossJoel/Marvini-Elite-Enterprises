@@ -149,6 +149,10 @@
         <p>Consultation requests and training registrations submitted from the public M-Consultancy & Training page.</p>
       </div>
       <div class="page-head-actions">
+        <button class="btn btn-outline" type="button" id="openPartnerBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Add Partner
+        </button>
         <button class="btn btn-primary" type="button" id="openProgramBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Add Program
@@ -168,6 +172,21 @@
       </table>
       <div class="empty-state" id="programsEmptyState" style="display:none;">
         No programs published yet. Click <strong>Add Program</strong> to publish one to the live Consultancy &amp; Training page.
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h2>Partners</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Logo</th><th>Name</th><th>CEO</th><th>Website</th><th></th></tr></thead>
+        <tbody id="partnersTableBody">
+          <!-- Rows are rendered by ../js/partners-admin.js -->
+        </tbody>
+      </table>
+      <div class="empty-state" id="partnersEmptyState" style="display:none;">
+        No partners yet. Click <strong>Add Partner</strong> to publish one to the live Consultancy &amp; Training page.
       </div>
     </div>
 
@@ -307,5 +326,6 @@
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
 <script type="module" src="../js/consultancy-training-admin.js"></script>
+<script type="module" src="../js/partners-admin.js"></script>
 </body>
 </html>

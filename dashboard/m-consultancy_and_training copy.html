@@ -196,6 +196,10 @@
         <p>Consultation requests and training registrations submitted from the public M-Consultancy & Training page.</p>
       </div>
       <div class="page-head-actions">
+        <button class="btn btn-outline" type="button" id="openPartnerBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Add Partner
+        </button>
         <button class="btn btn-primary" type="button" id="openProgramBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Add Program
@@ -215,6 +219,21 @@
       </table>
       <div class="empty-state" id="programsEmptyState" style="display:none;">
         No programs published yet. Click <strong>Add Program</strong> to publish one to the live Consultancy &amp; Training page.
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h2>Partners</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Logo</th><th>Name</th><th>CEO</th><th>Website</th><th></th></tr></thead>
+        <tbody id="partnersTableBody">
+          <!-- Rows are rendered by ../js/partners-admin.js -->
+        </tbody>
+      </table>
+      <div class="empty-state" id="partnersEmptyState" style="display:none;">
+        No partners yet. Click <strong>Add Partner</strong> to publish one to the live Consultancy &amp; Training page.
       </div>
     </div>
 
@@ -419,6 +438,96 @@
   </div>
 </div>
 
+<!-- Add / Edit Partner Modal -->
+<div class="modal-overlay" id="partnerModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="partnerModalTitle">Add Partner</h3>
+      <button class="modal-close" id="closePartnerBtn" aria-label="Close">✕</button>
+    </div>
+    <form id="partnerForm">
+      <input type="hidden" id="partnerId" value="" />
+
+      <div class="form-field">
+        <label for="partnerName">Organisation name *</label>
+        <input type="text" id="partnerName" placeholder="e.g. Excelsis" required />
+      </div>
+
+      <div class="form-field">
+        <label for="partnerDescription">Short description *</label>
+        <textarea id="partnerDescription" placeholder="One or two sentences about this organisation…" required></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="partnerLogo">Logo</label>
+        <div class="program-image-preview-wrap" id="partnerLogoPreviewWrap">
+          <p class="current-image-label">Current logo</p>
+          <img class="program-image-preview" id="partnerLogoPreview" src="" alt="Logo preview" style="width:120px; height:120px; object-fit:contain;" />
+        </div>
+        <input type="file" id="partnerLogo" accept="image/*" />
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="partnerCeoName">CEO / Executive name</label>
+          <input type="text" id="partnerCeoName" placeholder="e.g. Jane Doe" />
+        </div>
+        <div class="form-field">
+          <label for="partnerCeoRole">CEO / Executive title</label>
+          <input type="text" id="partnerCeoRole" placeholder="e.g. Chief Executive Officer" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="partnerCeoPhoto">CEO photo</label>
+        <div class="program-image-preview-wrap" id="partnerCeoPhotoPreviewWrap">
+          <p class="current-image-label">Current photo</p>
+          <img class="program-image-preview" id="partnerCeoPhotoPreview" src="" alt="CEO photo preview" style="width:120px; height:120px; border-radius:50%; object-fit:cover;" />
+        </div>
+        <input type="file" id="partnerCeoPhoto" accept="image/*" />
+      </div>
+
+      <div class="form-field">
+        <label for="partnerVideo">Spotlight video (optional)</label>
+        <div class="program-image-preview-wrap" id="partnerVideoPreviewWrap">
+          <p class="current-image-label">Current video</p>
+          <video id="partnerVideoPreview" src="" controls style="width:100%; max-width:280px; border-radius:10px; display:block; margin:0 0 .5rem;"></video>
+        </div>
+        <input type="file" id="partnerVideo" accept="video/*" />
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="partnerImage1">Facility image 1</label>
+          <div class="program-image-preview-wrap" id="partnerImage1PreviewWrap">
+            <p class="current-image-label">Current image</p>
+            <img class="program-image-preview" id="partnerImage1Preview" src="" alt="Facility image 1 preview" style="width:100%; height:140px;" />
+          </div>
+          <input type="file" id="partnerImage1" accept="image/*" />
+        </div>
+        <div class="form-field">
+          <label for="partnerImage2">Facility image 2</label>
+          <div class="program-image-preview-wrap" id="partnerImage2PreviewWrap">
+            <p class="current-image-label">Current image</p>
+            <img class="program-image-preview" id="partnerImage2Preview" src="" alt="Facility image 2 preview" style="width:100%; height:140px;" />
+          </div>
+          <input type="file" id="partnerImage2" accept="image/*" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="partnerWebsite">Website URL</label>
+        <input type="url" id="partnerWebsite" placeholder="https://example.com" />
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="partnerSubmitBtn" style="width:100%; justify-content:center;">
+        Save Partner
+      </button>
+      <div id="partnerFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
+    </form>
+  </div>
+</div>
+
 <!-- Reusable Confirm Modal (replaces browser confirm()) -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-card confirm-modal-card">
@@ -436,5 +545,6 @@
 <script type="module" src="../js/auth-guard.js"></script>
 <script src="admin.js"></script>
 <script type="module" src="../js/consultancy-training-admin.js"></script>
+<script type="module" src="../js/partners-admin.js"></script>
 </body>
 </html>
