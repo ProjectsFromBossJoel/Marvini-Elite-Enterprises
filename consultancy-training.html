@@ -33,6 +33,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 
+<!-- EmailJS: sends the training-registration confirmation email (with any partner payment link) -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <style>
   :root{
     --ink:        #14213D;
@@ -1386,6 +1389,31 @@
   // consultation enquiries (consultancyTrainingLeads).
   const TRAINING_COLLECTION = 'trainingRegistrations';
 
+  // ---------------- EmailJS (registration confirmation email) ----------------
+  // Replace these with your own values from emailjs.com (Account > API Keys,
+  // and Email Services / Email Templates in the dashboard).
+  const EMAILJS_PUBLIC_KEY = 'NNPXvjN4OVB2_fqFO';
+  const EMAILJS_SERVICE_ID = 'service_tpxm0u8';
+  const EMAILJS_TEMPLATE_ID = 'template_9o32eed';
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  async function sendRegistrationEmail(payload){
+    if (payload.type !== 'training' || !payload.email) return;
+    const program = programsByTitle[payload.program] || null;
+    const templateParams = {
+      to_email: payload.email,
+      to_name: payload.name,
+      program_title: payload.program || 'your selected program',
+      partner_name: program?.partner || '',
+      payment_link: program?.paymentLink || ''
+    };
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+    } catch (err) {
+      console.error('EmailJS send failed:', err);
+    }
+  }
+
   // ---------------- Mobile menu ----------------
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -1472,14 +1500,18 @@
   }
 
   const programsQuery = query(collection(db, 'consultancyPrograms'), orderBy('createdAt', 'desc'));
+  let programsByTitle = {};
 
   onSnapshot(programsQuery, (snapshot) => {
     if (snapshot.empty){
       programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60;">No programs scheduled right now — check back soon, or request a consultation and we\'ll advise on training.</p>';
       populateProgramSelects([]);
+      programsByTitle = {};
       return;
     }
     const programsData = snapshot.docs.map(d => d.data());
+    programsByTitle = {};
+    programsData.forEach(p => { programsByTitle[p.title] = p; });
     populateProgramSelects(programsData);
     programsGrid.innerHTML = snapshot.docs.map(docSnap => {
       const p = docSnap.data();
@@ -1636,6 +1668,7 @@
 
     try {
       await addDoc(collection(db, TRAINING_COLLECTION), payload);
+      sendRegistrationEmail(payload);
       modalStatus.textContent = "Sent — we'll be in touch within two working days.";
       modalStatus.classList.add('ok');
       modalForm.reset();
@@ -1677,6 +1710,7 @@
     try {
       const targetCollection = typeInput.value === 'training' ? TRAINING_COLLECTION : 'consultancyTrainingLeads';
       await addDoc(collection(db, targetCollection), payload);
+      sendRegistrationEmail(payload);
       status.textContent = "Sent — we'll be in touch within two working days.";
       status.classList.add('ok');
       form.reset();

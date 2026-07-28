@@ -454,6 +454,7 @@ const programEndTimeField = document.getElementById("programEndTime");
 const programDescriptionField = document.getElementById("programDescription");
 const programVenueField = document.getElementById("programVenue");
 const programPartnerField = document.getElementById("programPartner");
+const programPaymentLinkField = document.getElementById("programPaymentLink");
 const programCoverField = document.getElementById("programCover");
 const programImagePreviewWrap = document.getElementById("programImagePreviewWrap");
 const programImagePreview = document.getElementById("programImagePreview");
@@ -474,6 +475,7 @@ const detailEnd = document.getElementById("detailEnd");
 const detailDuration = document.getElementById("detailDuration");
 const detailVenue = document.getElementById("detailVenue");
 const detailPartner = document.getElementById("detailPartner");
+const detailPaymentLink = document.getElementById("detailPaymentLink");
 const detailNote = document.getElementById("detailNote");
 const detailDescription = document.getElementById("detailDescription");
 
@@ -496,6 +498,7 @@ function openProgramDetailModal(programId) {
   detailDuration.textContent = p.duration || "—";
   detailVenue.textContent = p.venue || "—";
   detailPartner.textContent = p.partner || "—";
+  detailPaymentLink.textContent = p.paymentLink || "—";
   detailNote.textContent = p.note || "—";
   detailDescription.textContent = p.description || "—";
 
@@ -581,6 +584,7 @@ function openProgramModal(programId) {
     programDescriptionField.value = p.description || "";
     programVenueField.value = p.venue || "";
     programPartnerField.value = p.partner || "";
+    programPaymentLinkField.value = p.paymentLink || "";
     programNoteField.value = p.note || "";
     programSubmitBtn.textContent = "Save Changes";
     computeDuration();
@@ -626,6 +630,7 @@ programForm.addEventListener("submit", async (e) => {
     description: programDescriptionField.value.trim(),
     venue: programVenueField.value.trim(),
     partner: programPartnerField.value.trim(),
+    paymentLink: programPaymentLinkField.value.trim(),
     note: programNoteField.value.trim(),
   };
 
