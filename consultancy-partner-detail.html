@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partner | Marvini Consultancy & Training</title>
+<meta name="description" content="Meet the organisations Marvini Consultancy & Training works alongside — profiles, leadership, and facilities.">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:        #14213D;
+    --parchment:  #F6F3EC;
+    --parchment-2:#EFEAE0;
+    --gold:       #B8892E;
+    --gold-dark:  #93701F;
+    --rust:       #A6542A;
+    --sage:       #4F6B4F;
+    --sage-light: #7C9B7C;
+    --charcoal:   #262524;
+    --line:       rgba(20,33,61,0.14);
+    --white:      #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Source Sans 3', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--parchment);
+    color: var(--charcoal);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Nav ---------- */
+  .site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(246,243,236,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height: 76px;
+  }
+  .brand-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brand-link .arrow{
+    font-family: var(--font-body);
+    font-size: 16px;
+    transition: transform .2s ease;
+  }
+  .brand-link:hover .arrow{ transform: translateX(-3px); }
+
+  .nav-cta{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration:none;
+    color: var(--white);
+    background: var(--ink);
+    padding: 11px 20px;
+    border-radius: 3px;
+    transition: background .2s ease;
+  }
+  .nav-cta:hover{ background: var(--gold-dark); }
+
+  /* ---------- Back link ---------- */
+  .back-row{ padding: 40px 0 0; }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #5b5a51;
+    transition: color .2s ease;
+  }
+  .back-link:hover{ color: var(--rust); }
+  .back-link svg{ width:15px; height:15px; }
+
+  /* ---------- Loading / error ---------- */
+  .state-msg{
+    text-align:center;
+    padding: 90px 20px;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    color: #6b6a60;
+  }
+  .state-msg a{ color: var(--rust); text-decoration: underline; }
+
+  /* ---------- Hero ---------- */
+  .partner-hero{
+    padding: 44px 0 56px;
+  }
+  .partner-hero-top{
+    display:flex;
+    align-items:center;
+    gap: 22px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .partner-logo-frame{
+    width: 84px;
+    height: 84px;
+    flex-shrink:0;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 12px;
+  }
+  .partner-logo-frame img{ width:100%; height:100%; object-fit: contain; }
+  .partner-logo-frame .placeholder{
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9a8e;
+    text-align: center;
+  }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin: 0 0 10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width: 22px; height: 1px;
+    background: var(--gold-dark);
+    display:inline-block;
+  }
+  .partner-hero h1{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 4.6vw, 46px);
+    line-height: 1.08;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .partner-desc{
+    font-size: 17.5px;
+    line-height: 1.65;
+    color: #4A483F;
+    max-width: 62ch;
+    margin: 0 0 26px;
+  }
+  .partner-hero-ctas{ display:flex; flex-wrap:wrap; gap: 14px; }
+  .btn{
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration:none;
+    padding: 15px 26px;
+    border-radius: 3px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition: all .2s ease;
+    border: 1px solid transparent;
+    cursor:pointer;
+  }
+  .btn-primary{ background: var(--rust); color: var(--white); }
+  .btn-primary:hover{ background: #8C4522; }
+  .btn-ghost{ background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn-ghost:hover{ background: var(--ink); color: var(--white); }
+
+  /* ---------- Section divider ---------- */
+  .thread-divider{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px 8px;
+  }
+  .thread-divider .node{
+    width:7px;height:7px;border-radius:50%;
+    background: var(--gold);
+    flex-shrink:0;
+  }
+  .thread-divider .line{ height:1px; background: var(--line); flex:1; }
+
+  section{ padding: 60px 0; }
+  .section-head{ max-width: 640px; margin-bottom: 36px; }
+  .section-head h2{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(24px, 3vw, 32px);
+    color: var(--ink);
+    margin: 10px 0 12px;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{ color:#4A483F; font-size:15.5px; margin:0; }
+
+  /* ---------- CEO card ---------- */
+  .ceo-card{
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 36px;
+    display:flex;
+    gap: 28px;
+    align-items:center;
+    flex-wrap: wrap;
+  }
+  .ceo-photo-frame{
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink:0;
+    border: 3px solid var(--parchment-2);
+    background: var(--parchment-2);
+  }
+  .ceo-photo-frame img{ width:100%; height:100%; object-fit: cover; }
+  .ceo-info .ceo-tag{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 8px;
+  }
+  .ceo-info h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .ceo-info .ceo-role{
+    font-size: 14.5px;
+    color: #6b6a60;
+    margin: 0;
+  }
+
+  /* ---------- Video ---------- */
+  .video-frame{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0d1524;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .video-frame video, .video-frame iframe{
+    width: 100%; height: 100%;
+    border: none; display:block;
+    object-fit: cover;
+  }
+  .video-frame .placeholder{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction: column;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(246,243,236,0.5);
+  }
+  .video-frame .placeholder svg{ width: 40px; height:40px; opacity:0.6; }
+
+  /* ---------- Building gallery ---------- */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 640px){ .gallery-grid{ grid-template-columns: 1fr; } }
+  .gallery-frame{
+    aspect-ratio: 4 / 3;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .gallery-frame img{ width:100%; height:100%; object-fit: cover; }
+  .gallery-frame .placeholder{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9a8e;
+    background: var(--parchment-2);
+  }
+  .gallery-caption{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: #6b6a60;
+    margin-top: 10px;
+  }
+
+  /* ---------- Visit us ---------- */
+  .visit-band{
+    background: var(--ink);
+    color: var(--parchment);
+    border-radius: 6px;
+    padding: 44px 40px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .visit-band h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 26px;
+    margin: 0 0 6px;
+    color: var(--white);
+  }
+  .visit-band p{
+    margin:0;
+    color: rgba(246,243,236,0.68);
+    font-size: 15px;
+  }
+  .visit-band .btn-primary{ flex-shrink:0; }
+
+  footer{
+    background: var(--ink);
+    color: rgba(246,243,236,0.55);
+    padding: 32px 0;
+    text-align:center;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+  }
+  footer a{ color: var(--gold); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand-link" href="index.html">
+      <span class="arrow">&larr;</span> Marvini Elite Enterprises
+    </a>
+    <a class="nav-cta" href="consultancy-training.html">Consultancy &amp; Training</a>
+  </div>
+</nav>
+
+<div class="wrap back-row">
+  <a href="consultancy-training.html#partners" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+    Back to Partners
+  </a>
+</div>
+
+<div id="stateLoading" class="state-msg">Loading partner…</div>
+<div id="stateError" class="state-msg" style="display:none;">
+  We couldn't find that partner. <a href="consultancy-training.html#partners">Return to Partners</a>.
+</div>
+
+<div id="partnerContent" style="display:none;">
+
+  <header class="partner-hero">
+    <div class="wrap">
+      <div class="partner-hero-top">
+        <div class="partner-logo-frame" id="pLogoFrame">
+          <img id="pLogo" src="" alt="" style="display:none;" />
+          <span class="placeholder" id="pLogoPlaceholder">No logo</span>
+        </div>
+        <div>
+          <p class="eyebrow">Partner Organisation</p>
+          <h1 id="pName"></h1>
+        </div>
+      </div>
+      <p class="partner-desc" id="pDesc"></p>
+      <div class="partner-hero-ctas">
+        <a href="#" id="pWebsiteTop" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+          Visit Us Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="consultancy-training.html#partners" class="btn btn-ghost">Back to Partners</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="thread-divider" aria-hidden="true"><span class="node"></span><span class="line"></span></div>
+
+  <section id="leadership">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Leadership</p>
+        <h2>Leading the organisation</h2>
+      </div>
+      <div class="ceo-card">
+        <div class="ceo-photo-frame"><img id="ceoPhoto" src="" alt="" /></div>
+        <div class="ceo-info">
+          <p class="ceo-tag">Chief Executive</p>
+          <h3 id="ceoName"></h3>
+          <p class="ceo-role" id="ceoRole"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="spotlight">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">In Motion</p>
+        <h2>Organisation spotlight</h2>
+        <p>A short look at their work and impact.</p>
+      </div>
+      <div class="video-frame" id="videoFrame">
+        <div class="placeholder" id="videoPlaceholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+          Video coming soon
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="facilities">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Facilities</p>
+        <h2>Where they operate</h2>
+        <p>A glimpse of their offices and facilities.</p>
+      </div>
+      <div class="gallery-grid">
+        <div>
+          <div class="gallery-frame"><img id="pImage1" src="" alt="" style="display:none;" /><div class="placeholder" id="pImage1Placeholder">No image yet</div></div>
+          <p class="gallery-caption">Building exterior</p>
+        </div>
+        <div>
+          <div class="gallery-frame"><img id="pImage2" src="" alt="" style="display:none;" /><div class="placeholder" id="pImage2Placeholder">No image yet</div></div>
+          <p class="gallery-caption">Facility interior</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="thread-divider" aria-hidden="true"><span class="node"></span><span class="line"></span></div>
+
+  <section id="visit">
+    <div class="wrap">
+      <div class="visit-band">
+        <div>
+          <h3>Want to know more?</h3>
+          <p>Head over to their official website for the full picture.</p>
+        </div>
+        <a href="#" id="pWebsiteBottom" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+          Visit Us Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>&copy; <span id="year"></span> Marvini Elite Enterprises — Partner Directory</p>
+</footer>
+
+<script type="module">
+  import { db, doc, getDoc } from "./js/firebase-config.js";
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const params = new URLSearchParams(window.location.search);
+  const id = (params.get('id') || '').trim();
+
+  const loadingEl = document.getElementById('stateLoading');
+  const errorEl = document.getElementById('stateError');
+  const contentEl = document.getElementById('partnerContent');
+
+  function escapeText(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  async function loadPartner(){
+    if (!id) {
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    try {
+      const snap = await getDoc(doc(db, 'consultancyPartners', id));
+      if (!snap.exists()) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      const partner = snap.data();
+      document.title = (partner.name || 'Partner') + " | Marvini Consultancy & Training";
+
+      // Logo
+      if (partner.logoUrl) {
+        const logoImg = document.getElementById('pLogo');
+        logoImg.src = partner.logoUrl;
+        logoImg.alt = partner.name || '';
+        logoImg.style.display = 'block';
+        document.getElementById('pLogoPlaceholder').style.display = 'none';
+      }
+
+      document.getElementById('pName').textContent = partner.name || '';
+      document.getElementById('pDesc').textContent = partner.description || '';
+
+      // CEO
+      document.getElementById('ceoName').textContent = partner.ceoName || 'To be announced';
+      document.getElementById('ceoRole').textContent = partner.ceoRole || '';
+      if (partner.ceoPhotoUrl) {
+        const ceoImg = document.getElementById('ceoPhoto');
+        ceoImg.src = partner.ceoPhotoUrl;
+        ceoImg.alt = partner.ceoName || '';
+      }
+
+      // Video
+      if (partner.videoUrl) {
+        const frame = document.getElementById('videoFrame');
+        frame.innerHTML = `<video src="${escapeText(partner.videoUrl)}" controls playsinline></video>`;
+      }
+
+      // Facility images
+      if (partner.image1Url) {
+        document.getElementById('pImage1').src = partner.image1Url;
+        document.getElementById('pImage1').style.display = 'block';
+        document.getElementById('pImage1Placeholder').style.display = 'none';
+      }
+      if (partner.image2Url) {
+        document.getElementById('pImage2').src = partner.image2Url;
+        document.getElementById('pImage2').style.display = 'block';
+        document.getElementById('pImage2Placeholder').style.display = 'none';
+      }
+
+      // Website
+      const websiteHref = partner.website || '#';
+      document.getElementById('pWebsiteTop').href = websiteHref;
+      document.getElementById('pWebsiteBottom').href = websiteHref;
+
+      loadingEl.style.display = 'none';
+      contentEl.style.display = 'block';
+    } catch (err) {
+      console.error('Error loading partner:', err);
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+    }
+  }
+
+  loadPartner();
+</script>
+
+</body>
+</html>

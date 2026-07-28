@@ -1516,6 +1516,38 @@
     programsGrid.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:var(--rust);">Couldn\'t load programs right now.</p>';
   });
 
+  // ---------------- Partners (live from Firestore) ----------------
+  const partnersCarousel = document.getElementById('partners-carousel');
+  const partnersQuery = query(collection(db, 'consultancyPartners'), orderBy('createdAt', 'desc'));
+
+  function renderPartnerCard(p, hidden){
+    const hiddenAttrs = hidden ? 'aria-hidden="true" tabindex="-1"' : '';
+    const logoHtml = p.logoUrl
+      ? `<img src="${escapeHtml(p.logoUrl)}" alt="${escapeHtml(p.name)}" />`
+      : '';
+    return `
+      <a class="partner-card" href="consultancy-partner-detail.html?id=${encodeURIComponent(p.id)}" ${hiddenAttrs}>
+        ${logoHtml}
+        <span class="partner-name">${escapeHtml(p.name)}</span>
+      </a>
+    `;
+  }
+
+  onSnapshot(partnersQuery, (snapshot) => {
+    if (snapshot.empty){
+      partnersCarousel.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:#6b6a60; padding: 0 24px;">No partners published yet.</p>';
+      return;
+    }
+    const partners = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    // Render the set twice so the CSS marquee (translateX(-50%)) loops seamlessly.
+    const cardsHtml = partners.map(p => renderPartnerCard(p, false)).join('');
+    const hiddenCardsHtml = partners.map(p => renderPartnerCard(p, true)).join('');
+    partnersCarousel.innerHTML = cardsHtml + hiddenCardsHtml;
+  }, (err) => {
+    console.error('Error loading partners:', err);
+    partnersCarousel.innerHTML = '<p style="font-family: var(--font-mono); font-size:13px; color:var(--rust);">Couldn\'t load partners right now.</p>';
+  });
+
   // Hero "Request a consultation" CTA jumps to the inline form with that intent
   document.querySelector('[data-intent="consultation"]').addEventListener('click', () => {
     setIntent('consultation');
