@@ -525,6 +525,7 @@ const programEndTimeField = document.getElementById("programEndTime");
 const programDescriptionField = document.getElementById("programDescription");
 const programVenueField = document.getElementById("programVenue");
 const programPartnerField = document.getElementById("programPartner");
+const programIsPartnershipField = document.getElementById("programIsPartnership");
 const programPaymentLinkField = document.getElementById("programPaymentLink");
 const programCoverField = document.getElementById("programCover");
 const programImagePreviewWrap = document.getElementById("programImagePreviewWrap");
@@ -659,6 +660,7 @@ function openProgramModal(programId) {
     programDescriptionField.value = p.description || "";
     programVenueField.value = p.venue || "";
     programPartnerField.value = p.partner || "";
+    programIsPartnershipField.value = p.isPartnership ? "yes" : "no";
     programPaymentLinkField.value = p.paymentLink || "";
     programNoteField.value = p.note || "";
     programSubmitBtn.textContent = "Save Changes";
@@ -671,6 +673,7 @@ function openProgramModal(programId) {
   } else {
     programModalTitle.textContent = "Add Training Program";
     programIdField.value = "";
+    programIsPartnershipField.value = "no";
     programSubmitBtn.textContent = "Save Program";
   }
 
@@ -705,6 +708,7 @@ programForm.addEventListener("submit", async (e) => {
     description: programDescriptionField.value.trim(),
     venue: programVenueField.value.trim(),
     partner: programPartnerField.value.trim(),
+    isPartnership: programIsPartnershipField.value === "yes",
     paymentLink: normalizeUrl(programPaymentLinkField.value),
     note: programNoteField.value.trim(),
   };
