@@ -17,6 +17,7 @@ import {
 import { uploadToCloudinary } from "./cloudinary.js";
 
 const LEADS_COLLECTION = "consultancyTrainingLeads";
+const TRAINING_COLLECTION = "trainingRegistrations";
 const PROGRAMS_COLLECTION = "consultancyPrograms";
 
 // ---------------- Reusable confirm modal (replaces confirm()) ----------------
@@ -149,8 +150,9 @@ function partnerTagColor(name) {
 
 function updateNavBadge() {
   if (!consultancyNavBadge) return;
-  const newCount = allLeads.filter((l) => (l.status || "new") === "new").length;
-  consultancyNavBadge.textContent = String(newCount);
+  const newLeadsCount = allLeads.filter((l) => (l.status || "new") === "new").length;
+  const newRegistrationsCount = allRegistrations.filter((r) => (r.status || "new") === "new").length;
+  consultancyNavBadge.textContent = String(newLeadsCount + newRegistrationsCount);
 }
 
 // ---------------- Live Firestore subscription ----------------
@@ -164,6 +166,118 @@ onSnapshot(leadsQuery, (snapshot) => {
   console.error("Error loading consultancy/training leads:", err);
   emptyState.textContent = "Couldn't load enquiries — check your connection or Firestore rules.";
   emptyState.style.display = "block";
+});
+
+// =====================================================================
+// Training Registrations — own collection/table, separate from
+// consultation enquiries.
+// =====================================================================
+
+const registrationsTableBody = document.getElementById("registrationsTableBody");
+const registrationsEmptyState = document.getElementById("registrationsEmptyState");
+let allRegistrations = [];
+let activeRegistrationId = null;
+
+function renderRegistrationRows() {
+  registrationsTableBody.innerHTML = "";
+  if (allRegistrations.length === 0) {
+    registrationsEmptyState.style.display = "block";
+    return;
+  }
+  registrationsEmptyState.style.display = "none";
+
+  allRegistrations.forEach((reg) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>
+        <strong>${escapeHtml(reg.name || "—")}</strong>
+        ${reg.organisation ? `<div class="row-sub">${escapeHtml(reg.organisation)}</div>` : ""}
+      </td>
+      <td>${escapeHtml(reg.program || "—")}</td>
+      <td>
+        ${escapeHtml(reg.email || "—")}
+        ${reg.phone ? `<div class="row-sub">${escapeHtml(reg.phone)}</div>` : ""}
+      </td>
+      <td><span class="pill status-${reg.status || "new"}">${statusLabel(reg.status)}</span></td>
+      <td>${formatDate(reg.createdAt)}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn btn-outline btn-icon" data-view-reg="${reg.id}" title="View" aria-label="View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </td>
+    `;
+    registrationsTableBody.appendChild(tr);
+  });
+
+  registrationsTableBody.querySelectorAll("[data-view-reg]").forEach((btn) => {
+    btn.addEventListener("click", () => openRegistrationModal(btn.dataset.viewReg));
+  });
+}
+
+const registrationsQuery = query(collection(db, TRAINING_COLLECTION), orderBy("createdAt", "desc"));
+
+onSnapshot(registrationsQuery, (snapshot) => {
+  allRegistrations = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+  renderRegistrationRows();
+  updateNavBadge();
+}, (err) => {
+  console.error("Error loading training registrations:", err);
+  registrationsEmptyState.textContent = "Couldn't load registrations — check your connection or Firestore rules.";
+  registrationsEmptyState.style.display = "block";
+});
+
+const registrationModal = document.getElementById("registrationModal");
+const closeRegistrationBtn = document.getElementById("closeRegistrationBtn");
+const markRegContactedBtn = document.getElementById("markRegContactedBtn");
+const markRegClosedBtn = document.getElementById("markRegClosedBtn");
+const deleteRegBtn = document.getElementById("deleteRegBtn");
+
+function openRegistrationModal(regId) {
+  const reg = allRegistrations.find((r) => r.id === regId);
+  if (!reg) return;
+  activeRegistrationId = regId;
+
+  document.getElementById("regName").textContent = reg.name || "—";
+  document.getElementById("regOrg").textContent = reg.organisation || "—";
+  document.getElementById("regEmail").textContent = reg.email || "—";
+  document.getElementById("regPhone").textContent = reg.phone || "—";
+  document.getElementById("regProgram").textContent = reg.program || "—";
+  document.getElementById("regMessage").textContent = reg.message || "—";
+  document.getElementById("regDate").textContent = formatDate(reg.createdAt);
+
+  registrationModal.classList.add("open");
+}
+
+function closeRegistrationModal() {
+  registrationModal.classList.remove("open");
+  activeRegistrationId = null;
+}
+
+closeRegistrationBtn.addEventListener("click", closeRegistrationModal);
+registrationModal.addEventListener("click", (e) => {
+  if (e.target === registrationModal) closeRegistrationModal();
+});
+
+markRegContactedBtn.addEventListener("click", async () => {
+  if (!activeRegistrationId) return;
+  await updateDoc(doc(db, TRAINING_COLLECTION, activeRegistrationId), { status: "contacted" });
+  closeRegistrationModal();
+});
+
+markRegClosedBtn.addEventListener("click", async () => {
+  if (!activeRegistrationId) return;
+  await updateDoc(doc(db, TRAINING_COLLECTION, activeRegistrationId), { status: "closed" });
+  closeRegistrationModal();
+});
+
+deleteRegBtn.addEventListener("click", async () => {
+  if (!activeRegistrationId) return;
+  const ok = await askConfirm("This registration will be permanently deleted.", "Delete this registration?");
+  if (!ok) return;
+  await deleteDoc(doc(db, TRAINING_COLLECTION, activeRegistrationId));
+  closeRegistrationModal();
 });
 
 // ---------------- Filter tabs ----------------

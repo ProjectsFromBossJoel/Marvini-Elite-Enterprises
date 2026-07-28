@@ -198,6 +198,21 @@
     </div>
 
     <div class="section-heading">
+      <h2>Training Registrations</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Name</th><th>Program</th><th>Contact</th><th>Status</th><th>Received</th><th></th></tr></thead>
+        <tbody id="registrationsTableBody">
+          <!-- Rows rendered by ../js/consultancy-training-admin.js -->
+        </tbody>
+      </table>
+      <div class="empty-state" id="registrationsEmptyState" style="display:none;">
+        No training registrations yet. New sign-ups from the Consultancy &amp; Training page will show up here.
+      </div>
+    </div>
+
+    <div class="section-heading">
       <h2>Enquiries</h2>
     </div>
     <div class="filter-tabs" id="filterTabs">
@@ -268,6 +283,28 @@
       <button class="btn btn-outline" id="markContactedBtn" type="button">Mark Contacted</button>
       <button class="btn btn-outline" id="markClosedBtn" type="button">Mark Closed</button>
       <button class="btn btn-danger" id="deleteLeadBtn" type="button">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Training Registration Detail Modal -->
+<div class="modal-overlay" id="registrationModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Registration Details</h3>
+      <button class="modal-close" id="closeRegistrationBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="lead-detail-row"><label>Name</label><p id="regName"></p></div>
+    <div class="lead-detail-row"><label>Organisation</label><p id="regOrg"></p></div>
+    <div class="lead-detail-row"><label>Email</label><p id="regEmail"></p></div>
+    <div class="lead-detail-row"><label>Phone</label><p id="regPhone"></p></div>
+    <div class="lead-detail-row"><label>Program of Interest</label><p id="regProgram"></p></div>
+    <div class="lead-detail-row"><label>Message</label><p class="msg-box" id="regMessage"></p></div>
+    <div class="lead-detail-row"><label>Received</label><p id="regDate"></p></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="markRegContactedBtn" type="button">Mark Contacted</button>
+      <button class="btn btn-outline" id="markRegClosedBtn" type="button">Mark Closed</button>
+      <button class="btn btn-danger" id="deleteRegBtn" type="button">Delete</button>
     </div>
   </div>
 </div>

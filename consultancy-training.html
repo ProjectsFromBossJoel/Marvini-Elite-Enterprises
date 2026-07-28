@@ -1382,6 +1382,10 @@
   // ---------------------------------------------------------------
   import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc } from "./js/firebase-config.js";
 
+  // Training registrations live in their own collection, separate from
+  // consultation enquiries (consultancyTrainingLeads).
+  const TRAINING_COLLECTION = 'trainingRegistrations';
+
   // ---------------- Mobile menu ----------------
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -1631,7 +1635,7 @@
     };
 
     try {
-      await addDoc(collection(db, 'consultancyTrainingLeads'), payload);
+      await addDoc(collection(db, TRAINING_COLLECTION), payload);
       modalStatus.textContent = "Sent — we'll be in touch within two working days.";
       modalStatus.classList.add('ok');
       modalForm.reset();
@@ -1671,7 +1675,8 @@
     };
 
     try {
-      await addDoc(collection(db, 'consultancyTrainingLeads'), payload);
+      const targetCollection = typeInput.value === 'training' ? TRAINING_COLLECTION : 'consultancyTrainingLeads';
+      await addDoc(collection(db, targetCollection), payload);
       status.textContent = "Sent — we'll be in touch within two working days.";
       status.classList.add('ok');
       form.reset();
