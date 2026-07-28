@@ -105,6 +105,12 @@ const PARTNER_TAG_PALETTE = [
   { bg: "rgba(147,51,234,0.12)", fg: "#7C3AED" },
 ];
 
+function normalizeUrl(value) {
+  const trimmed = (value || "").trim();
+  if (!trimmed) return "";
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 function partnerTagColor(name) {
   if (!name) return PARTNER_TAG_PALETTE[0];
   let hash = 0;

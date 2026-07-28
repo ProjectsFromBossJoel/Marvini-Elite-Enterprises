@@ -141,6 +141,12 @@ const PARTNER_TAG_PALETTE = [
   { bg: "rgba(147,51,234,0.12)", fg: "#7C3AED" },
 ];
 
+function normalizeUrl(value) {
+  const trimmed = (value || "").trim();
+  if (!trimmed) return "";
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 function partnerTagColor(name) {
   if (!name) return PARTNER_TAG_PALETTE[0];
   let hash = 0;
@@ -498,7 +504,11 @@ function openProgramDetailModal(programId) {
   detailDuration.textContent = p.duration || "—";
   detailVenue.textContent = p.venue || "—";
   detailPartner.textContent = p.partner || "—";
-  detailPaymentLink.textContent = p.paymentLink || "—";
+  if (p.paymentLink) {
+    detailPaymentLink.innerHTML = `<a href="${escapeHtml(p.paymentLink)}" target="_blank" rel="noopener noreferrer" style="color:#1a56ff; text-decoration:underline;">${escapeHtml(p.paymentLink)}</a>`;
+  } else {
+    detailPaymentLink.textContent = "—";
+  }
   detailNote.textContent = p.note || "—";
   detailDescription.textContent = p.description || "—";
 
@@ -630,7 +640,7 @@ programForm.addEventListener("submit", async (e) => {
     description: programDescriptionField.value.trim(),
     venue: programVenueField.value.trim(),
     partner: programPartnerField.value.trim(),
-    paymentLink: programPaymentLinkField.value.trim(),
+    paymentLink: normalizeUrl(programPaymentLinkField.value),
     note: programNoteField.value.trim(),
   };
 

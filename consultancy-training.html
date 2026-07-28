@@ -1400,12 +1400,16 @@
   async function sendRegistrationEmail(payload){
     if (payload.type !== 'training' || !payload.email) return;
     const program = programsByTitle[payload.program] || null;
+    const paymentNote = (program?.partner && program?.paymentLink)
+      ? `This training is delivered in partnership with ${program.partner}. To secure your seat, please complete payment here: <a href="${program.paymentLink}" style="color:#1a56ff; font-weight:600;">${program.paymentLink}</a>`
+      : '';
     const templateParams = {
       to_email: payload.email,
       to_name: payload.name,
       program_title: payload.program || 'your selected program',
       partner_name: program?.partner || '',
-      payment_link: program?.paymentLink || ''
+      payment_link: program?.paymentLink || '',
+      payment_note: paymentNote
     };
     try {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
