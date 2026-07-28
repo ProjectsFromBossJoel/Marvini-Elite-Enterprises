@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ceoRole: document.getElementById("partnerCeoRole"),
     website: document.getElementById("partnerWebsite"),
     mapUrl: document.getElementById("partnerMapUrl"),
+    email: document.getElementById("partnerEmail"),
+    phone1: document.getElementById("partnerPhone1"),
+    phone2: document.getElementById("partnerPhone2"),
     logo: document.getElementById("partnerLogo"),
     ceoPhoto: document.getElementById("partnerCeoPhoto"),
     video: document.getElementById("partnerVideo"),
@@ -82,6 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
       fields.ceoRole.value = partner.ceoRole || "";
       fields.website.value = partner.website || "";
       fields.mapUrl.value = partner.mapUrl || "";
+      fields.email.value = partner.email || "";
+      fields.phone1.value = partner.phone1 || "";
+      fields.phone2.value = partner.phone2 || "";
       existingUrls = {
         logoUrl: partner.logoUrl || "",
         ceoPhotoUrl: partner.ceoPhotoUrl || "",
@@ -247,6 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ceoRole: fields.ceoRole.value.trim(),
         website: fields.website.value.trim(),
         mapUrl: fields.mapUrl.value.trim(),
+        email: fields.email.value.trim(),
+        phone1: fields.phone1.value.trim(),
+        phone2: fields.phone2.value.trim(),
         logoUrl: uploads.logoUrl ?? existingUrls.logoUrl ?? "",
         ceoPhotoUrl: uploads.ceoPhotoUrl ?? existingUrls.ceoPhotoUrl ?? "",
         videoUrl: uploads.videoUrl ?? existingUrls.videoUrl ?? "",
