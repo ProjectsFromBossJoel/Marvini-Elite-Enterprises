@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     video: document.getElementById("partnerVideo"),
     image1: document.getElementById("partnerImage1"),
     image2: document.getElementById("partnerImage2"),
+    landingImage: document.getElementById("partnerLandingImage"),
   };
 
   // Tracks existing Cloudinary URLs when editing, so we only
@@ -85,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
         videoUrl: partner.videoUrl || "",
         image1Url: partner.image1Url || "",
         image2Url: partner.image2Url || "",
+        landingImageUrl: partner.landingImageUrl || "",
       };
 
       if (existingUrls.logoUrl) {
@@ -106,6 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (existingUrls.image2Url) {
         document.getElementById("partnerImage2Preview").src = existingUrls.image2Url;
         document.getElementById("partnerImage2PreviewWrap").classList.add("has-image");
+      }
+      if (existingUrls.landingImageUrl) {
+        document.getElementById("partnerLandingImagePreview").src = existingUrls.landingImageUrl;
+        document.getElementById("partnerLandingImagePreviewWrap").classList.add("has-image");
       }
     } else {
       modalTitle.textContent = "Add Partner";
@@ -227,6 +233,10 @@ document.addEventListener("DOMContentLoaded", () => {
         statusEl.textContent = "Uploading facility image 2…";
         uploads.image2Url = await uploadToCloudinary(fields.image2.files[0], "image");
       }
+      if (fields.landingImage.files[0]) {
+        statusEl.textContent = "Uploading landing image…";
+        uploads.landingImageUrl = await uploadToCloudinary(fields.landingImage.files[0], "image");
+      }
 
       const payload = {
         name: fields.name.value.trim(),
@@ -239,6 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
         videoUrl: uploads.videoUrl ?? existingUrls.videoUrl ?? "",
         image1Url: uploads.image1Url ?? existingUrls.image1Url ?? "",
         image2Url: uploads.image2Url ?? existingUrls.image2Url ?? "",
+        landingImageUrl: uploads.landingImageUrl ?? existingUrls.landingImageUrl ?? "",
       };
 
       const existingId = idInput.value;

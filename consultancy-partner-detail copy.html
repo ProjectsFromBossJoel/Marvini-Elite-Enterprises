@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Partner | Marvini Consultancy & Training</title>
+<link rel="apple-touch-icon" sizes="180x180" href="img/M-Consultancy and Training/img/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/M-Consultancy and Training/img/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/M-Consultancy and Training/img/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="img/M-Consultancy and Training/img/favicon_io/site.webmanifest">
+<link rel="icon" type="image/x-icon" href="img/M-Consultancy and Training/img/favicon_io/favicon.ico">
 <meta name="description" content="Meet the organisations Marvini Consultancy & Training works alongside — profiles, leadership, and facilities.">
 <meta name="robots" content="noindex, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -153,6 +158,14 @@
     padding: 12px;
   }
   .partner-logo-frame img{ width:100%; height:100%; object-fit: contain; }
+  .partner-logo-frame .placeholder{
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9a8e;
+    text-align: center;
+  }
   .eyebrow{
     font-family: var(--font-mono);
     font-size: 12.5px;
@@ -403,7 +416,10 @@
   <header class="partner-hero">
     <div class="wrap">
       <div class="partner-hero-top">
-        <div class="partner-logo-frame"><img id="pLogo" src="" alt="" /></div>
+        <div class="partner-logo-frame" id="pLogoFrame">
+          <img id="pLogo" src="" alt="" style="display:none;" />
+          <span class="placeholder" id="pLogoPlaceholder">No logo</span>
+        </div>
         <div>
           <p class="eyebrow">Partner Organisation</p>
           <h1 id="pName"></h1>
@@ -498,152 +514,96 @@
   <p>&copy; <span id="year"></span> Marvini Elite Enterprises — Partner Directory</p>
 </footer>
 
-<script>
+<script type="module">
+  import { db, doc, getDoc } from "./js/firebase-config.js";
+
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---------------------------------------------------------------
-  // Partner data. Replace/extend with real logos, CEO photos, videos
-  // and facility images per partner as they become available. Keys
-  // must match the `id` used in the partner-card links on
-  // consultancy-training.html (e.g. consultancy-partner-detail.html?id=dvla).
-  // ---------------------------------------------------------------
-  const PARTNERS = {
-    excelsis: {
-      name: "Excelsis",
-      logo: "img/M-Consultancy and Training/img/Excelsis_logo.png",
-      description: "A collaborative partner supporting Marvini Consultancy & Training's advisory and capability-building programs across Ghana.",
-      ceoName: "To be announced",
-      ceoRole: "Chief Executive Officer",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "#"
-    },
-    dvla: {
-      name: "DVLA Ghana",
-      logo: "img/others/All Logos/partners/dvla.png",
-      description: "The Driver and Vehicle Licensing Authority of Ghana, partnering on digital compliance initiatives across the Marvini group.",
-      ceoName: "To be announced",
-      ceoRole: "Chief Executive Officer",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "https://dvla.gov.gh"
-    },
-    mofa: {
-      name: "Ministry of Food and Agriculture",
-      logo: "img/others/All Logos/partners/mofa.png",
-      description: "Ghana's Ministry of Food and Agriculture, collaborating on farmer empowerment and food-systems initiatives.",
-      ceoName: "To be announced",
-      ceoRole: "Sector Minister",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "https://mofa.gov.gh"
-    },
-    gipc: {
-      name: "Ghana Investment Promotion Centre",
-      logo: "img/others/All Logos/partners/gipc.png",
-      description: "GIPC supports investment promotion and business facilitation for enterprises operating in Ghana.",
-      ceoName: "To be announced",
-      ceoRole: "Chief Executive Officer",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "https://gipcghana.com"
-    },
-    nbssi: {
-      name: "National Board for Small Scale Industries",
-      logo: "img/others/All Logos/partners/nbssi.png",
-      description: "NBSSI champions the growth of small and medium-sized enterprises across Ghana.",
-      ceoName: "To be announced",
-      ceoRole: "Executive Director",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "#"
-    },
-    gta: {
-      name: "Ghana Tourism Authority",
-      logo: "img/others/All Logos/partners/gta.png",
-      description: "GTA promotes and regulates tourism development across Ghana.",
-      ceoName: "To be announced",
-      ceoRole: "Chief Executive Officer",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "https://gta.gov.gh"
-    },
-    gepa: {
-      name: "Ghana Export Promotion Authority",
-      logo: "img/others/All Logos/partners/gepa.png",
-      description: "GEPA drives export development and promotion for Ghanaian goods and services.",
-      ceoName: "To be announced",
-      ceoRole: "Chief Executive Officer",
-      ceoPhoto: "",
-      video: "",
-      image1: "",
-      image2: "",
-      website: "https://gepaghana.org"
-    }
-  };
-
   const params = new URLSearchParams(window.location.search);
-  const id = (params.get('id') || '').toLowerCase().trim();
-  const partner = PARTNERS[id];
+  const id = (params.get('id') || '').trim();
 
   const loadingEl = document.getElementById('stateLoading');
   const errorEl = document.getElementById('stateError');
   const contentEl = document.getElementById('partnerContent');
 
-  if (!partner) {
-    loadingEl.style.display = 'none';
-    errorEl.style.display = 'block';
-  } else {
-    document.title = partner.name + " | Marvini Consultancy & Training";
-
-    document.getElementById('pLogo').src = partner.logo;
-    document.getElementById('pLogo').alt = partner.name;
-    document.getElementById('pName').textContent = partner.name;
-    document.getElementById('pDesc').textContent = partner.description;
-
-    document.getElementById('ceoName').textContent = partner.ceoName;
-    document.getElementById('ceoRole').textContent = partner.ceoRole;
-    if (partner.ceoPhoto) {
-      document.getElementById('ceoPhoto').src = partner.ceoPhoto;
-      document.getElementById('ceoPhoto').alt = partner.ceoName;
-    } else {
-      document.getElementById('ceoPhoto').closest('.ceo-photo-frame').style.background = 'var(--parchment-2)';
-    }
-
-    if (partner.video) {
-      const frame = document.getElementById('videoFrame');
-      frame.innerHTML = `<video src="${partner.video}" controls playsinline></video>`;
-    }
-
-    if (partner.image1) {
-      document.getElementById('pImage1').src = partner.image1;
-      document.getElementById('pImage1').style.display = 'block';
-      document.getElementById('pImage1Placeholder').style.display = 'none';
-    }
-    if (partner.image2) {
-      document.getElementById('pImage2').src = partner.image2;
-      document.getElementById('pImage2').style.display = 'block';
-      document.getElementById('pImage2Placeholder').style.display = 'none';
-    }
-
-    document.getElementById('pWebsiteTop').href = partner.website || '#';
-    document.getElementById('pWebsiteBottom').href = partner.website || '#';
-
-    loadingEl.style.display = 'none';
-    contentEl.style.display = 'block';
+  function escapeText(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
   }
+
+  async function loadPartner(){
+    if (!id) {
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    try {
+      const snap = await getDoc(doc(db, 'consultancyPartners', id));
+      if (!snap.exists()) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      const partner = snap.data();
+      document.title = (partner.name || 'Partner') + " | Marvini Consultancy & Training";
+
+      // Logo
+      if (partner.logoUrl) {
+        const logoImg = document.getElementById('pLogo');
+        logoImg.src = partner.logoUrl;
+        logoImg.alt = partner.name || '';
+        logoImg.style.display = 'block';
+        document.getElementById('pLogoPlaceholder').style.display = 'none';
+      }
+
+      document.getElementById('pName').textContent = partner.name || '';
+      document.getElementById('pDesc').textContent = partner.description || '';
+
+      // CEO
+      document.getElementById('ceoName').textContent = partner.ceoName || 'To be announced';
+      document.getElementById('ceoRole').textContent = partner.ceoRole || '';
+      if (partner.ceoPhotoUrl) {
+        const ceoImg = document.getElementById('ceoPhoto');
+        ceoImg.src = partner.ceoPhotoUrl;
+        ceoImg.alt = partner.ceoName || '';
+      }
+
+      // Video
+      if (partner.videoUrl) {
+        const frame = document.getElementById('videoFrame');
+        frame.innerHTML = `<video src="${escapeText(partner.videoUrl)}" controls playsinline></video>`;
+      }
+
+      // Facility images
+      if (partner.image1Url) {
+        document.getElementById('pImage1').src = partner.image1Url;
+        document.getElementById('pImage1').style.display = 'block';
+        document.getElementById('pImage1Placeholder').style.display = 'none';
+      }
+      if (partner.image2Url) {
+        document.getElementById('pImage2').src = partner.image2Url;
+        document.getElementById('pImage2').style.display = 'block';
+        document.getElementById('pImage2Placeholder').style.display = 'none';
+      }
+
+      // Website
+      const websiteHref = partner.website || '#';
+      document.getElementById('pWebsiteTop').href = websiteHref;
+      document.getElementById('pWebsiteBottom').href = websiteHref;
+
+      loadingEl.style.display = 'none';
+      contentEl.style.display = 'block';
+    } catch (err) {
+      console.error('Error loading partner:', err);
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+    }
+  }
+
+  loadPartner();
 </script>
 
 </body>

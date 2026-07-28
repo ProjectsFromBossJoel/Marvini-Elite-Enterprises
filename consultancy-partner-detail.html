@@ -219,6 +219,36 @@
   .btn-ghost{ background: transparent; color: var(--ink); border-color: var(--ink); }
   .btn-ghost:hover{ background: var(--ink); color: var(--white); }
 
+  /* ---------- Landing image (hero right column) ---------- */
+  .partner-hero-grid{
+    display:grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 860px){
+    .partner-hero-grid{ grid-template-columns: 1fr; }
+  }
+  .partner-landing-frame{
+    aspect-ratio: 4 / 3;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .partner-landing-frame img{ width:100%; height:100%; object-fit: cover; }
+  .partner-landing-frame .placeholder{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9a8e;
+    background: var(--parchment-2);
+  }
+
   /* ---------- Section divider ---------- */
   .thread-divider{
     display:flex;
@@ -414,24 +444,30 @@
 <div id="partnerContent" style="display:none;">
 
   <header class="partner-hero">
-    <div class="wrap">
-      <div class="partner-hero-top">
-        <div class="partner-logo-frame" id="pLogoFrame">
-          <img id="pLogo" src="" alt="" style="display:none;" />
-          <span class="placeholder" id="pLogoPlaceholder">No logo</span>
+    <div class="wrap partner-hero-grid">
+      <div class="partner-hero-left">
+        <div class="partner-hero-top">
+          <div class="partner-logo-frame" id="pLogoFrame">
+            <img id="pLogo" src="" alt="" style="display:none;" />
+            <span class="placeholder" id="pLogoPlaceholder">No logo</span>
+          </div>
+          <div>
+            <p class="eyebrow">Partner Organisation</p>
+            <h1 id="pName"></h1>
+          </div>
         </div>
-        <div>
-          <p class="eyebrow">Partner Organisation</p>
-          <h1 id="pName"></h1>
+        <p class="partner-desc" id="pDesc"></p>
+        <div class="partner-hero-ctas">
+          <a href="#" id="pWebsiteTop" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+            Visit Us Here
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <a href="consultancy-training.html#partners" class="btn btn-ghost">Back to Partners</a>
         </div>
       </div>
-      <p class="partner-desc" id="pDesc"></p>
-      <div class="partner-hero-ctas">
-        <a href="#" id="pWebsiteTop" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
-          Visit Us Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-        <a href="consultancy-training.html#partners" class="btn btn-ghost">Back to Partners</a>
+      <div class="partner-landing-frame" id="pLandingFrame">
+        <img id="pLandingImage" src="" alt="" style="display:none;" />
+        <span class="placeholder" id="pLandingImagePlaceholder">No image yet</span>
       </div>
     </div>
   </header>
@@ -561,6 +597,15 @@
 
       document.getElementById('pName').textContent = partner.name || '';
       document.getElementById('pDesc').textContent = partner.description || '';
+
+      // Landing image
+      if (partner.landingImageUrl) {
+        const landingImg = document.getElementById('pLandingImage');
+        landingImg.src = partner.landingImageUrl;
+        landingImg.alt = partner.name || '';
+        landingImg.style.display = 'block';
+        document.getElementById('pLandingImagePlaceholder').style.display = 'none';
+      }
 
       // CEO
       document.getElementById('ceoName').textContent = partner.ceoName || 'To be announced';
