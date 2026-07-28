@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ceoName: document.getElementById("partnerCeoName"),
     ceoRole: document.getElementById("partnerCeoRole"),
     website: document.getElementById("partnerWebsite"),
+    mapUrl: document.getElementById("partnerMapUrl"),
     logo: document.getElementById("partnerLogo"),
     ceoPhoto: document.getElementById("partnerCeoPhoto"),
     video: document.getElementById("partnerVideo"),
@@ -80,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fields.ceoName.value = partner.ceoName || "";
       fields.ceoRole.value = partner.ceoRole || "";
       fields.website.value = partner.website || "";
+      fields.mapUrl.value = partner.mapUrl || "";
       existingUrls = {
         logoUrl: partner.logoUrl || "",
         ceoPhotoUrl: partner.ceoPhotoUrl || "",
@@ -244,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ceoName: fields.ceoName.value.trim(),
         ceoRole: fields.ceoRole.value.trim(),
         website: fields.website.value.trim(),
+        mapUrl: fields.mapUrl.value.trim(),
         logoUrl: uploads.logoUrl ?? existingUrls.logoUrl ?? "",
         ceoPhotoUrl: uploads.ceoPhotoUrl ?? existingUrls.ceoPhotoUrl ?? "",
         videoUrl: uploads.videoUrl ?? existingUrls.videoUrl ?? "",

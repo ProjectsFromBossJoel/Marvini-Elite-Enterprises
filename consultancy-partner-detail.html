@@ -463,6 +463,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
           <a href="consultancy-training.html#partners" class="btn btn-ghost">Back to Partners</a>
+          <a href="#" id="pMapDirections" class="btn btn-ghost" target="_blank" rel="noopener noreferrer" style="display:none;">
+            Get Directions
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </a>
         </div>
       </div>
       <div class="partner-landing-frame" id="pLandingFrame">
@@ -632,6 +636,13 @@
         document.getElementById('pImage2').src = partner.image2Url;
         document.getElementById('pImage2').style.display = 'block';
         document.getElementById('pImage2Placeholder').style.display = 'none';
+      }
+
+      // Google Maps directions
+      if (partner.mapUrl) {
+        const mapBtn = document.getElementById('pMapDirections');
+        mapBtn.href = partner.mapUrl;
+        mapBtn.style.display = 'inline-flex';
       }
 
       // Website

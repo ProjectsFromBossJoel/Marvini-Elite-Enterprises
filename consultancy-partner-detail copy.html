@@ -589,6 +589,13 @@
         document.getElementById('pImage2Placeholder').style.display = 'none';
       }
 
+      // Google Maps directions
+      if (partner.mapUrl) {
+        const mapBtn = document.getElementById('pMapDirections');
+        mapBtn.href = partner.mapUrl;
+        mapBtn.style.display = 'inline-flex';
+      }
+
       // Website
       const websiteHref = partner.website || '#';
       document.getElementById('pWebsiteTop').href = websiteHref;
