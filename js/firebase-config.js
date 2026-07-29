@@ -27,6 +27,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // ⚠️ Replace with your actual Firebase project config (Project settings → General → Your apps)
@@ -65,6 +66,7 @@ export {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 };
 
 // Exposed so js/users-admin.js can spin up a *second*, isolated Firebase App

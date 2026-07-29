@@ -12,6 +12,7 @@ import {
   limit,
   onSnapshot,
   doc,
+  setDoc,
 } from "./firebase-config.js";
 
 const NEWSLETTER_API_URL = "https://marvini-elite-enterprises-alpha.vercel.app/api/send-newsletter";
@@ -23,11 +24,9 @@ const win = document.getElementById("nlWindow");
 const messages = document.getElementById("nlMessages");
 const minimizeBtn = document.getElementById("nlMinimize");
 
-const DISMISSED_KEY = "nlWidgetDismissedNewsId";
-
 let latestNews = null;
 let lastSentAtMillis = 0;
-let dismissedNewsId = localStorage.getItem(DISMISSED_KEY) || null;
+let dismissedNewsId = null; // now synced from Firestore, shared across every browser/device
 let currentPromptNewsId = null;
 
 function millisFromTimestamp(ts) {
@@ -87,7 +86,7 @@ async function handleSend(newsItem) {
   document.getElementById("nlSendBtn").disabled = true;
   document.getElementById("nlDismissBtn").disabled = true;
   dismissedNewsId = newsItem.id;
-  localStorage.setItem(DISMISSED_KEY, newsItem.id);
+  await setDoc(doc(db, "settings", "newsletter"), { dismissedNewsId: newsItem.id }, { merge: true });
   addMessage("Sending now…");
 
   try {
@@ -122,9 +121,9 @@ function scheduleVanish() {
   }, 5500);
 }
 
-function handleDismiss(newsItem) {
+async function handleDismiss(newsItem) {
   dismissedNewsId = newsItem.id;
-  localStorage.setItem(DISMISSED_KEY, newsItem.id);
+  await setDoc(doc(db, "settings", "newsletter"), { dismissedNewsId: newsItem.id }, { merge: true });
   addMessage("Okay, I won't send it. I'll step back now, but I'm still quietly watching for the next new post.");
   toggleDot.style.display = "none";
   scheduleVanish();
@@ -132,6 +131,7 @@ function handleDismiss(newsItem) {
 
 function evaluate() {
   if (!latestNews || !auth.currentUser) return;
+  if (!window.marviniUser?.canSendNewsletter) return; // permission gate — widget stays hidden for users without it
   const newsMillis = millisFromTimestamp(latestNews.createdAt);
   const isNew = newsMillis > lastSentAtMillis;
   const alreadyHandled = latestNews.id === dismissedNewsId || latestNews.id === currentPromptNewsId;
@@ -152,6 +152,8 @@ onSnapshot(latestNewsQuery, (snap) => {
 });
 
 onSnapshot(doc(db, "settings", "newsletter"), (snap) => {
-  lastSentAtMillis = snap.exists() ? millisFromTimestamp(snap.data().lastSentAt) : 0;
+  const data = snap.exists() ? snap.data() : {};
+  lastSentAtMillis = millisFromTimestamp(data.lastSentAt);
+  dismissedNewsId = data.dismissedNewsId || null;
   evaluate();
 });

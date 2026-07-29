@@ -48,6 +48,7 @@ const passwordWrap = document.getElementById("userPasswordField");
 const roleField = document.getElementById("userRole");
 const pagesFieldset = document.getElementById("pagesFieldset");
 const pageChks = () => Array.from(document.querySelectorAll(".pageChk"));
+const permSendNewsletter = document.getElementById("permSendNewsletter");
 const statusBox = document.getElementById("userStatus");
 const submitBtn = document.getElementById("userSubmitBtn");
 const avatarFileInput = document.getElementById("avatarFileInput");
@@ -196,6 +197,7 @@ function openModal(user = null) {
     passwordField.required = false;
     roleField.value = user.role || "it_support";
     setCheckedPages(user.pages || DEFAULT_PAGES[user.role] || []);
+    permSendNewsletter.checked = user.role === "admin" ? true : !!user.canSendNewsletter;
     photoURLField.value = user.photoURL || "";
     avatarPreview.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=1a56ff&color=fff`;
     submitBtn.textContent = "Save Changes";
@@ -207,6 +209,7 @@ function openModal(user = null) {
     passwordField.required = true;
     roleField.value = "it_support";
     setCheckedPages(DEFAULT_PAGES.it_support);
+    permSendNewsletter.checked = false;
     photoURLField.value = "";
     avatarPreview.src = "https://ui-avatars.com/api/?name=New+User&background=1a56ff&color=fff";
     submitBtn.textContent = "Create User";
@@ -241,8 +244,11 @@ function applyRoleDefaults() {
   if (role === "admin") {
     setCheckedPages(DEFAULT_PAGES.admin);
     pagesFieldset.classList.add("disabled");
+    permSendNewsletter.checked = true;
+    permSendNewsletter.disabled = true;
   } else {
     pagesFieldset.classList.remove("disabled");
+    permSendNewsletter.disabled = false;
     // Only auto-fill defaults when creating a brand-new user (no uid yet)
     if (!uidField.value) setCheckedPages(DEFAULT_PAGES[role] || []);
   }
@@ -265,12 +271,13 @@ async function handleSubmit(e) {
   const name = nameField.value.trim();
   const role = roleField.value;
   const pages = role === "admin" ? DEFAULT_PAGES.admin : getCheckedPages();
+  const canSendNewsletter = role === "admin" ? true : permSendNewsletter.checked;
   const photoURL = photoURLField.value || null;
 
   try {
     if (uid) {
       // Editing an existing user — Firestore doc only.
-      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, photoURL });
+      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, canSendNewsletter, photoURL });
       if (window.marviniUser && uid === window.marviniUser.uid) {
         window.marviniUser.photoURL = photoURL;
         const profileImg = document.querySelector(".profile img");
@@ -291,6 +298,7 @@ async function handleSubmit(e) {
           email,
           role,
           pages,
+          canSendNewsletter,
           photoURL,
           status: "active",
           createdAt: serverTimestamp(),

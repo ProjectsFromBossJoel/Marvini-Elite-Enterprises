@@ -198,6 +198,15 @@
         </select>
       </div>
 
+      <fieldset class="pages-fieldset" id="permissionsFieldset" style="margin-bottom: 1rem;">
+        <legend>Permissions</legend>
+        <p style="font-size:.8rem; color:var(--text-muted,#64748b); margin:0 0 .5rem;">Extra abilities beyond page access. Admins automatically get all permissions.</p>
+        <label style="display:flex; align-items:center; gap:.5rem; font-size:.85rem; font-weight:500; cursor:pointer;">
+          <input type="checkbox" id="permSendNewsletter" />
+          Send Newsletter <span style="font-weight:400; color:var(--text-muted,#64748b);">— can approve/dismiss the newsletter-agent prompt on the Dashboard</span>
+        </label>
+      </fieldset>
+
       <fieldset class="pages-fieldset" id="pagesFieldset">
         <legend>Assigned Pages</legend>
         <p style="font-size:.8rem; color:var(--text-muted,#64748b); margin:0;">Admins automatically get every page. For other roles, pick exactly what they should see in the sidebar.</p>
