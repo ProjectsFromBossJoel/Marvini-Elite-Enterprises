@@ -16,6 +16,7 @@ import {
   getDocs,
   LINKEDIN_POSTS_COLLECTION,
   X_POSTS_COLLECTION,
+  FACEBOOK_POSTS_COLLECTION,
 } from "./firebase-config.js";
 
 const API_BASE = "https://marvini-elite-enterprises-alpha.vercel.app";
@@ -43,6 +44,17 @@ const PLATFORMS = {
     successVerb: "Posted to X",
     historyCollection: X_POSTS_COLLECTION,
   },
+  facebook: {
+    label: "Facebook Posts",
+    sub: "Describe what to post. Facebook has no strict character cap — keep it warm and readable.",
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;vertical-align:-4px;"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"/></svg>`,
+    endpoint: "/api/admin/facebook-post",
+    model: "openai/gpt-oss-120b",
+    charLimit: null,
+    publishLabel: "Post to Facebook",
+    successVerb: "Posted to Facebook",
+    historyCollection: FACEBOOK_POSTS_COLLECTION,
+  },
 };
 
 let currentPlatform = "linkedin";
@@ -51,6 +63,7 @@ let currentPlatform = "linkedin";
 const state = {
   linkedin: { text: "", genState: "idle", isAuto: false },
   x: { text: "", genState: "idle", isAuto: false },
+  facebook: { text: "", genState: "idle", isAuto: false },
 };
 
 const promptEl = document.getElementById("lpPrompt");
@@ -75,6 +88,7 @@ const platformIcon = document.getElementById("lpPlatformIcon");
 const modelLabelEl = document.getElementById("lpModelLabel");
 const tabLinkedin = document.getElementById("lpTabLinkedin");
 const tabX = document.getElementById("lpTabX");
+const tabFacebook = document.getElementById("lpTabFacebook");
 
 let lastPrompt = "";
 
@@ -91,6 +105,7 @@ function renderPlatform() {
 
   tabLinkedin.classList.toggle("active", currentPlatform === "linkedin");
   tabX.classList.toggle("active", currentPlatform === "x");
+  tabFacebook.classList.toggle("active", currentPlatform === "facebook");
 
   charLimitEl.textContent = cfg.charLimit ? ` / ${cfg.charLimit}` : "";
   resultBox.className = "lp-result";
@@ -126,6 +141,7 @@ function switchPlatform(platform) {
 
 tabLinkedin.addEventListener("click", () => switchPlatform("linkedin"));
 tabX.addEventListener("click", () => switchPlatform("x"));
+tabFacebook.addEventListener("click", () => switchPlatform("facebook"));
 
 // ---------- helpers ----------
 function setGenState(genState) {
