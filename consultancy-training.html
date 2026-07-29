@@ -1422,11 +1422,23 @@
   // Reuse the SAME Firebase app/Firestore instance as the rest of the
   // Marvini site, so writes land in the same project/collections.
   // ---------------------------------------------------------------
-  import { db, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc } from "./js/firebase-config.js";
+  import { db, collection, addDoc, setDoc, serverTimestamp, onSnapshot, query, orderBy, doc } from "./js/firebase-config.js";
 
   // Training registrations live in their own collection, separate from
   // consultation enquiries (consultancyTrainingLeads).
   const TRAINING_COLLECTION = 'trainingRegistrations';
+
+  // Deterministic doc ID from email + program + start date. A second
+  // registration with the SAME email for the SAME program cohort (same
+  // title AND same start date) lands on an existing doc path, which
+  // Firestore treats as an "update" rather than a "create" — and since
+  // only staff can update, the duplicate is rejected automatically.
+  // Including startDate means a later cohort reusing the same title is
+  // treated as a distinct registration, not a duplicate.
+  function makeRegistrationId(email, program, startDate) {
+    const clean = (s) => (s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    return `${clean(email)}__${clean(program)}__${clean(startDate)}`;
+  }
 
   // ---------------- EmailJS (registration confirmation email) ----------------
   // Replace these with your own values from emailjs.com (Account > API Keys,
@@ -1717,7 +1729,9 @@
     };
 
     try {
-      await addDoc(collection(db, TRAINING_COLLECTION), payload);
+      const selectedProgram = programsByTitle[payload.program];
+      const regId = makeRegistrationId(payload.email, payload.program, selectedProgram?.startDate);
+      await setDoc(doc(db, TRAINING_COLLECTION, regId), payload);
       sendRegistrationEmail(payload);
       modalStatus.innerHTML = `
         <div class="success-card">
@@ -1739,7 +1753,11 @@
       }, 5000);
     } catch (err) {
       console.error('Error saving training registration:', err);
-      modalStatus.textContent = "Something went wrong sending this — please try again or email us directly.";
+      if (err.code === 'permission-denied') {
+        modalStatus.textContent = "This email has already registered for this training.";
+      } else {
+        modalStatus.textContent = "Something went wrong sending this — please try again or email us directly.";
+      }
       modalStatus.classList.add('err');
     } finally {
       modalSubmitBtn.disabled = false;
@@ -1772,8 +1790,13 @@
     };
 
     try {
-      const targetCollection = typeInput.value === 'training' ? TRAINING_COLLECTION : 'consultancyTrainingLeads';
-      await addDoc(collection(db, targetCollection), payload);
+      if (typeInput.value === 'training') {
+        const selectedProgram = programsByTitle[payload.program];
+        const regId = makeRegistrationId(payload.email, payload.program, selectedProgram?.startDate);
+        await setDoc(doc(db, TRAINING_COLLECTION, regId), payload);
+      } else {
+        await addDoc(collection(db, 'consultancyTrainingLeads'), payload);
+      }
       sendRegistrationEmail(payload);
       const successMsg = typeInput.value === 'training'
         ? "You're all set — check your inbox for your registration email."
@@ -1794,7 +1817,11 @@
       }, 7000);
     } catch (err) {
       console.error('Error saving lead:', err);
-      status.textContent = "Something went wrong sending this — please try again or email us directly.";
+      if (err.code === 'permission-denied' && typeInput.value === 'training') {
+        status.textContent = "This email has already registered for this training.";
+      } else {
+        status.textContent = "Something went wrong sending this — please try again or email us directly.";
+      }
       status.classList.add('err');
     } finally {
       submitBtn.disabled = false;
