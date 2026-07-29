@@ -26,6 +26,7 @@ const PLATFORMS = {
     sub: "Describe what to post. Review the draft. Publish when it's ready.",
     icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;vertical-align:-4px;"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v2c1-1.5 2.5-2.5 4.5-2.5 3.5 0 5.5 2 5.5 6.5V21h-4v-5.5c0-1.5-.5-2.5-2-2.5s-2 1-2 2.5V21h-4z"/></svg>`,
     endpoint: "/api/admin/linkedin-post",
+    model: "openai/gpt-oss-120b",
     charLimit: null,
     publishLabel: "Post to LinkedIn",
     successVerb: "Posted to LinkedIn",
@@ -36,6 +37,7 @@ const PLATFORMS = {
     sub: "Describe what to post. Keep it tight — X caps posts at 280 characters.",
     icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;vertical-align:-3px;"><path d="M18.9 2H22l-7.6 8.7L23.3 22H16.7l-5.2-6.8L5.6 22H2.4l8.2-9.3L1.7 2h6.8l4.7 6.2L18.9 2z"/></svg>`,
     endpoint: "/api/admin/x-post",
+    model: "llama-3.3-70b-versatile",
     charLimit: 280,
     publishLabel: "Post to X",
     successVerb: "Posted to X",
@@ -70,6 +72,7 @@ const resultBox = document.getElementById("lpResult");
 const platformTitle = document.getElementById("lpPlatformTitle");
 const platformSub = document.getElementById("lpPlatformSub");
 const platformIcon = document.getElementById("lpPlatformIcon");
+const modelLabelEl = document.getElementById("lpModelLabel");
 const tabLinkedin = document.getElementById("lpTabLinkedin");
 const tabX = document.getElementById("lpTabX");
 
@@ -83,6 +86,7 @@ function renderPlatform() {
   platformTitle.textContent = cfg.label;
   platformSub.textContent = cfg.sub;
   platformIcon.innerHTML = cfg.icon;
+  if (modelLabelEl) modelLabelEl.textContent = `groq · ${cfg.model}`;
   publishLabel.textContent = cfg.publishLabel;
 
   tabLinkedin.classList.toggle("active", currentPlatform === "linkedin");
