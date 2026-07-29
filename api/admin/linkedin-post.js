@@ -81,7 +81,12 @@ async function generatePost(prompt) {
   }
 
   const data = await response.json();
-  return data.choices[0].message.content.trim();
+  const content = data.choices[0]?.message?.content;
+  const cleaned = typeof content === 'string' ? content.trim() : '';
+  if (!cleaned || /^(undefined|null)$/i.test(cleaned)) {
+    throw new Error('Groq returned no usable content — try regenerating');
+  }
+  return cleaned;
 }
 
 // ---------- Main handler ----------
