@@ -42,14 +42,23 @@ function typeLabel(type) {
   return type === "training" ? "Training" : "Consultation";
 }
 
+let leadsSearchTerm = "";
+
 function matchesFilter(lead) {
   if (activeFilter === "all") return true;
   if (activeFilter === "consultation" || activeFilter === "training") return lead.type === activeFilter;
   return (lead.status || "new") === activeFilter;
 }
 
+function matchesLeadSearch(lead) {
+  if (!leadsSearchTerm) return true;
+  const haystack = [lead.name, lead.organisation, lead.program, lead.email, lead.phone]
+    .filter(Boolean).join(" ").toLowerCase();
+  return haystack.includes(leadsSearchTerm);
+}
+
 function renderRows() {
-  const filtered = allLeads.filter(matchesFilter);
+  const filtered = allLeads.filter((l) => matchesFilter(l) && matchesLeadSearch(l));
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   if (leadsPage > totalPages) leadsPage = totalPages;
   const rows = paginate(filtered, leadsPage, PAGE_SIZE);
@@ -160,13 +169,22 @@ const registrationsEmptyState = document.getElementById("registrationsEmptyState
 let allRegistrations = [];
 let activeRegistrationId = null;
 let registrationsPage = 1;
+let registrationsSearchTerm = "";
+
+function matchesRegistrationSearch(reg) {
+  if (!registrationsSearchTerm) return true;
+  const haystack = [reg.name, reg.organisation, reg.program, reg.email, reg.phone]
+    .filter(Boolean).join(" ").toLowerCase();
+  return haystack.includes(registrationsSearchTerm);
+}
 
 function renderRegistrationRows() {
-  const totalPages = Math.max(1, Math.ceil(allRegistrations.length / PAGE_SIZE));
+  const filtered = allRegistrations.filter(matchesRegistrationSearch);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   if (registrationsPage > totalPages) registrationsPage = totalPages;
-  const rows = paginate(allRegistrations, registrationsPage, PAGE_SIZE);
+  const rows = paginate(filtered, registrationsPage, PAGE_SIZE);
   registrationsTableBody.innerHTML = "";
-  if (allRegistrations.length === 0) {
+  if (filtered.length === 0) {
     registrationsEmptyState.style.display = "block";
     document.getElementById("registrationsPagination").innerHTML = "";
     return;
@@ -174,7 +192,7 @@ function renderRegistrationRows() {
   registrationsEmptyState.style.display = "none";
   renderPaginationControls(
     document.getElementById("registrationsPagination"),
-    allRegistrations.length,
+    filtered.length,
     registrationsPage,
     PAGE_SIZE,
     (p) => { registrationsPage = p; renderRegistrationRows(); }
@@ -209,6 +227,12 @@ function renderRegistrationRows() {
     btn.addEventListener("click", () => openRegistrationModal(btn.dataset.viewReg));
   });
 }
+
+document.getElementById("registrationsSearchInput")?.addEventListener("input", (e) => {
+  registrationsSearchTerm = e.target.value.trim().toLowerCase();
+  registrationsPage = 1;
+  renderRegistrationRows();
+});
 
 const registrationsQuery = query(collection(db, TRAINING_COLLECTION), orderBy("createdAt", "desc"));
 
@@ -283,6 +307,13 @@ filterTabs.querySelectorAll(".filter-tab").forEach((tab) => {
     leadsPage = 1;
     renderRows();
   });
+});
+
+// ---------------- Leads search ----------------
+document.getElementById("leadsSearchInput")?.addEventListener("input", (e) => {
+  leadsSearchTerm = e.target.value.trim().toLowerCase();
+  leadsPage = 1;
+  renderRows();
 });
 
 // ---------------- Lead detail modal ----------------

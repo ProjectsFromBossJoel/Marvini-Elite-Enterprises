@@ -167,10 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const partnersQuery = query(collection(db, "consultancyPartners"), orderBy("createdAt", "desc"));
   let partnersCache = {};
   let allPartners = [];
+  let partnersSearchTerm = "";
   const partnersPaginationEl = document.getElementById("partnersPagination");
 
+  function matchesPartnerSearch(p) {
+    if (!partnersSearchTerm) return true;
+    const haystack = [p.name, p.ceoName, p.website]
+      .filter(Boolean).join(" ").toLowerCase();
+    return haystack.includes(partnersSearchTerm);
+  }
+
   function renderPartnersTable() {
-    if (allPartners.length === 0) {
+    const filtered = allPartners.filter(matchesPartnerSearch);
+    if (filtered.length === 0) {
       tableBody.innerHTML = "";
       emptyState.style.display = "block";
       partnersPaginationEl.innerHTML = "";
@@ -178,14 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     emptyState.style.display = "none";
 
-    const totalPages = Math.max(1, Math.ceil(allPartners.length / PARTNERS_PAGE_SIZE));
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PARTNERS_PAGE_SIZE));
     if (partnersPage > totalPages) partnersPage = totalPages;
     const start = (partnersPage - 1) * PARTNERS_PAGE_SIZE;
-    const pageItems = allPartners.slice(start, start + PARTNERS_PAGE_SIZE);
+    const pageItems = filtered.slice(start, start + PARTNERS_PAGE_SIZE);
 
     renderPartnersPaginationControls(
       partnersPaginationEl,
-      allPartners.length,
+      filtered.length,
       partnersPage,
       PARTNERS_PAGE_SIZE,
       (p) => { partnersPage = p; renderPartnersTable(); }
@@ -220,6 +229,12 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }).join("");
   }
+
+  document.getElementById("partnersSearchInput")?.addEventListener("input", (e) => {
+    partnersSearchTerm = e.target.value.trim().toLowerCase();
+    partnersPage = 1;
+    renderPartnersTable();
+  });
 
   onSnapshot(partnersQuery, (snapshot) => {
     allPartners = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
