@@ -15,7 +15,7 @@ if (grid) {
     const docs = snap.docs.map((d) => d.data()).filter((d) => d.status === "published");
     if (docs.length === 0) return; // keep existing emoji placeholders
 
-    grid.innerHTML = docs.map((g) => `
+    grid.innerHTML = docs.slice(0, 9).map((g) => `
       <div class="gallery-placeholder reveal-fade-up revealed" role="listitem" style="cursor:zoom-in;" data-img="${escapeHtml(g.imageUrl)}" data-caption="${escapeHtml(g.caption || "")}">
         <img src="${escapeHtml(g.imageUrl)}" alt="${escapeHtml(g.caption || "")}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" />
       </div>

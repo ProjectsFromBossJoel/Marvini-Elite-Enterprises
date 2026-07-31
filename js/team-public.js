@@ -99,18 +99,19 @@ function renderLeadershipMessage(allDocs) {
   quoteEl.textContent = leader.leadershipQuote;
 }
 
-if (grid) {
-  onSnapshot(collection(db, "team"), (snap) => {
-    const allDocs = snap.docs.map((d) => d.data());
-    renderLeadershipMessage(allDocs);
-    renderFeaturedCards(allDocs);
+onSnapshot(collection(db, "team"), (snap) => {
+  const allDocs = snap.docs.map((d) => d.data());
+  renderLeadershipMessage(allDocs);
+  renderFeaturedCards(allDocs);
 
-    const docs = allDocs
-      .filter((d) => d.status === "published" && d.category !== "Leadership" && !d.showAsFeatured)
-      .sort(compareTeamDocs);
-    if (docs.length === 0) return; // keep existing hardcoded fallback cards
+  if (!grid) return; // this page has no team grid (e.g. index.html's About/CEO section)
 
-    grid.innerHTML = docs.map((m) => {
+  const docs = allDocs
+    .filter((d) => d.status === "published" && d.category !== "Leadership" && !d.showAsFeatured)
+    .sort(compareTeamDocs);
+  if (docs.length === 0) return; // keep existing hardcoded fallback cards
+
+  grid.innerHTML = docs.map((m) => {
       const avatar = m.photoUrl && m.photoUrl.trim()
         ? m.photoUrl
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(m.name || "?")}&background=1a56ff&color=fff`;
@@ -146,8 +147,7 @@ if (grid) {
     }).join("");
 
     // Wire Read More buttons for the freshly-rendered cards
-    grid.querySelectorAll(".bio-readmore-live").forEach((btn, i) => {
-      btn.addEventListener("click", () => openBioModal(docs[i]));
-    });
+  grid.querySelectorAll(".bio-readmore-live").forEach((btn, i) => {
+    btn.addEventListener("click", () => openBioModal(docs[i]));
   });
-}
+});

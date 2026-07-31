@@ -40,7 +40,7 @@ if (grid) {
       });
 
       if (fallback) fallback.style.display = "none";
-      grid.innerHTML = docs.map((n) => {
+      grid.innerHTML = docs.slice(0, 3).map((n) => {
         const ts = n.publishedAt || n.createdAt;
         const dateLabel = ts?.toDate ? monthYearLabel(ts.toDate()) : "";
         const mediaHtml = n.imageUrl

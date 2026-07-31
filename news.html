@@ -1,0 +1,453 @@
+<!-- News & Announcements Page -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>News & Announcements | Marvini Elite Enterprises</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="img/favicon_io/site.webmanifest">
+  <meta name="description" content="Stay updated with the latest news, announcements and milestones from across the Marvini Elite Enterprises group." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://marvini-elite-enterprises.web.app/news.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://marvini-elite-enterprises.web.app/news.html" />
+  <meta property="og:title" content="News & Announcements | Marvini Elite Enterprises" />
+  <meta property="og:description" content="Stay updated with the latest news, announcements and milestones from across the Marvini Elite Enterprises group." />
+  <meta property="og:image" content="https://marvini-elite-enterprises.web.app/img/marvini_elite_enterprise_logo1.png" />
+  <meta property="og:site_name" content="Marvini Elite Enterprises" />
+  <meta property="og:locale" content="en_GH" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css?v=2" />
+
+  <link rel="icon" type="image/svg+xml" href="img/favicon_io/favicon.ico" />
+
+  <style>
+    /* Companies nav dropdown (same as index.html) */
+    .nav-item-dropdown { position: relative; display: flex; align-items: center; }
+    .nav-item-dropdown .nav-link { display: inline-flex; align-items: center; gap: 5px; height: 100%; }
+    .nav-dropdown-caret { width: 10px; height: 10px; transition: transform 0.2s ease; }
+    .nav-item-dropdown.open .nav-dropdown-caret,
+    .nav-item-dropdown:hover .nav-dropdown-caret { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 14px); left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 240px; background: var(--bg-card, #fff);
+      border: 1px solid var(--border, rgba(0,0,0,0.08));
+      border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+      padding: 8px; opacity: 0; visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      z-index: 300;
+    }
+    .nav-item-dropdown:hover .nav-dropdown-menu,
+    .nav-item-dropdown.open .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      border-radius: 8px; font-size: 14px; color: var(--text-primary, #14213D);
+      text-decoration: none; white-space: nowrap; transition: background 0.15s ease;
+    }
+    .nav-dropdown-menu a:hover { background: var(--bg-secondary, rgba(26,86,255,0.08)); }
+    .nav-dropdown-menu img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+    @media (max-width: 980px) { .nav-dropdown-menu { display: none; } }
+
+    .mobile-dropdown-item { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .mobile-link-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .mobile-dropdown-toggle {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg-glass, rgba(255,255,255,0.06));
+      border: 1px solid var(--border, rgba(255,255,255,0.1));
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.3s ease, background 0.2s ease; flex-shrink: 0;
+    }
+    .mobile-dropdown-toggle svg { width: 14px; height: 14px; color: var(--text-secondary, #94A3B8); transition: transform 0.3s ease; }
+    .mobile-dropdown-toggle.open svg { transform: rotate(180deg); }
+    .mobile-dropdown-submenu {
+      max-height: 0; overflow: hidden; opacity: 0; display: flex;
+      flex-direction: column; align-items: center; gap: 0.15rem; width: 100%;
+      transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.35s ease; margin-top: 0;
+    }
+    .mobile-dropdown-submenu.open { max-height: 400px; opacity: 1; margin-top: 0.75rem; }
+    .mobile-sublink {
+      display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600;
+      color: var(--text-secondary, #94A3B8); padding: 0.5rem 1rem; transition: color 0.2s ease;
+    }
+    .mobile-sublink:hover { color: var(--text-primary, #F1F5F9); }
+    .mobile-sublink img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+
+    /* Pagination controls */
+    .news-pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.25rem; margin-top: 2.5rem; flex-wrap: wrap;
+    }
+    .news-pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .news-page-label {
+      font-family: var(--font-heading); font-weight: 600;
+      color: var(--text-primary); font-size: 0.95rem;
+    }
+  </style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z8NS6CY134"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z8NS6CY134');
+</script>
+
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- NAVIGATION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <header class="site-header" id="site-header" role="banner">
+    <nav class="navbar" aria-label="Main navigation">
+      <a href="index.html#home" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+        <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini Elite Enterprises" class="nav-logo-img" />
+        <span class="nav-logo-text">
+          <span class="logo-name">Marvini</span>
+          <span class="logo-sub">Elite Enterprises</span>
+        </span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li class="nav-item-dropdown" id="companiesNavDropdown">
+          <a href="index.html#companies" class="nav-link">
+            Subsidiaries
+            <svg class="nav-dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="https://marvini-smart-driving-school-solution.web.app/"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+            <a href="https://marvini-digital-food-chain.web.app/"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+            <a href="index.html#companies"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
+            <a href="https://marvini--farms.web.app/"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+            <a href="consultancy-training.html"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
+          </div>
+        </li>
+        <li><a href="consultancy-training.html" class="nav-link">M-Consultancy & Training</a></li>
+        <li><a href="news.html" class="nav-link active">News</a></li>
+        <li><a href="publications.html" class="nav-link">Publications</a></li>
+        <li><a href="careers.html" class="nav-link">Careers/ Volunteer</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☽</span>
+        </button>
+        <a href="index.html#contact" class="btn btn-primary btn-sm">Get In Touch</a>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
+    <ul class="mobile-links" role="list">
+      <li><a href="index.html#home" class="mobile-link">Home</a></li>
+      <li><a href="index.html#about" class="mobile-link">About</a></li>
+      <li class="mobile-dropdown-item" id="mobileCompaniesItem">
+        <div class="mobile-link-row">
+          <a href="index.html#companies" class="mobile-link" id="mobileCompaniesLink">Subsidiaries</a>
+          <button class="mobile-dropdown-toggle" id="mobileCompaniesToggle" aria-label="Toggle subsidiaries submenu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="mobile-dropdown-submenu" id="mobileCompaniesSubmenu">
+          <a href="https://marvini-smart-driving-school-solution.web.app/" class="mobile-sublink"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+          <a href="https://marvini-digital-food-chain.web.app/" class="mobile-sublink"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+          <a href="index.html#companies" class="mobile-sublink"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
+          <a href="https://marvini--farms.web.app/" class="mobile-sublink"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+          <a href="consultancy-training.html" class="mobile-sublink"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
+        </div>
+      </li>
+      <li><a href="consultancy-training.html" class="mobile-link">M-Consultancy & Training</a></li>
+      <li><a href="news.html" class="mobile-link active">News</a></li>
+      <li><a href="index.html#partners" class="mobile-link">Partners</a></li>
+      <li><a href="index.html#team" class="mobile-link">Team</a></li>
+      <li><a href="careers.html" class="mobile-link">Careers</a></li>
+    </ul>
+  </div>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- NEWS LIST SECTION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section id="news-list" class="section news-section" aria-label="All News" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Publications</span>
+          <h2 class="section-title">News & Announcements</h2>
+          <p class="section-subtitle">Browse every update, milestone and announcement from across the Marvini group.</p>
+        </div>
+
+        <div class="news-grid" id="newsListGrid" role="list">
+          <article class="news-card news-skeleton" aria-hidden="true">
+            <div class="news-img-placeholder"></div>
+            <div class="news-body">
+              <div class="skeleton-line w-30"></div>
+              <div class="skeleton-line w-80"></div>
+              <div class="skeleton-line w-60"></div>
+            </div>
+          </article>
+          <article class="news-card news-skeleton" aria-hidden="true">
+            <div class="news-img-placeholder"></div>
+            <div class="news-body">
+              <div class="skeleton-line w-30"></div>
+              <div class="skeleton-line w-80"></div>
+              <div class="skeleton-line w-60"></div>
+            </div>
+          </article>
+          <article class="news-card news-skeleton" aria-hidden="true">
+            <div class="news-img-placeholder"></div>
+            <div class="news-body">
+              <div class="skeleton-line w-30"></div>
+              <div class="skeleton-line w-80"></div>
+              <div class="skeleton-line w-60"></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="news-pagination" id="newsPagination" style="display:none;">
+          <button id="newsPrevBtn" class="btn btn-outline btn-sm" aria-label="Previous page">← Previous</button>
+          <span class="news-page-label" id="newsPageLabel">Page 1 of 1</span>
+          <button id="newsNextBtn" class="btn btn-outline btn-sm" aria-label="Next page">Next →</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+
+          <div class="footer-brand">
+            <a href="index.html#home" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+              <img src="img/marvini_elite_enterprise_logo.png" alt="Marvini Elite Enterprises" class="footer-logo-img" />
+            </a>
+            <p class="footer-tagline">Innovating Africa's Future</p>
+            <p class="footer-about">Building African-led solutions that are innovative, sustainable, and globally competitive.</p>
+            <div class="footer-social">
+              <a href="https://www.linkedin.com/in/marvini-elite-enterprise-30a252422/" target="_blank" rel="noopener noreferrer" class="fsocial-link" aria-label="LinkedIn">in</a>
+              <a href="https://x.com/Jmarvini" target="_blank" rel="noopener noreferrer" class="fsocial-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="fsocial-link" aria-label="Facebook">f</a>
+              <a href="#" class="fsocial-link" aria-label="Instagram">◎</a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Company</h4>
+            <ul class="footer-links" role="list">
+              <li><a href="index.html#about" class="footer-link">About Us</a></li>
+              <li><a href="index.html#ceo" class="footer-link">CEO Message</a></li>
+              <li><a href="index.html#values" class="footer-link">Core Values</a></li>
+              <li><a href="index.html#innovation" class="footer-link">Innovation</a></li>
+              <li><a href="index.html#team" class="footer-link">Meet the Team</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Our Companies</h4>
+            <div class="footer-logos">
+              <a href="https://marvini-smart-driving-school-solution.web.app/">
+                <img src="img/m-smart_driving_solution -logo.png" alt="M-Smart Driving School" class="company-logo" />
+                M-Smart Driving School
+              </a>
+              <a href="https://marvini-digital-food-chain.web.app">
+                <img src="img/M-Digital Food Chain .png" alt="M-Digital Food Chain" class="company-logo" />
+                M-Digital Food Chain
+              </a>
+              <a href="index.html#companies">
+                <img src="img/M-Events & Festivals0.png" alt="M-Events & Festivals" class="company-logo" />
+                M-Events & Festivals
+              </a>
+              <a href="index.html#companies">
+                <img src="img/M-Consultancy & Training0.png" alt="M-Consultancy & Training" class="company-logo" />
+                M-Consultancy & Training
+              </a>
+              <a href="index.html#companies">
+                <img src="img/M-Farms0.png" alt="M-Farms" class="company-logo" />
+                M-Farms
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Stay Updated</h4>
+            <p class="footer-newsletter-text">Subscribe to the Marvini newsletter for updates from across the group.</p>
+            <form class="newsletter-form" id="newsletterForm" novalidate aria-label="Newsletter signup">
+              <input type="email" class="newsletter-input" placeholder="richid@gmail.com" required aria-label="Email address" autocomplete="email" />
+              <button type="submit" class="btn btn-primary btn-sm newsletter-btn" aria-label="Subscribe">Subscribe</button>
+            </form>
+            <div class="newsletter-success" id="newsletterSuccess" role="alert" aria-live="polite" style="display:none;">
+              ✅ You're subscribed!
+            </div>
+            <div class="newsletter-error" id="newsletterError" role="alert" aria-live="polite" style="display:none; color:#F87171; font-size:0.85rem; margin-top:0.5rem;">
+              ⚠️ Please enter a valid email address.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="footer-copy">&copy; <span id="footerYear">2025</span> Marvini Elite Enterprises. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Privacy Policy</a>
+          <a href="#" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+  <script>
+    // ── STICKY HEADER ───────────────────────────────────
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── THEME TOGGLE ────────────────────────────────────
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    });
+
+    // ── MOBILE MENU ─────────────────────────────────────
+    const hamburger = document.getElementById('navHamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger?.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      mobileMenu.setAttribute('aria-hidden', !isOpen);
+      document.body.classList.toggle('no-scroll', isOpen);
+    });
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+    document.querySelectorAll('.mobile-link:not(#mobileCompaniesLink), .mobile-sublink').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // ── MOBILE COMPANIES DROPDOWN ───────────────────────
+    const mobileCompaniesToggle = document.getElementById('mobileCompaniesToggle');
+    const mobileCompaniesSubmenu = document.getElementById('mobileCompaniesSubmenu');
+    const mobileCompaniesLink = document.getElementById('mobileCompaniesLink');
+    function toggleMobileCompanies(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = mobileCompaniesSubmenu.classList.toggle('open');
+      mobileCompaniesToggle.classList.toggle('open', isOpen);
+      mobileCompaniesToggle.setAttribute('aria-expanded', isOpen);
+    }
+    mobileCompaniesToggle?.addEventListener('click', toggleMobileCompanies);
+    mobileCompaniesLink?.addEventListener('click', toggleMobileCompanies);
+
+    // ── REVEAL ON SCROLL ────────────────────────────────
+    const style = document.createElement('style');
+    style.textContent = `
+      .reveal-fade-up, .reveal-fade-left, .reveal-fade-right {
+        opacity: 0; transform: translateY(40px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+      .reveal-fade-left  { transform: translateX(-40px); }
+      .reveal-fade-right { transform: translateX( 40px); }
+      .revealed { opacity: 1 !important; transform: none !important; }
+      .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; }
+      .delay-3 { transition-delay: 0.3s; } .delay-4 { transition-delay: 0.4s; }
+      .delay-5 { transition-delay: 0.5s; } .delay-6 { transition-delay: 0.6s; }
+    `;
+    document.head.appendChild(style);
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    function observeReveals() {
+      document.querySelectorAll('.reveal-fade-up:not(.revealed), .reveal-fade-left:not(.revealed), .reveal-fade-right:not(.revealed)')
+        .forEach(el => revealObserver.observe(el));
+    }
+    observeReveals();
+
+    // ── FOOTER YEAR ──────────────────────────────────────
+    const yr = document.getElementById('footerYear');
+    if (yr) yr.textContent = new Date().getFullYear();
+
+    // ── NEWSLETTER FORM (writes to Firestore "newsletter") ──
+    document.getElementById('newsletterForm')?.addEventListener('submit', async e => {
+      e.preventDefault();
+      const form = e.target;
+      const emailInput = form.querySelector('.newsletter-input');
+      const email = (emailInput?.value || '').trim();
+      const successEl = document.getElementById('newsletterSuccess');
+      const errorEl = document.getElementById('newsletterError');
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        errorEl.style.display = 'block';
+        emailInput?.focus();
+        return;
+      }
+
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'newsletter'), { email, createdAt: serverTimestamp() });
+        successEl.style.display = 'block';
+        form.reset();
+      } catch (err) {
+        console.error('Could not subscribe:', err);
+        errorEl.textContent = '⚠️ Something went wrong — please try again.';
+        errorEl.style.display = 'block';
+      }
+    });
+
+    // expose reveal-observer hook for news-list.js to call after rendering
+    window.__observeReveals = observeReveals;
+  </script>
+
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/news-list.js"></script>
+</body>
+</html>

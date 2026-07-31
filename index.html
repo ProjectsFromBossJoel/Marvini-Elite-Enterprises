@@ -511,7 +511,7 @@
 
       <ul class="nav-links" role="list">
         <li><a href="#home" class="nav-link active">Home</a></li>
-        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
         <li class="nav-item-dropdown" id="companiesNavDropdown">
           <a href="#companies" class="nav-link">
             Subsidiaries
@@ -526,7 +526,7 @@
           </div>
         </li>
         <li><a href="consultancy-training.html" class="nav-link">M-Consultancy & Training</a></li>
-        <li><a href="#news" class="nav-link">News</a></li>
+        <li><a href="news.html" class="nav-link">News</a></li>
         <li><a href="publications.html" class="nav-link">Publications</a></li>
         <li><a href="careers.html" class="nav-link">Careers/ Volunteer</a></li>
       </ul>
@@ -548,7 +548,7 @@
   <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
     <ul class="mobile-links" role="list">
       <li><a href="#home" class="mobile-link">Home</a></li>
-      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="about.html" class="mobile-link">About</a></li>
       <li class="mobile-dropdown-item" id="mobileCompaniesItem">
         <div class="mobile-link-row">
           <a href="#companies" class="mobile-link" id="mobileCompaniesLink">Subsidiaries</a>
@@ -565,9 +565,9 @@
         </div>
       </li>
       <li><a href="consultancy-training.html" class="mobile-link">M-Consultancy & Training</a></li>
-      <li><a href="#news" class="mobile-link">News</a></li>
+      <li><a href="news.html" class="mobile-link">News</a></li>
       <li><a href="#partners" class="mobile-link">Partners</a></li>
-      <li><a href="#team" class="mobile-link">Team</a></li>
+      <li><a href="about.html#team" class="mobile-link">Team</a></li>
       <li><a href="careers.html" class="nav-link active">Careers</a></li>
     </ul>
   </div>
@@ -1090,6 +1090,13 @@
           </div>
         </div>
 
+        <div class="news-viewmore reveal-fade-up" style="text-align:center; margin-top:2rem;">
+          <a href="news.html" class="btn btn-outline btn-lg">
+            View All News
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
       </div>
     </section>
 
@@ -1142,6 +1149,13 @@
               <p>M-Events & Festivals</p>
             </div>
           </div>
+        </div>
+
+        <div class="gallery-viewmore reveal-fade-up" style="text-align:center; margin-top:2rem;">
+          <a href="gallery.html" class="btn btn-outline btn-lg">
+            View Full Gallery
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
 
         <!-- Lightbox -->
@@ -1200,6 +1214,13 @@
     <div class="articles-grid">
       <div class="empty-state" style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-muted,#64748b);">Loading publications…</div>
     </div>
+
+    <div class="articles-viewmore reveal-fade-up" style="text-align:center; margin-top:2rem;">
+      <a href="articles.html" class="btn btn-outline btn-lg">
+        View All Publications
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -1230,533 +1251,6 @@
     </div>
   </div>
 </section>
-
-    <!-- ═══════════════════════════════════════════════════ -->
-    <!-- TEAM SECTION -->
-    <!-- ═══════════════════════════════════════════════════ -->
-    <section id="team" class="section team-section" aria-label="Our Team">
-      <div class="container">
-        <div class="section-header reveal-fade-up">
-          <span class="section-eyebrow">The People Behind It</span>
-          <h2 class="section-title">Meet Our Team</h2>
-          <p class="section-subtitle">Visionary leaders and passionate professionals driving Marvini's mission across Africa.</p>
-        </div>
-
-        
-        <!-- Featured Team Members (live from Firestore "team" collection where showAsFeatured == true — see js/team-public.js) -->
-        <div id="featuredTeamGrid">
-        <!-- Featured Team Member -->
-<div class="featured-profile-card reveal-fade-up">
-  <div class="featured-avatar-wrap">
-    <div class="featured-avatar-glow"></div>
-    <div class="featured-avatar-ring"></div>
-    <img src="img/ceo_mee121.png" alt="Jacob T. Akunor" class="featured-avatar" />
-  </div>
-  <div class="featured-info">
-    <div class="team-company-badge">
-      <span class="team-badge-dot"></span>
-      Marvini Group
-    </div>
-    <h3 class="featured-name">Jacob T. Akunor</h3>
-    <p class="featured-role">Chief Executive Officer</p>
-    <p class="featured-bio">
-        Distinguished technology executive, PMP-certified project manager and visionary entrepreneur leading Africa-focused innovation across digital transformation, enterprise systems and sustainable business solutions.</p>
-    <button class="bio-readmore"
-  data-bio-img="img/ceo_mee121.png"
-  data-bio-name="Jacob T. Akunor"
-  data-bio-role="Chief Executive Officer"
-  data-bio-text="<b>Jacob T. Akunor</b> is a distinguished technology executive, PMP-certified project manager and visionary entrepreneur with over a decade of leadership experience across information technology, digital infrastructure, enterprise systems and national-scale project delivery. As Chief Executive Officer of Marvini Elite Enterprises, he leads one of Africa's most forward-looking multi-sector enterprise groups, driving innovation across mobility, food systems, events, agriculture, consultancy and digital transformation.
-
-With extensive expertise in IT management, systems architecture, cloud technologies, cybersecurity and organisational leadership, Jacob T. Akunor combines deep technical knowledge with strategic business vision. He served for more than ten years as Head of IT/MIS at the Ghana Tertiary Education Commission, where he led the design and implementation of major national digital platforms that transformed service delivery for thousands of users across multiple institutions.
-
-A certified Project Management Professional (PMP) and experienced IT strategist, Jacob has successfully delivered enterprise-scale technology projects, strengthened cybersecurity frameworks, modernised digital infrastructure, and led high-performing technical teams. His contributions extend to national ICT policy development, cybersecurity initiatives, and international technology conferences, reflecting his commitment to advancing digital innovation.
-
-Under his leadership, Marvini Elite Enterprises continues to build sustainable, technology-driven businesses that solve real-world challenges. Through subsidiaries including M-Smart Driving School Solution, M-Digital Food Chain, M-Events & Festivals, M-Farms and M-Consultancy & Training, Jacob T. Akunor is creating scalable platforms that improve safety, strengthen supply chains, modernise service delivery and empower communities across Africa.
-
-Driven by innovation, operational excellence and research-based strategy, Jacob T. Akunor remains committed to building globally competitive African enterprises that shape the continent's digital future.">
-  Read More
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M5 12h14M12 5l7 7-7 7"/>
-  </svg>
-</button>
-
-    <div class="team-socials">
-      <a href="https://www.linkedin.com/in/jacob-akunor-43043638" class="team-social" aria-label="LinkedIn">in</a>
-      <a href="https://twitter.com/jakunor" class="team-social" aria-label="Twitter">𝕏</a>
-    </div>
-  </div>
-</div>
-
-        
-
-       
-        <!-- Featured Team Member 2 -->
-<div class="featured-profile-card reveal-fade-up">
-  <div class="featured-avatar-wrap">
-    <div class="featured-avatar-glow featured-avatar-glow--orange"></div>
-    <div class="featured-avatar-ring featured-avatar-ring--orange"></div>
-    <img src="img/programs_manager.png" alt="Programs Manager" class="featured-avatar featured-avatar--orange" />
-  </div>
-  <div class="featured-info">
-    <div class="team-company-badge">
-      <span class="team-badge-dot"></span>
-      Marvini Group
-    </div>
-    <h3 class="featured-name">[Full Name]</h3>
-    <p class="featured-role">Programs Manager (Products & Solutions)</p>
-    <p class="featured-bio">Overseeing and coordinating Marvini's key programs and initiatives, ensuring effective delivery across all subsidiaries and driving measurable impact.</p>
-    <button class="bio-readmore" data-bio-img="img/programs_manager.png" data-bio-name="[Full Name]" data-bio-role="Programs Manager (Products & Solutions)" data-bio-text="Overseeing and coordinating Marvini's key programs and initiatives, ensuring effective delivery across all subsidiaries and driving measurable impact.">
-      Read More
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </button>
-    <div class="team-socials">
-      <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-      <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-    </div>
-  </div>
-</div>
-        </div><!-- /#featuredTeamGrid -->
-
-
-        <div class="team-grid" id="teamGrid">
-
-
-          <!-- Card 1: M-Smart Driving School Solutions -->
-          <div class="team-card reveal-fade-up delay-3">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--gold"></div>
-                <img src="img/team_member7.png" alt="[Name]" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--gold"></div>
-                <a href="https://marvini-smart-driving-school-solution.web.app/" class="team-avatar-badge-link" aria-label="Visit M-Smart Driving School Solution">
-                  <img src="img/m-smart_driving_solution -logo.png" alt="M-Smart" class="team-avatar-badge" />
-                </a>
-              </div>
-              <div class="team-info">
-                <a href="https://marvini-smart-driving-school-solution.web.app/"
-                    class="team-company-badge team-company-badge--farms"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Visit M-Smart Driving School Solution">
-                    <span class="team-badge-dot"></span>
-                    M-Smart Driving Sch
-                  </a>
-                <h3 class="team-name">Dr. Baidoo</h3>
-                <p class="team-role">PM/GM</p>
-                <p class="team-bio">Driving modern farming innovation and empowering smallholder farmers with smart tools and direct market access.</p>
-                <button class="bio-readmore" data-bio-img="img/team_member7.png" data-bio-name="Dr. Baidoo" data-bio-role="M- Smart Driving School Solution" data-bio-text="<b>Dr. Elvis Baidoo</b> is an accomplished project and operations leader with a distinguished background in analytical chemistry, toxicology, laboratory instrumentation, and multi‑sector project management. He brings over a decade of experience spanning academia, industry, and corporate project leadership, combining scientific expertise with strong managerial capability to drive complex initiatives from concept to execution.
-
-                Before joining Marvini Elite Enterprises, Dr. Baidoo served as a Lecturer in Chemistry at Kwame Nkrumah University of Science and Technology, where he taught physical chemistry, analytical chemistry, instrumental analysis, environmental chemistry, toxicology, and laboratory practice while supervising practical sessions and maintaining advanced analytical instruments such as LC‑MS, HPLC, and GC‑MS . His academic career also included nearly a decade as a Laboratory Demonstrator/Assistant, supporting teaching, laboratory operations, sample preparation, instrumental analysis, and technical reporting across multiple science programmes .
-
-                Beyond academia, Dr. Baidoo has held senior roles in industry, including General Manager (Projects) at Vokacom Limited, where he led project feasibility studies, business plan development, stakeholder engagement, project costing, and execution oversight with strict adherence to timelines and reporting structures . He has also served as a consultant to multiple organisations, providing expertise in project management, business development, environmental analysis, and operational oversight.
-
-                Dr. Baidoo holds a <b>PhD in Chemistry</b> from Kwame Nkrumah University of Science and Technology, with research focused on metal ion speciation, environmental toxicity, and humic substance interactions . His scientific work has contributed to numerous peer‑reviewed publications on environmental pollution, toxicology, and heavy metal risk assessment.
-
-                At M‑Smart Driving School Solution, Dr. Baidoo leverages his combined strengths in scientific analysis, instrumentation, operational management, and project leadership to oversee platform deployment, stakeholder coordination, regulatory alignment, and continuous improvement of the digital ecosystem. His multidisciplinary background ensures that M‑Smart delivers safe, efficient, and high‑quality digital services aligned with DVLA standards and the broader mission of Marvini Elite Enterprises.">
-                                  Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <div class="team-socials">
-                  <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- Card 2: M-Farms -->
-          <div class="team-card reveal-fade-up delay-1">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--cyan"></div>
-                <img src="img/team_member5.png" alt="[Name]" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--cyan"></div>
-                <a href="#companies" class="team-avatar-badge-link" aria-label="View M-Farms">
-                  <img src="img/M-Farms1.png" alt="M-Farms" class="team-avatar-badge" />
-                </a>
-              </div>
-              <div class="team-info">
-                <a href="index.html"
-                    class="team-company-badge team-company-badge--farms"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                      <span class="team-badge-dot"></span>
-                      M-FARMS
-                  </a>
-                <h3 class="team-name">Priscilla N. Akunor</h3>
-                <p class="team-role">PM/GM</p>
-                <p class="team-bio">Producing world-class festivals and cultural experiences that celebrate Africa's richness and connect global audiences.</p>
-                <button class="bio-readmore" data-bio-img="img/team_member5.png" data-bio-name="Priscilla N. Akunor" data-bio-role="M-Farms" data-bio-text="Producing world-class festivals and cultural experiences that celebrate Africa's richness and connect global audiences.">
-                  Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <div class="team-socials">
-                  <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- Card 3: M-Events & Festivals -->
-          <div class="team-card reveal-fade-up delay-1">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--cyan"></div>
-                <img src="img/team_member5.png" alt="[Name]" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--cyan"></div>
-                <a href="#companies" class="team-avatar-badge-link" aria-label="View M-Events & Festivals">
-                  <img src="img/M-Events & Festivals1.png" alt="M-Events" class="team-avatar-badge" />
-                </a>
-              </div>
-              <div class="team-info">
-                <a href="index.html"
-                    class="team-company-badge team-company-badge--events"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                      <span class="team-badge-dot"></span>
-                      M-EVENTS &amp; FESTIVALS
-                  </a>
-                <h3 class="team-name">Daniel Etoo Yeboah</h3>
-                <p class="team-role">PM/GM</p>
-                <p class="team-bio">Daniel Etoo Yeboah is an operations strategist, project manager, and innovation driven leader whose career sits at the intersection of science, technology, and large scale community impact.</p>
-                <button class="bio-readmore" data-bio-img="img/team_member5.png" data-bio-name="Daniel Etoo Yeboah" data-bio-role="M-Events & Festivals (PM/GM)" data-bio-text="
-              <p><strong>Daniel Etoo Yeboah</strong> is an operations strategist, project manager, and innovation driven leader whose career sits at the intersection of science, technology, and large scale community impact.</p>
-              <p>With a background in Physics and more than a decade of experience managing multi sector operational initiatives, Daniel brings a unique analytical mindset and a strong execution focused leadership style to M Events &amp; Festivals, the creative experiences subsidiary of Marvini Elite Enterprises.</p>
-              <p>Daniel's professional journey reflects a consistent ability to translate complex ideas into structured, scalable, and high impact projects. As Director of Operations at the Chamber of Entrepreneurship and Innovation (COEIN), he led the deployment of several flagship initiatives aimed at youth development, environmental sustainability, and community empowerment.</p>
-              <p>With core strengths in project lifecycle management, resource optimisation, cross sector collaboration, and framework standardisation, Daniel excels at bridging high level strategy with ground level execution.</p>
-              <p>Daniel holds a <strong>Bachelor of Science in Physics</strong> from Kwame Nkrumah University of Science and Technology (KNUST), a foundation that sharpened his logical reasoning, data driven decision making, and problem solving abilities.</p>
-              <p>At M Events &amp; Festivals, Daniel leads the planning, production, and execution of high impact events and festivals across Africa. His role integrates strategic design, operational leadership, vendor and stakeholder coordination, and the development of scalable event frameworks that elevate cultural experiences and strengthen community engagement.</p>
-              <p>Daniel is driven by a deep belief in Africa's creative potential and the power of well structured experiences to inspire, educate, and transform communities. Outside work, he enjoys competitive darts, immersive video gaming, and exploring innovative ideas that merge creativity with social impact.</p>
-              <b>Operations Strategist | Project Manager | Community Impact Innovator | Events & Festivals Lead | Scaling Creative & Environmental Solutions Across Africa</b>
-            ">
-                  Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <div class="team-socials">
-                  <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- Card 4: M-Digital Food Chain -->
-          <div class="team-card reveal-fade-up delay-1">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--cyan"></div>
-                <img src="img/Nicolette_web1.jpg" alt="[Name]" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--cyan"></div>
-                <a href="https://marvini-digital-food-chain.web.app" class="team-avatar-badge-link" aria-label="View M-Digital Food Chain">
-                  <img src="img/M-Digital Food Chain-1.png" alt="M-Digital Food Chain" class="team-avatar-badge" />
-                </a>
-              </div>
-              <div class="team-info">
-                <a href="https://marvini-digital-food-chain.web.app"
-                    class="team-company-badge team-company-badge--food"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                      <span class="team-badge-dot"></span>
-                      M-DIGITAL FOOD CHAIN
-                  </a>
-                <h3 class="team-name">Nicolette Naa Shormeh Noi</h3>
-                <p class="team-role">PM/GM</p>
-                <p class="team-bio" style="text-align: left;">Nicolette Naa Shormeh Noi is an accomplished operations and project management professional with 7+ years of cross industry experience spanning food systems, education, hospitality, cultural diplomacy and organisational leadership.</p>
-                <button class="bio-readmore" data-bio-img="img/Nicolette_web1.jpg" data-bio-name="Nicolette Naa Shormeh Noi" data-bio-role="M-Digital Food Chain (PM/GM)" data-bio-text="
-              <b>Nicolette Naa Shormeh Noi</b> is an accomplished operations and project management professional with 7+ years of cross industry experience spanning food systems, education, hospitality, cultural diplomacy, and organisational leadership. As Project Manager & General Manager of M-Digital Food Chain, she leads strategic initiatives that modernise food distribution, strengthen agricultural value chains, and expand market access for farmers through technology driven, data supported solutions.
-              
-              With a strong foundation in Nutrition and Food Science, Nicolette brings an in depth understanding of practical food processing, quality assurance, hygiene protocols and health & safety standards. Her background includes hands on experience in factory level quality control, sanitation audits, supplier verification, and compliance with food industry regulations—skills she now applies to ensure M-Digital Food Chain's operations meet the highest standards of safety, efficiency, and consumer trust.
-
-              <p>As the founder of Shorr's Haven, a nationally recognised online restaurant, Nicolette developed expertise in restaurant management, food production workflows, vendor management, supply chain coordination, and customer experience optimisation. She built partnerships with farmers and suppliers, negotiated contracts, implemented quality control systems, and led marketing campaigns that elevated the brand across Ghana's digital food marketplace.</p>
-              Her leadership at M-Digital Food Chain integrates blockchain aware supply chain thinking, digital logistics coordination, and transparent vendor management practices, ensuring traceability, accountability, and reliability across the entire food ecosystem. She manages cross functional teams responsible for digital platform development, farmer onboarding, logistics, and operational compliance, driving measurable improvements in efficiency and stakeholder satisfaction.
-              
-              Nicolette's career also includes impactful roles in People & Culture leadership, executive support, and educational facilitation. She is known for her ability to streamline workflows, enhance communication across teams, and build inclusive, high performance environments. Fluent in English, Ga, and Twi, she excels in stakeholder engagement, crisis management, and cross cultural communication.
-              
-              <b>Core Competencies & Keywords (SEO Optimised)</b>
-            •	Food Systems Management
-            •	Quality Assurance & Compliance
-            •	Practical Food Processing
-            •	Health & Safety Standards
-            •	Restaurant & Hospitality Management
-            •	Vendor & Supplier Management
-            •	Blockchain aware Supply Chain Processes
-            •	Project & Operations Management
-            •	Digital Transformation (Food & Agriculture)
-            •	People & Culture Leadership
-            •	Stakeholder Engagement & Partnerships
-            •	Logistics Coordination & Process Optimisation
-            •	Data Driven Decision Making
-            •	Customer Experience & Service Excellence
-
-            Nicolette’s leadership philosophy is rooted in integrity, innovation, and sustainable impact. She is committed to transforming food systems, empowering farmers and building resilient digital supply chains that serve communities across Ghana and beyond.
-
-          
-              ">
-                  Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <div class="team-socials">
-                  <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- Card 5: Business Development & Partnerships -->
-<div class="team-card reveal-fade-up delay-2">
-  <div class="team-card-inner">
-    <div class="team-avatar-wrap">
-      <div class="team-avatar-bg team-avatar-bg--green"></div>
-      <img src="img/team_member7.png" alt="Business Development & Partnerships Lead" class="team-avatar" />
-      <div class="team-avatar-ring team-avatar-ring--green"></div>
-      <a href="#companies" class="team-avatar-badge-link" aria-label="View M-Consultancy & Training">
-        <img src="img/M-Consultancy & Training1.png" alt="M-Consultancy & Training" class="team-avatar-badge" />
-      </a>
-    </div>
-
-    <div class="team-info">
-      <a href="index.html"
-            class="team-company-badge team-company-badge--food"
-            target="_blank"
-            rel="noopener noreferrer">
-              <span class="team-badge-dot"></span>
-              M-TRAINING & CONSULTANCY
-          </a>
-
-      <h3 class="team-name">******</h3>
-      <p class="team-role">Business Development & Partnerships</p>
-      <p class="team-bio">
-        Leads business development and strategic partnerships by identifying growth opportunities, building strong client and stakeholder relationships, negotiating collaborations and driving initiatives that expand the company's market presence and long-term success.
-      </p>
-
-      <button
-        class="bio-readmore"
-        data-bio-img="img/team_member7.png"
-        data-bio-name="Business Development & Partnerships Lead"
-        data-bio-role="Business Development & Partnerships"
-        data-bio-text="Leads business development and strategic partnerships by identifying growth opportunities, building strong client and stakeholder relationships, negotiating collaborations and driving initiatives that expand the company's market presence and long-term success.">
-        Read More
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </button>
-
-      <div class="team-socials">
-        <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-        <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-          <!-- Card 6: Marvinini Group -->
-          <div class="team-card reveal-fade-up delay-2">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--green"></div>
-                <img src="img/joel2.jpeg" alt="Joel Obuamah Addy" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--green"></div>
-              </div>
-              <div class="team-info">
-                <div class="team-company-badge team-company-badge--smart">
-                  <span class="team-badge-dot"></span>
-                  MARVINI GROUP
-                </div>
-                <h3 class="team-name">Joel Obuamah Addy</h3>
-                <p class="team-role">Enterprise Software Developer</p>
-                <p class="team-bio">Enterprise Software Engineer with 5+ years of experience designing and delivering scalable digital systems across mobility, food distribution, education, healthcare, and government sectors. Skilled in full‑stack development, mobile engineering, systems architecture, and end‑to‑end product delivery using modern technologies including React, Vue.js, TypeScript, Laravel, NestJS, GraphQL, PostgreSQL, MySQL, React Native, and Flutter.</p>
-                <button class="bio-readmore" data-bio-img="img/joel2.jpeg" data-bio-name="Joel Obuamah Addy" data-bio-role="Enterprise Software Developer" data-bio-text="Enterprise Software Engineer with 5+ years of experience designing and delivering scalable digital systems across mobility, food distribution, education, healthcare, and government sectors. Skilled in full‑stack development, mobile engineering, systems architecture, and end‑to‑end product delivery using modern technologies including React, Vue.js, TypeScript, Laravel, NestJS, GraphQL, PostgreSQL, MySQL, React Native, and Flutter.
-
-              Has supported global engineering teams through Andela, contributing to high‑impact projects for clients in the U.S. and Europe, while also providing technical expertise to national digital initiatives under the Ghana Tertiary Education Commission. Experienced in building and maintaining enterprise platforms for foundations, healthcare providers, and government institutions.
-
-              Holds a <b>BSc in Computer Science</b> (University of Cape Coast) and is pursuing an <b>MSc in Computer Science</b> (University of Ghana). At Marvini Elite Enterprises, he contributes to the development and integration of digital platforms across the group's multi‑sector operations, ensuring technology remains a driver of innovation, efficiency, and sustainable growth.">
-                      Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <div class="team-socials">
-                  <a href="https://www.linkedin.com/in/joel-obuamah-addy-723043153" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="https://twitter.com/joelobuamah" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 7: Marvini Group -->
-          <div class="team-card reveal-fade-up delay-4">
-      <div class="team-card-inner">
-        <div class="team-avatar-wrap">
-          <div class="team-avatar-bg"></div>
-          <img src="img/prince-me8_web1.jpg" alt="Prince A. Wiafe" class="team-avatar" />
-          <div class="team-avatar-ring"></div>
-        </div>
-        <div class="team-info">
-      <div class="team-company-badge">
-        <span class="team-badge-dot"></span>
-        Marvini Group
-      </div>
-      <h3 class="team-name">Prince Antwi Wiafe</h3>
-      <p class="team-role">Senior Solutions Architect</p>
-      <p class="team-bio">Senior Solutions Architect building and architecting the digital systems that power Marvini's enterprise platforms.</p>
-      <button class="bio-readmore" data-bio-img="img/prince-me8_web1.jpg" data-bio-name="Prince Antwi Wiafe" data-bio-role="Senior Solutions Architect" data-bio-text="Senior Solutions Architect specializing in the design, architecture and development of scalable digital systems for enterprise operations, education, religious organizations and business management. Skilled in full-stack web development, database systems, workflow automation and enterprise application development using AppScript, React, JavaScript/Node.js, HTML5 & CSS, PHP, MySQL and modern web technologies.
-
-          Has contributed to the development of enterprise platforms including conference and facility management systems, guest lodge systems, church management and attendance systems, pharmacy inventory systems, visitor management applications, e-commerce platforms and intelligent transport systems. At the Ghana Tertiary Education Commission, he provides technical support in network administration, database management, web development and IT operations, strengthening digital service delivery within the institution.
-
-          Holds a <b>Bachelor of Science in Computer Engineering</b> from Ghana Communication Technology University (GCTU). At Marvini Elite Enterprises, he builds and architects the digital systems that power the organization's multi-sector operations, delivering secure, scalable and user-focused software solutions that drive operational efficiency, automation and innovation.">
-              Read More
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-
-      <!-- Portfolio Link -->
-      <a href="https://myportfolio-theta-topaz-43.vercel.app/" target="_blank" rel="noopener noreferrer" style="
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin: 10px 0 14px;
-        padding: 6px 14px;
-        background: linear-gradient(135deg, #1a56ff22, #05966922);
-        border: 1px solid #1a56ff55;
-        border-radius: 20px;
-        color: #1a56ff;
-        font-size: 13px;
-        font-weight: 600;
-        text-decoration: none;
-        letter-spacing: 0.3px;
-        transition: all 0.25s ease;
-      "
-      onmouseover="this.style.background='linear-gradient(135deg,#1a56ff33,#05966933)'; this.style.borderColor='#1a56ff99'; this.style.transform='translateY(-1px)';"
-      onmouseout="this.style.background='linear-gradient(135deg,#1a56ff22,#05966922)'; this.style.borderColor='#1a56ff55'; this.style.transform='translateY(0)';">
-        
-        TrevorMiles
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </a>
-
-      <div class="team-socials">
-        <a href="https://www.linkedin.com/in/prince-antwi-wiafe" target="_blank" rel="noopener noreferrer" class="team-social" aria-label="LinkedIn">in</a>
-        <a href="https://twitter.com/antwi_wiafe" target="_blank" rel="noopener noreferrer" class="team-social" aria-label="Twitter">𝕏</a>
-      </div>
-    </div>
-      </div>
-    </div>
-
-          <!-- Card 8: M-Digital Food -->
-  <div class="team-card reveal-fade-up delay-2">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--green"></div>
-                <img src="img/team_member6.png" alt="Linda Oduraa Boakye" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--green"></div>
-              </div>
-              <div class="team-info">
-                <div class="team-company-badge team-company-badge--smart">
-                  <span class="team-badge-dot"></span>
-                  Marvini Group
-                </div>
-                <h3 class="team-name">Linda Oduraa Boakye</h3>
-                <p class="team-role">Finance & Administration</p>
-                <p class="team-bio">Streamlining Africa's food value chain by connecting farmers, suppliers, retailers and consumers through technology.</p>
-                <button class="bio-readmore" data-bio-img="img/team_member6.png" data-bio-name="Linda Oduraa Boakye" data-bio-role="Finance & Administration" data-bio-text="
-                  <b>Linda Oduraa Boakye</b> is a seasoned Finance and Administration Executive with more than ten years of experience driving organisational efficiency, financial accuracy, and administrative excellence across corporate, institutional, and faith‑based environments. She brings a strong record of managing complex financial operations, strengthening administrative systems, and supporting leadership teams with strategic operational insight.
-
-                  Linda currently serves as the Finance & Administrative Manager at Epsilon Developers Limited, where she oversees financial reporting, budgeting, payroll processing, procurement, statutory compliance, stakeholder liaison, and office operations . Her leadership has contributed to improved record‑management efficiency, reduced operational costs through budget monitoring, and strengthened compliance with local regulatory requirements .
-
-                  Her administrative and financial expertise spans multiple roles, including Office Administrator, Church Administrator, Administrative Assistant, Assistant Account Officer, and Office Assistant Intern. Across these positions, she has managed payroll, reconciliations, statutory payments, procurement workflows, project expense tracking, database management, and organisational communication . Her experience at Nestlé Ghana Limited further strengthened her foundation in invoice validation, purchase order allocation, and SAP‑based financial processes .
-
-                  Linda holds a <b>Bachelor of Arts in Business Studies (Accounting Option)</b> from Wisconsin International University College, Ghana, with coursework in Financial Accounting, Auditing, Taxation, and Professional Office Management . She has also earned certifications in Administrative Functions (Modules I & II) and Emotional Intelligence, enhancing her leadership, communication, and organisational development capabilities .
-
-                  At Marvini Elite Enterprises, Linda leads finance and administrative operations across the enterprise group, ensuring financial integrity, compliance, efficient workflow management, and strong organisational coordination. Her blend of analytical skill, operational discipline, and people‑centered leadership makes her a key driver of stability, accountability, and growth within Marvini Elite’s multi‑sector ecosystem.">
-                                    Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-
-                <div class="team-socials">
-                  <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        <!-- Row 2 -->
-
-          <!-- Card 9 -->
-          <div class="team-card reveal-fade-up delay-4">
-  <div class="team-card-inner">
-    <div class="team-avatar-wrap">
-      <div class="team-avatar-bg"></div>
-      <img src="img/rty.jpeg" alt="[Name]" class="team-avatar" />
-      <div class="team-avatar-ring"></div>
-    </div>
-    <div class="team-info">
-  <div class="team-company-badge">
-    <span class="team-badge-dot"></span>
-    Marvini Group
-  </div>
- <h3 class="team-name">******</h3>
-  <p class="team-role">Quality Assurance & Compliance</p>
-  <p class="team-bio">Quality assurance and compliance specialist with a focus on ensuring our products meet the highest standards.</p>
-  <button class="bio-readmore" data-bio-img="img/rty.jpeg" data-bio-name="Quality Assurance & Compliance Specialist" data-bio-role="Quality Assurance & Compliance" data-bio-text="Quality assurance and compliance specialist with a focus on ensuring our products meet the highest standards.">
-    Read More
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-  </button>
-
-  <div class="team-socials">
-    <a href="https://www.linkedin.com/in/uytv" target="_blank" rel="noopener noreferrer" class="team-social" aria-label="LinkedIn">in</a>
-    <a href="https://twitter.com/fdf" target="_blank" rel="noopener noreferrer" class="team-social" aria-label="Twitter">𝕏</a>
-  </div>
-</div>
-  </div>
-</div>
-
-          <!-- Card 10 -->
-          <div class="team-card reveal-fade-up delay-2">
-            <div class="team-card-inner">
-              <div class="team-avatar-wrap">
-                <div class="team-avatar-bg team-avatar-bg--green"></div>
-                <img src="img/team_member6.png" alt="[Name]" class="team-avatar" />
-                <div class="team-avatar-ring team-avatar-ring--green"></div>
-              </div>
-              <div class="team-info">
-                <div class="team-company-badge team-company-badge--smart">
-                  <span class="team-badge-dot"></span>
-                  Marvini Group
-                </div>
-                <h3 class="team-name">[Full Name]</h3>
-                <p class="team-role">PR & Marketing</p>
-                <p class="team-bio">Driving brand awareness and marketing strategies for our innovative food tech solutions.</p>
-                <button class="bio-readmore" data-bio-img="img/team_member6.png" data-bio-name="PR & Marketing Lead" data-bio-role="PR & Marketing" data-bio-text="Driving brand awareness and marketing strategies for our innovative food tech solutions.">
-                  Read More
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-
-                <div class="team-socials">
-                  <a href="#" class="team-social" aria-label="LinkedIn">in</a>
-                  <a href="#" class="team-social" aria-label="Twitter">𝕏</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-    
-
-
-          <!-- Card 10 -->
-          
-        
-        </div><!-- /.team-grid -->
-
-        <!-- Join CTA -->
-        <div class="team-cta reveal-fade-up">
-          
-
-      </div>
-    </section>
 
     <!-- ═══════════════════════════════════════════════════ -->
     <!-- CONTACT SECTION -->
@@ -1878,7 +1372,7 @@ Driven by innovation, operational excellence and research-based strategy, Jacob 
               <li><a href="#ceo" class="footer-link">CEO Message</a></li>
               <li><a href="#values" class="footer-link">Core Values</a></li>
               <li><a href="#innovation" class="footer-link">Innovation</a></li>
-              <li><a href="#team" class="footer-link">Meet the Team</a></li>
+              <li><a href="about.html#team" class="footer-link">Meet the Team</a></li>
             </ul>
           </div>
 

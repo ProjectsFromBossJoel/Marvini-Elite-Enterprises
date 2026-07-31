@@ -42,7 +42,7 @@ function renderPublishedArticles() {
         return;
       }
 
-      snapshot.forEach((docSnap) => {
+      snapshot.docs.slice(0, 3).forEach((docSnap) => {
         const data = docSnap.data();
         grid.appendChild(buildArticleCard(data, docSnap.id));
       });
