@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agents Ecosystem & Orchestrator</title>
+  
+  <style>
+    /* ==========================================================================
+       1. CORE DESIGN TOKENS & NEON THEME
+       ========================================================================== */
+    :root {
+      --bg-gradient: radial-gradient(circle at center, #0b1f3a 0%, #030a16 100%);
+      --panel-bg: rgba(7, 20, 40, 0.75);
+      --panel-border: rgba(0, 213, 255, 0.3);
+      --cyan: #00d5ff;
+      --cyan-glow: rgba(0, 213, 255, 0.5);
+      --blue-accent: #1e60ff;
+      --green: #00ff9d;
+      --text-main: #ffffff;
+      --text-muted: #8ab4f8;
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: var(--bg-page, #eef1f8);
+      font-family: var(--font-family);
+    }
+
+    .engine-room-panel,
+    .engine-room-panel * {
+      color: var(--text-main);
+    }
+
+    .main.engine-room-main {
+      padding-bottom: 22px;
+    }
+
+    .engine-room-panel {
+      background: var(--bg-gradient);
+      border-radius: var(--radius-xl, 26px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 130px);
+      box-shadow: var(--shadow-lg, 0 20px 50px rgba(16,24,64,0.12));
+    }
+
+    /* ==========================================================================
+       2. TOP NAVIGATION HEADER
+       ========================================================================== */
+    header {
+      background: rgba(3, 10, 22, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--panel-border);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--cyan);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--cyan);
+      font-weight: bold;
+      color: #030a16;
+    }
+
+    .brand h1 {
+      font-size: 1.15rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .system-stats {
+      display: flex;
+      gap: 24px;
+      font-size: 0.85rem;
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .stat-badge span {
+      color: var(--cyan);
+      font-weight: bold;
+    }
+
+    /* ==========================================================================
+       3. NETWORK CANVAS & ECOSYSTEM CONTAINER
+       ========================================================================== */
+    .viewport {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas#network-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Node Cards Layer */
+    .nodes-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    /* Individual AI Agent Node */
+    .agent-node {
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .agent-node:hover, .agent-node.active {
+      border-color: var(--cyan);
+      box-shadow: 0 0 25px var(--cyan-glow);
+      transform: translate(-50%, -50%) scale(1.12);
+    }
+
+    /* Central Master Hub Node */
+    .agent-node.central-hub {
+      width: 150px;
+      height: 150px;
+      border-radius: 20px;
+      border-color: var(--cyan);
+      background: rgba(0, 213, 255, 0.08);
+      box-shadow: 0 0 35px var(--cyan-glow);
+      animation: pulse-central 3s infinite alternate;
+    }
+
+    @keyframes pulse-central {
+      0% { box-shadow: 0 0 25px rgba(0, 213, 255, 0.3); }
+      100% { box-shadow: 0 0 45px rgba(0, 213, 255, 0.7); }
+    }
+
+    /* Node Image Avatar Frame */
+    .node-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 6px;
+    }
+
+    .central-hub .node-avatar {
+      width: 70px;
+      height: 70px;
+    }
+
+    .node-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .node-avatar svg {
+      width: 30px;
+      height: 30px;
+      fill: var(--cyan);
+    }
+
+    .node-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.1;
+      color: var(--text-main);
+      max-width: 95px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .central-hub .node-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .node-status-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    /* ==========================================================================
+       4. RIGHT SIDEBAR: AGENT INSPECTOR & IMAGE CHANGER PANEL
+       ========================================================================== */
+    .inspector-panel {
+      position: fixed;
+      right: -380px;
+      top: 65px;
+      width: 360px;
+      height: calc(100vh - 80px);
+      background: rgba(5, 15, 30, 0.92);
+      backdrop-filter: blur(14px);
+      border-left: 1px solid var(--panel-border);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      z-index: 99;
+      transition: right 0.4s ease;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .inspector-panel.open {
+      right: 15px;
+      border-radius: 16px;
+    }
+
+    .inspector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 12px;
+    }
+
+    .inspector-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    /* Avatar Editor Box */
+    .avatar-editor-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--panel-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .editor-avatar-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .editor-avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .editor-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn-upload {
+      background: var(--blue-accent);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .btn-upload:hover {
+      background: #004bd6;
+    }
+
+    .url-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--panel-border);
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-group label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--panel-border);
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .agent-capabilities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .cap-tag {
+      background: rgba(0, 213, 255, 0.1);
+      border: 1px solid rgba(0, 213, 255, 0.3);
+      color: var(--cyan);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+    }
+
+    /* Action Trigger Button */
+    .btn-action {
+      background: var(--cyan);
+      color: #030a16;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: auto;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    /* Hidden File Input */
+    #file-input-hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🤖</div>
+      <h1>AI AGENT ORCHESTRATOR</h1>
+    </div>
+    <div class="system-stats">
+      <div class="stat-badge">Total Agents: <span id="stat-count">13</span></div>
+      <div class="stat-badge">Network Status: <span style="color: var(--green);">ONLINE</span></div>
+      <div class="stat-badge">Latency: <span>1.2ms</span></div>
+    </div>
+  </header>
+
+  <!-- Main Dynamic Viewport -->
+  <div class="viewport" id="viewport">
+    <canvas id="network-canvas"></canvas>
+    <div class="nodes-layer" id="nodes-layer"></div>
+  </div>
+
+  <!-- Agent Inspector & Avatar Editor Panel -->
+  <div class="inspector-panel" id="inspector-panel">
+    <div class="inspector-header">
+      <div class="inspector-title" id="insp-title">Agent Details</div>
+      <button class="btn-close" id="btn-close-inspector">&times;</button>
+    </div>
+
+    <!-- Avatar Image Replacement Box -->
+    <div class="avatar-editor-box">
+      <div class="editor-avatar-preview" id="insp-avatar-preview">
+        <!-- Dynamically rendered -->
+      </div>
+      <div class="editor-controls">
+        <button class="btn-upload" onclick="document.getElementById('file-input-hidden').click()">📷 Upload Custom Image</button>
+        <input type="text" id="insp-url-input" class="url-input" placeholder="Or paste Image URL...">
+      </div>
+      <input type="file" id="file-input-hidden" accept="image/*">
+    </div>
+
+    <div class="field-group">
+      <label>Agent Name</label>
+      <input type="text" id="insp-name-input" class="field-input">
+    </div>
+
+    <div class="field-group">
+      <label>Specialization & Role</label>
+      <input type="text" id="insp-role-input" class="field-input">
+    </div>
+
+    <div class="field-group">
+      <label>Capabilities</label>
+      <div class="agent-capabilities" id="insp-caps"></div>
+    </div>
+
+    <button class="btn-action" id="btn-trigger-agent">⚡ Run Agent Task</button>
+  </div>
+
+  </div>
+
+  </main>
+
+</div>
+
+  <script type="module" src="/js/auth-guard.js"></script>
+  <script src="/dashboard/admin.js"></script>
+  <script>
+    // ==========================================================================
+    // AI AGENTS DATA CONFIGURATION (Names, Icons & Roles matching your graphic)
+    // ==========================================================================
+    const agentsData = [
+      {
+        id: 'hub',
+        name: 'AI AGENTS ORCHESTRATOR',
+        role: 'Central Processing & Task Routing',
+        isCentral: true,
+        image: '',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1.05A7.002 7.002 0 0 1 19.95 10H21a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1.05A7.002 7.002 0 0 1 14 20.95V22a1 1 0 0 1-2 0v-1.05A7.002 7.002 0 0 1 4.05 16H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.05A7.002 7.002 0 0 1 10 5.05V4a2 2 0 0 1 2-2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-2.5 3.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>`,
+        caps: ['Task Distribution', 'Neural Core', 'Load Balancing']
+      },
+      {
+        id: 'prompt',
+        name: 'Prompt Master',
+        role: 'Context Parsing & Prompt Engineering',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm4-7h6v2h-6zm0-4h4v2h-4z"/></svg>`,
+        caps: ['Context Extraction', 'Instruction Tuning', 'LangChain']
+      },
+      {
+        id: 'idea',
+        name: 'Ideation & Strategy',
+        role: 'Creative Thinking & Problem Solving',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7zm-2 18h4v2h-4v-2z"/></svg>`,
+        caps: ['Brainstorming', 'Strategy Graphs', 'Pattern Matching']
+      },
+      {
+        id: 'automation',
+        name: 'Workflow Logic',
+        role: 'Process Automation & Rules Engine',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>`,
+        caps: ['Webhooks', 'Zapier Automation', 'Cron Jobs']
+      },
+      {
+        id: 'chip',
+        name: 'Neural Processor',
+        role: 'Hardware Acceleration & Tensor Compute',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm3 5v6h6V9H9z"/></svg>`,
+        caps: ['CUDA Cores', 'LLM Inference', 'Tensor FLOPS']
+      },
+      {
+        id: 'analytics',
+        name: 'Data Insights',
+        role: 'Predictive Analytics & Forecasting',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4zm4 6h-2V9h2v8zm0-10h-2V7h2v2z"/></svg>`,
+        caps: ['Data Mining', 'Trend Charts', 'BigQuery']
+      },
+      {
+        id: 'cloud',
+        name: 'Cloud Storage',
+        role: 'Vector DB & Distributed Storage',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>`,
+        caps: ['Pinecone Vector', 'AWS S3', 'Data Sync']
+      },
+      {
+        id: 'commerce',
+        name: 'E-Commerce Agent',
+        role: 'Checkout & Inventory Manager',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>`,
+        caps: ['Stripe Integration', 'Order Tracking', 'Cart AI']
+      },
+      {
+        id: 'music',
+        name: 'Audio Synthesizer',
+        role: 'Music Generation & Audio Processing',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`,
+        caps: ['Suno API', 'Stem Separation', 'MIDI AI']
+      },
+      {
+        id: 'mail',
+        name: 'Email & Comms',
+        role: 'Automated Email Dispatcher',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
+        caps: ['Resend API', 'Drip Campaigns', 'NLP Mail']
+      },
+      {
+        id: 'voice',
+        name: 'Voice Agent',
+        role: 'Real-time Speech Synthesis (TTS/STT)',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>`,
+        caps: ['ElevenLabs Voice', 'Whisper STT', 'Low Latency']
+      },
+      {
+        id: 'call',
+        name: 'Telephony Assistant',
+        role: 'Inbound/Outbound Phone Handler',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>`,
+        caps: ['Twilio VOIP', 'Call Routing', 'Vapi AI']
+      },
+      {
+        id: 'video',
+        name: 'Video Engine',
+        role: 'Video Render & Frame Synthesis',
+        iconSvg: `<svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>`,
+        caps: ['Runway Gen-2', 'FFmpeg Pipeline', 'Avatar Lipsync']
+      }
+    ];
+
+    // ==========================================================================
+    // SYSTEM INITIALIZATION & RENDERER LOGIC
+    // ==========================================================================
+    const viewport = document.getElementById('viewport');
+    const nodesLayer = document.getElementById('nodes-layer');
+    const canvas = document.getElementById('network-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const inspectorPanel = document.getElementById('inspector-panel');
+    let activeAgentId = null;
+
+    function resizeCanvas() {
+      canvas.width = viewport.clientWidth;
+      canvas.height = viewport.clientHeight;
+    }
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      positionNodes();
+    });
+    resizeCanvas();
+
+    // Dynamically calculate radial node positions around the hub
+    function positionNodes() {
+      const centerX = viewport.clientWidth / 2;
+      const centerY = viewport.clientHeight / 2;
+      
+      const hubAgent = agentsData.find(a => a.isCentral);
+      const satelliteAgents = agentsData.filter(a => !a.isCentral);
+
+      // Position Hub
+      hubAgent.x = centerX;
+      hubAgent.y = centerY;
+
+      // Position Satellite radial orbit
+      const radiusX = Math.min(centerX - 90, 420);
+      const radiusY = Math.min(centerY - 90, 260);
+
+      satelliteAgents.forEach((agent, index) => {
+        const angle = (index / satelliteAgents.length) * Math.PI * 2 - Math.PI / 2;
+        agent.x = centerX + Math.cos(angle) * radiusX;
+        agent.y = centerY + Math.sin(angle) * radiusY;
+      });
+
+      renderNodeElements();
+    }
+
+    // Render HTML Node elements for accessibility & hover interactions
+    function renderNodeElements() {
+      nodesLayer.innerHTML = '';
+      
+      agentsData.forEach(agent => {
+        const el = document.createElement('div');
+        el.className = `agent-node ${agent.isCentral ? 'central-hub' : ''} ${agent.id === activeAgentId ? 'active' : ''}`;
+        el.style.left = `${agent.x}px`;
+        el.style.top = `${agent.y}px`;
+        el.dataset.id = agent.id;
+
+        const avatarContent = agent.image 
+          ? `<img src="${agent.image}" alt="${agent.name}">`
+          : agent.iconSvg;
+
+        el.innerHTML = `
+          <div class="node-status-dot"></div>
+          <div class="node-avatar">${avatarContent}</div>
+          <div class="node-title">${agent.name}</div>
+        `;
+
+        el.addEventListener('click', () => openInspector(agent.id));
+        nodesLayer.appendChild(el);
+      });
+    }
+
+    // Canvas Background Renderer (Glow Lines & Energy Pulses)
+    let pulseOffset = 0;
+    function animateNetwork() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const hub = agentsData.find(a => a.isCentral);
+      const satellites = agentsData.filter(a => !a.isCentral);
+
+      pulseOffset += 0.015;
+
+      satellites.forEach((sat, i) => {
+        // Draw Connecting Line
+        ctx.beginPath();
+        ctx.moveTo(hub.x, hub.y);
+        ctx.lineTo(sat.x, sat.y);
+        ctx.strokeStyle = 'rgba(0, 213, 255, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Draw Flowing Light Pulse along line
+        const pulsePos = (pulseOffset + i * 0.1) % 1;
+        const px = hub.x + (sat.x - hub.x) * pulsePos;
+        const py = hub.y + (sat.y - hub.y) * pulsePos;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#00d5ff';
+        ctx.shadowColor = '#00d5ff';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0; // Reset blur
+      });
+
+      requestAnimationFrame(animateNetwork);
+    }
+
+    // Initialize Positioning and Animation Loop
+    positionNodes();
+    animateNetwork();
+
+    // ==========================================================================
+    // AGENT INSPECTOR & IMAGE CHANGER LOGIC
+    // ==========================================================================
+    function openInspector(id) {
+      activeAgentId = id;
+      const agent = agentsData.find(a => a.id === id);
+
+      document.getElementById('insp-title').innerText = agent.isCentral ? 'Master Core Orchestrator' : 'Agent Inspector';
+      document.getElementById('insp-name-input').value = agent.name;
+      document.getElementById('insp-role-input').value = agent.role;
+      document.getElementById('insp-url-input').value = agent.image || '';
+
+      // Render Avatar Preview inside Inspector
+      const previewBox = document.getElementById('insp-avatar-preview');
+      previewBox.innerHTML = agent.image 
+        ? `<img src="${agent.image}" alt="${agent.name}">` 
+        : agent.iconSvg;
+
+      // Render Capabilities
+      const capsBox = document.getElementById('insp-caps');
+      capsBox.innerHTML = agent.caps.map(c => `<span class="cap-tag">${c}</span>`).join('');
+
+      inspectorPanel.classList.add('open');
+      renderNodeElements();
+    }
+
+    document.getElementById('btn-close-inspector').addEventListener('click', () => {
+      inspectorPanel.classList.remove('open');
+      activeAgentId = null;
+      renderNodeElements();
+    });
+
+    // Handle Name & Role Inputs
+    document.getElementById('insp-name-input').addEventListener('input', (e) => {
+      if (!activeAgentId) return;
+      const agent = agentsData.find(a => a.id === activeAgentId);
+      agent.name = e.target.value;
+      renderNodeElements();
+    });
+
+    document.getElementById('insp-role-input').addEventListener('input', (e) => {
+      if (!activeAgentId) return;
+      const agent = agentsData.find(a => a.id === activeAgentId);
+      agent.role = e.target.value;
+    });
+
+    // Handle URL Image Input
+    document.getElementById('insp-url-input').addEventListener('input', (e) => {
+      if (!activeAgentId) return;
+      const agent = agentsData.find(a => a.id === activeAgentId);
+      agent.image = e.target.value;
+      
+      const previewBox = document.getElementById('insp-avatar-preview');
+      previewBox.innerHTML = agent.image ? `<img src="${agent.image}">` : agent.iconSvg;
+      renderNodeElements();
+    });
+
+    // Handle Local File Upload for Custom Images
+    document.getElementById('file-input-hidden').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file && activeAgentId) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const agent = agentsData.find(a => a.id === activeAgentId);
+          agent.image = evt.target.result;
+          document.getElementById('insp-url-input').value = '[Uploaded Image File]';
+          
+          const previewBox = document.getElementById('insp-avatar-preview');
+          previewBox.innerHTML = `<img src="${agent.image}">`;
+          renderNodeElements();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Trigger Task Simulation Button
+    document.getElementById('btn-trigger-agent').addEventListener('click', () => {
+      if (!activeAgentId) return;
+      const agent = agentsData.find(a => a.id === activeAgentId);
+      alert(`⚡ Triggered Agent: ${agent.name}\nExecuting task: "${agent.role}"`);
+    });
+  </script>
+</body>
+</html>

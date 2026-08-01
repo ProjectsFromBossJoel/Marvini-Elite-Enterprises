@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agent Orchestrator | Marvini Admin</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="favicon_io/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/dashboard/admin.css" />
+
+  <style>
+    /* ==========================================================================
+       ENGINE ROOM LAYOUT (LEFT ORGANOGRAM + RIGHT 3-CARD GRID)
+       ========================================================================== */
+    :root {
+      --cyber-bg: #070d19;
+      --cyber-panel: rgba(11, 22, 42, 0.9);
+      --cyber-border: rgba(0, 212, 255, 0.25);
+      --cyan: #00d4ff;
+      --cyan-glow: rgba(0, 212, 255, 0.4);
+      --green: #059669;
+      --green-glow: rgba(5, 150, 105, 0.4);
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.4);
+      --text-light: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    .engine-container {
+      background: var(--cyber-bg);
+      border-radius: 20px;
+      padding: 24px;
+      color: var(--text-light);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      min-height: calc(100vh - 130px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .engine-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--cyber-border);
+      padding-bottom: 16px;
+    }
+
+    .engine-title h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .engine-title p {
+      font-size: 0.82rem;
+      color: var(--cyan);
+      margin-top: 2px;
+    }
+
+    .engine-stats {
+      display: flex;
+      gap: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--cyber-border);
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    .stat-pill b.live { color: #00ff9d; }
+    .stat-pill b.incoming { color: var(--amber); }
+
+    /* Main Split Layout: Left Organogram vs Right Grid */
+    .engine-split {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .engine-split { grid-template-columns: 1fr; }
+    }
+
+    /* ==========================================================================
+       LEFT COLUMN: ORGANOGRAM TREE & TYPEWRITER TERMINAL
+       ========================================================================== */
+    .organogram-panel {
+      background: var(--cyber-panel);
+      border: 1px solid var(--cyber-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .organogram-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--cyan);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 10px;
+    }
+
+    /* Hierarchy Organogram Tree */
+    .organogram-tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    .tree-node {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .tree-node:hover {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--cyan);
+    }
+
+    .tree-node.hub { font-weight: 700; color: var(--cyan); }
+    .tree-node.live { color: #00ff9d; }
+    .tree-node.incoming { color: var(--amber); }
+
+    .tree-indent { margin-left: 16px; border-left: 1px dashed var(--cyber-border); padding-left: 10px; }
+
+    /* Typewriter Terminal Console */
+    .typewriter-box {
+      background: #020611;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #00ff9d;
+      min-height: 110px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    }
+
+    .typewriter-text {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 6px; height: 12px;
+      background: #00ff9d;
+      animation: blink 0.8s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ==========================================================================
+       RIGHT COLUMN: CONTAINER GRID (3 CARDS PER ROW)
+       ========================================================================== */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .agents-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .agents-grid { grid-template-columns: 1fr; }
+    }
+
+    .agent-card {
+      background: var(--cyber-panel);
+      border: 1px solid var(--cyber-border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: visible;
+    }
+
+    .agent-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 212, 255, 0.25);
+      border-color: var(--cyan);
+    }
+
+    .agent-card.status-active {
+      border-color: rgba(5, 150, 105, 0.4);
+    }
+    .agent-card.status-active:hover {
+      border-color: #00ff9d;
+      box-shadow: 0 10px 25px var(--green-glow);
+    }
+
+    .agent-card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .agent-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .agent-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .agent-avatar svg { width: 26px; height: 26px; fill: var(--cyan); }
+
+    .agent-info h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .agent-info p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .agent-card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 10px;
+      margin-top: auto;
+    }
+
+    .badge-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+
+    .badge-live { background: rgba(5, 150, 105, 0.2); color: #00ff9d; border: 1px solid #00ff9d; }
+    .badge-incoming { background: rgba(245, 158, 11, 0.2); color: var(--amber); border: 1px solid var(--amber); }
+
+    .btn-inspect {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--cyan);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       INSPECTOR MODAL (OPEN ON CLICK)
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 17, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-shell {
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+      width: 100%;
+      max-width: 760px;
+      max-height: 90vh;
+    }
+
+    .modal-portrait-panel {
+      flex: 0 0 240px;
+      background: #091322;
+      border: 1px solid var(--cyber-border);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .modal-portrait-preview {
+      width: 100%;
+      flex: 1;
+      min-height: 260px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--cyan);
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-portrait-preview img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .modal-portrait-preview svg { width: 56px; height: 56px; fill: var(--cyan); }
+
+    .modal-portrait-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .modal-card {
+      background: #091322;
+      border: 1px solid var(--cyber-border);
+      border-radius: 20px;
+      flex: 1;
+      min-width: 0;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 12px;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .modal-head-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--cyan);
+      flex-shrink: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-head-thumb img { width: 100%; height: 100%; object-fit: contain; }
+    .modal-head-thumb svg { width: 22px; height: 22px; fill: var(--cyan); }
+
+    .modal-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      color: var(--cyan);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .modal-field label {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .modal-input {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--cyber-border);
+      border-radius: 8px;
+      padding: 10px;
+      color: #fff;
+      font-size: 0.88rem;
+    }
+
+    .caps-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .cap-item {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--cyan);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+    }
+
+    .code-box {
+      background: #020611;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #00ff9d;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .btn-modal-action {
+      background: var(--cyan);
+      color: #020611;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-modal-action:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .task-status-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      animation: status-fade-in 0.25s ease;
+    }
+
+    .task-status-banner.show { display: flex; }
+
+    .task-status-banner.running {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--cyan);
+    }
+
+    .task-status-banner.success {
+      background: rgba(5, 150, 105, 0.15);
+      border: 1px solid #00ff9d;
+      color: #00ff9d;
+    }
+
+    .task-status-banner.pending {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+    }
+
+    .status-spinner {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      animation: status-spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes status-spin { to { transform: rotate(360deg); } }
+
+    @keyframes status-fade-in {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #fileInputHidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="side-brand">
+      <img src="/img/marvini_elite_enterprise_logo2.png" alt="Marvini" onerror="this.style.display='none'"/>
+      <div class="side-brand-text">
+        <div class="name">Marvini Admin</div>
+        <div class="sub">Elite Enterprises</div>
+      </div>
+    </div>
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" href="/dashboard/index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span>Dashboard</a>
+    <div class="nav-section-label">Site Content</div>
+    <a class="nav-item" href="/dashboard/companies.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Companies</a>
+    <a class="nav-item" href="/dashboard/team.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>Team</a>
+    <a class="nav-item" href="/dashboard/news.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg></span>News & Updates</a>
+    <a class="nav-item" href="/dashboard/publications.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>Publications</a>
+    <a class="nav-item" href="/dashboard/gallery.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>Gallery</a>
+    <a class="nav-item" href="/dashboard/partners.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></svg></span>Partners</a>
+    <div class="nav-section-label">Engagement</div>
+    <a class="nav-item" href="/dashboard/careers.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>Careers & Volunteering<span class="nav-badge">12</span></a>
+    <a class="nav-item" href="/dashboard/messages.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg></span>Contact Messages<span class="nav-badge" id="messagesNavBadge">0</span></a>
+    <a class="nav-item" href="/dashboard/newsletter.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Email Subscriptions<span class="nav-badge" id="newsletterNavBadge">0</span></a>
+    <a class="nav-item" href="/dashboard/analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Site Analytics</a>
+    <a class="nav-item" href="/dashboard/linkedin-posts.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v2c1-1.5 2.5-2.5 4.5-2.5 3.5 0 5.5 2 5.5 6.5V21h-4v-5.5c0-1.5-.5-2.5-2-2.5s-2 1-2 2.5V21h-4z"/></svg></span>LinkedIn / X Posts</a>
+    <div class="nav-section-label">AI Ecosystem</div>
+    <a class="nav-item active" href="/dashboard/engine_room.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2v1.05A7.002 7.002 0 0 1 19.95 10H21a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1.05A7.002 7.002 0 0 1 14 20.95V22a1 1 0 0 1-2 0v-1.05A7.002 7.002 0 0 1 4.05 16H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.05A7.002 7.002 0 0 1 10 5.05V4a2 2 0 0 1 2-2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg></span>AI Agent Orchestrator</a>
+    <div class="nav-section-label">Subsidiaries</div>
+    <a class="nav-item" href="/dashboard/m-consultancy_and_training.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></span>M-Consultancy & Training</a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="/dashboard/settings.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.68.36 1 .51H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Settings</a>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main" style="padding-bottom:20px;">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search pages, applications, messages…" />
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">☀</button>
+        <button class="icon-btn" id="signOutBtn" aria-label="Sign out" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+        <div class="profile">
+          <img src="/img/avatar727.png" alt="Admin" onerror="this.src='https://ui-avatars.com/api/?name=Admin+User&background=1a56ff&color=fff'"/>
+          <div class="who">
+            <strong>User</strong>
+            <span>Site Administrator</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Engine Dashboard Panel -->
+    <div class="engine-container">
+      
+      <!-- Engine Room Header -->
+      <div class="engine-header">
+        <div class="engine-title">
+          <h1>⚡ MARVINI AI AGENT ORCHESTRATOR</h1>
+          <p>Autonomous AI Systems & Cross-Agent Execution Hub</p>
+        </div>
+        <div class="engine-stats">
+          <div class="stat-pill">Active: <b class="live">4 LIVE</b></div>
+          <div class="stat-pill">In-coming: <b class="incoming">8 SHIPPING SOON</b></div>
+        </div>
+      </div>
+
+      <!-- Main Split: Left Organogram vs Right 3-Column Grid -->
+      <div class="engine-split">
+
+        <!-- FAR LEFT: ORGANOGRAM TREE & TYPEWRITER console -->
+        <div class="organogram-panel">
+          <div class="organogram-title">Ecosystem Organogram</div>
+          
+          <div class="organogram-tree" id="organogramTree">
+            <!-- Dynamically Rendered Organogram Tree -->
+          </div>
+
+          <div style="margin-top:auto;">
+            <div style="font-size: 0.7rem; color: var(--cyan); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace;">> AGENT ACTIVITY TERMINAL</div>
+            <div class="typewriter-box">
+              <span class="typewriter-text" id="typewriterText">Initializing system logs...</span>
+              <span class="typewriter-cursor"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAR RIGHT: CONTAINER GRID (3 CARDS PER ROW) -->
+        <div class="agents-grid" id="agentsGrid">
+          <!-- Dynamically Rendered Agent Cards -->
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- INSPECTOR MODAL OVERLAY -->
+<div class="modal-overlay" id="agentModal">
+  <div class="modal-shell">
+
+    <!-- STANDALONE PORTRAIT PANEL -->
+    <div class="modal-portrait-panel">
+      <div class="modal-portrait-preview" id="modalAvatarPreview"></div>
+      <div class="modal-portrait-controls">
+        <button type="button" class="btn-modal-action" style="padding:8px 12px; font-size:0.75rem;" onclick="document.getElementById('fileInputHidden').click()">📷 Upload Custom Image</button>
+        <input type="text" id="modalUrlInput" class="modal-input" placeholder="Or paste Cloudinary Image URL..." style="font-size:0.75rem; padding:6px 10px;">
+      </div>
+      <input type="file" id="fileInputHidden" accept="image/*">
+    </div>
+
+    <!-- DETAILS CARD -->
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-head-thumb" id="modalHeadThumb"></div>
+          <h2 id="modalAgentName">Agent Inspector</h2>
+        </div>
+        <button class="modal-close" id="btnModalClose">&times;</button>
+      </div>
+
+      <div class="modal-field">
+        <label>Head Thumbnail Image URL</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="modalHeadUrlInput" class="modal-input" placeholder="Paste Cloudinary head image URL..." style="flex:1;">
+          <button type="button" class="btn-modal-action" style="padding:8px 12px; font-size:0.72rem; white-space:nowrap;" onclick="document.getElementById('headFileInputHidden').click()">📷 Upload</button>
+        </div>
+        <input type="file" id="headFileInputHidden" accept="image/*" style="display:none;">
+      </div>
+
+      <div class="modal-field">
+        <label>Role / Job Description</label>
+        <input type="text" id="modalRoleInput" class="modal-input">
+      </div>
+
+      <div class="modal-field">
+        <label>Capabilities & Tech Stack</label>
+        <div class="caps-list" id="modalCapsList"></div>
+      </div>
+
+      <div class="modal-field">
+        <label>Integration Code Snippet</label>
+        <div class="code-box" id="modalCodeBox"></div>
+      </div>
+
+      <button type="button" class="btn-modal-action" id="btnRunAgentTask">⚡ Run Agent Task</button>
+      <div class="task-status-banner" id="taskStatusBanner"></div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="/js/auth-guard.js"></script>
+<script src="/dashboard/admin.js"></script>
+
+<script type="module">
+  import { uploadToCloudinary } from '/js/cloudinary.js';
+  import { db, doc, getDoc, setDoc } from '/js/firebase-config.js';
+
+  const AI_AGENTS_UPLOAD_PRESET = 'marvini_ai_agents';
+  const AI_AGENTS_FOLDER = 'AI_Agents';
+  const AI_AGENTS_COLLECTION = 'ai_agents_overrides';
+
+  async function saveAgentOverride(agent) {
+    try {
+      await setDoc(doc(db, AI_AGENTS_COLLECTION, agent.id), {
+        image: agent.image || '',
+        headImage: agent.headImage || '',
+        role: agent.role || '',
+      });
+    } catch (err) {
+      console.error('Failed to save agent override:', err);
+    }
+  }
+
+  async function loadAgentOverrides() {
+    for (const agent of agentsData) {
+      try {
+        const snap = await getDoc(doc(db, AI_AGENTS_COLLECTION, agent.id));
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.image) agent.image = data.image;
+          if (data.headImage) agent.headImage = data.headImage;
+          if (data.role) agent.role = data.role;
+        }
+      } catch (err) {
+        console.error(`Failed to load override for ${agent.id}:`, err);
+      }
+    }
+  }
+  // ==========================================================================
+  // COMPLETE AGENTS DATASET (4 REAL LIVE + 8 IN-COMING)
+  // ==========================================================================
+  const agentsData = [
+    {
+      id: 'miles',
+      name: 'Miles',
+      role: 'Newsletter Dispatch & Database Watcher',
+      status: 'active',
+      image: '',
+      headImage: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
+      caps: ['Firestore onSnapshot', 'News Trigger', '/api/send-newsletter', 'Admin Prompt Widget'],
+      codeSnippet: `// newsletter-trigger-admin.js\nonSnapshot(latestNewsQuery, (snap) => {\n  if (isNew && !alreadyHandled) {\n    showPrompt("New article published. Send newsletter?");\n  }\n});`
+    },
+    {
+      id: 'marvini',
+      name: 'Marvini',
+      role: 'Landing Page FAQ Chatbot & Concierge',
+      status: 'active',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1.05A7.002 7.002 0 0 1 19.95 10H21a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1.05A7.002 7.002 0 0 1 14 20.95V22a1 1 0 0 1-2 0v-1.05A7.002 7.002 0 0 1 4.05 16H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.05A7.002 7.002 0 0 1 10 5.05V4a2 2 0 0 1 2-2z"/></svg>`,
+      caps: ['Public Assistant', '/api/message', 'WhatsApp Fallback', 'Marvini AI Mascot'],
+      codeSnippet: `// landing page chatbot\nfetch('https://marvini-elite-enterprises-alpha.vercel.app/api/message', {\n  method: 'POST',\n  body: JSON.stringify({ message: text })\n});`
+    },
+    {
+      id: 'devin',
+      name: 'Devin',
+      role: 'Social Media Copywriter & LinkedIn Publisher',
+      status: 'active',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4zm4 6h-2V9h2v8z"/></svg>`,
+      caps: ['Groq Llama-3.3-70b', 'LinkedIn API', '/api/admin/linkedin-post', 'Auto X-Condenser'],
+      codeSnippet: `// linkedin-posts-admin.js\nconst res = await fetch('/api/admin/linkedin-post', {\n  method: 'POST',\n  body: JSON.stringify({ action: 'generate', prompt })\n});`
+    },
+    {
+      id: 'leo',
+      name: 'Leo',
+      role: 'Twitter / X 280-Char Generator & OAuth Publisher',
+      status: 'active',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.6 8.7L23.3 22H16.7l-5.2-6.8L5.6 22H2.4l8.2-9.3L1.7 2h6.8l4.7 6.2L18.9 2z"/></svg>`,
+      caps: ['OAuth 1.0a HMAC-SHA1', '/api/admin/x-post', 'Groq Llama-3.3-70b', '280-Char Cap'],
+      codeSnippet: `// api/admin/x-post.js\nconst authHeader = buildOAuthHeader({ method: 'POST', url: 'https://api.twitter.com/2/tweets' });\nfetch('https://api.twitter.com/2/tweets', { headers: { Authorization: authHeader } });`
+    },
+
+    // --- 8 IN-COMING / SHIPPING SOON AGENTS ---
+    {
+      id: 'echo',
+      name: 'Echo',
+      role: 'Voice & Speech Audio Synthesizer',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>`,
+      caps: ['ElevenLabs Voice', 'Whisper STT', 'Real-time Audio Stream'],
+      codeSnippet: `// IN-COMING: Voice synthesis module (Shipping soon)`
+    },
+    {
+      id: 'sentinel',
+      name: 'Sentinel',
+      role: 'Database Security & Auth Anomaly Guard',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>`,
+      caps: ['Security Token Guard', 'Firestore Rules Audit', 'IP Threat Detection'],
+      codeSnippet: `// IN-COMING: Firebase Security Sentinel (Shipping soon)`
+    },
+    {
+      id: 'vision',
+      name: 'Vision',
+      role: 'Media & Social Banner Render Engine',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`,
+      caps: ['Banner Generator', 'Canvas Render', 'OG Image Engine'],
+      codeSnippet: `// IN-COMING: Vision banner synthesizer (Shipping soon)`
+    },
+    {
+      id: 'nexus',
+      name: 'Nexus',
+      role: 'Multi-LLM Router & Cost Optimizer',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+      caps: ['Groq Fallback', 'OpenAI Route', 'Latency Optimizer'],
+      codeSnippet: `// IN-COMING: Multi-LLM load balancer (Shipping soon)`
+    },
+    {
+      id: 'commerce',
+      name: 'Commerce',
+      role: 'E-Commerce & Payment Gateway Agent',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>`,
+      caps: ['Stripe Automation', 'Checkout AI', 'Order Status Sync'],
+      codeSnippet: `// IN-COMING: E-commerce AI handler (Shipping soon)`
+    },
+    {
+      id: 'vector',
+      name: 'Vector',
+      role: 'Vector DB Memory & RAG Retrieval Engine',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>`,
+      caps: ['Pinecone Vector DB', 'Embeddings Generator', 'Semantic Search'],
+      codeSnippet: `// IN-COMING: RAG retrieval pipeline (Shipping soon)`
+    },
+    {
+      id: 'call',
+      name: 'Call Assistant',
+      role: 'Telephony Voice Call Handler',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>`,
+      caps: ['Twilio VOIP', 'Vapi AI Voice', 'Automated Call Dispatch'],
+      codeSnippet: `// IN-COMING: Telephony voice bot (Shipping soon)`
+    },
+    {
+      id: 'sync',
+      name: 'Sync',
+      role: 'Cloud Storage & Automated Asset Pipeline',
+      status: 'incoming',
+      image: '',
+      iconSvg: `<svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>`,
+      caps: ['AWS S3 Sync', 'Firebase Storage', 'Asset Optimization'],
+      codeSnippet: `// IN-COMING: Automated asset cloud sync (Shipping soon)`
+    }
+  ];
+
+  let currentActiveModalId = null;
+
+  // ==========================================================================
+  // 1. RENDER FAR LEFT ORGANOGRAM TREE
+  // ==========================================================================
+  function renderOrganogramTree() {
+    const treeBox = document.getElementById('organogramTree');
+    
+    let html = `
+      <div class="tree-node hub" onclick="openInspectorModal('miles')">
+        🌐 MARVINI CORE HUB
+      </div>
+      <div class="tree-indent">
+        <div style="margin: 4px 0; color: #00ff9d; font-weight:700;">├── 🟢 LIVE AGENTS</div>
+        <div class="tree-indent">
+    `;
+
+    // Live Agents
+    agentsData.filter(a => a.status === 'active').forEach((agent, i, arr) => {
+      const isLast = i === arr.length - 1;
+      html += `
+        <div class="tree-node live" onclick="openInspectorModal('${agent.id}')">
+          ${isLast ? '└──' : '├──'} 🟢 ${agent.name}
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+        <div style="margin: 6px 0; color: var(--amber); font-weight:700;">└── 🟡 IN-COMING AGENTS</div>
+        <div class="tree-indent">
+    `;
+
+    // Incoming Agents
+    agentsData.filter(a => a.status === 'incoming').forEach((agent, i, arr) => {
+      const isLast = i === arr.length - 1;
+      html += `
+        <div class="tree-node incoming" onclick="openInspectorModal('${agent.id}')">
+          ${isLast ? '└──' : '├──'} 🟡 ${agent.name}
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    treeBox.innerHTML = html;
+  }
+
+  // ==========================================================================
+  // 2. RENDER FAR RIGHT 3-COLUMN AGENT CARDS GRID
+  // ==========================================================================
+  function renderAgentsGrid() {
+    const gridBox = document.getElementById('agentsGrid');
+    gridBox.innerHTML = '';
+
+    agentsData.forEach(agent => {
+      const card = document.createElement('div');
+      card.className = `agent-card ${agent.status === 'active' ? 'status-active' : ''}`;
+      
+      const avatarContent = agent.headImage 
+        ? `<img src="${agent.headImage}" alt="${agent.name}">` 
+        : agent.iconSvg;
+
+      const badgeClass = agent.status === 'active' ? 'badge-live' : 'badge-incoming';
+      const badgeText = agent.status === 'active' ? 'LIVE' : 'SHIPPING SOON';
+
+      card.innerHTML = `
+        <div class="agent-card-top">
+          <div class="agent-avatar">${avatarContent}</div>
+          <div class="agent-info">
+            <h3>${agent.name}</h3>
+            <p>${agent.role}</p>
+          </div>
+        </div>
+        <div class="agent-card-bottom">
+          <span class="badge-pill ${badgeClass}">${badgeText}</span>
+          <button type="button" class="btn-inspect">Inspect →</button>
+        </div>
+      `;
+
+      card.addEventListener('click', () => openInspectorModal(agent.id));
+      gridBox.appendChild(card);
+    });
+  }
+
+  // ==========================================================================
+  // 3. TYPEWRITER TERMINAL ANIMATION
+  // ==========================================================================
+  const typewriterText = document.getElementById('typewriterText');
+  const typePhrases = [
+    "[SYSTEM] Marvini Core Orchestrator running optimal.",
+    "[MILES] Listening to Firestore for new published news...",
+    "[MARVINI] Chatbot AI active on landing page.",
+    "[DEVIN] Groq Llama-3.3-70b ready for LinkedIn generation.",
+    "[LEO] Twitter OAuth 1.0a HMAC-SHA1 signature ready.",
+    "[IN-COMING] Echo, Sentinel, Vision & Nexus shipping soon!"
+  ];
+
+  let phraseIndex = 0, charIndex = 0, isDeleting = false;
+
+  function typeLoop() {
+    const current = typePhrases[phraseIndex];
+    if (!isDeleting) {
+      charIndex++;
+      typewriterText.textContent = current.slice(0, charIndex);
+      if (charIndex === current.length) {
+        isDeleting = true;
+        setTimeout(typeLoop, 2000);
+        return;
+      }
+    } else {
+      charIndex--;
+      typewriterText.textContent = current.slice(0, charIndex);
+      if (charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % typePhrases.length;
+      }
+    }
+    setTimeout(typeLoop, isDeleting ? 25 : 50);
+  }
+
+  // ==========================================================================
+  // 4. INSPECTOR MODAL LOGIC & IMAGE REPLACER
+  // ==========================================================================
+  const modal = document.getElementById('agentModal');
+  const btnCloseModal = document.getElementById('btnModalClose');
+
+  window.openInspectorModal = function(id) {
+    currentActiveModalId = id;
+    const agent = agentsData.find(a => a.id === id);
+    if (!agent) return;
+
+    document.getElementById('modalAgentName').innerText = `${agent.name} (${agent.status.toUpperCase()})`;
+    document.getElementById('modalRoleInput').value = agent.role;
+    document.getElementById('modalUrlInput').value = agent.image || '';
+
+    const preview = document.getElementById('modalAvatarPreview');
+    preview.innerHTML = agent.image 
+      ? `<img src="${agent.image}" alt="${agent.name}">` 
+      : agent.iconSvg;
+
+    const headThumb = document.getElementById('modalHeadThumb');
+    headThumb.innerHTML = agent.headImage
+      ? `<img src="${agent.headImage}" alt="${agent.name}">`
+      : agent.iconSvg;
+
+    document.getElementById('modalHeadUrlInput').value = agent.headImage || '';
+
+    const capsBox = document.getElementById('modalCapsList');
+    capsBox.innerHTML = agent.caps.map(c => `<span class="cap-item">${c}</span>`).join('');
+
+    document.getElementById('modalCodeBox').innerText = agent.codeSnippet;
+
+    const statusBanner = document.getElementById('taskStatusBanner');
+    statusBanner.className = 'task-status-banner';
+    statusBanner.innerHTML = '';
+
+    modal.classList.add('open');
+  };
+
+  btnCloseModal.addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+
+  // Handle URL Image Replacer Input
+  document.getElementById('modalUrlInput').addEventListener('input', (e) => {
+    if (!currentActiveModalId) return;
+    const agent = agentsData.find(a => a.id === currentActiveModalId);
+    agent.image = e.target.value;
+    
+    document.getElementById('modalAvatarPreview').innerHTML = agent.image 
+      ? `<img src="${agent.image}">` 
+      : agent.iconSvg;
+    
+    renderAgentsGrid();
+  });
+
+  // Handle Head Thumbnail URL Input
+  document.getElementById('modalHeadUrlInput').addEventListener('input', (e) => {
+    if (!currentActiveModalId) return;
+    const agent = agentsData.find(a => a.id === currentActiveModalId);
+    agent.headImage = e.target.value;
+
+    document.getElementById('modalHeadThumb').innerHTML = agent.headImage
+      ? `<img src="${agent.headImage}">`
+      : agent.iconSvg;
+  });
+
+  // Handle File Upload Custom Image (Portrait) — uploads to Cloudinary
+  document.getElementById('fileInputHidden').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file || !currentActiveModalId) return;
+
+    const agent = agentsData.find(a => a.id === currentActiveModalId);
+    document.getElementById('modalUrlInput').value = 'Uploading...';
+
+    try {
+      const result = await uploadToCloudinary(file, 'image', AI_AGENTS_FOLDER, AI_AGENTS_UPLOAD_PRESET);
+      agent.image = result.url;
+      document.getElementById('modalUrlInput').value = result.url;
+      document.getElementById('modalAvatarPreview').innerHTML = `<img src="${agent.image}">`;
+      renderAgentsGrid();
+      await saveAgentOverride(agent);
+    } catch (err) {
+      console.error(err);
+      document.getElementById('modalUrlInput').value = '';
+      alert('Upload failed: ' + err.message);
+    }
+  });
+
+  // Handle File Upload Custom Image (Head Thumbnail) — uploads to Cloudinary
+  document.getElementById('headFileInputHidden').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file || !currentActiveModalId) return;
+
+    const agent = agentsData.find(a => a.id === currentActiveModalId);
+    document.getElementById('modalHeadUrlInput').value = 'Uploading...';
+
+    try {
+      const result = await uploadToCloudinary(file, 'image', AI_AGENTS_FOLDER, AI_AGENTS_UPLOAD_PRESET);
+      agent.headImage = result.url;
+      document.getElementById('modalHeadUrlInput').value = result.url;
+      document.getElementById('modalHeadThumb').innerHTML = `<img src="${agent.headImage}">`;
+      renderAgentsGrid();
+      await saveAgentOverride(agent);
+    } catch (err) {
+      console.error(err);
+      document.getElementById('modalHeadUrlInput').value = '';
+      alert('Upload failed: ' + err.message);
+    }
+  });
+
+  // Run Task Simulation Button — inline status banner instead of alert()
+  document.getElementById('btnRunAgentTask').addEventListener('click', () => {
+    if (!currentActiveModalId) return;
+    const agent = agentsData.find(a => a.id === currentActiveModalId);
+    const btn = document.getElementById('btnRunAgentTask');
+    const banner = document.getElementById('taskStatusBanner');
+
+    if (agent.status !== 'active') {
+      banner.className = 'task-status-banner pending show';
+      banner.innerHTML = `🟡 ${agent.name} is currently IN-COMING / SHIPPING SOON — not yet deployable.`;
+      return;
+    }
+
+    btn.disabled = true;
+    banner.className = 'task-status-banner running show';
+    banner.innerHTML = `<span class="status-spinner"></span> Executing task for ${agent.name}...`;
+
+    setTimeout(() => {
+      btn.disabled = false;
+      banner.className = 'task-status-banner success show';
+      banner.innerHTML = `✅ ${agent.name} task executed — ${agent.role} (DEPLOYED & ACTIVE)`;
+    }, 1200);
+  });
+
+  // Initialize
+  loadAgentOverrides().then(() => {
+    renderOrganogramTree();
+    renderAgentsGrid();
+  });
+  typeLoop();
+</script>
+</body>
+</html>
