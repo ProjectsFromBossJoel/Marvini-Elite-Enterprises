@@ -33,10 +33,11 @@ function renderCard(n) {
       </div>
       <div class="news-body">
         <span class="news-tag">${escapeHtml(n.tag || "")}</span>
-        <h3 class="news-title">${escapeHtml(n.title || "")}</h3>
+        <h3 class="news-title"><a href="news-details.html?id=${encodeURIComponent(n.id)}" style="color:inherit; text-decoration:none;">${escapeHtml(n.title || "")}</a></h3>
         <p class="news-excerpt">${escapeHtml(n.excerpt || "")}</p>
-        <div class="news-meta">
+        <div class="news-meta" style="display:flex; align-items:center;">
           <time class="news-date">${dateLabel}</time>
+          <a href="news-details.html?id=${encodeURIComponent(n.id)}" style="margin-left:auto; font-weight:700; color:var(--royal-blue,#1A56FF); font-size:0.85rem; text-decoration:none;">Read More →</a>
         </div>
       </div>
     </article>
@@ -79,7 +80,7 @@ if (grid) {
         return;
       }
 
-      allDocs = snap.docs.map((d) => d.data());
+      allDocs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       allDocs.sort((a, b) => {
         const aTime = (a.publishedAt || a.createdAt)?.toMillis?.() || 0;
         const bTime = (b.publishedAt || b.createdAt)?.toMillis?.() || 0;
