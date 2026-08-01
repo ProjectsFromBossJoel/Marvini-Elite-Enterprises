@@ -16,7 +16,10 @@ if (carousel) {
 
     const itemsHtml = docs.map((p) => {
       return p.logoUrl
-        ? `<div class="partner-logo" aria-label="${escapeHtml(p.name || "")}"><img src="${escapeHtml(p.logoUrl)}" alt="${escapeHtml(p.name || "")}" style="max-height:36px;max-width:100%;object-fit:contain;" /></div>`
+        ? `<div class="partner-logo" aria-label="${escapeHtml(p.name || "")}" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">
+            <img src="${escapeHtml(p.logoUrl)}" alt="${escapeHtml(p.name || "")}" style="max-height:36px;max-width:100%;object-fit:contain;" />
+            <span style="font-size:0.78rem; font-weight:600; color:var(--text-secondary,#64748b); white-space:nowrap;">${escapeHtml(p.name || "")}</span>
+          </div>`
         : `<div class="partner-logo" aria-label="${escapeHtml(p.name || "")}">${escapeHtml(p.name || "")}</div>`;
     }).join("");
 

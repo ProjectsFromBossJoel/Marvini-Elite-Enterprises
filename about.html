@@ -96,25 +96,82 @@
     .mobile-sublink img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
 
     /* Our Story block */
-    .about-story {
-      max-width: 820px;
-      margin: 0 auto 4rem;
+    .about-story-lede {
+      max-width: 760px;
+      margin: 0 auto 3rem;
       text-align: center;
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1.6;
+      color: var(--text-primary, #14213D);
     }
-    .about-story p {
+    .about-story-lede strong {
+      color: var(--royal-blue, #1A56FF);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 900px) {
+      .story-grid { grid-template-columns: 1fr; }
+    }
+    .story-card {
+      position: relative;
+      background: var(--bg-card, #fff);
+      border: 1px solid var(--border, rgba(0,0,0,0.08));
+      border-radius: var(--radius-xl, 18px);
+      padding: 2rem 1.75rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .story-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(26,86,255,0.10);
+      border-color: rgba(26,86,255,0.25);
+    }
+    .story-card-num {
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--royal-blue, #1A56FF);
+      margin-bottom: 0.85rem;
+    }
+    .story-card-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(26,86,255,0.12), rgba(5,150,105,0.12));
+      color: var(--royal-blue, #1A56FF);
+      margin-bottom: 1.1rem;
+    }
+    .story-card-icon svg { width: 22px; height: 22px; }
+    .story-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary, #14213D);
+      margin-bottom: 0.6rem;
+    }
+    .story-card-text {
+      color: var(--text-secondary, #475569);
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+
+    .about-story-closing {
+      max-width: 700px;
+      margin: 2.5rem auto 0;
+      text-align: center;
       color: var(--text-secondary, #475569);
       font-size: 1.05rem;
       line-height: 1.8;
-      margin-bottom: 1.25rem;
     }
-    .about-story p:first-of-type::first-letter {
-      font-family: var(--font-heading);
-      font-size: 3.2rem;
-      font-weight: 700;
-      color: var(--royal-blue, #1A56FF);
-      float: left;
-      line-height: 0.8;
-      margin: 0.1rem 0.15rem 0 0;
+    .about-story-closing strong {
+      color: var(--text-primary, #14213D);
     }
   </style>
 
@@ -218,11 +275,42 @@
           <h2 class="section-title">The Story Behind<br />Marvini Elite Enterprises</h2>
         </div>
 
-        <div class="about-story reveal-fade-up">
-          <p>Every great enterprise begins with a simple belief, that Africa's challenges are also Africa's greatest opportunities. Marvini Elite Enterprises was built on exactly that belief: that the continent's road safety gaps, food distribution inefficiencies, agricultural potential, and creative economy could all be transformed through disciplined execution and homegrown technology.</p>
-          <p>What started as a single idea has grown into a multi-sector enterprise group spanning mobility education, digital food logistics, cultural experiences, sustainable agriculture, and professional consultancy — each subsidiary built by people who understand the markets they serve because they live in them.</p>
-          <p>Behind every platform, dashboard, and festival stage is a team of engineers, strategists, scientists, and operators who chose to build in Ghana, for Ghana, and for the rest of Africa. Meet the people driving that mission forward.</p>
+        <p class="about-story-lede reveal-fade-up">
+          Every great enterprise begins with a simple belief — that <strong>Africa's challenges are also Africa's greatest opportunities.</strong>
+        </p>
+
+        <div class="story-grid">
+          <div class="story-card reveal-fade-up delay-1">
+            <div class="story-card-num">THE BELIEF</div>
+            <div class="story-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A5.5 5.5 0 0 0 4 7.5c0 2.2 1.2 3.6 2.2 4.8.8.9 1.3 1.6 1.3 2.7v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-1c0-1.1.5-1.8 1.3-2.7 1-1.2 2.2-2.6 2.2-4.8A5.5 5.5 0 0 0 14.5 2"/><path d="M9 21h6"/><path d="M10 17v2M14 17v2"/></svg>
+            </div>
+            <h3 class="story-card-title">Africa's Challenges, Reframed</h3>
+            <p class="story-card-text">Marvini Elite Enterprises was built on the conviction that the continent's road safety gaps, food distribution inefficiencies, agricultural potential, and creative economy could all be transformed through disciplined execution and homegrown technology.</p>
+          </div>
+
+          <div class="story-card reveal-fade-up delay-2">
+            <div class="story-card-num">THE GROWTH</div>
+            <div class="story-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.1-3-3L7 13.7"/><circle cx="18.7" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="13.6" cy="13.1" r="1.2" fill="currentColor" stroke="none"/><circle cx="10.6" cy="10.1" r="1.2" fill="currentColor" stroke="none"/><circle cx="7" cy="13.7" r="1.2" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <h3 class="story-card-title">One Idea, Five Industries</h3>
+            <p class="story-card-text">What started as a single idea has grown into a multi-sector group spanning mobility education, digital food logistics, cultural experiences, sustainable agriculture, and professional consultancy — each built by people who understand the markets they serve because they live in them.</p>
+          </div>
+
+          <div class="story-card reveal-fade-up delay-3">
+            <div class="story-card-num">THE PEOPLE</div>
+            <div class="story-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M22.5 21v-2a4 4 0 0 0-3-3.87"/><path d="M15.5 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="story-card-title">Built in Ghana, For Africa</h3>
+            <p class="story-card-text">Behind every platform, dashboard, and festival stage is a team of engineers, strategists, scientists, and operators who chose to build in Ghana, for Ghana, and for the rest of the continent.</p>
+          </div>
         </div>
+
+        <p class="about-story-closing reveal-fade-up delay-4">
+          <strong>Meet the people driving that mission forward.</strong>
+        </p>
       </div>
     </section>
 
