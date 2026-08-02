@@ -8,6 +8,7 @@ import {
   addDoc,
   doc,
   updateDoc,
+  increment,
   deleteDoc,
   orderBy,
   query,
@@ -74,7 +75,10 @@ function openViewModal(id, data) {
     : `<div class="view-cover empty">No cover image</div>`;
 
   viewDownloadBtn.onclick = () => {
-    if (data.fileUrl) window.open(data.fileUrl, "_blank");
+    if (data.fileUrl) window.open(toForcedDownloadUrl(data.fileUrl), "_blank");
+    updateDoc(doc(db, PUBLICATIONS_COLLECTION, id), { adminDownloads: increment(1) }).catch((err) =>
+      console.error("Could not record admin download:", err)
+    );
   };
 
   viewModal.classList.add("open");
@@ -206,6 +210,7 @@ uploadForm?.addEventListener("submit", async (e) => {
       coverPublicId: coverResult ? coverResult.publicId : null,
       status: "draft", // draft | published
       downloads: 0,
+      adminDownloads: 0,
       createdAt: serverTimestamp(),
       publishedAt: null,
     });
@@ -265,7 +270,7 @@ function renderRow(id, data) {
     </td>
     <td>${categoryLabel}</td>
     <td>${data.fileName || "—"}</td>
-    <td>${data.downloads || 0} downloads</td>
+    <td>${data.downloads || 0} public<br><span style="color:var(--text-muted,#64748b); font-size:.78rem;">${data.adminDownloads || 0} admin</span></td>
     <td><span class="pill ${isPublished ? "completed" : "pending"}">${isPublished ? "Published" : "Draft"}</span></td>
     <td>
       <div class="row-actions">
@@ -287,7 +292,10 @@ function renderRow(id, data) {
 
   tr.querySelector('[data-action="view"]').addEventListener("click", () => openViewModal(id, data));
   tr.querySelector('[data-action="download"]').addEventListener("click", () => {
-    if (data.fileUrl) window.open(data.fileUrl, "_blank");
+    if (data.fileUrl) window.open(toForcedDownloadUrl(data.fileUrl), "_blank");
+    updateDoc(doc(db, PUBLICATIONS_COLLECTION, id), { adminDownloads: increment(1) }).catch((err) =>
+      console.error("Could not record admin download:", err)
+    );
   });
   tr.querySelector('[data-action="toggle-publish"]').addEventListener("click", () => togglePublish(id, data.status));
   tr.querySelector('[data-action="delete"]').addEventListener("click", () => deleteItem(id, data.title));
@@ -322,6 +330,11 @@ async function deleteItem(id, title) {
   // automatic Cloudinary cleanup, add a small server function (e.g.
   // a Firebase Cloud Function) that calls Cloudinary's authenticated
   // destroy API using your API secret.
+}
+
+function toForcedDownloadUrl(url) {
+  if (!url) return url;
+  return url.replace("/upload/", "/upload/fl_attachment/");
 }
 
 function escapeHtml(str) {

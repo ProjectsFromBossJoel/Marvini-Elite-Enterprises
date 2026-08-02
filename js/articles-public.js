@@ -9,6 +9,9 @@ import {
   db,
   collection,
   addDoc,
+  doc,
+  updateDoc,
+  increment,
   query,
   where,
   orderBy,
@@ -74,7 +77,7 @@ function buildArticleCard(data, id) {
         Read More
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="${data.fileUrl}" class="btn btn-primary btn-sm article-download" target="_blank" rel="noopener noreferrer" download>
+      <a href="${toForcedDownloadUrl(data.fileUrl)}" class="btn btn-primary btn-sm article-download" rel="noopener noreferrer" data-pub-id="${id}">
         Download Now
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </a>
@@ -94,7 +97,19 @@ function buildArticleCard(data, id) {
     io.observe(article);
   });
 
+  const downloadLink = article.querySelector(".article-download");
+  downloadLink?.addEventListener("click", () => {
+    updateDoc(doc(db, PUBLICATIONS_COLLECTION, id), { downloads: increment(1) }).catch((err) =>
+      console.error("Could not record download:", err)
+    );
+  });
+
   return article;
+}
+
+function toForcedDownloadUrl(url) {
+  if (!url) return url;
+  return url.replace("/upload/", "/upload/fl_attachment/");
 }
 
 function escapeHtml(str) {
@@ -147,6 +162,7 @@ publicSubmitForm?.addEventListener("submit", async (e) => {
       coverPublicId: coverResult ? coverResult.publicId : null,
       status: "draft", // always starts pending review, never auto-published
       downloads: 0,
+      adminDownloads: 0,
       createdAt: serverTimestamp(),
       publishedAt: null,
       submittedPublicly: true,

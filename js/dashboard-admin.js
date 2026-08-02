@@ -129,6 +129,22 @@ function watchTrafficChart() {
     });
   }
 
+  // Rounds a raw max value up to a clean, human-friendly ceiling (10, 20, 50,
+  // 100, 200, 500...) so the y-axis always shows tidy, stable increments
+  // instead of oddly-spaced fractions of whatever the current peak happens
+  // to be (e.g. 49 → 12/24/36/48 today, then a different jumble tomorrow).
+  function niceAxisMax(rawMax) {
+    if (rawMax <= 0) return 4; // keeps a visible 0/1/2/3/4 scale on empty data
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawMax)));
+    const normalized = rawMax / magnitude; // between 1 and 10
+    let niceNormalized;
+    if (normalized <= 1) niceNormalized = 1;
+    else if (normalized <= 2) niceNormalized = 2;
+    else if (normalized <= 5) niceNormalized = 5;
+    else niceNormalized = 10;
+    return niceNormalized * magnitude;
+  }
+
   function buildPoints(counts, maxCount) {
     const stepX = CHART_WIDTH / (counts.length - 1);
     return counts.map((count, i) => ({
@@ -262,20 +278,23 @@ function watchTrafficChart() {
       }
     });
 
-    const maxCount = Math.max(...appCounts, ...visitorCounts, 1);
+    const rawMax = Math.max(...appCounts, ...visitorCounts, 1);
+    const maxCount = niceAxisMax(rawMax);
 
     const appPaths = buildPath(appCounts, maxCount);
     linePath.setAttribute("d", appPaths.lineD);
     areaPath.setAttribute("d", appPaths.areaD);
 
+    const hasVisitorData = allMonthlyVisitors.length > 0;
+
     let visPaths = null;
     if (visitorsArea && visitorsLine) {
       visPaths = buildPath(visitorCounts, maxCount);
-      visitorsLine.setAttribute("d", visPaths.lineD);
-      visitorsArea.setAttribute("d", visPaths.areaD);
+      visitorsLine.setAttribute("d", hasVisitorData ? visPaths.lineD : "");
+      visitorsArea.setAttribute("d", hasVisitorData ? visPaths.areaD : "");
     }
 
-    renderMarkers(appPaths.points, visPaths ? visPaths.points : []);
+    renderMarkers(appPaths.points, hasVisitorData && visPaths ? visPaths.points : []);
     renderYAxis(maxCount);
 
     const yearTotal = appCounts.reduce((sum, c) => sum + c, 0);
