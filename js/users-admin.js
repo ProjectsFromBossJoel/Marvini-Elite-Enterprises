@@ -29,9 +29,9 @@ import { uploadToCloudinary } from "./cloudinary.js";
 const ROLE_LABELS = { admin: "Admin", hr: "HR", it_support: "IT Support" };
 
 const DEFAULT_PAGES = {
-  admin: ["dashboard","companies","team","news","publications","gallery","partners","careers","messages","newsletter","analytics","settings","users"],
+  admin: ["dashboard","companies","team","news","publications","gallery","partners","careers","messages","newsletter","analytics","linkedin-posts","engine_room","m-consultancy_and_training","settings","users"],
   hr: ["dashboard", "team", "careers", "messages", "newsletter"],
-  it_support: ["dashboard", "companies", "news", "publications", "gallery", "partners", "analytics", "settings"],
+  it_support: ["dashboard", "companies", "news", "publications", "gallery", "partners", "analytics", "linkedin-posts", "engine_room", "settings"],
 };
 
 const tbody = document.getElementById("usersTableBody");
@@ -49,6 +49,7 @@ const roleField = document.getElementById("userRole");
 const pagesFieldset = document.getElementById("pagesFieldset");
 const pageChks = () => Array.from(document.querySelectorAll(".pageChk"));
 const permSendNewsletter = document.getElementById("permSendNewsletter");
+const permUploadAgentImages = document.getElementById("permUploadAgentImages");
 const statusBox = document.getElementById("userStatus");
 const submitBtn = document.getElementById("userSubmitBtn");
 const avatarFileInput = document.getElementById("avatarFileInput");
@@ -198,6 +199,7 @@ function openModal(user = null) {
     roleField.value = user.role || "it_support";
     setCheckedPages(user.pages || DEFAULT_PAGES[user.role] || []);
     permSendNewsletter.checked = user.role === "admin" ? true : !!user.canSendNewsletter;
+    permUploadAgentImages.checked = user.role === "admin" ? true : !!user.canUploadAgentImages;
     photoURLField.value = user.photoURL || "";
     avatarPreview.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=1a56ff&color=fff`;
     submitBtn.textContent = "Save Changes";
@@ -210,6 +212,7 @@ function openModal(user = null) {
     roleField.value = "it_support";
     setCheckedPages(DEFAULT_PAGES.it_support);
     permSendNewsletter.checked = false;
+    permUploadAgentImages.checked = false;
     photoURLField.value = "";
     avatarPreview.src = "https://ui-avatars.com/api/?name=New+User&background=1a56ff&color=fff";
     submitBtn.textContent = "Create User";
@@ -246,9 +249,12 @@ function applyRoleDefaults() {
     pagesFieldset.classList.add("disabled");
     permSendNewsletter.checked = true;
     permSendNewsletter.disabled = true;
+    permUploadAgentImages.checked = true;
+    permUploadAgentImages.disabled = true;
   } else {
     pagesFieldset.classList.remove("disabled");
     permSendNewsletter.disabled = false;
+    permUploadAgentImages.disabled = false;
     // Only auto-fill defaults when creating a brand-new user (no uid yet)
     if (!uidField.value) setCheckedPages(DEFAULT_PAGES[role] || []);
   }
@@ -272,12 +278,13 @@ async function handleSubmit(e) {
   const role = roleField.value;
   const pages = role === "admin" ? DEFAULT_PAGES.admin : getCheckedPages();
   const canSendNewsletter = role === "admin" ? true : permSendNewsletter.checked;
+  const canUploadAgentImages = role === "admin" ? true : permUploadAgentImages.checked;
   const photoURL = photoURLField.value || null;
 
   try {
     if (uid) {
       // Editing an existing user — Firestore doc only.
-      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, canSendNewsletter, photoURL });
+      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, canSendNewsletter, canUploadAgentImages, photoURL });
       if (window.marviniUser && uid === window.marviniUser.uid) {
         window.marviniUser.photoURL = photoURL;
         const profileImg = document.querySelector(".profile img");
@@ -299,6 +306,7 @@ async function handleSubmit(e) {
           role,
           pages,
           canSendNewsletter,
+          canUploadAgentImages,
           photoURL,
           status: "active",
           createdAt: serverTimestamp(),

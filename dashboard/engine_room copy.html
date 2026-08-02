@@ -585,6 +585,12 @@
       color: var(--amber);
     }
 
+    .task-status-banner.error {
+      background: rgba(255, 77, 94, 0.12);
+      border: 1px solid #ff4d5e;
+      color: #ff4d5e;
+    }
+
     .status-spinner {
       width: 12px;
       height: 12px;
@@ -1070,6 +1076,10 @@
     const agent = agentsData.find(a => a.id === id);
     if (!agent) return;
 
+    const canUpload = !!(window.marviniUser && window.marviniUser.canUploadAgentImages);
+    document.querySelectorAll('.modal-portrait-controls .btn-modal-action, .modal-field button[onclick*="headFileInputHidden"]')
+      .forEach(btn => { btn.style.display = canUpload ? '' : 'none'; });
+
     document.getElementById('modalAgentName').innerText = `${agent.name} (${agent.status.toUpperCase()})`;
     document.getElementById('modalRoleInput').value = agent.role;
     document.getElementById('modalUrlInput').value = agent.image || '';
@@ -1169,28 +1179,15 @@
     }
   });
 
-  // Run Task Simulation Button — inline status banner instead of alert()
+  // Run Task Button — agents can't be triggered from this generic inspector;
+  // each one is wired into its own specific page/endpoint.
   document.getElementById('btnRunAgentTask').addEventListener('click', () => {
     if (!currentActiveModalId) return;
     const agent = agentsData.find(a => a.id === currentActiveModalId);
-    const btn = document.getElementById('btnRunAgentTask');
     const banner = document.getElementById('taskStatusBanner');
 
-    if (agent.status !== 'active') {
-      banner.className = 'task-status-banner pending show';
-      banner.innerHTML = `🟡 ${agent.name} is currently IN-COMING / SHIPPING SOON — not yet deployable.`;
-      return;
-    }
-
-    btn.disabled = true;
-    banner.className = 'task-status-banner running show';
-    banner.innerHTML = `<span class="status-spinner"></span> Executing task for ${agent.name}...`;
-
-    setTimeout(() => {
-      btn.disabled = false;
-      banner.className = 'task-status-banner success show';
-      banner.innerHTML = `✅ ${agent.name} task executed — ${agent.role} (DEPLOYED & ACTIVE)`;
-    }, 1200);
+    banner.className = 'task-status-banner error show';
+    banner.innerHTML = `⛔ Sorry, you can't run ${agent.name}'s task directly from here — go to their specific checkpoint, or wherever they've been coded to sit and work, rather.`;
   });
 
   // Initialize
