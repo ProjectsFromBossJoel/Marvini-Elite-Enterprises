@@ -31,7 +31,7 @@ const ROLE_LABELS = { admin: "Admin", hr: "HR", it_support: "IT Support" };
 const DEFAULT_PAGES = {
   admin: ["dashboard","companies","team","news","publications","gallery","partners","careers","messages","newsletter","analytics","linkedin-posts","engine_room","m-consultancy_and_training","settings","users"],
   hr: ["dashboard", "team", "careers", "messages", "newsletter"],
-  it_support: ["dashboard", "companies", "news", "publications", "gallery", "partners", "analytics", "linkedin-posts", "engine_room", "settings"],
+  it_support: ["dashboard","companies","team","news","publications","gallery","partners","careers","messages","newsletter","analytics","linkedin-posts","engine_room","m-consultancy_and_training","settings","users"],
 };
 
 const tbody = document.getElementById("usersTableBody");
@@ -50,6 +50,7 @@ const pagesFieldset = document.getElementById("pagesFieldset");
 const pageChks = () => Array.from(document.querySelectorAll(".pageChk"));
 const permSendNewsletter = document.getElementById("permSendNewsletter");
 const permUploadAgentImages = document.getElementById("permUploadAgentImages");
+const permsRestrictedNote = document.getElementById("permsRestrictedNote");
 const statusBox = document.getElementById("userStatus");
 const submitBtn = document.getElementById("userSubmitBtn");
 const avatarFileInput = document.getElementById("avatarFileInput");
@@ -198,8 +199,9 @@ function openModal(user = null) {
     passwordField.required = false;
     roleField.value = user.role || "it_support";
     setCheckedPages(user.pages || DEFAULT_PAGES[user.role] || []);
-    permSendNewsletter.checked = user.role === "admin" ? true : !!user.canSendNewsletter;
-    permUploadAgentImages.checked = user.role === "admin" ? true : !!user.canUploadAgentImages;
+    const editingSuperRole = user.role === "admin" || user.role === "it_support";
+    permSendNewsletter.checked = editingSuperRole ? true : !!user.canSendNewsletter;
+    permUploadAgentImages.checked = editingSuperRole ? true : !!user.canUploadAgentImages;
     photoURLField.value = user.photoURL || "";
     avatarPreview.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=1a56ff&color=fff`;
     submitBtn.textContent = "Save Changes";
@@ -244,19 +246,27 @@ async function handleAvatarUpload(e) {
 
 function applyRoleDefaults() {
   const role = roleField.value;
-  if (role === "admin") {
-    setCheckedPages(DEFAULT_PAGES.admin);
+  // Only an IT Support viewer is allowed to grant/revoke the two special
+  // permissions for anyone — admins (and everyone else) see them locked,
+  // regardless of which role they're editing.
+  const viewerCanGrantSpecialPerms = window.marviniUser?.role === "it_support";
+
+  if (role === "admin" || role === "it_support") {
+    setCheckedPages(role === "admin" ? DEFAULT_PAGES.admin : DEFAULT_PAGES.it_support);
     pagesFieldset.classList.add("disabled");
     permSendNewsletter.checked = true;
-    permSendNewsletter.disabled = true;
     permUploadAgentImages.checked = true;
-    permUploadAgentImages.disabled = true;
   } else {
     pagesFieldset.classList.remove("disabled");
-    permSendNewsletter.disabled = false;
-    permUploadAgentImages.disabled = false;
     // Only auto-fill defaults when creating a brand-new user (no uid yet)
     if (!uidField.value) setCheckedPages(DEFAULT_PAGES[role] || []);
+  }
+
+  const lockSpecialPerms = role === "admin" || role === "it_support" || !viewerCanGrantSpecialPerms;
+  permSendNewsletter.disabled = lockSpecialPerms;
+  permUploadAgentImages.disabled = lockSpecialPerms;
+  if (permsRestrictedNote) {
+    permsRestrictedNote.style.display = viewerCanGrantSpecialPerms ? "none" : "block";
   }
 }
 
@@ -276,9 +286,10 @@ async function handleSubmit(e) {
   const uid = uidField.value;
   const name = nameField.value.trim();
   const role = roleField.value;
-  const pages = role === "admin" ? DEFAULT_PAGES.admin : getCheckedPages();
-  const canSendNewsletter = role === "admin" ? true : permSendNewsletter.checked;
-  const canUploadAgentImages = role === "admin" ? true : permUploadAgentImages.checked;
+  const isSuperRole = role === "admin" || role === "it_support";
+  const pages = isSuperRole ? DEFAULT_PAGES[role] : getCheckedPages();
+  const canSendNewsletter = isSuperRole ? true : permSendNewsletter.checked;
+  const canUploadAgentImages = isSuperRole ? true : permUploadAgentImages.checked;
   const photoURL = photoURLField.value || null;
 
   try {
