@@ -216,11 +216,11 @@
         <p>Consultation requests and training registrations submitted from the public M-Consultancy & Training page.</p>
       </div>
       <div class="page-head-actions">
-        <button class="btn btn-outline" type="button" id="openPartnerBtn">
+        <button class="btn btn-outline" type="button" id="openPartnerBtn" data-perm="create">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Add Partner
         </button>
-        <button class="btn btn-primary" type="button" id="openProgramBtn">
+        <button class="btn btn-primary" type="button" id="openProgramBtn" data-perm="create">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Add Program
         </button>
@@ -369,9 +369,9 @@
     </div>
 
     <div class="modal-actions">
-      <button class="btn btn-outline" id="markContactedBtn" type="button">Mark Contacted</button>
-      <button class="btn btn-outline" id="markClosedBtn" type="button">Mark Closed</button>
-      <button class="btn btn-danger" id="deleteLeadBtn" type="button">Delete</button>
+      <button class="btn btn-outline" id="markContactedBtn" type="button" data-perm="edit">Mark Contacted</button>
+      <button class="btn btn-outline" id="markClosedBtn" type="button" data-perm="edit">Mark Closed</button>
+      <button class="btn btn-danger" id="deleteLeadBtn" type="button" data-perm="delete">Delete</button>
     </div>
   </div>
 </div>
@@ -391,9 +391,9 @@
     <div class="lead-detail-row"><label>Message</label><p class="msg-box" id="regMessage"></p></div>
     <div class="lead-detail-row"><label>Received</label><p id="regDate"></p></div>
     <div class="modal-actions">
-      <button class="btn btn-outline" id="markRegContactedBtn" type="button">Mark Contacted</button>
-      <button class="btn btn-outline" id="markRegClosedBtn" type="button">Mark Closed</button>
-      <button class="btn btn-danger" id="deleteRegBtn" type="button">Delete</button>
+      <button class="btn btn-outline" id="markRegContactedBtn" type="button" data-perm="edit">Mark Contacted</button>
+      <button class="btn btn-outline" id="markRegClosedBtn" type="button" data-perm="edit">Mark Closed</button>
+      <button class="btn btn-danger" id="deleteRegBtn" type="button" data-perm="delete">Delete</button>
     </div>
   </div>
 </div>

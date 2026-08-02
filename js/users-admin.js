@@ -51,6 +51,9 @@ const permissionsFieldset = document.getElementById("permissionsFieldset");
 const pageChks = () => Array.from(document.querySelectorAll(".pageChk"));
 const permSendNewsletter = document.getElementById("permSendNewsletter");
 const permUploadAgentImages = document.getElementById("permUploadAgentImages");
+const permCanCreate = document.getElementById("permCanCreate");
+const permCanEdit = document.getElementById("permCanEdit");
+const permCanDelete = document.getElementById("permCanDelete");
 const permsRestrictedNote = document.getElementById("permsRestrictedNote");
 const statusBox = document.getElementById("userStatus");
 const submitBtn = document.getElementById("userSubmitBtn");
@@ -208,9 +211,11 @@ function openModal(user = null) {
     passwordField.required = false;
     roleField.value = user.role || "it_support";
     setCheckedPages(user.pages || DEFAULT_PAGES[user.role] || []);
-    const editingSuperRole = user.role === "admin" || user.role === "it_support";
-    permSendNewsletter.checked = editingSuperRole ? true : !!user.canSendNewsletter;
-    permUploadAgentImages.checked = editingSuperRole ? true : !!user.canUploadAgentImages;
+    permSendNewsletter.checked = !!user.canSendNewsletter;
+    permUploadAgentImages.checked = !!user.canUploadAgentImages;
+    permCanCreate.checked = !!user.canCreate;
+    permCanEdit.checked = !!user.canEdit;
+    permCanDelete.checked = !!user.canDelete;
     photoURLField.value = user.photoURL || "";
     avatarPreview.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=1a56ff&color=fff`;
     submitBtn.textContent = "Save Changes";
@@ -224,6 +229,9 @@ function openModal(user = null) {
     setCheckedPages(DEFAULT_PAGES.it_support);
     permSendNewsletter.checked = false;
     permUploadAgentImages.checked = false;
+    permCanCreate.checked = false;
+    permCanEdit.checked = false;
+    permCanDelete.checked = false;
     photoURLField.value = "";
     avatarPreview.src = "https://ui-avatars.com/api/?name=New+User&background=1a56ff&color=fff";
     submitBtn.textContent = "Create User";
@@ -268,6 +276,9 @@ function applyRoleDefaults() {
     pagesFieldset.classList.remove("disabled");
     permSendNewsletter.checked = true;
     permUploadAgentImages.checked = true;
+    permCanCreate.checked = true;
+    permCanEdit.checked = true;
+    permCanDelete.checked = true;
   } else {
     pagesFieldset.classList.remove("disabled");
     // Only auto-fill defaults when creating a brand-new user (no uid yet)
@@ -275,14 +286,23 @@ function applyRoleDefaults() {
     if (role === "it_support") {
       permSendNewsletter.checked = true;
       permUploadAgentImages.checked = true;
+      permCanCreate.checked = true;
+      permCanEdit.checked = true;
+      permCanDelete.checked = true;
     }
   }
 
   const lockSpecialPerms = role === "admin" || role === "it_support" || !viewerCanGrantSpecialPerms;
   permSendNewsletter.disabled = false;
   permUploadAgentImages.disabled = false;
+  permCanCreate.disabled = false;
+  permCanEdit.disabled = false;
+  permCanDelete.disabled = false;
   permSendNewsletter.classList.toggle("locked-chk", lockSpecialPerms);
   permUploadAgentImages.classList.toggle("locked-chk", lockSpecialPerms);
+  permCanCreate.classList.toggle("locked-chk", lockSpecialPerms);
+  permCanEdit.classList.toggle("locked-chk", lockSpecialPerms);
+  permCanDelete.classList.toggle("locked-chk", lockSpecialPerms);
   if (permsRestrictedNote) {
     permsRestrictedNote.style.display = viewerCanGrantSpecialPerms ? "none" : "block";
   }
@@ -305,16 +325,18 @@ async function handleSubmit(e) {
   const uid = uidField.value;
   const name = nameField.value.trim();
   const role = roleField.value;
-  const isSuperRole = role === "admin" || role === "it_support";
   const pages = getCheckedPages();
-  const canSendNewsletter = isSuperRole ? true : permSendNewsletter.checked;
-  const canUploadAgentImages = isSuperRole ? true : permUploadAgentImages.checked;
+  const canSendNewsletter = permSendNewsletter.checked;
+  const canUploadAgentImages = permUploadAgentImages.checked;
+  const canCreate = permCanCreate.checked;
+  const canEdit = permCanEdit.checked;
+  const canDelete = permCanDelete.checked;
   const photoURL = photoURLField.value || null;
 
   try {
     if (uid) {
       // Editing an existing user — Firestore doc only.
-      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, canSendNewsletter, canUploadAgentImages, photoURL });
+      await updateDoc(doc(db, USERS_COLLECTION, uid), { name, role, pages, canSendNewsletter, canUploadAgentImages, canCreate, canEdit, canDelete, photoURL });
       if (window.marviniUser && uid === window.marviniUser.uid) {
         window.marviniUser.photoURL = photoURL;
         const profileImg = document.querySelector(".profile img");
@@ -337,6 +359,9 @@ async function handleSubmit(e) {
           pages,
           canSendNewsletter,
           canUploadAgentImages,
+          canCreate,
+          canEdit,
+          canDelete,
           photoURL,
           status: "active",
           createdAt: serverTimestamp(),

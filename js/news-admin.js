@@ -188,8 +188,8 @@ function buildCard(id, data) {
       <h3 class="content-card-title">${escapeHtml(data.title || "Untitled")}</h3>
       <p class="content-card-desc">${escapeHtml(data.excerpt || "")}</p>
       <div class="content-card-footer">
-        <button class="btn btn-outline btn-sm" data-edit>Edit</button>
-        <button class="btn btn-danger-ghost btn-sm" data-remove>Remove</button>
+        <button class="btn btn-outline btn-sm" data-edit data-perm="edit">Edit</button>
+        <button class="btn btn-danger-ghost btn-sm" data-remove data-perm="delete">Remove</button>
       </div>
     </div>
   `;

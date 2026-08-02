@@ -134,8 +134,8 @@ function buildCard(id, data) {
       <h3 class="content-card-title" style="font-size:.95rem;">${escapeHtml(data.name || "Untitled")}</h3>
       ${data.websiteUrl ? `<p class="content-card-desc" style="font-size:.75rem;">${escapeHtml(data.websiteUrl)}</p>` : ""}
       <div class="content-card-footer">
-        <button class="btn btn-outline btn-sm" data-edit>Edit</button>
-        <button class="btn btn-danger-ghost btn-sm" data-remove>Remove</button>
+        <button class="btn btn-outline btn-sm" data-edit data-perm="edit">Edit</button>
+        <button class="btn btn-danger-ghost btn-sm" data-remove data-perm="delete">Remove</button>
       </div>
     </div>
   `;

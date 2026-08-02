@@ -225,7 +225,19 @@
           <input type="checkbox" id="permUploadAgentImages" />
           Upload Agent Images <span style="font-weight:400; color:var(--text-muted,#64748b);">— can see the upload/replace image controls in the AI Agent Orchestrator inspector</span>
         </label>
-        <p id="permsRestrictedNote" style="font-size:.78rem; color:var(--amber,#B45309); margin:.6rem 0 0; display:none;">Only IT Support admins can grant these two permissions.</p>
+        <label style="display:flex; align-items:center; gap:.5rem; font-size:.85rem; font-weight:500; cursor:pointer; margin-top:.6rem;">
+          <input type="checkbox" id="permCanCreate" />
+          Create <span style="font-weight:400; color:var(--text-muted,#64748b);">— can see "Add / Upload" buttons and create new content</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:.5rem; font-size:.85rem; font-weight:500; cursor:pointer; margin-top:.6rem;">
+          <input type="checkbox" id="permCanEdit" />
+          Edit <span style="font-weight:400; color:var(--text-muted,#64748b);">— can see "Edit" buttons and modify existing content</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:.5rem; font-size:.85rem; font-weight:500; cursor:pointer; margin-top:.6rem;">
+          <input type="checkbox" id="permCanDelete" />
+          Delete <span style="font-weight:400; color:var(--text-muted,#64748b);">— can see "Remove / Delete" buttons and delete content</span>
+        </label>
+        <p id="permsRestrictedNote" style="font-size:.78rem; color:var(--amber,#B45309); margin:.6rem 0 0; display:none;">Only IT Support admins can grant these permissions.</p>
       </fieldset>
 
       <fieldset class="pages-fieldset" id="pagesFieldset">

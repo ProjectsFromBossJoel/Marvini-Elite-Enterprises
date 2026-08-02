@@ -56,6 +56,9 @@ onAuthStateChanged(auth, (user) => {
         photoURL: profile.photoURL || null,
         canSendNewsletter: !!profile.canSendNewsletter,
         canUploadAgentImages: !!profile.canUploadAgentImages,
+        canCreate: profile.role === "admin" || !!profile.canCreate,
+        canEdit: profile.role === "admin" || !!profile.canEdit,
+        canDelete: profile.role === "admin" || !!profile.canDelete,
       };
 
       // Let other page scripts (loaded before this listener resolves, or

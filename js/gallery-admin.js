@@ -124,7 +124,7 @@ function buildCard(id, data) {
       <span class="content-card-tag">${escapeHtml(CATEGORY_LABELS[data.category] || "General")}</span>
       <h3 class="content-card-title" style="font-size:.92rem;">${escapeHtml(data.caption || "Untitled")}</h3>
       <div class="content-card-footer">
-        <button class="btn btn-danger-ghost btn-sm" data-remove style="flex:1; justify-content:center;">Remove</button>
+        <button class="btn btn-danger-ghost btn-sm" data-remove data-perm="delete" style="flex:1; justify-content:center;">Remove</button>
       </div>
     </div>
   `;

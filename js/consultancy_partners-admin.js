@@ -217,10 +217,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${websiteHtml}</td>
           <td>
             <div class="row-actions">
-              <button type="button" class="btn btn-outline btn-icon" data-action="edit" title="Edit">
+              <button type="button" class="btn btn-outline btn-icon" data-action="edit" title="Edit" data-perm="edit">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
               </button>
-              <button type="button" class="btn btn-danger btn-icon" data-action="delete" title="Delete">
+              <button type="button" class="btn btn-danger btn-icon" data-action="delete" title="Delete" data-perm="delete">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
               </button>
             </div>

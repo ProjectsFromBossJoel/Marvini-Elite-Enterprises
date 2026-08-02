@@ -114,11 +114,11 @@ function buildCard(id, data) {
       <h3 class="content-card-title">${escapeHtml(data.name || "Untitled")}</h3>
       <p class="content-card-desc">${escapeHtml(data.description || "")}</p>
       <div class="content-card-footer">
-        <button class="btn btn-outline btn-sm" data-edit>
+        <button class="btn btn-outline btn-sm" data-edit data-perm="edit">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
           Edit
         </button>
-        <button class="btn btn-danger-ghost btn-sm" data-remove>
+        <button class="btn btn-danger-ghost btn-sm" data-remove data-perm="delete">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
           Remove
         </button>

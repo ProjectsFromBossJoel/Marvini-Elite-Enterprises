@@ -47,4 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // ── Create/Edit/Delete permission-based button visibility ───────
+  // Tag any button with data-perm="create" / "edit" / "delete" (or a
+  // comma list, e.g. data-perm="edit,delete") and it's hidden unless
+  // window.marviniUser (set by auth-guard.js) has that permission.
+  // NOTE: this is a UI convenience only — Firestore rules are the real
+  // enforcement layer, since anyone can inspect/remove a hidden button.
+  function applyPermissionVisibility() {
+    if (!window.marviniUser) return;
+    const perms = {
+      create: window.marviniUser.canCreate,
+      edit: window.marviniUser.canEdit,
+      delete: window.marviniUser.canDelete,
+    };
+    document.querySelectorAll('[data-perm]').forEach(el => {
+      const required = el.dataset.perm.split(',').map(s => s.trim());
+      const allowed = required.every(p => perms[p]);
+      el.style.display = allowed ? '' : 'none';
+    });
+  }
+  window.applyPermissionVisibility = applyPermissionVisibility;
+  applyPermissionVisibility();
+  window.addEventListener('marvini:user-updated', applyPermissionVisibility);
+  // Content pages (companies, publications, etc.) render their Edit/Remove
+  // buttons dynamically after this runs — re-check whenever the DOM
+  // changes so newly-added buttons get gated too.
+  const permObserver = new MutationObserver(() => applyPermissionVisibility());
+  permObserver.observe(document.body, { childList: true, subtree: true });
 });
