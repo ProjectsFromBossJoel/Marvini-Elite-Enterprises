@@ -270,25 +270,29 @@ function applyRoleDefaults() {
 
   if (role === "admin") {
     // Only auto-fill defaults when creating a brand-new user (no uid yet).
-    // When editing an existing admin, keep whatever pages are already
-    // checked (loaded from their saved doc) instead of resetting to full.
-    if (!uidField.value) setCheckedPages(DEFAULT_PAGES.admin);
-    pagesFieldset.classList.remove("disabled");
-    permSendNewsletter.checked = true;
-    permUploadAgentImages.checked = true;
-    permCanCreate.checked = true;
-    permCanEdit.checked = true;
-    permCanDelete.checked = true;
-  } else {
-    pagesFieldset.classList.remove("disabled");
-    // Only auto-fill defaults when creating a brand-new user (no uid yet)
-    if (!uidField.value) setCheckedPages(DEFAULT_PAGES[role] || []);
-    if (role === "it_support") {
+    // When editing an existing admin, keep whatever pages/permissions are
+    // already checked (loaded from their saved doc) instead of resetting.
+    if (!uidField.value) {
+      setCheckedPages(DEFAULT_PAGES.admin);
       permSendNewsletter.checked = true;
       permUploadAgentImages.checked = true;
       permCanCreate.checked = true;
       permCanEdit.checked = true;
       permCanDelete.checked = true;
+    }
+    pagesFieldset.classList.remove("disabled");
+  } else {
+    pagesFieldset.classList.remove("disabled");
+    // Only auto-fill defaults when creating a brand-new user (no uid yet)
+    if (!uidField.value) {
+      setCheckedPages(DEFAULT_PAGES[role] || []);
+      if (role === "it_support") {
+        permSendNewsletter.checked = true;
+        permUploadAgentImages.checked = true;
+        permCanCreate.checked = true;
+        permCanEdit.checked = true;
+        permCanDelete.checked = true;
+      }
     }
   }
 
