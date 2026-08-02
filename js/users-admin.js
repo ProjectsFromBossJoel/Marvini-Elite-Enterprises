@@ -47,6 +47,7 @@ const passwordField = document.getElementById("userPassword");
 const passwordWrap = document.getElementById("userPasswordField");
 const roleField = document.getElementById("userRole");
 const pagesFieldset = document.getElementById("pagesFieldset");
+const permissionsFieldset = document.getElementById("permissionsFieldset");
 const pageChks = () => Array.from(document.querySelectorAll(".pageChk"));
 const permSendNewsletter = document.getElementById("permSendNewsletter");
 const permUploadAgentImages = document.getElementById("permUploadAgentImages");
@@ -74,7 +75,7 @@ function whenReady(cb) {
 }
 
 whenReady(() => {
-  if (window.marviniUser.role !== "admin") {
+  if (window.marviniUser.role !== "admin" && window.marviniUser.role !== "it_support") {
     // Non-admins should never really reach this page (nav link is hidden),
     // but guard the data too in case of a direct link.
     document.querySelector(".main").innerHTML =
@@ -84,7 +85,15 @@ whenReady(() => {
   initUsersPage();
 });
 
+function applyPermissionsVisibility() {
+  if (!permissionsFieldset) return;
+  permissionsFieldset.style.display = window.marviniUser?.role === "it_support" ? "" : "none";
+}
+
 function initUsersPage() {
+  applyPermissionsVisibility();
+  window.addEventListener("marvini:user-updated", applyPermissionsVisibility);
+
   const q = query(collection(db, USERS_COLLECTION), orderBy("createdAt", "desc"));
   onSnapshot(q, (snap) => {
     currentUsers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
@@ -251,20 +260,29 @@ function applyRoleDefaults() {
   // regardless of which role they're editing.
   const viewerCanGrantSpecialPerms = window.marviniUser?.role === "it_support";
 
-  if (role === "admin" || role === "it_support") {
-    setCheckedPages(role === "admin" ? DEFAULT_PAGES.admin : DEFAULT_PAGES.it_support);
-    pagesFieldset.classList.add("disabled");
+  if (role === "admin") {
+    // Only auto-fill defaults when creating a brand-new user (no uid yet).
+    // When editing an existing admin, keep whatever pages are already
+    // checked (loaded from their saved doc) instead of resetting to full.
+    if (!uidField.value) setCheckedPages(DEFAULT_PAGES.admin);
+    pagesFieldset.classList.remove("disabled");
     permSendNewsletter.checked = true;
     permUploadAgentImages.checked = true;
   } else {
     pagesFieldset.classList.remove("disabled");
     // Only auto-fill defaults when creating a brand-new user (no uid yet)
     if (!uidField.value) setCheckedPages(DEFAULT_PAGES[role] || []);
+    if (role === "it_support") {
+      permSendNewsletter.checked = true;
+      permUploadAgentImages.checked = true;
+    }
   }
 
   const lockSpecialPerms = role === "admin" || role === "it_support" || !viewerCanGrantSpecialPerms;
-  permSendNewsletter.disabled = lockSpecialPerms;
-  permUploadAgentImages.disabled = lockSpecialPerms;
+  permSendNewsletter.disabled = false;
+  permUploadAgentImages.disabled = false;
+  permSendNewsletter.classList.toggle("locked-chk", lockSpecialPerms);
+  permUploadAgentImages.classList.toggle("locked-chk", lockSpecialPerms);
   if (permsRestrictedNote) {
     permsRestrictedNote.style.display = viewerCanGrantSpecialPerms ? "none" : "block";
   }
@@ -281,13 +299,14 @@ function getCheckedPages() {
 async function handleSubmit(e) {
   e.preventDefault();
   submitBtn.disabled = true;
+  submitBtn.classList.add("btn-loading");
   statusBox.textContent = "";
 
   const uid = uidField.value;
   const name = nameField.value.trim();
   const role = roleField.value;
   const isSuperRole = role === "admin" || role === "it_support";
-  const pages = isSuperRole ? DEFAULT_PAGES[role] : getCheckedPages();
+  const pages = getCheckedPages();
   const canSendNewsletter = isSuperRole ? true : permSendNewsletter.checked;
   const canUploadAgentImages = isSuperRole ? true : permUploadAgentImages.checked;
   const photoURL = photoURLField.value || null;
@@ -336,6 +355,7 @@ async function handleSubmit(e) {
   }
 
   submitBtn.disabled = false;
+  submitBtn.classList.remove("btn-loading");
 }
 
 function escapeHtml(str) {

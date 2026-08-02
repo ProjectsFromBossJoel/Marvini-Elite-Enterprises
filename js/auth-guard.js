@@ -7,7 +7,7 @@ import {
   auth,
   db,
   doc,
-  getDoc,
+  onSnapshot,
   onAuthStateChanged,
   signOut,
   USERS_COLLECTION,
@@ -19,67 +19,93 @@ const ROLE_LABELS = {
   it_support: "IT Support",
 };
 
-onAuthStateChanged(auth, async (user) => {
+let unsubscribeProfile = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (unsubscribeProfile) {
+    unsubscribeProfile();
+    unsubscribeProfile = null;
+  }
+
   if (!user) {
     window.location.href = "login.html";
     return;
   }
 
-  // Look up this user's role/status doc. If it's missing or disabled,
-  // they don't get into the dashboard — sign them back out.
-  let profile = null;
-  try {
-    const snap = await getDoc(doc(db, USERS_COLLECTION, user.uid));
-    if (snap.exists()) profile = snap.data();
-  } catch (err) {
-    console.error("auth-guard: failed to load user profile", err);
-  }
+  // Live listener instead of a one-time read: any Firestore change to this
+  // user's doc (role, pages, status) re-runs this callback immediately, in
+  // every open tab, with no manual refresh needed.
+  unsubscribeProfile = onSnapshot(
+    doc(db, USERS_COLLECTION, user.uid),
+    (snap) => {
+      const profile = snap.exists() ? snap.data() : null;
 
-  if (!profile || profile.status === "disabled") {
-    await signOut(auth);
-    window.location.href = "login.html";
-    return;
-  }
-
-  // Make the role + assigned pages available to every dashboard page/script
-  // without each one needing its own Firestore read.
-  window.marviniUser = {
-    uid: user.uid,
-    email: user.email,
-    role: profile.role,
-    name: profile.name || user.email,
-    pages: profile.pages || [],
-    photoURL: profile.photoURL || null,
-  };
-
-  // Admins always see every nav link. Everyone else only sees the pages
-  // explicitly assigned to them in their Firestore user doc (see users.html).
-  if (profile.role !== "admin") {
-    document.querySelectorAll(".nav-item[data-page]").forEach((link) => {
-      const page = link.dataset.page;
-      if (!profile.pages || !profile.pages.includes(page)) {
-        link.remove();
+      if (!profile || profile.status === "disabled") {
+        signOut(auth).finally(() => {
+          window.location.href = "login.html";
+        });
+        return;
       }
-    });
-  }
 
-  const whoName = document.querySelector(".profile .who strong");
-  if (whoName) whoName.textContent = profile.name || user.email;
+      window.marviniUser = {
+        uid: user.uid,
+        email: user.email,
+        role: profile.role,
+        name: profile.name || user.email,
+        pages: profile.pages || [],
+        photoURL: profile.photoURL || null,
+        canSendNewsletter: !!profile.canSendNewsletter,
+        canUploadAgentImages: !!profile.canUploadAgentImages,
+      };
 
-  const whoRole = document.querySelector(".profile .who span");
-  if (whoRole) whoRole.textContent = ROLE_LABELS[profile.role] || profile.role;
+      // Let other page scripts (loaded before this listener resolves, or
+      // that need to react to a role/permission change live) know the
+      // user profile has just been (re)loaded or updated.
+      window.dispatchEvent(new CustomEvent("marvini:user-updated"));
 
-  const profileImg = document.querySelector(".profile img");
-  if (profileImg) {
-    profileImg.src = profile.photoURL ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name || user.email)}&background=1a56ff&color=fff`;
-  }
+      // Toggle visibility (not remove()) so a re-granted page can reappear
+      // live too, without needing a reload.
+      document.querySelectorAll(".nav-item[data-page]").forEach((link) => {
+        const page = link.dataset.page;
+        const allowed = profile.role === "admin" || (profile.pages || []).includes(page);
+        link.style.display = allowed ? "" : "none";
+      });
+
+      // If the page currently open just got revoked, bounce off it right away
+      // instead of leaving a stale panel visible on screen.
+      const activeLink = document.querySelector(".nav-item[data-page].active");
+      const currentPage = activeLink?.dataset.page;
+      if (
+        currentPage &&
+        profile.role !== "admin" &&
+        !(profile.pages || []).includes(currentPage)
+      ) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      const whoName = document.querySelector(".profile .who strong");
+      if (whoName) whoName.textContent = profile.name || user.email;
+
+      const whoRole = document.querySelector(".profile .who span");
+      if (whoRole) whoRole.textContent = ROLE_LABELS[profile.role] || profile.role;
+
+      const profileImg = document.querySelector(".profile img");
+      if (profileImg) {
+        profileImg.src = profile.photoURL ||
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name || user.email)}&background=1a56ff&color=fff`;
+      }
+    },
+    (err) => {
+      console.error("auth-guard: failed to load user profile", err);
+    }
+  );
 
   const signOutBtn = document.getElementById("signOutBtn");
   signOutBtn?.addEventListener("click", async () => {
     window.marviniUser = null;
+    if (unsubscribeProfile) unsubscribeProfile();
     await signOut(auth);
-    // replace() drops this page from history, so Back can't return to it.
     window.location.replace("login.html");
   });
 });
