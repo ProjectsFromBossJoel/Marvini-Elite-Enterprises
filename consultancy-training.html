@@ -1700,6 +1700,31 @@
     if (btn) openRegisterModal(btn.dataset.program);
   });
 
+  // Arrived from the landing page's "Register interest" button via
+  // ?register=<program title>#programs — open the modal pre-filled for
+  // that program once the live program list has loaded.
+  const deepLinkProgram = new URLSearchParams(window.location.search).get('register');
+  if (deepLinkProgram) {
+    let opened = false;
+    const tryOpenDeepLink = () => {
+      if (opened) return;
+      opened = true;
+      openRegisterModal(deepLinkProgram);
+    };
+    // programsByTitle is populated by the onSnapshot listener above; give
+    // it a moment to arrive, but don't block forever if it's slow/empty.
+    const deepLinkTimer = setInterval(() => {
+      if (Object.keys(programsByTitle).length > 0) {
+        clearInterval(deepLinkTimer);
+        tryOpenDeepLink();
+      }
+    }, 150);
+    setTimeout(() => {
+      clearInterval(deepLinkTimer);
+      tryOpenDeepLink();
+    }, 3000);
+  }
+
   modalClose.addEventListener('click', closeRegisterModal);
   modalOverlay.addEventListener('click', (e) => {
     if (e.target === modalOverlay) closeRegisterModal();
