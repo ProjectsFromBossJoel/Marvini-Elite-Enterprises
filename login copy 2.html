@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/dashboard/admin.css?v=2" />
+<link rel="stylesheet" href="/dashboard/admin.css" />
 
 <style>
   html, body { height: 100%; }
@@ -141,7 +141,6 @@
     position: relative !important;
     display: flex;
     align-items: center;
-    width: 100%;   /* add this */
   }
   .input-wrap svg {
     position: absolute;
@@ -152,17 +151,16 @@
     transition: color .15s ease;
   }
   .input-wrap input {
-  box-sizing: border-box;          /* added */
-  width: 100%;
-  padding: 12px 46px 12px 42px;    /* right padding changed to 46px */
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: 9px;
-  font-size: .92rem;
-  font-family: inherit;
-  background: #fff;
-  color: var(--text, #14213D);
-  transition: border-color .15s ease, box-shadow .15s ease;
-}
+    width: 100%;
+    padding: 12px 14px 12px 42px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 9px;
+    font-size: .92rem;
+    font-family: inherit;
+    background: #fff;
+    color: var(--text, #14213D);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
   .input-wrap input:focus {
     outline: none;
     border-color: #14213D;
@@ -171,7 +169,24 @@
   .input-wrap input:focus + svg,
   .input-wrap input:focus ~ svg { color: #14213D; }
 
-    .form-row-between {
+  .toggle-pw {
+    position: absolute !important;
+    top: 50% !important;
+    right: 16px !important;
+    transform: translateY(-50%) !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #9aa3b2;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+  .toggle-pw:hover { color: #14213D; }
+  .toggle-pw svg { width: 18px; height: 18px; }
+
+  .form-row-between {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -270,11 +285,11 @@
 <div class="brand-panel">
   <div class="brand-top">
     <img src="/img/marvini_elite_enterprise_logo2.png" alt="" onerror="this.style.display='none'" />
-    <span>Admin</span>
+    <span>Marvini Admin</span>
   </div>
 
   <div class="brand-mid">
-    <p class="eyebrow">Marvini Elite Enterprises</p>
+    <p class="eyebrow">Elite Enterprises</p>
     <h2>Innovation, Entrepreneurship & Technology</h2>
     <p class="desc">Sign in to manage content, registrations, and analytics across the Marvini network.</p>
 
@@ -332,8 +347,10 @@
         <label for="loginPassword">Password</label>
         <div class="input-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-          <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••" />
-          
+          <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••" style="padding-right: 46px;" />
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeIcon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
       </div>
 
@@ -398,7 +415,17 @@
     }
   });
 
-  
+  // ---------------- Show/hide password ----------------
+  const togglePw = document.getElementById("togglePw");
+  const eyeIcon = document.getElementById("eyeIcon");
+  togglePw.addEventListener("click", () => {
+    const isPw = passwordInput.type === "password";
+    passwordInput.type = isPw ? "text" : "password";
+    eyeIcon.innerHTML = isPw
+      ? '<path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.6 21.6 0 015.06-6.06M9.9 4.24A10.94 10.94 0 0112 4c7 0 11 8 11 8a21.6 21.6 0 01-3.22 4.44M1 1l22 22"/><path d="M14.12 14.12a3 3 0 11-4.24-4.24"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    togglePw.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+  });
 
   // ---------------- Forgot password ----------------
   document.getElementById("forgotLink").addEventListener("click", async (e) => {
