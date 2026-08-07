@@ -12,7 +12,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="admin.css" />
+<!-- html2canvas: renders the certificate template to a downloadable PNG -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- QRious: draws the QR code on the certificate -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 <style>
   /* Modal + status pills — self-contained so this page works even if
@@ -158,6 +163,95 @@
   .current-image-label {
     font-size:.75rem; color: var(--text-muted,#64748b); margin: 0 0 .35rem;
   }
+
+  /* ---------- Certificate generator ---------- */
+  .cert-modal-card{ max-width: 920px; }
+  .cert-preview-scroll{
+    overflow-x:auto;
+    border:1px solid var(--border,#e2e8f0);
+    border-radius:10px;
+    background:#e9e5da;
+    padding: 20px;
+    margin: 18px 0;
+  }
+  #certificate-template{
+    width: 1100px;
+    height: 780px;
+    position: relative;
+    background: #F7F5F0;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    flex-shrink:0;
+  }
+  .cert-ribbon{
+    position:absolute; top:0; left:0; width: 210px; height: 100%;
+    background: #14213D;
+    clip-path: polygon(0 0, 65% 0, 100% 18%, 40% 100%, 0 100%);
+  }
+  .cert-ribbon::after{
+    content:"";
+    position:absolute; top:0; left: 55px; width: 40px; height: 100%;
+    background: #A6542A;
+    clip-path: polygon(0 0, 100% 0, 55% 100%, 0 100%);
+    opacity:0.9;
+  }
+  .cert-qr{
+    position:absolute; top: 44px; right: 48px; width: 92px; height: 92px;
+    background: #fff; padding: 6px; border-radius: 4px;
+  }
+  .cert-qr canvas{ width:100%; height:100%; display:block; }
+  .cert-head{
+    position:absolute; top: 46px; left: 250px; right: 170px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .cert-head img{ width:52px; height:52px; object-fit:contain; }
+  .cert-head .cert-brand-name{
+    font-family: 'Space Grotesk', sans-serif; font-size:14px; letter-spacing:0.04em;
+    color: #14213D; line-height:1.35;
+  }
+  .cert-title{
+    position:absolute; top: 128px; left: 250px; right: 90px;
+    font-family: 'Fraunces', serif; font-weight:600; font-size: 34px;
+    color: #14213D; line-height:1.15; letter-spacing:-0.01em;
+  }
+  .cert-ack{ position:absolute; top: 232px; left: 250px; font-size:15px; color:#6b6a60; }
+  .cert-name{
+    position:absolute; top: 258px; left: 250px; right: 90px;
+    font-family: 'Fraunces', serif; font-weight:600; font-size: 46px;
+    color: #A6542A; border-bottom: 1px solid #e2ded2; padding-bottom: 16px;
+  }
+  .cert-body-line1{ position:absolute; top: 352px; left: 250px; font-size:15px; color:#6b6a60; }
+  .cert-program{
+    position:absolute; top: 380px; left: 250px; right: 90px;
+    font-family: 'Fraunces', serif; font-weight:600; font-size: 26px; color: #14213D;
+  }
+  .cert-desc{
+    position:absolute; top: 428px; left: 250px; right: 110px;
+    font-size:14px; color:#6b6a60; line-height:1.5;
+  }
+  .cert-duration{
+    position:absolute; top: 500px; left: 250px; right: 110px;
+    border-top:1px solid #e2ded2; padding-top:16px;
+  }
+  .cert-duration #certOutDuration{
+    display:block; font-family: 'Space Grotesk', sans-serif; font-size:16px;
+    letter-spacing:0.03em; color: #14213D; font-weight:600;
+  }
+  .cert-duration .cert-duration-label{
+    display:block; font-family: 'Space Grotesk', sans-serif; font-size:11px;
+    color:#9a9a8e; margin-top:4px; letter-spacing:0.05em; text-transform:uppercase;
+  }
+  .cert-footer{ position:absolute; bottom: 56px; left: 250px; right: 90px; display:flex; gap: 60px; }
+  .cert-footer .cert-fcol{ flex:1; }
+  .cert-footer .cert-sig{
+    font-family: 'Fraunces', serif; font-style:italic; font-size:22px; color: #14213D;
+    border-bottom: 1px solid #e2ded2; padding-bottom: 6px; margin-bottom: 6px; min-height: 30px;
+  }
+  .cert-footer .cert-flabel{
+    font-family: 'Space Grotesk', sans-serif; font-size:11px; letter-spacing:0.05em;
+    text-transform:uppercase; color:#9a9a8e;
+  }
+  .cert-footer .cert-fvalue{ font-size:14px; color: #14213D; font-weight:600; margin-bottom:4px; }
 </style>
 </head>
 
@@ -233,6 +327,10 @@
         <p>Consultation requests and training registrations submitted from the public M-Consultancy & Training page.</p>
       </div>
       <div class="page-head-actions">
+        <button class="btn btn-outline" type="button" id="openCertModalBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 13.5V21l3-1.5 3 1.5v-7.5"/></svg>
+          Generate Certificate
+        </button>
         <button class="btn btn-outline" type="button" id="openPartnerBtn" data-perm="create">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Add Partner
@@ -676,6 +774,97 @@
   </div>
 </div>
 
+<!-- Generate Certificate Modal -->
+<div class="modal-overlay" id="certModal">
+  <div class="modal-card cert-modal-card">
+    <div class="modal-head">
+      <h3>Generate a Certificate</h3>
+      <button class="modal-close" id="closeCertBtn" aria-label="Close">✕</button>
+    </div>
+
+    <div class="form-field">
+      <label for="cert-registration">Load from a registration (optional)</label>
+      <select id="cert-registration">
+        <option value="">— Fill in manually below —</option>
+      </select>
+    </div>
+
+    <div class="form-row-2">
+      <div class="form-field">
+        <label for="cert-name">Recipient name</label>
+        <input id="cert-name" type="text" />
+      </div>
+      <div class="form-field">
+        <label for="cert-program">Training program</label>
+        <input id="cert-program" type="text" />
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-field">
+        <label for="cert-date">Completion date</label>
+        <input id="cert-date" type="text" placeholder="e.g. August 6, 2026" />
+      </div>
+      <div class="form-field">
+        <label for="cert-duration">Duration / hours</label>
+        <input id="cert-duration" type="text" placeholder="e.g. 24 hours, 3 sessions" />
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-field">
+        <label for="cert-signer">Issued by (name)</label>
+        <input id="cert-signer" type="text" value="Jonathan Akunor" />
+      </div>
+      <div class="form-field">
+        <label for="cert-signer-title">Signer title</label>
+        <input id="cert-signer-title" type="text" value="Director, Marvini Consultancy & Training" />
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="cert-id">Certificate ID</label>
+      <input id="cert-id" type="text" />
+    </div>
+
+    <div class="cert-preview-scroll">
+      <div id="certificate-template">
+        <div class="cert-ribbon"></div>
+        <div class="cert-qr" id="cert-qr-holder"></div>
+        <div class="cert-head">
+          <img src="/img/M-Consultancy & Training1.png" alt="" onerror="this.style.display='none'" />
+          <span class="cert-brand-name">Marvini Consultancy<br>&amp; Training</span>
+        </div>
+        <div class="cert-title">CERTIFICATE OF<br>COMPLETION</div>
+        <div class="cert-ack">This is to acknowledge that</div>
+        <div class="cert-name" id="certOutName">—</div>
+        <div class="cert-body-line1">has successfully completed the training program</div>
+        <div class="cert-program" id="certOutProgram">—</div>
+        <div class="cert-desc">by completing all required sessions and coursework with Marvini Consultancy &amp; Training.</div>
+        <div class="cert-duration">
+          <span id="certOutDuration">—</span>
+          <span class="cert-duration-label">Program duration</span>
+        </div>
+        <div class="cert-footer">
+          <div class="cert-fcol">
+            <div class="cert-sig" id="certOutSignerName">Jonathan Akunor</div>
+            <div class="cert-fvalue" id="certOutSignerTitle">Director, Marvini Consultancy &amp; Training</div>
+            <div class="cert-flabel">Authorised Signature</div>
+          </div>
+          <div class="cert-fcol">
+            <div class="cert-fvalue" id="certOutDate">—</div>
+            <div class="cert-flabel">Completion Date</div>
+          </div>
+          <div class="cert-fcol">
+            <div class="cert-fvalue" id="certOutId">—</div>
+            <div class="cert-flabel">Certificate ID</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="certDownloadBtn" style="width:100%; justify-content:center;">Download certificate (PNG)</button>
+    <div id="certFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
+  </div>
+</div>
+
 <!-- Reusable Confirm Modal (replaces browser confirm()) -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-card confirm-modal-card">
@@ -694,5 +883,121 @@
 <script src="admin.js"></script>
 <script type="module" src="../js/consultancy-training-admin.js"></script>
 <script type="module" src="../js/consultancy_partners-admin.js"></script>
+<script type="module">
+  import { db, collection, query, orderBy, onSnapshot } from "../js/firebase-config.js";
+
+  function certEscapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  const certModal = document.getElementById('certModal');
+  const certOpenBtn = document.getElementById('openCertModalBtn');
+  const certCloseBtn = document.getElementById('closeCertBtn');
+  const certRegSelect = document.getElementById('cert-registration');
+  const certStatus = document.getElementById('certFormStatus');
+
+  const certNameInput = document.getElementById('cert-name');
+  const certProgramInput = document.getElementById('cert-program');
+  const certDateInput = document.getElementById('cert-date');
+  const certDurationInput = document.getElementById('cert-duration');
+  const certSignerInput = document.getElementById('cert-signer');
+  const certSignerTitleInput = document.getElementById('cert-signer-title');
+  const certIdInput = document.getElementById('cert-id');
+
+  let certRegistrationsCache = [];
+
+  const certRegistrationsQuery = query(collection(db, 'trainingRegistrations'), orderBy('createdAt', 'desc'));
+  onSnapshot(certRegistrationsQuery, (snapshot) => {
+    certRegistrationsCache = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    const prevValue = certRegSelect.value;
+    certRegSelect.innerHTML = '<option value="">— Fill in manually below —</option>'
+      + certRegistrationsCache.map(r => `<option value="${r.id}">${certEscapeHtml(r.name || 'Unnamed')} — ${certEscapeHtml(r.program || 'No program')}</option>`).join('');
+    if (prevValue && certRegistrationsCache.some(r => r.id === prevValue)) certRegSelect.value = prevValue;
+  }, (err) => {
+    console.error('Error loading registrations for certificate tool:', err);
+  });
+
+  certRegSelect.addEventListener('change', () => {
+    const reg = certRegistrationsCache.find(r => r.id === certRegSelect.value);
+    if (!reg) return;
+    certNameInput.value = reg.name || '';
+    certProgramInput.value = reg.program || '';
+    updateCertPreview();
+  });
+
+  function randomCertId(){
+    return 'MCT-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(Math.random() * 900 + 100);
+  }
+
+  function updateCertPreview(){
+    document.getElementById('certOutName').textContent = certNameInput.value.trim() || '—';
+    document.getElementById('certOutProgram').textContent = certProgramInput.value.trim() || '—';
+    document.getElementById('certOutDuration').textContent = certDurationInput.value.trim() || '—';
+    document.getElementById('certOutDate').textContent = certDateInput.value.trim() || '—';
+    document.getElementById('certOutId').textContent = certIdInput.value.trim() || '—';
+    document.getElementById('certOutSignerName').textContent = certSignerInput.value.trim() || '—';
+    document.getElementById('certOutSignerTitle').textContent = certSignerTitleInput.value.trim() || '—';
+
+    if (window.QRious){
+      const qrHolder = document.getElementById('cert-qr-holder');
+      qrHolder.innerHTML = '';
+      const canvas = document.createElement('canvas');
+      qrHolder.appendChild(canvas);
+      new QRious({
+        element: canvas,
+        value: `Marvini Consultancy & Training | ${certNameInput.value.trim()} | ${certProgramInput.value.trim()} | ${certIdInput.value.trim()}`,
+        size: 200,
+        background: '#ffffff',
+        foreground: '#14213D'
+      });
+    }
+  }
+
+  [certNameInput, certProgramInput, certDateInput, certDurationInput, certSignerInput, certSignerTitleInput, certIdInput]
+    .forEach(el => el.addEventListener('input', updateCertPreview));
+
+  certOpenBtn.addEventListener('click', () => {
+    certStatus.textContent = '';
+    if (!certIdInput.value) certIdInput.value = randomCertId();
+    if (!certDateInput.value){
+      certDateInput.value = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    updateCertPreview();
+    certModal.classList.add('open');
+  });
+
+  certCloseBtn.addEventListener('click', () => certModal.classList.remove('open'));
+  certModal.addEventListener('click', (e) => { if (e.target === certModal) certModal.classList.remove('open'); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certModal.classList.contains('open')) certModal.classList.remove('open');
+  });
+
+  document.getElementById('certDownloadBtn').addEventListener('click', async () => {
+    if (!certNameInput.value.trim() || !certProgramInput.value.trim()){
+      certStatus.textContent = 'Add at least a name and program before downloading.';
+      certStatus.style.color = '#dc2626';
+      return;
+    }
+    certStatus.textContent = 'Rendering…';
+    certStatus.style.color = '';
+    try {
+      const target = document.getElementById('certificate-template');
+      const canvas = await html2canvas(target, { scale: 2, backgroundColor: '#F7F5F0' });
+      const link = document.createElement('a');
+      const safeName = certNameInput.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      link.download = `certificate-${safeName || 'client'}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      certStatus.textContent = 'Downloaded.';
+      certStatus.style.color = '#047857';
+    } catch (err) {
+      console.error('Error generating certificate image:', err);
+      certStatus.textContent = 'Could not generate the image — please try again.';
+      certStatus.style.color = '#dc2626';
+    }
+  });
+</script>
 </body>
 </html>
