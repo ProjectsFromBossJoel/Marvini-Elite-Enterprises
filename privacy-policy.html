@@ -1,0 +1,636 @@
+<!-- Privacy Policy -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>Privacy Policy | Marvini Elite Enterprises</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="img/favicon_io/site.webmanifest">
+  <meta name="description" content="Privacy Policy for Marvini Elite Enterprises and its group subsidiaries — M-Smart Driving School Solution, M-Digital Food Chain, M-Events & Festivals, M-Farms, and M-Consultancy & Training." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://marvini-elite-enterprises.web.app/privacy-policy.html" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets (shared with the rest of the site) -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css?v=2" />
+
+  <link rel="icon" type="image/svg+xml" href="img/favicon_io/favicon.ico" />
+
+  <style>
+    /* Companies nav dropdown (kept in sync with index.html's inline copy) */
+    .nav-item-dropdown {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .nav-item-dropdown .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 100%;
+    }
+    .nav-dropdown-caret {
+      width: 10px;
+      height: 10px;
+      transition: transform 0.2s ease;
+    }
+    .nav-item-dropdown.open .nav-dropdown-caret,
+    .nav-item-dropdown:hover .nav-dropdown-caret {
+      transform: rotate(180deg);
+    }
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 240px;
+      background: var(--bg-card, #fff);
+      border: 1px solid var(--border, rgba(0,0,0,0.08));
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+      padding: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      z-index: 300;
+    }
+    .nav-item-dropdown:hover .nav-dropdown-menu,
+    .nav-item-dropdown.open .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary, #14213D);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.15s ease;
+    }
+    .nav-dropdown-menu a:hover {
+      background: var(--bg-secondary, rgba(26,86,255,0.08));
+    }
+    .nav-dropdown-menu img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    @media (max-width: 980px) {
+      .nav-dropdown-menu { display: none; }
+    }
+
+    /* ── Legal page layout ── */
+    .legal-hero {
+      padding: 160px 0 60px;
+      background: var(--bg-primary);
+      position: relative;
+      overflow: hidden;
+    }
+    .legal-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 0%, rgba(26,86,255,0.10) 0%, transparent 55%),
+                  radial-gradient(ellipse at 85% 20%, rgba(5,150,105,0.08) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .legal-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--emerald-light);
+      margin-bottom: 1rem;
+    }
+    .legal-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      line-height: 1.1;
+    }
+    .legal-updated {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .legal-section { background: var(--bg-primary); padding: 0 0 var(--section-pad); }
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    /* Side nav (table of contents) */
+    .legal-toc {
+      position: sticky;
+      top: 110px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+    .legal-toc-title {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .legal-toc ol {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      counter-reset: toc;
+    }
+    .legal-toc a {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--duration) var(--ease), transform var(--duration) var(--ease);
+    }
+    .legal-toc a:hover {
+      color: var(--royal-blue);
+      transform: translateX(3px);
+    }
+
+    /* Article body */
+    .legal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      box-shadow: var(--shadow);
+    }
+    .legal-card > p:first-of-type { margin-top: 0; }
+    .legal-article h2 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 2.75rem 0 1rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 110px;
+    }
+    .legal-article > section:first-of-type h2,
+    .legal-article h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+    .legal-article p {
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+    .legal-article ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin: 0 0 1.25rem;
+    }
+    .legal-article ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .legal-article ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--grad-blue-green);
+    }
+    .legal-article ul li strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    .legal-article a {
+      color: var(--royal-blue);
+      font-weight: 600;
+      transition: color var(--duration);
+    }
+    .legal-article a:hover { color: var(--emerald-light); }
+
+    .legal-subsidiaries {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.25rem;
+    }
+    .legal-chip {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0.4rem 0.9rem;
+    }
+
+    .legal-contact-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .legal-contact-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border-radius: var(--radius-md);
+      background: var(--grad-blue-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .legal-contact-icon svg { width: 20px; height: 20px; }
+    .legal-contact-box p { margin: 0; }
+
+    @media (max-width: 900px) {
+      .legal-layout { grid-template-columns: 1fr; }
+      .legal-toc { position: static; }
+      .legal-card { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- NAVIGATION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <header class="site-header" id="site-header" role="banner">
+    <nav class="navbar" aria-label="Main navigation">
+      <a href="index.html#home" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+        <img src="img/marvini_elite_enterprise_logo2.png" alt="Marvini Elite Enterprises" class="nav-logo-img" />
+        <span class="nav-logo-text">
+          <span class="logo-name">Marvini</span>
+          <span class="logo-sub">Elite Enterprises</span>
+        </span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li class="nav-item-dropdown" id="companiesNavDropdown">
+          <a href="index.html#companies" class="nav-link">
+            Subsidiaries
+            <svg class="nav-dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="https://marvini-smart-driving-school-solution.web.app/"><img src="img/m-smart_driving_solution -logo.png" alt="" />M-Smart Driving School Solution</a>
+            <a href="https://marvini-digital-food-chain.web.app/"><img src="img/M-Digital Food Chain .png" alt="" />M-Digital Food Chain</a>
+            <a href="https://marvini-events-and-festivals.web.app/"><img src="img/M-Events & Festivals0.png" alt="" />M-Events & Festivals</a>
+            <a href="https://marvini--farms.web.app/"><img src="img/M-Farms0.png" alt="" />M-Farms</a>
+            <a href="consultancy-training.html"><img src="img/M-Consultancy & Training0.png" alt="" />M-Consultancy & Training</a>
+          </div>
+        </li>
+        <li><a href="consultancy-training.html" class="nav-link">M-Consultancy & Training</a></li>
+        <li><a href="news.html" class="nav-link">News</a></li>
+        <li><a href="publications.html" class="nav-link">Publications</a></li>
+        <li><a href="careers.html" class="nav-link">Careers/ Volunteer</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☽</span>
+        </button>
+        <a href="index.html#contact" class="btn btn-primary btn-sm">Get In Touch</a>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
+    <ul class="mobile-links" role="list">
+      <li><a href="index.html#home" class="mobile-link">Home</a></li>
+      <li><a href="about.html" class="mobile-link">About</a></li>
+      <li><a href="index.html#companies" class="mobile-link">Subsidiaries</a></li>
+      <li><a href="consultancy-training.html" class="mobile-link">M-Consultancy & Training</a></li>
+      <li><a href="news.html" class="mobile-link">News</a></li>
+      <li><a href="careers.html" class="mobile-link">Careers</a></li>
+    </ul>
+  </div>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- LEGAL HERO -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="legal-hero" aria-label="Privacy Policy">
+      <div class="container">
+        <span class="legal-eyebrow">
+          <span class="badge-dot"></span>
+          Legal
+        </span>
+        <h1 class="legal-title">Privacy Policy</h1>
+        <p class="legal-updated">Last Updated: August 2026</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- LEGAL CONTENT -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="legal-section">
+      <div class="container">
+        <div class="legal-layout">
+
+          <!-- Table of contents -->
+          <aside class="legal-toc" aria-label="Table of contents">
+            <div class="legal-toc-title">On This Page</div>
+            <ol>
+              <li><a href="#introduction">1. Introduction</a></li>
+              <li><a href="#information-we-collect">2. Information We Collect</a></li>
+              <li><a href="#how-we-use">3. How We Use Your Information</a></li>
+              <li><a href="#data-sharing">4. Data Sharing & Disclosure</a></li>
+              <li><a href="#data-security">5. Data Security & Retention</a></li>
+              <li><a href="#your-rights">6. Your Rights</a></li>
+              <li><a href="#contact-us">7. Contact Us</a></li>
+            </ol>
+          </aside>
+
+          <!-- Article -->
+          <article class="legal-card legal-article">
+
+            <section id="introduction">
+              <h2>1. Introduction</h2>
+              <p>Marvini Elite Enterprises ("we," "us," or "our"), headquartered in Accra, Ghana, respects your privacy. This Privacy Policy outlines how we collect, use, and protect your information across our website and group subsidiaries, including:</p>
+              <div class="legal-subsidiaries">
+                <span class="legal-chip">M-Smart Driving School Solution</span>
+                <span class="legal-chip">M-Digital Food Chain</span>
+                <span class="legal-chip">M-Events & Festivals</span>
+                <span class="legal-chip">M-Farms</span>
+                <span class="legal-chip">M-Consultancy & Training</span>
+              </div>
+            </section>
+
+            <section id="information-we-collect">
+              <h2>2. Information We Collect</h2>
+              <ul>
+                <li><strong>Personal Data:</strong> Full name, email address, phone number, and organization details submitted via contact forms, newsletter subscriptions, or program registrations.</li>
+                <li><strong>Usage Data:</strong> Technical data including IP address, browser type, device information, and pages visited.</li>
+                <li><strong>Subsidiary-Specific Data:</strong> Records relevant to specific services (e.g., driving school registration details or training enrolment forms).</li>
+              </ul>
+            </section>
+
+            <section id="how-we-use">
+              <h2>3. How We Use Your Information</h2>
+              <ul>
+                <li>To process inquiries, registrations, and newsletter subscriptions.</li>
+                <li>To deliver and improve enterprise services across our subsidiaries.</li>
+                <li>To comply with statutory and regulatory obligations (e.g., DVLA requirements for driving school services).</li>
+                <li>To send updates, newsletters, and administrative notices.</li>
+              </ul>
+            </section>
+
+            <section id="data-sharing">
+              <h2>4. Data Sharing & Disclosure</h2>
+              <p>We do not sell your personal data. We may share information with:</p>
+              <ul>
+                <li><strong>Group Subsidiaries:</strong> To fulfil multi-disciplinary requests or specific service offerings.</li>
+                <li><strong>Regulatory & Government Bodies:</strong> When required by law or official regulatory frameworks (e.g., DVLA, MoFA).</li>
+                <li><strong>Service Providers:</strong> Trusted third-party vendors operating under strict confidentiality standards to maintain website operations and service delivery.</li>
+              </ul>
+            </section>
+
+            <section id="data-security">
+              <h2>5. Data Security & Retention</h2>
+              <p>We implement appropriate technical and organizational measures to safeguard your data against unauthorised access, loss, or disclosure. Personal information is retained only as long as necessary to fulfil the purposes outlined in this policy or comply with legal obligations.</p>
+            </section>
+
+            <section id="your-rights">
+              <h2>6. Your Rights</h2>
+              <p>Depending on applicable data protection laws (including Ghana's Data Protection Act), you have the right to:</p>
+              <ul>
+                <li>Access, update, or correct your personal data.</li>
+                <li>Request deletion of your personal records.</li>
+                <li>Opt-out of promotional communications at any time.</li>
+              </ul>
+            </section>
+
+            <section id="contact-us">
+              <h2>7. Contact Us</h2>
+              <p>For privacy-related inquiries or to exercise your rights, contact us at <a href="mailto:marvinieliteenterprise@gmail.com">marvinieliteenterprise@gmail.com</a> or write to our headquarters in Accra, Ghana.</p>
+
+              <div class="legal-contact-box">
+                <span class="legal-contact-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+                </span>
+                <p><strong>Email:</strong> <a href="mailto:marvinieliteenterprise@gmail.com">marvinieliteenterprise@gmail.com</a><br /><strong>Headquarters:</strong> Accra, Ghana, West Africa</p>
+              </div>
+            </section>
+
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+
+          <div class="footer-brand">
+            <a href="index.html#home" class="nav-logo" aria-label="Marvini Elite Enterprises Home">
+              <img src="img/marvini_elite_enterprise_logo.png" alt="Marvini Elite Enterprises" class="footer-logo-img" />
+            </a>
+            <p class="footer-tagline">Innovating Africa's Future</p>
+            <p class="footer-about">Building African-led solutions that are innovative, sustainable, and globally competitive.</p>
+            <div class="footer-social">
+              <a href="https://www.linkedin.com/in/marvini-elite-enterprise-30a252422/" target="_blank" rel="noopener noreferrer" class="fsocial-link" aria-label="LinkedIn">in</a>
+              <a href="https://x.com/Jmarvini" target="_blank" rel="noopener noreferrer" class="fsocial-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="fsocial-link" aria-label="Facebook">f</a>
+              <a href="#" class="fsocial-link" aria-label="Instagram">◎</a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Company</h4>
+            <ul class="footer-links" role="list">
+              <li><a href="index.html#about" class="footer-link">About Us</a></li>
+              <li><a href="index.html#ceo" class="footer-link">CEO Message</a></li>
+              <li><a href="index.html#values" class="footer-link">Core Values</a></li>
+              <li><a href="index.html#innovation" class="footer-link">Innovation</a></li>
+              <li><a href="about.html#team" class="footer-link">Meet the Team</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Our Companies</h4>
+            <div class="footer-logos">
+              <a href="https://marvini-smart-driving-school-solution.web.app/">
+                <img src="img/m-smart_driving_solution -logo.png" alt="M-Smart Driving School" class="company-logo" />
+                M-Smart Driving School
+              </a>
+              <a href="https://marvini-digital-food-chain.web.app">
+                <img src="img/M-Digital Food Chain .png" alt="M-Digital Food Chain" class="company-logo" />
+                M-Digital Food Chain
+              </a>
+              <a href="https://marvini-events-and-festivals.web.app/">
+                <img src="img/M-Events & Festivals0.png" alt="M-Events & Festivals" class="company-logo" />
+                M-Events & Festivals
+              </a>
+              <a href="consultancy-training.html">
+                <img src="img/M-Consultancy & Training0.png" alt="M-Consultancy & Training" class="company-logo" />
+                M-Consultancy & Training
+              </a>
+              <a href="https://marvini--farms.web.app">
+                <img src="img/M-Farms0.png" alt="M-Farms" class="company-logo" />
+                M-Farms
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Stay Updated</h4>
+            <p class="footer-newsletter-text">Subscribe to the Marvini newsletter for updates from across the group.</p>
+            <form class="newsletter-form" id="newsletterForm" novalidate aria-label="Newsletter signup">
+              <input type="email" class="newsletter-input" placeholder="richid@gmail.com" required aria-label="Email address" autocomplete="email" />
+              <button type="submit" class="btn btn-primary btn-sm newsletter-btn" aria-label="Subscribe">Subscribe</button>
+            </form>
+            <div class="newsletter-success" id="newsletterSuccess" role="alert" aria-live="polite" style="display:none;">
+              ✅ You're subscribed!
+            </div>
+            <div class="newsletter-error" id="newsletterError" role="alert" aria-live="polite" style="display:none; color:#F87171; font-size:0.85rem; margin-top:0.5rem;">
+              ⚠️ Please enter a valid email address.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="footer-copy">&copy; <span id="footerYear">2025</span> Marvini Elite Enterprises. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <a href="#" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── STICKY HEADER ───────────────────────────────────
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── THEME TOGGLE ────────────────────────────────────
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    });
+
+    // ── MOBILE MENU ─────────────────────────────────────
+    const hamburger = document.getElementById('navHamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger?.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      mobileMenu.setAttribute('aria-hidden', !isOpen);
+      document.body.classList.toggle('no-scroll', isOpen);
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('no-scroll');
+      });
+    });
+
+    // ── FOOTER YEAR ──────────────────────────────────────
+    const yr = document.getElementById('footerYear');
+    if (yr) yr.textContent = new Date().getFullYear();
+
+    // ── NEWSLETTER FORM (writes to Firestore "newsletter") ──
+    document.getElementById('newsletterForm')?.addEventListener('submit', async e => {
+      e.preventDefault();
+      const form = e.target;
+      const emailInput = form.querySelector('.newsletter-input');
+      const email = (emailInput?.value || '').trim();
+      const successEl = document.getElementById('newsletterSuccess');
+      const errorEl = document.getElementById('newsletterError');
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        errorEl.style.display = 'block';
+        emailInput?.focus();
+        return;
+      }
+
+      try {
+        const { db, collection, addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+        await addDoc(collection(db, 'newsletter'), { email, createdAt: serverTimestamp() });
+        successEl.style.display = 'block';
+        form.reset();
+      } catch (err) {
+        console.error('Could not subscribe:', err);
+        errorEl.textContent = '⚠️ Something went wrong — please try again.';
+        errorEl.style.display = 'block';
+      }
+    });
+  </script>
+
+</body>
+</html>
