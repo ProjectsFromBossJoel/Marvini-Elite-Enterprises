@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     ADSENSE_CLIENT_SECRET,
     ADSENSE_REFRESH_TOKEN,
   } = process.env;
-
+ 
   try {
     const oAuth2Client = new google.auth.OAuth2(ADSENSE_CLIENT_ID, ADSENSE_CLIENT_SECRET);
     oAuth2Client.setCredentials({ refresh_token: ADSENSE_REFRESH_TOKEN });
