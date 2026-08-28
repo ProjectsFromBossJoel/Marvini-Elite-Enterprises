@@ -1,0 +1,121 @@
+[33m4744742[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m large update on features
+[33me2454b1[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m adding privacy policy links to the all the web pages footers
+[33m448d57d[m adding privacy policy page
+[33m9cd8201[m update to js/firebase-config.js file
+[33mf3b2f88[m bulk update
+[33m9181f83[m Google Adsense config
+[33me5132e6[m adding and testing a new file 1.2
+[33me55ed99[m adding and testing a new file
+[33mc414c31[m working on login page 1.2
+[33m1125756[m working on login page
+[33mffd57f4[m adding the training programs to the landing page 1.2
+[33mc6cde21[m adding the training programs to the landing page
+[33m429712f[m working on the security 1.24
+[33m2a248ac[m working on the security 1.23
+[33m55fb260[m working on the security 1.0
+[33m34e1b90[m working on the IT Support role
+[33maf49997[m working on the analytics page
+[33m1088b45[m working on the users page
+[33mc05a745[m adding a page for MARVINI AI AGENT ORCHESTRATOR 1.1
+[33m6a6ca6f[m adding a page for MARVINI AI AGENT ORCHESTRATOR 1.0
+[33m2f36c53[m adding a page for MARVINI AI AGENT ORCHESTRATOR
+[33m8322096[m update on the some logic, whatsapp on the careers page and others
+[33mcedee5d[m update on the some logic, whatsapp and others
+[33m660296f[m update on the some logic
+[33mbdbf099[m update on the news logic
+[33m404d6b9[m massive updates and modifications
+[33m53c7339[m adding more page eg; the about page, news page and other configurations
+[33m0681fb0[m fixing registration bug for users
+[33m4e33742[m adding facebook post
+[33md78d1e7[m fixing x post bug, changing model from openai to model: 'llama-3.3-70b-versatile' 1.2
+[33md584a8e[m fixing x post bug, changing model from openai to model: 'llama-3.3-70b-versatile'
+[33me9c0beb[m fixing x post bug
+[33maafbeaa[m twitter post AI Agent config
+[33m63bfc53[m updating the the news letter bot
+[33m1793bcf[m updating the login page
+[33mf20ae24[m updating animation for training registration
+[33mcd71ac2[m updating some bugs in the dashboard
+[33mabc2c9c[m working on the training registration logic to trigger an email for either payment or necessary and confidential info, 1.3
+[33m75d60b3[m working on the training registration logic to trigger an email for either payment or necessary and confidential info, 1.2
+[33mde52ba1[m working on the training registration logic, 1.1
+[33m20dcc77[m working on the partners detail page 2.0, adding email and phone number field
+[33mcfad405[m working on the partners detail page 1.9, adding email and phone number field
+[33md3f50f0[m working on the partners detail page 1.8, google map direction button
+[33m9b45301[m working on the partners detail page 1.7, landing image
+[33m7d02a69[m working on the partners detail page 1.7
+[33md1adbb8[m working on the partners detail page 1.6, scrolling toggle button
+[33mf4c637f[m working on the partners detail page 1.5
+[33mce45395[m working on the partners detail page 1.4
+[33m608ffe0[m working on the partners detail page
+[33m41e8176[m adding logo section in consultancy page 1.2
+[33mc81ece0[m adding logo section in consultancy page 1.1
+[33m4ba8aef[m adding logo section in consultancy page
+[33m6970656[m fixing bug on Google Search Console
+[33m87145ee[m working on the SEO optimization 1.2
+[33m479641f[m working on the SEO optimization 1.1
+[33m4e84ea4[m working on the SEO optimization
+[33m5439dcd[m working on the download button for the cv and cover letter in the application details open modal
+[33m05a799b[m rearranging the sections to make the job postings appear at the top in the career page
+[33me662c37[m adding cover letter field to the career application modal 1.4
+[33mbdffa69[m adding cover letter field to the career application modal 1.4
+[33m00428f0[m adding cover letter field to the career application modal 1.3
+[33m45417c1[m adding cover letter field to the career application modal 1.2
+[33m2a0b958[m adding cover letter field to the career application modal
+[33m3ffc35b[m addind duration option to the list in the careers/volunteering and also duration field, more fields for the job description like the key responsibilities 1.2
+[33m66f11c7[m addind duration option to the list in the careers/volunteering and also duration field, more fields for the job description like the key responsibilities 1.2
+[33mc9302ef[m addind duration option to the list in the careers/volunteering and also duration field, more fields for the job description like the key responsibilities 1.1
+[33m91f3470[m addind duration option to the list in the careers/volunteering and also duration field 1.1
+[33mdea95ca[m addind duration option to the list in the careers/volunteering and also duration field
+[33m3254108[m working on the publications page auto sync on edit
+[33mc173d45[m working on the publications page, adding download button, truncation of text and edit feature
+[33ma00c257[m working on the chart graph in the site analytics page
+[33ma47ce9f[m working on the chart graph in the site analytics page
+[33m9b2e03b[m working on the chart graph
+[33m3bdc02b[m add all-time visitor count to analytics api and page
+[33mac4f744[m working on dashboard(index.html) open roles card bug
+[33mb4ab050[m working on history feature for the linkedin / X chat page
+[33m0b6cf03[m testing linkedin bot post ui 1.2
+[33m4390a8c[m testing linkedin bot post ui 1.1
+[33mf2518a2[m testing linkedin bot post ui 1.1
+[33m187f2a8[m testing linkedin bot post ui
+[33m9e4c2ec[m remove duplicate api package.json/vercel.json, simplify includeFiles
+[33m98dcb7e[m use createRequire for firebase-admin to fix ESM resolution
+[33m85bda2f[m force include firebase-admin dependencies
+[33m117daec[m force include firebase-admin dependencies
+[33m5dc8714[m error fix1
+[33m9ace3ff[m error fix
+[33m1c7bc53[m adding bot for linkedin post
+[33m895df4a[m adding publications details page
+[33m7e37b78[m working on some links integration and other stuff
+[33m7505d2c[m working on some links integration and other stuff
+[33m5f8b805[m working on some links integration and other stuff
+[33m1e4eff9[m working on some links integration and other stuff
+[33ma35782f[m working on some links integration and other stuff
+[33mf82f1db[m working on some links integration and other stuff
+[33m892ac96[m working on the news letter subscription floating widget to the other pages
+[33mad3e48f[m working on the news letter subscription floating widget
+[33mf011776[m working on the news letter subscription floating widget
+[33m02985d9[m working on the mobile responsivenes
+[33m391520f[m working on the nav and mobile responsiveness for M-Consultancy & Training page
+[33m2c7cbf2[m working on the nav and mobile responsiveness for M-Consultancy & Training page
+[33m5e88c7a[m working on the nav and mobile responsiveness for M-Consultancy & Training page
+[33mc53a395[m working on favicon
+[33m6b6b540[m working on favicon
+[33m0f4a83c[m working on favicon
+[33md3311dd[m working on admin chat bot for the news letter submission
+[33mc52428c[m working on M-Consultancy & Training fav ico
+[33ma5f27aa[m working on news-letter subscription chatbot popup in the admin dashboard
+[33m8945801[m Add firebase-admin dependency
+[33m6960013[m adding api/send-newsletter.js
+[33ma7f045b[m adding api/send-newsletter.js
+[33mef974a4[m adding email subscription and contact message form logic
+[33m70f2b40[m adding email subscription and contact message form logic
+[33m11fa78b[m adding email subscription and contact message form logic
+[33me55e4d4[m adding 404 page
+[33m46fbb16[m[33m ([m[1;32magents/admin-dashboard-workflow-overview[m[33m)[m making the consultany & training page bigger and more visible, logo dominant
+[33mf4da9ac[m Order column for profile cards
+[33me2ffcfe[m Order column for profile cards
+[33m70ff2e2[m working on featured profile cards
+[33mff00246[m adding consultancy dropdown in the add team member
+[33md74372d[m adding subsidiary logo image to avatar in team profile on the landing page
+[33mce88d76[m adding subsidiary logo 

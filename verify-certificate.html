@@ -1,0 +1,368 @@
+<!-- verify-certificate.html -->
+<!-- Public page. QR codes on generated certificates point here as:
+     https://YOURDOMAIN.com/verify-certificate.html?id=CERT-ID
+     Also supports manual entry for anyone typing the ID in by hand. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verify a Certificate | M-Consultancy & Training</title>
+
+
+<meta name="description" content="Verify the authenticity of a certificate issued by Marvini Consultancy & Training." />
+<link rel="apple-touch-icon" sizes="180x180" href="img/M-Consultancy and Training/img/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/M-Consultancy and Training/img/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/M-Consultancy and Training/img/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="img/M-Consultancy and Training/img/favicon_io/site.webmanifest">
+<link rel="icon" type="image/x-icon" href="img/M-Consultancy and Training/img/favicon_io/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --navy:#14213D;
+    --orange:#A6542A;
+    --parchment:#F7F5F0;
+    --parchment-deep:#EFEBE1;
+    --text-muted:#6b6a60;
+    --border:#e2ded2;
+    --green:#047857;
+    --red:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Work Sans', sans-serif;
+    background: var(--parchment);
+    color: var(--navy);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  header.vc-header{
+    padding: 1.5rem 1.5rem 1rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.6rem;
+  }
+  header.vc-header img{ width:36px; height:36px; object-fit:contain; }
+  header.vc-header span{
+    font-weight:700; font-size:.95rem; letter-spacing:.02em;
+  }
+
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .vc-card{
+    width:100%; max-width: 560px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 12px 40px rgba(20,33,61,0.08);
+  }
+
+  .vc-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color: var(--orange);
+    margin: 0 0 .4rem;
+  }
+  .vc-card h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size: 1.7rem;
+    margin: 0 0 .5rem;
+    line-height:1.2;
+  }
+  .vc-card p.lead{
+    color: var(--text-muted);
+    font-size: .92rem;
+    margin: 0 0 1.75rem;
+    line-height:1.5;
+  }
+
+  .vc-form{ display:flex; gap:.6rem; margin-bottom: 1.75rem; flex-wrap:wrap; }
+  .vc-form input{
+    flex:1; min-width: 200px;
+    padding: .8rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.9rem;
+    letter-spacing:.02em;
+    background: var(--parchment);
+    color: var(--navy);
+  }
+  .vc-form input:focus{
+    outline:none; border-color: var(--orange);
+    background:#fff;
+  }
+  .vc-form button{
+    padding: .8rem 1.4rem;
+    border:none; border-radius:9px;
+    background: var(--navy); color:#fff;
+    font-weight:600; font-size:.9rem;
+    cursor:pointer;
+    transition: background .15s ease;
+    white-space:nowrap;
+  }
+  .vc-form button:hover{ background:#1f2f57; }
+  .vc-form button:disabled{ opacity:.55; cursor:not-allowed; }
+
+  .vc-result{ display:none; }
+  .vc-result.show{ display:block; animation: vcFade .25s ease; }
+  @keyframes vcFade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .vc-status{
+    display:flex; align-items:center; gap:.6rem;
+    padding: .9rem 1rem;
+    border-radius: 10px;
+    font-weight:600; font-size:.92rem;
+    margin-bottom: 1.25rem;
+  }
+  .vc-status.valid{ background: rgba(4,120,87,0.09); color: var(--green); }
+  .vc-status.invalid{ background: rgba(220,38,38,0.08); color: var(--red); }
+  .vc-status .dot{
+    width:9px; height:9px; border-radius:50%;
+    background: currentColor; flex-shrink:0;
+  }
+
+  .vc-detail-grid{ display:flex; flex-direction:column; gap:1rem; }
+  .vc-detail-row label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.7rem; letter-spacing:.06em; text-transform:uppercase;
+    color: var(--text-muted);
+    margin-bottom: .25rem;
+  }
+  .vc-detail-row p{
+    margin:0; font-size:1rem; color: var(--navy);
+  }
+  .vc-detail-row.name p{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.3rem; color: var(--orange);
+  }
+  .vc-detail-row.program p{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.1rem;
+  }
+
+  .vc-divider{ height:1px; background: var(--border); margin: 1.25rem 0; }
+
+  .vc-download{
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding: .7rem 1.2rem;
+    border-radius:9px;
+    border: 1.5px solid var(--navy);
+    color: var(--navy);
+    text-decoration:none;
+    font-weight:600; font-size:.88rem;
+    margin-top:.5rem;
+  }
+  .vc-download:hover{ background: var(--navy); color:#fff; }
+
+  .vc-loading{
+    display:none;
+    align-items:center; gap:.6rem;
+    color: var(--text-muted); font-size:.9rem;
+    margin-bottom: 1.25rem;
+  }
+  .vc-loading.show{ display:flex; }
+  .vc-spinner{
+    width:16px; height:16px; border-radius:50%;
+    border: 2px solid var(--border); border-top-color: var(--orange);
+    animation: vcSpin .7s linear infinite;
+  }
+  @keyframes vcSpin{ to{ transform: rotate(360deg); } }
+
+  .vc-footnote{
+    text-align:center; color: var(--text-muted); font-size:.78rem;
+    margin-top: 2rem; max-width: 420px; line-height:1.5;
+  }
+
+  @media (max-width: 480px){
+    .vc-card{ padding: 1.75rem 1.35rem; }
+    .vc-form{ flex-direction:column; }
+    .vc-form button{ width:100%; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="vc-header">
+  <img src="/img/others/All Logos/Logo/all-logos-png/M-Consultancy & Training.png" alt="" onerror="this.style.display='none'" />
+  <span>M-CONSULTANCY &amp; TRAINING</span>
+</header>
+
+<main>
+  <div class="vc-card">
+    <p class="vc-eyebrow">Certificate Verification</p>
+    <h1>Verify a certificate</h1>
+    <p class="lead">Enter the certificate ID printed under the QR code, or scan the QR code directly on the certificate to check here automatically.</p>
+
+    <form class="vc-form" id="vcForm">
+      <input type="text" id="vcInput" placeholder="e.g. MCT-MTD1DGQV-507" autocomplete="off" spellcheck="false" />
+      <button type="submit" id="vcSubmitBtn">Verify</button>
+    </form>
+
+    <div class="vc-loading" id="vcLoading">
+      <span class="vc-spinner"></span> Checking record…
+    </div>
+
+    <div class="vc-result" id="vcResult">
+      <div class="vc-status" id="vcStatus"></div>
+
+      <div class="vc-detail-grid" id="vcDetails">
+        <div class="vc-detail-row name">
+          <label>Recipient</label>
+          <p id="vcName">—</p>
+        </div>
+        <div class="vc-detail-row program">
+          <label>Training program</label>
+          <p id="vcProgram">—</p>
+        </div>
+        <div class="vc-detail-row">
+          <label>Completion date</label>
+          <p id="vcDate">—</p>
+        </div>
+        <div class="vc-detail-row" id="vcPartnerRow" style="display:none;">
+          <label>Delivered in partnership with</label>
+          <p id="vcPartner">—</p>
+        </div>
+        <div class="vc-detail-row">
+          <label>Certificate ID</label>
+          <p id="vcCertId">—</p>
+        </div>
+      </div>
+
+      <div class="vc-divider"></div>
+      <a href="#" id="vcDownloadLink" class="vc-download" target="_blank" rel="noopener" style="display:none;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        Download certificate
+      </a>
+    </div>
+  </div>
+
+  <p class="vc-footnote">
+    This tool checks certificate IDs against Marvini Consultancy &amp; Training's official records.
+    If you believe a certificate ID isn't matching correctly, contact us for confirmation.
+  </p>
+</main>
+
+<script type="module">
+  // Adjust this import path to match where firebase-config.js lives relative
+  // to this file's location in your deployed site (same module used across
+  // the rest of the Marvini site, e.g. "js/firebase-config.js" or "./js/firebase-config.js").
+  import { db, collection, query, where, getDocs, limit } from "./js/firebase-config.js";
+
+  const form = document.getElementById('vcForm');
+  const input = document.getElementById('vcInput');
+  const submitBtn = document.getElementById('vcSubmitBtn');
+  const loading = document.getElementById('vcLoading');
+  const result = document.getElementById('vcResult');
+  const statusEl = document.getElementById('vcStatus');
+
+  const nameEl = document.getElementById('vcName');
+  const programEl = document.getElementById('vcProgram');
+  const dateEl = document.getElementById('vcDate');
+  const partnerRow = document.getElementById('vcPartnerRow');
+  const partnerEl = document.getElementById('vcPartner');
+  const certIdEl = document.getElementById('vcCertId');
+  const detailsEl = document.getElementById('vcDetails');
+  const downloadLink = document.getElementById('vcDownloadLink');
+
+  function setLoading(isLoading){
+    loading.classList.toggle('show', isLoading);
+    submitBtn.disabled = isLoading;
+  }
+
+  function showInvalid(){
+    result.classList.add('show');
+    detailsEl.style.display = 'none';
+    document.querySelector('.vc-divider').style.display = 'none';
+    downloadLink.style.display = 'none';
+    statusEl.className = 'vc-status invalid';
+    statusEl.innerHTML = '<span class="dot"></span> No certificate found with that ID. Double-check the ID and try again.';
+  }
+
+  function showValid(cert){
+    result.classList.add('show');
+    detailsEl.style.display = 'flex';
+    document.querySelector('.vc-divider').style.display = 'block';
+    statusEl.className = 'vc-status valid';
+    statusEl.innerHTML = '<span class="dot"></span> Certificate verified, this is a genuine record.';
+
+    nameEl.textContent = cert.name || '—';
+    programEl.textContent = cert.program || '—';
+    dateEl.textContent = cert.date || '—';
+    certIdEl.textContent = cert.certId || '—';
+
+    if (cert.partnerName){
+      partnerRow.style.display = 'block';
+      partnerEl.textContent = cert.partnerName;
+    } else {
+      partnerRow.style.display = 'none';
+    }
+
+    if (cert.downloadUrl || cert.viewUrl){
+      downloadLink.href = cert.downloadUrl || cert.viewUrl;
+      downloadLink.style.display = 'inline-flex';
+    } else {
+      downloadLink.style.display = 'none';
+    }
+  }
+
+  async function verify(rawId){
+    const id = (rawId || '').trim();
+    if (!id) return;
+
+    setLoading(true);
+    result.classList.remove('show');
+
+    try {
+      const q = query(collection(db, 'consultancyCertificates'), where('certId', '==', id), limit(1));
+      const snap = await getDocs(q);
+      if (snap.empty){
+        showInvalid();
+      } else {
+        showValid(snap.docs[0].data());
+      }
+    } catch (err) {
+      console.error('Error verifying certificate:', err);
+      result.classList.add('show');
+      detailsEl.style.display = 'none';
+      document.querySelector('.vc-divider').style.display = 'none';
+      downloadLink.style.display = 'none';
+      statusEl.className = 'vc-status invalid';
+      statusEl.innerHTML = '<span class="dot"></span> Something went wrong while checking this certificate. Please try again shortly.';
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    verify(input.value);
+  });
+
+  // Auto-verify if a ?id= param is present (QR scan flow)
+  const params = new URLSearchParams(window.location.search);
+  const idParam = params.get('id');
+  if (idParam){
+    input.value = idParam;
+    verify(idParam);
+  }
+</script>
+</body>
+</html>

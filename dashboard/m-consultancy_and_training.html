@@ -80,6 +80,43 @@
   }
   .filter-tab.active { background: #1a56ff; border-color:#1a56ff; color:#fff; }
   .empty-state { text-align:center; padding: 3rem 1rem; color: var(--text-muted,#64748b); }
+
+  /* ---------- Certificate history list ---------- */
+  .cert-history-list {
+    display:flex; flex-direction:column; gap:.6rem;
+    max-height: 420px; overflow-y:auto; padding-right:.25rem;
+  }
+  .cert-history-row {
+    display:flex; align-items:center; gap:1rem;
+    padding: .85rem 1rem;
+    border:1px solid var(--border,#e2e8f0); border-radius:12px;
+    background: var(--bg-card,#fff);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .cert-history-row:hover { border-color:#1a56ff; box-shadow: 0 4px 14px rgba(26,86,255,0.08); }
+  .cert-history-avatar {
+    width:42px; height:42px; border-radius:50%; flex-shrink:0;
+    background: linear-gradient(135deg,#A6542A,#14213D); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:600; font-size:1rem;
+  }
+  .cert-history-info { flex:1; min-width:0; }
+  .cert-history-name { font-weight:700; font-size:.95rem; color: var(--text-primary,#1e293b); margin:0 0 .15rem; }
+  .cert-history-program {
+    font-size:.82rem; color: var(--text-muted,#64748b); margin:0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .cert-history-meta {
+    display:flex; flex-direction:column; align-items:flex-end; gap:.35rem;
+    flex-shrink:0; margin-right:.25rem;
+  }
+  .cert-history-date { font-size:.78rem; color: var(--text-muted,#64748b); white-space:nowrap; }
+  .cert-history-id {
+    font-family:'IBM Plex Mono', monospace; font-size:.7rem; letter-spacing:.02em;
+    background: rgba(166,84,42,0.1); color:#A6542A;
+    padding:.2rem .55rem; border-radius:999px; white-space:nowrap;
+  }
+  .cert-history-download { flex-shrink:0; }
   .pagination {
     display:flex; align-items:center; justify-content:space-between;
     flex-wrap:wrap; gap:.75rem;
@@ -196,61 +233,69 @@
     opacity:0.9;
   }
   .cert-qr{
-    position:absolute; top: 44px; right: 48px; width: 92px; height: 92px;
-    background: #fff; padding: 6px; border-radius: 4px;
+    position:absolute; bottom: 48px; right: 24px; width: 76px; height: 76px;
+    background: #fff; padding: 5px; border-radius: 4px;
   }
   .cert-qr canvas{ width:100%; height:100%; display:block; }
+  .cert-qr-id{
+    position:absolute; bottom: 18px; right: 24px; width: 76px;
+    text-align:center; font-family:'Space Grotesk', sans-serif;
+    font-size:9px; letter-spacing:0.02em; color:#6b6a60;
+  }
+  .cert-content{
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    display:flex; flex-direction:column; justify-content:flex-start; align-items:center;
+    padding: 64px 100px 40px 250px; box-sizing:border-box; text-align:center;
+  }
   .cert-head{
-    position:absolute; top: 46px; left: 250px; right: 170px;
-    display:flex; align-items:center; gap:14px;
+    display:flex; align-items:center; justify-content:center; gap:20px;
+    margin-bottom: 28px;
   }
-  .cert-head img{ width:52px; height:52px; object-fit:contain; }
+  .cert-head img{ width:66px; height:66px; object-fit:contain; }
   .cert-head .cert-brand-name{
-    font-family: 'Space Grotesk', sans-serif; font-size:14px; letter-spacing:0.04em;
-    color: #14213D; line-height:1.35;
+    font-family: 'Space Grotesk', sans-serif; font-size:17px; font-weight:700; letter-spacing:0.03em;
+    color: #14213D; line-height:1.3;
   }
+  .cert-head-divider{ width:1.4px; align-self:stretch; background:#e2ded2; margin: 8px 6px; }
+  #certOutPartnerName{ text-transform: uppercase; }
   .cert-title{
-    position:absolute; top: 128px; left: 250px; right: 90px;
     font-family: 'Fraunces', serif; font-weight:600; font-size: 34px;
     color: #14213D; line-height:1.15; letter-spacing:-0.01em;
+    white-space: nowrap; margin-bottom: 40px;
   }
-  .cert-ack{ position:absolute; top: 232px; left: 250px; font-size:15px; color:#6b6a60; }
+  .cert-ack{ font-size:15px; color:#6b6a60; margin-bottom: 8px; }
   .cert-name{
-    position:absolute; top: 258px; left: 250px; right: 90px;
     font-family: 'Fraunces', serif; font-weight:600; font-size: 46px;
     color: #A6542A; border-bottom: 1px solid #e2ded2; padding-bottom: 16px;
+    margin-bottom: 24px;
   }
-  .cert-body-line1{ position:absolute; top: 352px; left: 250px; font-size:15px; color:#6b6a60; }
+  .cert-body-line1{ font-size:15px; color:#6b6a60; margin-bottom: 10px; }
   .cert-program{
-    position:absolute; top: 380px; left: 250px; right: 90px;
     font-family: 'Fraunces', serif; font-weight:600; font-size: 26px; color: #14213D;
+    margin-bottom: 20px;
   }
-  .cert-desc{
-    position:absolute; top: 428px; left: 250px; right: 110px;
+    .cert-desc{
     font-size:14px; color:#6b6a60; line-height:1.5;
+    margin-bottom: 8px; max-width: 640px;
   }
-  .cert-duration{
-    position:absolute; top: 500px; left: 250px; right: 110px;
-    border-top:1px solid #e2ded2; padding-top:16px;
+  .cert-partnership-line{
+    font-size:13px; color:#A6542A; font-weight:600;
+    margin-bottom: 32px; max-width: 640px;
+    display:none;
   }
-  .cert-duration #certOutDuration{
-    display:block; font-family: 'Space Grotesk', sans-serif; font-size:16px;
-    letter-spacing:0.03em; color: #14213D; font-weight:600;
-  }
-  .cert-duration .cert-duration-label{
-    display:block; font-family: 'Space Grotesk', sans-serif; font-size:11px;
-    color:#9a9a8e; margin-top:4px; letter-spacing:0.05em; text-transform:uppercase;
-  }
-  .cert-footer{ position:absolute; bottom: 56px; left: 250px; right: 90px; display:flex; gap: 60px; }
-  .cert-footer .cert-fcol{ flex:1; }
+  .cert-partnership-line.show{ display:block; }
+
+  .cert-footer{ display:flex; gap: 40px; width: 640px; margin: 0 auto; }
+  .cert-footer .cert-fcol{ flex:1; text-align:center; }
   .cert-footer .cert-sig{
     font-family: 'Fraunces', serif; font-style:italic; font-size:22px; color: #14213D;
-    border-bottom: 1px solid #e2ded2; padding-bottom: 6px; margin-bottom: 6px; min-height: 30px;
-  }
-  .cert-footer .cert-flabel{
+    border-bottom: 1px solid #e2ded2; padding-bottom: 0px; margin-bottom: 6px; min-height: 70px;
+    display:flex; align-items:flex-end; justify-content:center;
+  }  .cert-footer .cert-flabel{
     font-family: 'Space Grotesk', sans-serif; font-size:11px; letter-spacing:0.05em;
     text-transform:uppercase; color:#9a9a8e;
   }
+  .cert-modal-card .btn:disabled{ opacity:.45; cursor:not-allowed; }
   .cert-footer .cert-fvalue{ font-size:14px; color: #14213D; font-weight:600; margin-bottom:4px; }
 </style>
 </head>
@@ -779,13 +824,25 @@
   <div class="modal-card cert-modal-card">
     <div class="modal-head">
       <h3>Generate a Certificate</h3>
-      <button class="modal-close" id="closeCertBtn" aria-label="Close">✕</button>
+      <div style="display:flex; align-items:center; gap:.4rem;">
+        <button class="modal-close" id="openCertHistoryBtn" type="button" title="View saved certificates">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+        </button>
+        <button class="modal-close" id="closeCertBtn" aria-label="Close">✕</button>
+      </div>
     </div>
 
     <div class="form-field">
       <label for="cert-registration">Load from a registration (optional)</label>
       <select id="cert-registration">
         <option value="">— Fill in manually below —</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="cert-partner">Partner (optional)</label>
+      <select id="cert-partner">
+        <option value="">— No partner —</option>
       </select>
     </div>
 
@@ -799,20 +856,18 @@
         <input id="cert-program" type="text" />
       </div>
     </div>
-    <div class="form-row-2">
-      <div class="form-field">
-        <label for="cert-date">Completion date</label>
-        <input id="cert-date" type="text" placeholder="e.g. August 6, 2026" />
-      </div>
-      <div class="form-field">
-        <label for="cert-duration">Duration / hours</label>
-        <input id="cert-duration" type="text" placeholder="e.g. 24 hours, 3 sessions" />
-      </div>
+    <div class="form-field">
+      <label for="cert-date">Completion date</label>
+      <input id="cert-date" type="text" placeholder="e.g. August 6, 2026" />
     </div>
     <div class="form-row-2">
       <div class="form-field">
-        <label for="cert-signer">Issued by (name)</label>
-        <input id="cert-signer" type="text" value="CEO" />
+        <label for="cert-signature">Signature image (upload from this device)</label>
+        <div class="program-image-preview-wrap" id="certSignaturePreviewWrap">
+          <p class="current-image-label">Signature preview</p>
+          <img class="program-image-preview" id="certSignaturePreview" src="" alt="Signature preview" style="width:200px; height:70px; object-fit:contain; background:#fff; border-radius:6px;" />
+        </div>
+        <input type="file" id="cert-signature" accept="image/*" />
       </div>
       <div class="form-field">
         <label for="cert-signer-title">Signer title</label>
@@ -828,40 +883,63 @@
       <div id="certificate-template">
         <div class="cert-ribbon"></div>
         <div class="cert-qr" id="cert-qr-holder"></div>
-        <div class="cert-head">
-          <img src="/img/M-Consultancy & Training1.png" alt="" onerror="this.style.display='none'" />
-          <span class="cert-brand-name">Marvini Consultancy<br>&amp; Training</span>
-        </div>
-        <div class="cert-title">CERTIFICATE OF<br>COMPLETION</div>
-        <div class="cert-ack">This is to acknowledge that</div>
-        <div class="cert-name" id="certOutName">—</div>
-        <div class="cert-body-line1">has successfully completed the training program</div>
-        <div class="cert-program" id="certOutProgram">—</div>
-        <div class="cert-desc">by completing all required sessions and coursework with Marvini Consultancy &amp; Training.</div>
-        <div class="cert-duration">
-          <span id="certOutDuration">—</span>
-          <span class="cert-duration-label">Program duration</span>
-        </div>
-        <div class="cert-footer">
-          <div class="cert-fcol">
-            <div class="cert-sig" id="certOutSignerName">Jacob T. Akunor</div>
-            <div class="cert-fvalue" id="certOutSignerTitle">Director, Marvini Consultancy &amp; Training</div>
-            <div class="cert-flabel">Authorised Signature</div>
+        <div class="cert-qr-id" id="certOutIdUnderQr">—</div>
+        <div class="cert-content">
+          <div class="cert-head">
+            <img src="/img/others/All Logos/Logo/all-logos-png/M-Consultancy & Training.png" alt="" onerror="this.style.display='none'" />
+            <span class="cert-brand-name">M-CONSULTANCY<br>&amp; TRAINING</span>
+            <span class="cert-head-divider" id="certPartnerDivider" style="display:none;"></span>
+            <img id="certOutPartnerLogo" src="" alt="" crossorigin="anonymous" style="display:none;" onerror="this.style.display='none'" />
+            <span class="cert-brand-name" id="certOutPartnerName" style="display:none;"></span>
           </div>
-          <div class="cert-fcol">
-            <div class="cert-fvalue" id="certOutDate">—</div>
-            <div class="cert-flabel">Completion Date</div>
-          </div>
-          <div class="cert-fcol">
-            <div class="cert-fvalue" id="certOutId">—</div>
-            <div class="cert-flabel">Certificate ID</div>
+          <div class="cert-title">CERTIFICATE OF COMPLETION</div>
+          <div class="cert-ack">This is to certify that</div>
+          <div class="cert-name" id="certOutName">—</div>
+          <div class="cert-body-line1">has successfully completed a practical training program</div>
+          <div class="cert-program" id="certOutProgram">—</div>
+          <div class="cert-desc">by completing all required sessions and coursework with Marvini Consultancy &amp; Training.</div>
+          <div class="cert-partnership-line" id="certOutPartnershipLine">M-Consultancy &amp; Training in partnership with <span id="certOutPartnershipName"></span></div>
+
+          <div class="cert-footer">
+            <div class="cert-fcol">
+              <div class="cert-sig" id="certOutSignerSigWrap"><img id="certOutSignerSig" src="" alt="" style="display:none; max-height:68px; max-width:100%; object-fit:contain; transform: translateY(8px);" /></div>
+              <div class="cert-fvalue" id="certOutSignerTitle">Director, Marvini Consultancy &amp; Training</div>
+              <div class="cert-flabel">Authorised Signature</div>
+            </div>
+            <div class="cert-fcol">
+              <div class="cert-fvalue" id="certOutDate">—</div>
+              <div class="cert-flabel">Completion Date</div>
+              <div class="cert-fvalue" id="certOutValidity" style="margin-top:8px;">Non expiry</div>
+              <div class="cert-flabel">Certificate Validity</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <button type="button" class="btn btn-primary" id="certDownloadBtn" style="width:100%; justify-content:center;">Download certificate (PNG)</button>
+    <div style="display:flex; gap:.6rem;">
+      <button type="button" class="btn btn-primary" id="certSaveBtn" style="flex:1; justify-content:center;">Save Certificate</button>
+      <button type="button" class="btn btn-outline" id="certDownloadBtn" style="flex:1; justify-content:center;" disabled>Download (PNG)</button>
+    </div>
     <div id="certFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
+  </div>
+</div>
+
+<!-- Certificate History Modal -->
+<div class="modal-overlay" id="certHistoryModal">
+  <div class="modal-card" style="max-width:720px;">
+    <div class="modal-head">
+      <h3>Saved Certificates</h3>
+      <button class="modal-close" id="closeCertHistoryBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="search-bar-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="certHistorySearchInput" placeholder="Search by name, program, or certificate ID…" />
+    </div>
+    <div class="cert-history-list" id="certHistoryTableBody"></div>
+    <div class="empty-state" id="certHistoryEmptyState" style="display:none;">
+      No certificates saved yet. Generate and save one to see it here.
+    </div>
   </div>
 </div>
 
@@ -884,7 +962,7 @@
 <script type="module" src="../js/consultancy-training-admin.js"></script>
 <script type="module" src="../js/consultancy_partners-admin.js"></script>
 <script type="module">
-  import { db, collection, query, orderBy, onSnapshot } from "../js/firebase-config.js";
+  import { db, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from "../js/firebase-config.js";
 
   function certEscapeHtml(str){
     const div = document.createElement('div');
@@ -902,7 +980,9 @@
   const certProgramInput = document.getElementById('cert-program');
   const certDateInput = document.getElementById('cert-date');
   const certDurationInput = document.getElementById('cert-duration');
-  const certSignerInput = document.getElementById('cert-signer');
+  const certSignatureInput = document.getElementById('cert-signature');
+  const certSignaturePreview = document.getElementById('certSignaturePreview');
+  const certSignaturePreviewWrap = document.getElementById('certSignaturePreviewWrap');
   const certSignerTitleInput = document.getElementById('cert-signer-title');
   const certIdInput = document.getElementById('cert-id');
 
@@ -919,12 +999,80 @@
     console.error('Error loading registrations for certificate tool:', err);
   });
 
-  certRegSelect.addEventListener('change', () => {
+   certRegSelect.addEventListener('change', () => {
     const reg = certRegistrationsCache.find(r => r.id === certRegSelect.value);
     if (!reg) return;
     certNameInput.value = reg.name || '';
     certProgramInput.value = reg.program || '';
     updateCertPreview();
+  });
+
+  // ---------------- Partner logo (second logo on the certificate) ----------------
+  const certPartnerSelect = document.getElementById('cert-partner');
+  const certPartnerDivider = document.getElementById('certPartnerDivider');
+  const certPartnerLogoImg = document.getElementById('certOutPartnerLogo');
+  const certPartnerNameSpan = document.getElementById('certOutPartnerName');
+  let certPartnersCache = [];
+
+  const certPartnersQuery = query(collection(db, 'consultancyPartners'), orderBy('createdAt', 'desc'));
+  onSnapshot(certPartnersQuery, (snapshot) => {
+    certPartnersCache = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    const prevValue = certPartnerSelect.value;
+    certPartnerSelect.innerHTML = '<option value="">— No partner —</option>'
+      + certPartnersCache.map(p => `<option value="${p.id}">${certEscapeHtml(p.name || 'Unnamed')}</option>`).join('');
+    if (prevValue && certPartnersCache.some(p => p.id === prevValue)) certPartnerSelect.value = prevValue;
+  }, (err) => {
+    console.error('Error loading partners for certificate tool:', err);
+  });
+
+  const certPartnershipLine = document.getElementById('certOutPartnershipLine');
+  const certPartnershipNameSpan = document.getElementById('certOutPartnershipName');
+
+  certPartnerSelect.addEventListener('change', () => {
+    const partner = certPartnersCache.find(p => p.id === certPartnerSelect.value);
+    if (!partner) {
+      certPartnerDivider.style.display = 'none';
+      certPartnerLogoImg.style.display = 'none';
+      certPartnerLogoImg.src = '';
+      certPartnerNameSpan.style.display = 'none';
+      certPartnerNameSpan.textContent = '';
+      certPartnershipLine.classList.remove('show');
+      certPartnershipNameSpan.textContent = '';
+      return;
+    }
+    certPartnerDivider.style.display = '';
+    certPartnerNameSpan.style.display = '';
+    certPartnerNameSpan.textContent = partner.name || '';
+    certPartnershipLine.classList.add('show');
+    certPartnershipNameSpan.textContent = partner.name || '';
+    if (partner.logoUrl) {
+      certPartnerLogoImg.src = partner.logoUrl;
+      certPartnerLogoImg.style.display = '';
+    } else {
+      certPartnerLogoImg.style.display = 'none';
+      certPartnerLogoImg.src = '';
+    }
+  });
+
+  certSignatureInput.addEventListener('change', () => {
+    const file = certSignatureInput.files && certSignatureInput.files[0];
+    const sigImg = document.getElementById('certOutSignerSig');
+    if (!file) {
+      sigImg.src = '';
+      sigImg.style.display = 'none';
+      certSignaturePreview.src = '';
+      certSignaturePreviewWrap.classList.remove('has-image');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      sigImg.src = dataUrl;
+      sigImg.style.display = '';
+      certSignaturePreview.src = dataUrl;
+      certSignaturePreviewWrap.classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
   });
 
   function randomCertId(){
@@ -934,10 +1082,9 @@
   function updateCertPreview(){
     document.getElementById('certOutName').textContent = certNameInput.value.trim() || '—';
     document.getElementById('certOutProgram').textContent = certProgramInput.value.trim() || '—';
-    document.getElementById('certOutDuration').textContent = certDurationInput.value.trim() || '—';
+    
     document.getElementById('certOutDate').textContent = certDateInput.value.trim() || '—';
-    document.getElementById('certOutId').textContent = certIdInput.value.trim() || '—';
-    document.getElementById('certOutSignerName').textContent = certSignerInput.value.trim() || '—';
+    document.getElementById('certOutIdUnderQr').textContent = certIdInput.value.trim() || '—';
     document.getElementById('certOutSignerTitle').textContent = certSignerTitleInput.value.trim() || '—';
 
     if (window.QRious){
@@ -945,9 +1092,10 @@
       qrHolder.innerHTML = '';
       const canvas = document.createElement('canvas');
       qrHolder.appendChild(canvas);
+      const certVerifyBaseUrl = 'https://marvini-elite-enterprises.web.app/verify-certificate.html';
       new QRious({
         element: canvas,
-        value: `Marvini Consultancy & Training | ${certNameInput.value.trim()} | ${certProgramInput.value.trim()} | ${certIdInput.value.trim()}`,
+        value: `${certVerifyBaseUrl}?id=${encodeURIComponent(certIdInput.value.trim())}`,
         size: 200,
         background: '#ffffff',
         foreground: '#14213D'
@@ -955,11 +1103,12 @@
     }
   }
 
-  [certNameInput, certProgramInput, certDateInput, certDurationInput, certSignerInput, certSignerTitleInput, certIdInput]
+  [certNameInput, certProgramInput, certDateInput, certSignerTitleInput, certIdInput]
     .forEach(el => el.addEventListener('input', updateCertPreview));
 
   certOpenBtn.addEventListener('click', () => {
     certStatus.textContent = '';
+    setCertDownloadEnabled(false);
     if (!certIdInput.value) certIdInput.value = randomCertId();
     if (!certDateInput.value){
       certDateInput.value = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -974,29 +1123,142 @@
     if (e.key === 'Escape' && certModal.classList.contains('open')) certModal.classList.remove('open');
   });
 
-  document.getElementById('certDownloadBtn').addEventListener('click', async () => {
+  // ---------------- Save Certificate (Drive + Firestore) ----------------
+  const APPS_SCRIPT_CERT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzl8m-1wOQy3k9wD54z0S_T1gIh5IbKn-sEuqpNg1IknzZMC8BFfG8kS1qLjlozjKRK/exec';
+
+  const certSaveBtn = document.getElementById('certSaveBtn');
+  let lastSavedCertDownloadUrl = '';
+
+  function setCertDownloadEnabled(enabled, downloadUrl){
+    certDownloadBtn.disabled = !enabled;
+    lastSavedCertDownloadUrl = downloadUrl || '';
+  }
+
+  // Any edit after a save invalidates the download link, so it can't
+  // point at a stale render.
+  [certNameInput, certProgramInput, certDateInput, certSignerTitleInput, certIdInput]
+    .forEach(el => el.addEventListener('input', () => setCertDownloadEnabled(false)));
+  certSignatureInput.addEventListener('change', () => setCertDownloadEnabled(false));
+  certPartnerSelect.addEventListener('change', () => setCertDownloadEnabled(false));
+
+  certSaveBtn.addEventListener('click', async () => {
     if (!certNameInput.value.trim() || !certProgramInput.value.trim()){
-      certStatus.textContent = 'Add at least a name and program before downloading.';
+      certStatus.textContent = 'Add at least a name and program before saving.';
       certStatus.style.color = '#dc2626';
       return;
     }
-    certStatus.textContent = 'Rendering…';
+    if (!APPS_SCRIPT_CERT_ENDPOINT || APPS_SCRIPT_CERT_ENDPOINT.includes('PASTE_')){
+      certStatus.textContent = "Certificate storage isn't configured yet — set APPS_SCRIPT_CERT_ENDPOINT.";
+      certStatus.style.color = '#dc2626';
+      return;
+    }
+    certSaveBtn.disabled = true;
+    certStatus.textContent = 'Rendering certificate…';
     certStatus.style.color = '';
     try {
       const target = document.getElementById('certificate-template');
-      const canvas = await html2canvas(target, { scale: 2, backgroundColor: '#F7F5F0' });
-      const link = document.createElement('a');
+      const canvas = await html2canvas(target, { scale: 2, backgroundColor: '#F7F5F0', useCORS: true });
+      const base64 = canvas.toDataURL('image/png').split(',')[1];
       const safeName = certNameInput.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      link.download = `certificate-${safeName || 'client'}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      certStatus.textContent = 'Downloaded.';
+      const fileName = `certificate-${safeName || 'client'}-${certIdInput.value.trim() || Date.now()}.png`;
+
+      certStatus.textContent = 'Uploading to Google Drive…';
+      const uploadRes = await fetch(APPS_SCRIPT_CERT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight against Apps Script
+        body: JSON.stringify({ imageBase64: base64, fileName })
+      });
+      const uploadJson = await uploadRes.json();
+      if (!uploadJson.success) throw new Error(uploadJson.error || 'Drive upload failed');
+
+      certStatus.textContent = 'Saving record…';
+      await addDoc(collection(db, 'consultancyCertificates'), {
+        name: certNameInput.value.trim(),
+        program: certProgramInput.value.trim(),
+        date: certDateInput.value.trim(),
+        certId: certIdInput.value.trim(),
+        signerTitle: certSignerTitleInput.value.trim(),
+        partnerId: certPartnerSelect.value || null,
+        partnerName: certPartnerNameSpan.textContent || null,
+        driveFileId: uploadJson.fileId,
+        downloadUrl: uploadJson.downloadUrl,
+        viewUrl: uploadJson.viewUrl,
+        createdAt: serverTimestamp()
+      });
+
+      setCertDownloadEnabled(true, uploadJson.downloadUrl);
+      certStatus.textContent = 'Saved. You can now download the certificate.';
       certStatus.style.color = '#047857';
     } catch (err) {
-      console.error('Error generating certificate image:', err);
-      certStatus.textContent = 'Could not generate the image — please try again.';
+      console.error('Error saving certificate:', err);
+      certStatus.textContent = 'Could not save the certificate — please try again.';
       certStatus.style.color = '#dc2626';
+    } finally {
+      certSaveBtn.disabled = false;
     }
+  });
+
+  certDownloadBtn.addEventListener('click', () => {
+    if (certDownloadBtn.disabled || !lastSavedCertDownloadUrl) return;
+    window.open(lastSavedCertDownloadUrl, '_blank');
+  });
+
+  // ---------------- Certificate History ----------------
+  const certHistoryModal = document.getElementById('certHistoryModal');
+  const openCertHistoryBtn = document.getElementById('openCertHistoryBtn');
+  const closeCertHistoryBtn = document.getElementById('closeCertHistoryBtn');
+  const certHistoryTableBody = document.getElementById('certHistoryTableBody');
+  const certHistoryEmptyState = document.getElementById('certHistoryEmptyState');
+  const certHistorySearchInput = document.getElementById('certHistorySearchInput');
+  let certHistoryCache = [];
+
+  function renderCertHistory(){
+    const term = (certHistorySearchInput.value || '').trim().toLowerCase();
+    const rows = certHistoryCache.filter(c => !term
+      || (c.name || '').toLowerCase().includes(term)
+      || (c.program || '').toLowerCase().includes(term)
+      || (c.certId || '').toLowerCase().includes(term));
+
+    certHistoryTableBody.innerHTML = rows.map(c => {
+      const initials = (c.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+      return `
+      <div class="cert-history-row">
+        <div class="cert-history-avatar">${certEscapeHtml(initials || '?')}</div>
+        <div class="cert-history-info">
+          <p class="cert-history-name">${certEscapeHtml(c.name || 'Unnamed')}</p>
+          <p class="cert-history-program">${certEscapeHtml(c.program || 'No program')}</p>
+        </div>
+        <div class="cert-history-meta">
+          <span class="cert-history-date">${certEscapeHtml(c.date || '—')}</span>
+          <span class="cert-history-id">${certEscapeHtml(c.certId || '—')}</span>
+        </div>
+        <button class="btn btn-outline cert-history-download" type="button" data-redownload="${c.id}">Download</button>
+      </div>
+    `;
+    }).join('');
+
+    certHistoryEmptyState.style.display = rows.length ? 'none' : 'block';
+
+    certHistoryTableBody.querySelectorAll('[data-redownload]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cert = certHistoryCache.find(c => c.id === btn.dataset.redownload);
+        if (cert && cert.downloadUrl) window.open(cert.downloadUrl, '_blank');
+      });
+    });
+  }
+
+  const certHistoryQuery = query(collection(db, 'consultancyCertificates'), orderBy('createdAt', 'desc'));
+  onSnapshot(certHistoryQuery, (snapshot) => {
+    certHistoryCache = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderCertHistory();
+  }, (err) => console.error('Error loading certificate history:', err));
+
+  certHistorySearchInput.addEventListener('input', renderCertHistory);
+  openCertHistoryBtn.addEventListener('click', () => { renderCertHistory(); certHistoryModal.classList.add('open'); });
+  closeCertHistoryBtn.addEventListener('click', () => certHistoryModal.classList.remove('open'));
+  certHistoryModal.addEventListener('click', (e) => { if (e.target === certHistoryModal) certHistoryModal.classList.remove('open'); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certHistoryModal.classList.contains('open')) certHistoryModal.classList.remove('open');
   });
 </script>
 </body>
