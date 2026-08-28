@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@google-analytics/data": "^6.1.0",
-    "firebase-admin": "^12.7.0"
+    "firebase-admin": "^12.7.0",
+    "googleapis": "^140.0.1"
   }
 }
