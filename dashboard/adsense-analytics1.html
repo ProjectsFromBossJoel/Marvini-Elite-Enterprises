@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AdSense — Marvini Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12172B;
+    --ink-soft: #2A3150;
+    --bg: #EEF1F8;
+    --card: #FFFFFF;
+    --border: #E4E8F3;
+    --muted: #6B7280;
+    --blue: #2F6FED;
+    --blue-soft: #EAF0FE;
+    --mint: #17B897;
+    --mint-soft: #E7FBF4;
+    --amber: #F5A524;
+    --amber-soft: #FFF6E5;
+    --radius: 18px;
+    --shadow: 0 1px 2px rgba(18,23,43,.04), 0 8px 24px rgba(18,23,43,.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 28px 80px; }
+
+  /* Header */
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .sub { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
+
+  .range-pills {
+    display: flex;
+    gap: 6px;
+    background: var(--card);
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .range-pills button {
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+  }
+  .range-pills button:hover { color: var(--ink); }
+  .range-pills button.active {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* Status banner */
+  .banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--amber-soft);
+    border: 1px solid #F4DFAE;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+  .banner .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--amber);
+    margin-top: 5px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(245,165,36,.18);
+  }
+  .banner strong { font-size: 14.5px; }
+  .banner p { margin: 3px 0 0; font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+  .banner.hidden { display: none; }
+
+  /* Summary cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 980px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 18px 18px 14px;
+  }
+  .card .label {
+    font-size: 12.5px;
+    color: var(--muted);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card .value {
+    font-family: 'Sora', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    margin: 8px 0 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .card svg { display: block; margin-top: 6px; }
+  .card.primary { background: linear-gradient(135deg, #1B2450, #24306B); border: none; }
+  .card.primary .label { color: #A9B6FF; }
+  .card.primary .value { color: #fff; }
+
+  /* Main grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 980px) { .main-grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px 22px 22px;
+  }
+  .panel h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 2px;
+  }
+  .panel .panel-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+
+  #trendChart { width: 100%; height: 220px; display: block; }
+
+  .empty-chart {
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 13.5px;
+    gap: 8px;
+    text-align: center;
+  }
+  .empty-chart .icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--blue-soft); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  /* Right rail */
+  .rail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .rail-row:last-child { border-bottom: none; }
+  .rail-row .k { color: var(--muted); }
+  .rail-row .v { font-weight: 600; }
+  .pill-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--mint-soft);
+    color: #0B8F6F;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .pill-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #0B8F6F; }
+
+  /* Tables */
+  .tables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 980px) { .tables { grid-template-columns: 1fr; } }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 0 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  thead th:last-child, tbody td:last-child { text-align: right; }
+  tbody td {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  .row-name { font-weight: 600; }
+  .row-bar-track {
+    width: 100%; height: 5px; border-radius: 3px;
+    background: var(--border);
+    margin-top: 5px;
+    overflow: hidden;
+  }
+  .row-bar-fill { height: 100%; border-radius: 3px; background: var(--blue); }
+
+  .table-empty {
+    padding: 30px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .skel {
+    background: linear-gradient(90deg, #EDF0F7 25%, #E4E8F3 37%, #EDF0F7 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 6px;
+  }
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="page-head">
+    <div>
+      <p class="eyebrow">Engagement</p>
+      <h1>AdSense Performance</h1>
+      <p class="sub">Live earnings from marvini-elite-enterprises.web.app</p>
+    </div>
+    <div class="range-pills" id="rangePills">
+      <button data-range="LAST_7_DAYS">7 days</button>
+      <button data-range="LAST_30_DAYS" class="active">30 days</button>
+      <button data-range="MONTH_TO_DATE">This month</button>
+      <button data-range="YEAR_TO_DATE">This year</button>
+    </div>
+  </div>
+
+  <div class="banner" id="statusBanner">
+    <div class="dot"></div>
+    <div>
+      <strong>Your site is getting ready</strong>
+      <p>AdSense approved your site and ads.txt is authorised — earnings typically start appearing within 24–48 hours of ads going live. This page will populate automatically once data comes in.</p>
+    </div>
+  </div>
+
+  <div class="cards" id="summaryCards">
+    <div class="card primary">
+      <div class="label">💰 Estimated earnings</div>
+      <div class="value" id="cardEarnings">—</div>
+      <svg width="100%" height="34" id="sparkEarnings"></svg>
+    </div>
+    <div class="card">
+      <div class="label">Clicks</div>
+      <div class="value" id="cardClicks">—</div>
+      <svg width="100%" height="34" id="sparkClicks"></svg>
+    </div>
+    <div class="card">
+      <div class="label">Impressions</div>
+      <div class="value" id="cardImpressions">—</div>
+      <svg width="100%" height="34" id="sparkImpressions"></svg>
+    </div>
+    <div class="card">
+      <div class="label">CTR</div>
+      <div class="value" id="cardCtr">—</div>
+      <svg width="100%" height="34" id="sparkCtr"></svg>
+    </div>
+    <div class="card">
+      <div class="label">RPM</div>
+      <div class="value" id="cardRpm">—</div>
+      <svg width="100%" height="34" id="sparkRpm"></svg>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="panel">
+      <h2>Earnings trend</h2>
+      <p class="panel-sub">Daily estimated earnings for the selected period</p>
+      <div id="chartHost"></div>
+    </div>
+    <div class="panel">
+      <h2>Account snapshot</h2>
+      <p class="panel-sub">Current AdSense account status</p>
+      <div class="rail-row"><span class="k">Publisher ID</span><span class="v" id="railPubId">pub-9702535477307774</span></div>
+      <div class="rail-row"><span class="k">Site status</span><span class="pill-status"><span class="dot"></span>Getting ready</span></div>
+      <div class="rail-row"><span class="k">Ads.txt</span><span class="pill-status"><span class="dot"></span>Authorised</span></div>
+      <div class="rail-row"><span class="k">Time zone</span><span class="v">Africa/Accra</span></div>
+      <div class="rail-row"><span class="k">Last updated</span><span class="v" id="railUpdated">just now</span></div>
+    </div>
+  </div>
+
+  <div class="tables">
+    <div class="panel">
+      <h2>By ad unit</h2>
+      <p class="panel-sub">Earnings share per placement</p>
+      <table>
+        <thead><tr><th>Ad unit</th><th>Clicks</th><th>Earnings</th></tr></thead>
+        <tbody id="adUnitBody"></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>By page</h2>
+      <p class="panel-sub">Top earning pages</p>
+      <table>
+        <thead><tr><th>Page</th><th>Clicks</th><th>Earnings</th></tr></thead>
+        <tbody id="pageBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---- CONFIG: point this at your live Vercel API domain ----
+const API_BASE = 'https://marvini-elite-enterprises-alpha.vercel.app';
+// -------------------------------------------------------------
+
+const fmtMoney = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtNum = (n) => Number(n || 0).toLocaleString('en-US');
+const fmtPct = (n) => Number(n || 0).toFixed(2) + '%';
+
+function sparkline(el, values, color) {
+  if (!values || values.length < 2 || values.every(v => v === 0)) { el.innerHTML = ''; return; }
+  const w = el.clientWidth || 140, h = 34, pad = 3;
+  const max = Math.max(...values), min = Math.min(...values);
+  const range = max - min || 1;
+  const pts = values.map((v, i) => {
+    const x = pad + (i / (values.length - 1)) * (w - pad * 2);
+    const y = h - pad - ((v - min) / range) * (h - pad * 2);
+    return [x, y];
+  });
+  const d = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  el.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  el.innerHTML = `<path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+
+function renderChart(host, timeSeries) {
+  if (!timeSeries || timeSeries.length === 0) {
+    host.innerHTML = `<div class="empty-chart"><div class="icon">📈</div>No earnings recorded yet for this period</div>`;
+    return;
+  }
+  const w = 640, h = 220, padL = 40, padB = 26, padT = 12, padR = 12;
+  const values = timeSeries.map(d => d.earnings);
+  const max = Math.max(...values, 0.01);
+  const stepX = (w - padL - padR) / Math.max(timeSeries.length - 1, 1);
+  const pts = values.map((v, i) => {
+    const x = padL + i * stepX;
+    const y = padT + (h - padT - padB) * (1 - v / max);
+    return [x, y];
+  });
+  const line = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const area = line + ` L${pts[pts.length - 1][0]},${h - padB} L${pts[0][0]},${h - padB} Z`;
+  const midIdx = Math.floor(timeSeries.length / 2);
+  host.innerHTML = `
+    <svg id="trendChart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2F6FED" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#2F6FED" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="${area}" fill="url(#areaFill)" />
+      <path d="${line}" fill="none" stroke="#2F6FED" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="${padL}" y="${h - 6}" font-size="10" fill="#6B7280" font-family="Inter">${timeSeries[0].date}</text>
+      <text x="${w - padR}" y="${h - 6}" text-anchor="end" font-size="10" fill="#6B7280" font-family="Inter">${timeSeries[timeSeries.length - 1].date}</text>
+    </svg>`;
+}
+
+function renderTable(bodyEl, rows, maxVal) {
+  if (!rows || rows.length === 0) {
+    bodyEl.innerHTML = `<tr><td colspan="3"><div class="table-empty">No data for this period yet</div></td></tr>`;
+    return;
+  }
+  bodyEl.innerHTML = rows.slice(0, 8).map(r => `
+    <tr>
+      <td>
+        <div class="row-name">${(r.name || 'Unknown').toString().slice(0, 42)}</div>
+        <div class="row-bar-track"><div class="row-bar-fill" style="width:${maxVal ? (r.earnings / maxVal * 100).toFixed(0) : 0}%"></div></div>
+      </td>
+      <td>${fmtNum(r.clicks)}</td>
+      <td>${fmtMoney(r.earnings)}</td>
+    </tr>`).join('');
+}
+
+function showSkeleton() {
+  ['cardEarnings','cardClicks','cardImpressions','cardCtr','cardRpm'].forEach(id => {
+    document.getElementById(id).innerHTML = '<span class="skel" style="display:inline-block;width:70px;height:22px;"></span>';
+  });
+}
+
+async function loadReport(range) {
+  showSkeleton();
+  try {
+    const res = await fetch(`${API_BASE}/api/adsense-report?range=${range}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.details || data.error);
+
+    const t = data.totals || {};
+    document.getElementById('cardEarnings').textContent = fmtMoney(t.earnings);
+    document.getElementById('cardClicks').textContent = fmtNum(t.clicks);
+    document.getElementById('cardImpressions').textContent = fmtNum(t.impressions);
+    document.getElementById('cardCtr').textContent = fmtPct(t.ctr);
+    document.getElementById('cardRpm').textContent = fmtMoney(t.rpm);
+
+    const ts = data.timeSeries || [];
+    sparkline(document.getElementById('sparkEarnings'), ts.map(d => d.earnings), '#8FB3FF');
+    sparkline(document.getElementById('sparkClicks'), ts.map(d => d.clicks), '#2F6FED');
+    sparkline(document.getElementById('sparkImpressions'), ts.map(d => d.impressions), '#2F6FED');
+
+    renderChart(document.getElementById('chartHost'), ts);
+
+    const banner = document.getElementById('statusBanner');
+    banner.classList.toggle('hidden', t.earnings > 0);
+
+    const adRows = (data.byAdUnit || []).sort((a,b) => b.earnings - a.earnings);
+    const pageRows = (data.byPage || []).sort((a,b) => b.earnings - a.earnings);
+    const maxAd = Math.max(...adRows.map(r => r.earnings), 0.01);
+    const maxPage = Math.max(...pageRows.map(r => r.earnings), 0.01);
+    renderTable(document.getElementById('adUnitBody'), adRows, maxAd);
+    renderTable(document.getElementById('pageBody'), pageRows, maxPage);
+
+    document.getElementById('railUpdated').textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  } catch (err) {
+    document.getElementById('cardEarnings').textContent = '—';
+    document.getElementById('chartHost').innerHTML = `<div class="empty-chart"><div class="icon">⚠️</div>Couldn't load report: ${err.message}</div>`;
+    console.error(err);
+  }
+}
+
+document.getElementById('rangePills').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#rangePills button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadReport(btn.dataset.range);
+});
+
+loadReport('LAST_30_DAYS');
+</script>
+</body>
+</html>
