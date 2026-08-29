@@ -147,6 +147,23 @@ function stateClass(state) {
   return 'state-' + (state || '').toLowerCase().replace(/_/g, '-');
 }
 
+const SNAPSHOT_SITE_DOMAIN = 'marvini-elite-enterprises.web.app';
+
+function pillClassForState(state) {
+  if (state === 'READY') return 'completed';
+  if (state === 'REQUIRES_REVIEW' || state === 'NEEDS_ATTENTION') return 'archived';
+  return 'pending'; // GETTING_READY and anything unrecognised
+}
+
+function updateSnapshotSiteStatus(sites) {
+  const el = document.getElementById('adsSnapshotSiteStatus');
+  if (!el) return;
+  const match = sites.find((s) => s.domain === SNAPSHOT_SITE_DOMAIN);
+  if (!match) return;
+  el.textContent = stateLabel(match.state);
+  el.className = 'pill ' + pillClassForState(match.state);
+}
+
 async function loadAdsenseSites() {
   const body = document.getElementById('adsenseSitesBody');
   if (!body) return;
@@ -161,16 +178,19 @@ async function loadAdsenseSites() {
     }
     body.innerHTML = sites.map((s) => `
       <tr>
-        <td><strong style="font-size:.83rem;">${s.domain}</strong></td>
+        <td>
+          <strong style="font-size:.83rem;">${s.domain}</strong>
+          ${s.domain === SNAPSHOT_SITE_DOMAIN ? '<span class="pill active" style="margin-left:8px;">Reporting site</span>' : ''}
+        </td>
         <td><span class="site-state-pill ${stateClass(s.state)}">${stateLabel(s.state)}</span></td>
         <td>${s.autoAdsEnabled ? 'On' : 'Off'}</td>
       </tr>`).join('');
+    updateSnapshotSiteStatus(sites);
   } catch (err) {
     body.innerHTML = `<tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>Couldn't load sites: ${err.message}</p></div></td></tr>`;
     console.error('AdSense sites error:', err);
   }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
   const tabGroup = document.getElementById('adsenseRangeTabs');
   if (tabGroup) {
