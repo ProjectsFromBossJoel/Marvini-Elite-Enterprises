@@ -35,8 +35,6 @@ export default async function handler(req, res) {
   }
 
   const range = (req.query && req.query.range) || 'LAST_30_DAYS';
-  const site = req.query && req.query.site;
-  const siteFilters = site ? [`DOMAIN_NAME==${site}`] : [];
   const account = `accounts/${ADSENSE_ACCOUNT_ID}`;
 
   try {
@@ -59,7 +57,6 @@ export default async function handler(req, res) {
       dateRange: range,
       metrics,
       dimensions: ['DATE'],
-      filters: siteFilters,
     });
 
     // 2) Breakdown by ad unit
@@ -71,7 +68,6 @@ export default async function handler(req, res) {
         metrics,
         dimensions: ['AD_UNIT_NAME'],
         orderBy: ['-ESTIMATED_EARNINGS'],
-        filters: siteFilters,
       });
       byAdUnitRows = adUnitResp.data.rows || [];
     } catch (e) {
@@ -87,7 +83,6 @@ export default async function handler(req, res) {
         metrics,
         dimensions: ['PAGE_URL'],
         orderBy: ['-ESTIMATED_EARNINGS'],
-        filters: siteFilters,
       });
       byPageRows = pageResp.data.rows || [];
     } catch (e) {

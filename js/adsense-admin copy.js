@@ -6,16 +6,6 @@ const ADSENSE_API_BASE = 'https://marvini-elite-enterprises-alpha.vercel.app';
 // ----------------------------------------------------------------------------------
 
 let currentRange = 'LAST_30_DAYS';
-let currentSite = 'all';
-
-const SITE_LABELS = {
-  all: 'All sites',
-  'marvini-elite-enterprises.web.app': 'Marvini Elite Enterprises',
-  'marvini-smart-driving-school-solution.web.app': 'Smart Driving School Solution',
-  'marvini-events-and-festivals.web.app': 'Events & Festivals',
-  'marvini-digital-food-chain.web.app': 'Digital Food Chain',
-  'marvini--farms.web.app': 'M-Farms',
-};
 
 const fmtMoney = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtNum = (n) => Number(n || 0).toLocaleString('en-US');
@@ -100,11 +90,10 @@ function showSkeletons() {
   });
 }
 
-async function loadAdsenseReport(range, site) {
+async function loadAdsenseReport(range) {
   showSkeletons();
   try {
-    const siteParam = site && site !== 'all' ? `&site=${encodeURIComponent(site)}` : '';
-    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-report?range=${range}${siteParam}`);
+    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-report?range=${range}`);
     const data = await res.json();
     if (data.error) throw new Error(data.details || data.error);
 
@@ -135,10 +124,6 @@ async function loadAdsenseReport(range, site) {
     const updatedEl = document.getElementById('adsLastUpdated');
     if (updatedEl) updatedEl.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    const labelEl = document.getElementById('adsSiteLabel');
-    if (labelEl) labelEl.textContent = SITE_LABELS[site] || site;
-    const snapNameEl = document.getElementById('adsSnapshotSiteName');
-    if (snapNameEl) snapNameEl.textContent = SITE_LABELS[site] || site;
 
   } catch (err) {
     document.getElementById('adsCardEarnings').textContent = '—';
@@ -162,7 +147,7 @@ function stateClass(state) {
   return 'state-' + (state || '').toLowerCase().replace(/_/g, '-');
 }
 
-let lastLoadedSites = [];
+const SNAPSHOT_SITE_DOMAIN = 'marvini-elite-enterprises.web.app';
 
 function pillClassForState(state) {
   if (state === 'READY') return 'completed';
@@ -170,31 +155,13 @@ function pillClassForState(state) {
   return 'pending'; // GETTING_READY and anything unrecognised
 }
 
-function updateSnapshotSiteStatus(site) {
-  const row = document.getElementById('adsSnapshotStatusRow');
+function updateSnapshotSiteStatus(sites) {
   const el = document.getElementById('adsSnapshotSiteStatus');
-  if (!row || !el) return;
-  if (!site || site === 'all') { row.style.display = 'none'; return; }
-  const match = lastLoadedSites.find((s) => s.domain === site);
-  if (!match) { row.style.display = 'none'; return; }
-  row.style.display = '';
+  if (!el) return;
+  const match = sites.find((s) => s.domain === SNAPSHOT_SITE_DOMAIN);
+  if (!match) return;
   el.textContent = stateLabel(match.state);
   el.className = 'pill ' + pillClassForState(match.state);
-}
-
-async function loadTotalEarnings(range) {
-  try {
-    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-report?range=${range}`);
-    const data = await res.json();
-    if (data.error) throw new Error(data.details || data.error);
-    const t = data.totals || {};
-    document.getElementById('adsTotalEarningsVal').textContent = fmtMoney(t.earnings);
-    document.getElementById('adsTotalClicksVal').textContent = fmtNum(t.clicks);
-    document.getElementById('adsTotalImpressionsVal').textContent = fmtNum(t.impressions);
-  } catch (err) {
-    document.getElementById('adsTotalEarningsVal').textContent = '—';
-    console.error('Total earnings error:', err);
-  }
 }
 
 async function loadAdsenseSites() {
@@ -209,17 +176,16 @@ async function loadAdsenseSites() {
       body.innerHTML = `<tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>No sites found</p></div></td></tr>`;
       return;
     }
-    lastLoadedSites = sites;
     body.innerHTML = sites.map((s) => `
       <tr>
         <td>
           <strong style="font-size:.83rem;">${s.domain}</strong>
-          ${s.domain === currentSite ? '<span class="pill active" style="margin-left:8px;">Viewing</span>' : ''}
+          ${s.domain === SNAPSHOT_SITE_DOMAIN ? '<span class="pill active" style="margin-left:8px;">Reporting site</span>' : ''}
         </td>
         <td><span class="site-state-pill ${stateClass(s.state)}">${stateLabel(s.state)}</span></td>
         <td>${s.autoAdsEnabled ? 'On' : 'Off'}</td>
       </tr>`).join('');
-    updateSnapshotSiteStatus(currentSite);
+    updateSnapshotSiteStatus(sites);
   } catch (err) {
     body.innerHTML = `<tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>Couldn't load sites: ${err.message}</p></div></td></tr>`;
     console.error('AdSense sites error:', err);
@@ -234,21 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
       tabGroup.querySelectorAll('.admin-tab').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       currentRange = btn.dataset.range;
-      loadAdsenseReport(currentRange, currentSite);
-      loadTotalEarnings(currentRange);
+      loadAdsenseReport(currentRange);
     });
   }
 
-  const siteSelect = document.getElementById('adsenseSiteSelect');
-  if (siteSelect) {
-    siteSelect.addEventListener('change', () => {
-      currentSite = siteSelect.value;
-      loadAdsenseReport(currentRange, currentSite);
-      updateSnapshotSiteStatus(currentSite);
-    });
-  }
-
-  loadAdsenseReport(currentRange, currentSite);
-  loadTotalEarnings(currentRange);
+  loadAdsenseReport(currentRange);
   loadAdsenseSites();
 });
