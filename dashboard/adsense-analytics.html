@@ -36,9 +36,9 @@
   .total-earn-breakdown div{text-align:right;}
   .total-earn-breakdown .n{font-family:var(--font-heading);font-weight:800;font-size:1rem;display:block;}
   .total-earn-breakdown .l{font-size:.68rem;color:var(--text-muted);font-weight:600;}
-  .adsense-refresh-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:999px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:border-color .2s ease,color .2s ease;}
-  .adsense-refresh-btn:hover{border-color:var(--royal-blue);color:var(--royal-blue);}
-  .adsense-refresh-btn:disabled{opacity:.6;cursor:default;}
+  .adsense-refresh-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:999px;border:none;background:var(--deep-teal, #059669);color:#fff;font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(5,150,105,0.32);transition:transform .15s ease,box-shadow .15s ease,background .2s ease;}
+  .adsense-refresh-btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(5,150,105,0.4);background:#047a56;}
+  .adsense-refresh-btn:disabled{opacity:.7;cursor:default;transform:none;}
   .adsense-refresh-btn svg{width:15px;height:15px;transition:transform .5s ease;}
   .adsense-refresh-btn.spinning svg{animation:adsRefreshSpin .8s linear infinite;}
   @keyframes adsRefreshSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
