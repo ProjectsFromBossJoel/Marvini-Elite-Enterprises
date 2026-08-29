@@ -5,6 +5,8 @@
 const ADSENSE_API_BASE = 'https://marvini-elite-enterprises-alpha.vercel.app';
 // ----------------------------------------------------------------------------------
 
+let currentRange = 'LAST_30_DAYS';
+
 const fmtMoney = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtNum = (n) => Number(n || 0).toLocaleString('en-US');
 const fmtPct = (n) => Number(n || 0).toFixed(2) + '%';
@@ -121,11 +123,51 @@ async function loadAdsenseReport(range) {
 
     const updatedEl = document.getElementById('adsLastUpdated');
     if (updatedEl) updatedEl.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+
   } catch (err) {
     document.getElementById('adsCardEarnings').textContent = '—';
     const host = document.getElementById('adsenseChartHost');
     if (host) host.innerHTML = `<div class="adsense-chart-empty"><div class="es-icon">⚠️</div><span>Couldn't load report: ${err.message}</span></div>`;
     console.error('AdSense report error:', err);
+  }
+}
+
+function stateLabel(state) {
+  const map = {
+    READY: 'Ready',
+    GETTING_READY: 'Getting ready',
+    REQUIRES_REVIEW: 'Requires review',
+    NEEDS_ATTENTION: 'Needs attention',
+  };
+  return map[state] || state || 'Unknown';
+}
+
+function stateClass(state) {
+  return 'state-' + (state || '').toLowerCase().replace(/_/g, '-');
+}
+
+async function loadAdsenseSites() {
+  const body = document.getElementById('adsenseSitesBody');
+  if (!body) return;
+  try {
+    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-sites`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.details || data.error);
+    const sites = data.sites || [];
+    if (!sites.length) {
+      body.innerHTML = `<tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>No sites found</p></div></td></tr>`;
+      return;
+    }
+    body.innerHTML = sites.map((s) => `
+      <tr>
+        <td><strong style="font-size:.83rem;">${s.domain}</strong></td>
+        <td><span class="site-state-pill ${stateClass(s.state)}">${stateLabel(s.state)}</span></td>
+        <td>${s.autoAdsEnabled ? 'On' : 'Off'}</td>
+      </tr>`).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>Couldn't load sites: ${err.message}</p></div></td></tr>`;
+    console.error('AdSense sites error:', err);
   }
 }
 
@@ -137,8 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!btn) return;
       tabGroup.querySelectorAll('.admin-tab').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      loadAdsenseReport(btn.dataset.range);
+      currentRange = btn.dataset.range;
+      loadAdsenseReport(currentRange);
     });
   }
-  loadAdsenseReport('LAST_30_DAYS');
+
+  loadAdsenseReport(currentRange);
+  loadAdsenseSites();
 });

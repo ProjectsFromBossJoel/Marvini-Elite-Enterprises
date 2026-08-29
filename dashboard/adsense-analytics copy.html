@@ -22,12 +22,7 @@
   .stat-spark{display:block;margin-top:6px;}
   .earn-highlight{background:var(--grad-hero);color:#fff;border:none;}
   .earn-highlight .stat-label{color:rgba(255,255,255,.78);}
-   .earn-highlight .stat-value{color:#fff;}
-  .page-head-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-  .site-state-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:700;}
-  .site-state-pill.state-ready{background:#e2f8ec;color:#0a8a4a;}
-  .site-state-pill.state-getting-ready{background:#fff3d6;color:#a06400;}
-  .site-state-pill.state-requires-review,.site-state-pill.state-needs-attention{background:#fde3e3;color:#c0392b;}
+  .earn-highlight .stat-value{color:#fff;}
 
   .adsense-chart-empty{
     height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -118,7 +113,7 @@
         <p>Live ad revenue from marvini-elite-enterprises.web.app, pulled directly from your Google AdSense account.</p>
       </div>
       <div class="page-head-actions">
-<div class="admin-tabs" data-admin-tabs id="adsenseRangeTabs" style="margin-bottom:0;">
+        <div class="admin-tabs" data-admin-tabs id="adsenseRangeTabs" style="margin-bottom:0;">
           <button class="admin-tab" data-range="LAST_7_DAYS">7 days</button>
           <button class="admin-tab active" data-range="LAST_30_DAYS">30 days</button>
           <button class="admin-tab" data-range="MONTH_TO_DATE">This month</button>
@@ -188,7 +183,7 @@
         </div>
         <table>
           <tbody>
-<tr><td style="color:var(--text-muted);">Publisher ID</td><td style="text-align:right;font-weight:700;">pub-9702535477307774</td></tr>
+            <tr><td style="color:var(--text-muted);">Publisher ID</td><td style="text-align:right;font-weight:700;">pub-9702535477307774</td></tr>
             <tr><td style="color:var(--text-muted);">Site status</td><td style="text-align:right;"><span class="pill pending">Getting ready</span></td></tr>
             <tr><td style="color:var(--text-muted);">Ads.txt</td><td style="text-align:right;"><span class="pill completed">Authorised</span></td></tr>
             <tr><td style="color:var(--text-muted);">Time zone</td><td style="text-align:right;font-weight:700;">Africa/Accra</td></tr>
@@ -224,20 +219,6 @@
           <tbody id="adsensePageBody"><tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>Loading…</p></div></td></tr></tbody>
         </table>
       </div>
-    </div>
-
-    <div class="panel" style="margin-top:20px;">
-      <div class="panel-head">
-        <div>
-          <p class="panel-eyebrow">Portfolio</p>
-          <h2 class="panel-title" style="font-size:1.15rem;">All AdSense sites</h2>
-        </div>
-      </div>
-      <table>
-        <thead><tr><th>Site URL</th><th>Approval status</th><th>Auto ads</th></tr></thead>
-        <tbody id="adsenseSitesBody"><tr><td colspan="3"><div class="empty-state" style="padding:24px 0;"><p>Loading…</p></div></td></tr></tbody>
-      </table>
-      <p style="margin-top:10px;font-size:.75rem;color:var(--text-muted);">Ads.txt status and last-updated timestamps aren't exposed by the AdSense API — check those in the AdSense dashboard directly.</p>
     </div>
 
   </main>

@@ -1,14 +1,5 @@
 // api/adsense-report.js
 // Vercel serverless function — fetches AdSense report data server-side
-// so the refresh token / secret never touch the browser.
-//
-// Required Vercel Environment Variables (Project Settings > Environment Variables):
-//   ADSENSE_CLIENT_ID      - OAuth Client ID
-//   ADSENSE_CLIENT_SECRET  - OAuth Client Secret
-//   ADSENSE_REFRESH_TOKEN  - Refresh token from get-refresh-token.js
-//   ADSENSE_ACCOUNT_ID     - e.g. "pub-9702535477307774" (no "accounts/" prefix)
-//   ALLOWED_ORIGIN         - e.g. "https://marvini-elite-enterprises.web.app"
-//
 // Usage from the dashboard:
 //   GET /api/adsense-report?range=LAST_30_DAYS
 //   range options: TODAY, YESTERDAY, LAST_7_DAYS, LAST_30_DAYS, MONTH_TO_DATE, YEAR_TO_DATE
@@ -66,6 +57,7 @@ export default async function handler(req, res) {
       dateRange: range,
       metrics,
       dimensions: ['DATE'],
+      filters: siteFilters,
     });
 
     // 2) Breakdown by ad unit
@@ -77,6 +69,7 @@ export default async function handler(req, res) {
         metrics,
         dimensions: ['AD_UNIT_NAME'],
         orderBy: ['-ESTIMATED_EARNINGS'],
+        filters: siteFilters,
       });
       byAdUnitRows = adUnitResp.data.rows || [];
     } catch (e) {
@@ -92,6 +85,7 @@ export default async function handler(req, res) {
         metrics,
         dimensions: ['PAGE_URL'],
         orderBy: ['-ESTIMATED_EARNINGS'],
+        filters: siteFilters,
       });
       byPageRows = pageResp.data.rows || [];
     } catch (e) {
