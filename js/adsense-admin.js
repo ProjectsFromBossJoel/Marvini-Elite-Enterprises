@@ -104,7 +104,7 @@ async function loadAdsenseReport(range, site) {
   showSkeletons();
   try {
     const siteParam = site && site !== 'all' ? `&site=${encodeURIComponent(site)}` : '';
-    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-report?range=${range}${siteParam}`);
+    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense?type=report&range=${range}${siteParam}`);
     const data = await res.json();
     if (data.error) throw new Error(data.details || data.error);
 
@@ -184,7 +184,7 @@ function updateSnapshotSiteStatus(site) {
 
 async function loadTotalEarnings(range) {
   try {
-    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-report?range=${range}`);
+    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense?type=report&range=${range}`);
     const data = await res.json();
     if (data.error) throw new Error(data.details || data.error);
     const t = data.totals || {};
@@ -201,7 +201,7 @@ async function loadAdsenseSites() {
   const body = document.getElementById('adsenseSitesBody');
   if (!body) return;
   try {
-    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense-sites`);
+    const res = await fetch(`${ADSENSE_API_BASE}/api/adsense?type=sites`);
     const data = await res.json();
     if (data.error) throw new Error(data.details || data.error);
     const sites = data.sites || [];
