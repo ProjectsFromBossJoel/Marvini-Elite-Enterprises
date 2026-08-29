@@ -8,6 +8,8 @@ const ADSENSE_API_BASE = 'https://marvini-elite-enterprises-alpha.vercel.app';
 let currentRange = 'LAST_30_DAYS';
 let currentSite = 'all';
 
+// Optional friendly overrides. Anything NOT listed here still works —
+// it just falls back to an auto-formatted version of the domain (see labelForSite below).
 const SITE_LABELS = {
   all: 'All sites',
   'marvini-elite-enterprises.web.app': 'Marvini Elite Enterprises',
@@ -15,7 +17,19 @@ const SITE_LABELS = {
   'marvini-events-and-festivals.web.app': 'Events & Festivals',
   'marvini-digital-food-chain.web.app': 'Digital Food Chain',
   'marvini--farms.web.app': 'M-Farms',
+  'dekaydrivingschool-6933c.web.app': 'Dekay Driving School',
 };
+
+function labelForSite(domain) {
+  if (SITE_LABELS[domain]) return SITE_LABELS[domain];
+  // Auto-format: strip .web.app, split on hyphens, title-case each word
+  return domain
+    .replace(/\.web\.app$/, '')
+    .split('-')
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 
 const fmtMoney = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtNum = (n) => Number(n || 0).toLocaleString('en-US');
@@ -136,9 +150,9 @@ async function loadAdsenseReport(range, site) {
     if (updatedEl) updatedEl.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     const labelEl = document.getElementById('adsSiteLabel');
-    if (labelEl) labelEl.textContent = SITE_LABELS[site] || site;
+    if (labelEl) labelEl.textContent = labelForSite(site);
     const snapNameEl = document.getElementById('adsSnapshotSiteName');
-    if (snapNameEl) snapNameEl.textContent = SITE_LABELS[site] || site;
+    if (snapNameEl) snapNameEl.textContent = labelForSite(site);
 
   } catch (err) {
     document.getElementById('adsCardEarnings').textContent = '—';
@@ -197,6 +211,19 @@ async function loadTotalEarnings(range) {
   }
 }
 
+function populateSiteDropdown(sites) {
+  const select = document.getElementById('adsenseSiteSelect');
+  if (!select) return;
+  const previousValue = select.value || currentSite;
+  const optionsHtml = ['<option value="all">All sites (combined)</option>']
+    .concat(sites.map((s) => `<option value="${s.domain}">${labelForSite(s.domain)}</option>`))
+    .join('');
+  select.innerHTML = optionsHtml;
+  const stillExists = sites.some((s) => s.domain === previousValue) || previousValue === 'all';
+  select.value = stillExists ? previousValue : 'all';
+  currentSite = select.value;
+}
+
 async function loadAdsenseSites() {
   const body = document.getElementById('adsenseSitesBody');
   if (!body) return;
@@ -210,6 +237,7 @@ async function loadAdsenseSites() {
       return;
     }
     lastLoadedSites = sites;
+    populateSiteDropdown(sites);
     body.innerHTML = sites.map((s) => `
       <tr>
         <td>
@@ -225,6 +253,21 @@ async function loadAdsenseSites() {
     console.error('AdSense sites error:', err);
   }
 }
+async function refreshAll() {
+  const btn = document.getElementById('adsenseRefreshBtn');
+  const label = document.getElementById('adsenseRefreshBtnLabel');
+  if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
+  if (label) label.textContent = 'Refreshing…';
+  try {
+    await loadAdsenseSites();
+    await loadAdsenseReport(currentRange, currentSite);
+    await loadTotalEarnings(currentRange);
+  } finally {
+    if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
+    if (label) label.textContent = 'Refresh';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const tabGroup = document.getElementById('adsenseRangeTabs');
   if (tabGroup) {
@@ -248,7 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  loadAdsenseReport(currentRange, currentSite);
+  const refreshBtn = document.getElementById('adsenseRefreshBtn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', refreshAll);
+  }
+
+  loadAdsenseSites().then(() => {
+    loadAdsenseReport(currentRange, currentSite);
+  });
   loadTotalEarnings(currentRange);
-  loadAdsenseSites();
 });

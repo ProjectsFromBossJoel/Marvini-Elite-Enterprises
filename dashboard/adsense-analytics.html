@@ -36,6 +36,12 @@
   .total-earn-breakdown div{text-align:right;}
   .total-earn-breakdown .n{font-family:var(--font-heading);font-weight:800;font-size:1rem;display:block;}
   .total-earn-breakdown .l{font-size:.68rem;color:var(--text-muted);font-weight:600;}
+  .adsense-refresh-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:999px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:border-color .2s ease,color .2s ease;}
+  .adsense-refresh-btn:hover{border-color:var(--royal-blue);color:var(--royal-blue);}
+  .adsense-refresh-btn:disabled{opacity:.6;cursor:default;}
+  .adsense-refresh-btn svg{width:15px;height:15px;transition:transform .5s ease;}
+  .adsense-refresh-btn.spinning svg{animation:adsRefreshSpin .8s linear infinite;}
+  @keyframes adsRefreshSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
   .adsense-chart-empty{
     height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:8px;color:var(--text-muted);font-size:.85rem;
@@ -127,11 +133,6 @@
       <div class="page-head-actions">
         <select id="adsenseSiteSelect" class="adsense-site-select">
           <option value="all" selected>All sites (combined)</option>
-          <option value="marvini-elite-enterprises.web.app">Marvini Elite Enterprises</option>
-          <option value="marvini-smart-driving-school-solution.web.app">Smart Driving School Solution</option>
-          <option value="marvini-events-and-festivals.web.app">Events & Festivals</option>
-          <option value="marvini-digital-food-chain.web.app">Digital Food Chain</option>
-          <option value="marvini--farms.web.app">M-Farms</option>
         </select>
 <div class="admin-tabs" data-admin-tabs id="adsenseRangeTabs" style="margin-bottom:0;">
           <button class="admin-tab" data-range="LAST_7_DAYS">7 days</button>
@@ -139,6 +140,10 @@
           <button class="admin-tab" data-range="MONTH_TO_DATE">This month</button>
           <button class="admin-tab" data-range="YEAR_TO_DATE">This year</button>
         </div>
+        <button class="adsense-refresh-btn" id="adsenseRefreshBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          <span id="adsenseRefreshBtnLabel">Refresh</span>
+        </button>
       </div>
     </div>
 
