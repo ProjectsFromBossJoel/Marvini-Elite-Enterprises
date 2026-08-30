@@ -18,6 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <!-- QRious: draws the QR code on the certificate -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
   /* Modal + status pills — self-contained so this page works even if
@@ -861,6 +863,10 @@
       <label for="cert-date">Completion date</label>
       <input id="cert-date" type="text" placeholder="e.g. August 6, 2026" />
     </div>
+        <div class="form-field">
+      <label for="cert-email">Recipient email</label>
+      <input id="cert-email" type="email" placeholder="trainee@example.com" />
+    </div>
     <div class="form-row-2">
       <div class="form-field">
         <label for="cert-signature">Signature image (upload from this device)</label>
@@ -921,6 +927,7 @@
     <div style="display:flex; gap:.6rem;">
       <button type="button" class="btn btn-primary" id="certSaveBtn" style="flex:1; justify-content:center;">Save Certificate</button>
       <button type="button" class="btn btn-outline" id="certDownloadBtn" style="flex:1; justify-content:center;" disabled>Download (PNG)</button>
+      <button type="button" class="btn btn-outline" id="certSendBtn" style="flex:1; justify-content:center;" disabled>Email to Recipient</button>
     </div>
     <div id="certFormStatus" style="font-size:.85rem; margin-top:.5rem; min-height:1.2em;"></div>
   </div>
@@ -977,6 +984,22 @@
   const certRegSelect = document.getElementById('cert-registration');
   const certStatus = document.getElementById('certFormStatus');
 
+    // ---------------- Send Certificate via EmailJS ----------------
+  const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';              // reuse the same key you use for registration emails
+  const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';              // reuse the same service ID
+  const EMAILJS_CERT_TEMPLATE_ID = 'YOUR_CERT_TEMPLATE_ID';  // the new template you're creating
+
+  if (window.emailjs && !EMAILJS_PUBLIC_KEY.startsWith('YOUR_')) {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
+  const certEmailInput = document.getElementById('cert-email');
+  const certSendBtn = document.getElementById('certSendBtn');
+
+  function setCertSendEnabled(enabled){
+    certSendBtn.disabled = !enabled;
+  }
+
   const certNameInput = document.getElementById('cert-name');
   const certProgramInput = document.getElementById('cert-program');
   const certDateInput = document.getElementById('cert-date');
@@ -1005,6 +1028,7 @@
     if (!reg) return;
     certNameInput.value = reg.name || '';
     certProgramInput.value = reg.program || '';
+    certEmailInput.value = reg.email || '';
     updateCertPreview();
   });
 
@@ -1130,9 +1154,15 @@
   const certSaveBtn = document.getElementById('certSaveBtn');
   let lastSavedCertDownloadUrl = '';
 
-  function setCertDownloadEnabled(enabled, downloadUrl){
+  let lastSavedCertImageUrl = '';
+
+  function setCertDownloadEnabled(enabled, downloadUrl, driveFileId){
     certDownloadBtn.disabled = !enabled;
     lastSavedCertDownloadUrl = downloadUrl || '';
+    // Direct-view form so email clients can actually render it as an <img>,
+    // rather than Drive's HTML preview page (which downloadUrl/viewUrl point to).
+    lastSavedCertImageUrl = driveFileId ? `https://drive.google.com/uc?export=view&id=${driveFileId}` : '';
+    setCertSendEnabled(enabled);
   }
 
   // Any edit after a save invalidates the download link, so it can't
@@ -1141,6 +1171,44 @@
     .forEach(el => el.addEventListener('input', () => setCertDownloadEnabled(false)));
   certSignatureInput.addEventListener('change', () => setCertDownloadEnabled(false));
   certPartnerSelect.addEventListener('change', () => setCertDownloadEnabled(false));
+  certEmailInput.addEventListener('input', () => setCertDownloadEnabled(false));
+
+  certSendBtn.addEventListener('click', async () => {
+    const email = certEmailInput.value.trim();
+    if (!email){
+      certStatus.textContent = 'Add a recipient email before sending.';
+      certStatus.style.color = '#dc2626';
+      return;
+    }
+    if (!lastSavedCertImageUrl){
+      certStatus.textContent = 'Save the certificate first, then send it.';
+      certStatus.style.color = '#dc2626';
+      return;
+    }
+    certSendBtn.disabled = true;
+    certStatus.textContent = 'Sending email…';
+    certStatus.style.color = '';
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CERT_TEMPLATE_ID, {
+        to_email: email,
+        to_name: certNameInput.value.trim(),
+        program_name: certProgramInput.value.trim(),
+        cert_id: certIdInput.value.trim(),
+        completion_date: certDateInput.value.trim(),
+        certificate_image_url: lastSavedCertImageUrl,
+        certificate_link: lastSavedCertDownloadUrl,
+        signer_title: certSignerTitleInput.value.trim()
+      });
+      certStatus.textContent = `Certificate emailed to ${email}.`;
+      certStatus.style.color = '#047857';
+    } catch (err) {
+      console.error('Error sending certificate email:', err);
+      certStatus.textContent = 'Could not send the email — please try again.';
+      certStatus.style.color = '#dc2626';
+    } finally {
+      certSendBtn.disabled = false;
+    }
+  });
 
   certSaveBtn.addEventListener('click', async () => {
     if (!certNameInput.value.trim() || !certProgramInput.value.trim()){
@@ -1187,7 +1255,7 @@
         createdAt: serverTimestamp()
       });
 
-      setCertDownloadEnabled(true, uploadJson.downloadUrl);
+      setCertDownloadEnabled(true, uploadJson.downloadUrl, uploadJson.fileId);
       certStatus.textContent = 'Saved. You can now download the certificate.';
       certStatus.style.color = '#047857';
     } catch (err) {
