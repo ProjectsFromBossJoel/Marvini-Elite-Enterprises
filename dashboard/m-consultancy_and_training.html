@@ -949,6 +949,19 @@
   </div>
 </div>
 
+<!-- Certificate Send Reminder Modal -->
+<div class="modal-overlay" id="certSendPromptModal">
+  <div class="modal-card confirm-modal-card">
+    <div class="confirm-icon" style="background:rgba(26,86,255,0.12); color:#1a56ff;">✉</div>
+    <h3>Send the certificate?</h3>
+    <p>This certificate was saved to Drive but hasn't been emailed yet. Would you like to send it to the student / trainee now?</p>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-outline" id="certPromptNotNowBtn" style="border:1px solid var(--border,#e2e8f0);">Not now</button>
+      <button type="button" class="btn btn-primary" id="certPromptSendBtn">Send Now</button>
+    </div>
+  </div>
+</div>
+
 <!-- Reusable Confirm Modal (replaces browser confirm()) -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-card confirm-modal-card">
@@ -1127,6 +1140,7 @@
 
   certOpenBtn.addEventListener('click', () => {
     certStatus.textContent = '';
+    certEmailSent = false;
     setCertDownloadEnabled(false);
     if (!certIdInput.value) certIdInput.value = randomCertId();
     if (!certDateInput.value){
@@ -1136,10 +1150,48 @@
     certModal.classList.add('open');
   });
 
-  certCloseBtn.addEventListener('click', () => certModal.classList.remove('open'));
-  certModal.addEventListener('click', (e) => { if (e.target === certModal) certModal.classList.remove('open'); });
+  const certSendPromptModal = document.getElementById('certSendPromptModal');
+  const certPromptSendBtn = document.getElementById('certPromptSendBtn');
+  const certPromptNotNowBtn = document.getElementById('certPromptNotNowBtn');
+
+  // Only interrupt closing if there's a saved-but-unsent certificate.
+  // Otherwise close normally with no extra friction.
+  function attemptCloseCertModal(){
+    if (lastSavedCertImageUrl && !certEmailSent){
+      certSendPromptModal.classList.add('open');
+      return;
+    }
+    certModal.classList.remove('open');
+  }
+
+  certCloseBtn.addEventListener('click', attemptCloseCertModal);
+  certModal.addEventListener('click', (e) => { if (e.target === certModal) attemptCloseCertModal(); });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && certModal.classList.contains('open')) certModal.classList.remove('open');
+    if (e.key !== 'Escape') return;
+    if (certSendPromptModal.classList.contains('open')){
+      certSendPromptModal.classList.remove('open');
+      return;
+    }
+    if (certModal.classList.contains('open')) attemptCloseCertModal();
+  });
+
+  certPromptNotNowBtn.addEventListener('click', () => {
+    certSendPromptModal.classList.remove('open');
+    certModal.classList.remove('open');
+  });
+
+  certSendPromptModal.addEventListener('click', (e) => {
+    if (e.target === certSendPromptModal) certSendPromptModal.classList.remove('open');
+  });
+
+  certPromptSendBtn.addEventListener('click', async () => {
+    certSendPromptModal.classList.remove('open');
+    await sendCertificateEmail();
+    // Only close the certificate modal once the send actually succeeded —
+    // if it failed, leave everything open so they can see the error and retry.
+    if (certEmailSent){
+      certModal.classList.remove('open');
+    }
   });
 
   // ---------------- Save Certificate (Drive + Firestore) ----------------
@@ -1150,6 +1202,10 @@
 
   let lastSavedCertImageUrl = '';
 
+  // Tracks whether the most recently *saved* certificate has actually been
+  // emailed yet — drives the "did you forget to send this?" close prompt.
+  let certEmailSent = false;
+
   function setCertDownloadEnabled(enabled, downloadUrl, driveFileId){
     certDownloadBtn.disabled = !enabled;
     lastSavedCertDownloadUrl = downloadUrl || '';
@@ -1157,6 +1213,9 @@
     // rather than Drive's HTML preview page (which downloadUrl/viewUrl point to).
     lastSavedCertImageUrl = driveFileId ? `https://drive.google.com/uc?export=view&id=${driveFileId}` : '';
     setCertSendEnabled(enabled);
+    // A brand-new save means there's a fresh certificate that hasn't been
+    // emailed yet, regardless of whether an earlier one was.
+    if (enabled) certEmailSent = false;
   }
 
   // Any edit after a save invalidates the download link, so it can't
@@ -1167,7 +1226,7 @@
   certPartnerSelect.addEventListener('change', () => setCertDownloadEnabled(false));
   certEmailInput.addEventListener('input', () => setCertDownloadEnabled(false));
 
-  certSendBtn.addEventListener('click', async () => {
+  async function sendCertificateEmail(){
     const email = certEmailInput.value.trim();
     if (!email){
       certStatus.textContent = 'Add a recipient email before sending.';
@@ -1201,6 +1260,7 @@
       if (!json.success) throw new Error(json.error || 'Send failed');
       certStatus.textContent = `Certificate emailed to ${email}.`;
       certStatus.style.color = '#047857';
+      certEmailSent = true;
     } catch (err) {
       console.error('Error sending certificate email:', err);
       certStatus.textContent = 'Could not send the email — please try again.';
@@ -1208,7 +1268,9 @@
     } finally {
       certSendBtn.disabled = false;
     }
-  });
+  }
+
+  certSendBtn.addEventListener('click', sendCertificateEmail);
 
   certSaveBtn.addEventListener('click', async () => {
     if (!certNameInput.value.trim() || !certProgramInput.value.trim()){
