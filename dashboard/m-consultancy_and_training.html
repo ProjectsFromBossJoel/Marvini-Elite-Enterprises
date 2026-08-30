@@ -949,6 +949,22 @@
   </div>
 </div>
 
+<!-- Resend Certificate — email entry (for older certs saved without one) -->
+<div class="modal-overlay" id="certResendEmailModal">
+  <div class="modal-card confirm-modal-card">
+    <div class="confirm-icon" style="background:rgba(26,86,255,0.12); color:#1a56ff;">✉</div>
+    <h3>Recipient email</h3>
+    <p>This certificate was saved without an email on file. Enter one to resend it.</p>
+    <div class="form-field" style="text-align:left;">
+      <input type="email" id="certResendEmailInput" placeholder="trainee@example.com" />
+    </div>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-outline" id="certResendEmailCancelBtn" style="border:1px solid var(--border,#e2e8f0);">Cancel</button>
+      <button type="button" class="btn btn-primary" id="certResendEmailSendBtn">Send</button>
+    </div>
+  </div>
+</div>
+
 <!-- Certificate Send Reminder Modal -->
 <div class="modal-overlay" id="certSendPromptModal">
   <div class="modal-card confirm-modal-card">
@@ -981,7 +997,7 @@
 <script type="module" src="../js/consultancy-training-admin.js"></script>
 <script type="module" src="../js/consultancy_partners-admin.js"></script>
 <script type="module">
-  import { db, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from "../js/firebase-config.js";
+  import { db, collection, query, orderBy, onSnapshot, addDoc, updateDoc, doc, serverTimestamp } from "../js/firebase-config.js";
 
   function certEscapeHtml(str){
     const div = document.createElement('div');
@@ -1311,6 +1327,7 @@
         signerTitle: certSignerTitleInput.value.trim(),
         partnerId: certPartnerSelect.value || null,
         partnerName: certPartnerNameSpan.textContent || null,
+        email: certEmailInput.value.trim() || null,
         driveFileId: uploadJson.fileId,
         downloadUrl: uploadJson.downloadUrl,
         viewUrl: uploadJson.viewUrl,
@@ -1358,12 +1375,16 @@
         <div class="cert-history-info">
           <p class="cert-history-name">${certEscapeHtml(c.name || 'Unnamed')}</p>
           <p class="cert-history-program">${certEscapeHtml(c.program || 'No program')}</p>
+          <p class="cert-history-resend-status" id="resend-status-${c.id}" style="font-size:.75rem; margin:.25rem 0 0; min-height:1em;"></p>
         </div>
         <div class="cert-history-meta">
           <span class="cert-history-date">${certEscapeHtml(c.date || '—')}</span>
           <span class="cert-history-id">${certEscapeHtml(c.certId || '—')}</span>
         </div>
-        <button class="btn btn-outline cert-history-download" type="button" data-redownload="${c.id}">Download</button>
+        <div style="display:flex; flex-direction:column; gap:.4rem; align-items:stretch;">
+          <button class="btn btn-outline cert-history-download" type="button" data-redownload="${c.id}">Download</button>
+          <button class="btn btn-outline cert-history-resend" type="button" data-resend="${c.id}">Resend</button>
+        </div>
       </div>
     `;
     }).join('');
@@ -1376,6 +1397,72 @@
         if (cert && cert.downloadUrl) window.open(cert.downloadUrl, '_blank');
       });
     });
+
+    certHistoryTableBody.querySelectorAll('[data-resend]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cert = certHistoryCache.find(c => c.id === btn.dataset.resend);
+        if (!cert) return;
+        if (cert.email) {
+          resendSavedCertificate(cert);
+        } else {
+          pendingResendCertId = cert.id;
+          document.getElementById('certResendEmailInput').value = '';
+          certResendEmailModal.classList.add('open');
+        }
+      });
+    });
+  }
+
+  function setResendStatus(certId, message, color){
+    const el = document.getElementById(`resend-status-${certId}`);
+    if (!el) return;
+    el.textContent = message;
+    el.style.color = color || '';
+  }
+
+  async function resendSavedCertificate(cert, emailOverride){
+    const email = (emailOverride || cert.email || '').trim();
+    if (!email){
+      setResendStatus(cert.id, 'No email on file.', '#dc2626');
+      return;
+    }
+    if (!cert.driveFileId){
+      setResendStatus(cert.id, "Can't resend — missing file reference.", '#dc2626');
+      return;
+    }
+    const btn = certHistoryTableBody.querySelector(`[data-resend="${cert.id}"]`);
+    if (btn) btn.disabled = true;
+    setResendStatus(cert.id, 'Sending…', '');
+    try {
+      const certificateImageUrl = `https://drive.google.com/uc?export=view&id=${cert.driveFileId}`;
+      const res = await fetch(CERT_EMAIL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to_email: email,
+          to_name: cert.name || '',
+          program_name: cert.program || '',
+          cert_id: cert.certId || '',
+          completion_date: cert.date || '',
+          certificate_image_url: certificateImageUrl,
+          certificate_link: cert.downloadUrl || '',
+          signer_title: cert.signerTitle || ''
+        })
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || 'Send failed');
+
+      // Back-fill the email on the record so future resends don't need re-asking.
+      if (!cert.email) {
+        await updateDoc(doc(db, 'consultancyCertificates', cert.id), { email });
+      }
+      setResendStatus(cert.id, `Sent to ${email}.`, '#047857');
+    } catch (err) {
+      console.error('Error resending certificate:', err);
+      setResendStatus(cert.id, 'Could not resend — try again.', '#dc2626');
+    } finally {
+      if (btn) btn.disabled = false;
+    }
   }
 
   const certHistoryQuery = query(collection(db, 'consultancyCertificates'), orderBy('createdAt', 'desc'));
@@ -1390,6 +1477,32 @@
   certHistoryModal.addEventListener('click', (e) => { if (e.target === certHistoryModal) certHistoryModal.classList.remove('open'); });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && certHistoryModal.classList.contains('open')) certHistoryModal.classList.remove('open');
+  });
+
+  // ---------------- Resend — email entry for older certs with no email on file ----------------
+  const certResendEmailModal = document.getElementById('certResendEmailModal');
+  const certResendEmailInput = document.getElementById('certResendEmailInput');
+  const certResendEmailCancelBtn = document.getElementById('certResendEmailCancelBtn');
+  const certResendEmailSendBtn = document.getElementById('certResendEmailSendBtn');
+  let pendingResendCertId = null;
+
+  function closeCertResendEmailModal(){
+    certResendEmailModal.classList.remove('open');
+    pendingResendCertId = null;
+  }
+
+  certResendEmailCancelBtn.addEventListener('click', closeCertResendEmailModal);
+  certResendEmailModal.addEventListener('click', (e) => { if (e.target === certResendEmailModal) closeCertResendEmailModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certResendEmailModal.classList.contains('open')) closeCertResendEmailModal();
+  });
+
+  certResendEmailSendBtn.addEventListener('click', async () => {
+    const email = certResendEmailInput.value.trim();
+    if (!email || !pendingResendCertId) return;
+    const cert = certHistoryCache.find(c => c.id === pendingResendCertId);
+    closeCertResendEmailModal();
+    if (cert) await resendSavedCertificate(cert, email);
   });
 </script>
 </body>
