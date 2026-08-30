@@ -1,5 +1,16 @@
 // api/send-certificate-email.js
 export default async function handler(req, res) {
+  // Reuses the same ALLOWED_ORIGIN env var as your other API functions
+  // (e.g. api/adsense.js) so CORS config stays in one place.
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://marvini-elite-enterprises.web.app';
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
