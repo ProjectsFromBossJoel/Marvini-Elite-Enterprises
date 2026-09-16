@@ -80,7 +80,7 @@ INSTRUCTIONS:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile', // Free, fast, and powerful
+        model: 'openai/gpt-oss-120b', // Free, fast, and powerful
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
