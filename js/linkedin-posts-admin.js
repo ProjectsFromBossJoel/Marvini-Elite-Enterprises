@@ -342,6 +342,7 @@ async function publish() {
   } catch (err) {
     setGenState("error");
     showResult("error", `Publish failed — ${err.message}`);
+    if (currentPlatform === "linkedin" && /\(401\)/.test(err.message)) loadTokenStatus();
     publishBtn.disabled = false;
   } finally {
     regenBtn.disabled = false;
@@ -376,14 +377,30 @@ promptEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) generate(promptEl.value);
 });
 
-auth.onAuthStateChanged((user) => setConnected(!!user));
+auth.onAuthStateChanged((user) => {
+  setConnected(!!user);
+  if (user) loadTokenStatus();
+});
 
-// ---------- LinkedIn token expiry countdown ----------
-const TOKEN_EXPIRES_AT = new Date("2026-09-16T00:00:00Z");
+// ---------- LinkedIn token status (checked live via the API) ----------
+let tokenInfo = null;
 
-function daysUntilExpiry() {
-  const msLeft = TOKEN_EXPIRES_AT - new Date();
-  return Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
+async function loadTokenStatus() {
+  try {
+    const token = await getToken();
+    const res = await fetch(`${API_BASE}${PLATFORMS.linkedin.endpoint}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "status" }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || "Status check failed");
+    tokenInfo = data;
+  } catch (err) {
+    console.warn("LinkedIn token status check failed:", err.message);
+    tokenInfo = { status: "unverified" };
+  }
+  renderTokenCountdown();
 }
 
 function renderTokenCountdown() {
@@ -394,16 +411,51 @@ function renderTokenCountdown() {
     if (banner) banner.style.display = "none";
     return;
   }
-  const days = daysUntilExpiry();
-  if (el) {
-    if (days <= 0) { el.textContent = "⚠ LinkedIn token expired"; el.style.color = "#f87171"; }
-    else if (days <= 7) { el.textContent = `⚠ token expires in ${days}d`; el.style.color = "#f59e0b"; }
-    else { el.textContent = `token valid · ${days}d left`; el.style.color = ""; }
+
+  let note = "checking token…";
+  let noteColor = "";
+  let bannerClass = "";
+  let bannerText = "";
+  const info = tokenInfo;
+
+  if (info) {
+    if (info.status === "expired") {
+      note = "⚠ LinkedIn token expired"; noteColor = "#f87171";
+      bannerClass = "expired";
+      bannerText = "⚠ LinkedIn access token has expired or was revoked. Publishing will fail until you reauthorize.";
+    } else if (info.status === "not_configured") {
+      note = "⚠ LinkedIn credentials missing"; noteColor = "#f87171";
+      bannerClass = "expired";
+      bannerText = "⚠ LinkedIn credentials aren't configured on the server (LINKEDIN_ACCESS_TOKEN / PERSON_URN).";
+    } else if (info.status === "active") {
+      const days = info.daysLeft;
+      if (info.urnMatch === false) {
+        note = "⚠ PERSON_URN mismatch"; noteColor = "#f87171";
+        bannerClass = "expired";
+        bannerText = `⚠ The token is valid, but PERSON_URN doesn't match the account that authorized it. Set PERSON_URN to ${info.tokenUrn} in Vercel, then redeploy.`;
+      } else if (typeof days === "number" && days <= 7) {
+        note = `⚠ token expires in ${days}d`; noteColor = "#f59e0b";
+        bannerClass = "warn";
+        bannerText = `⚠ LinkedIn access token expires in ${days} day${days === 1 ? "" : "s"}.`;
+      } else if (typeof days === "number") {
+        note = `token valid · ${days}d left`;
+      } else {
+        note = "token valid";
+      }
+    } else {
+      note = "token status unknown"; noteColor = "#94a3b8";
+    }
   }
+
+  if (el) { el.textContent = note; el.style.color = noteColor; }
   if (banner) {
-    if (days <= 0) { banner.className = "lp-banner expired"; banner.style.display = "flex"; banner.textContent = "⚠ LinkedIn access token has expired. Publishing will fail until you reauthorize."; }
-    else if (days <= 7) { banner.className = "lp-banner warn"; banner.style.display = "flex"; banner.textContent = `⚠ LinkedIn access token expires in ${days} day${days === 1 ? "" : "s"}.`; }
-    else { banner.style.display = "none"; }
+    if (bannerText) {
+      banner.className = `lp-banner ${bannerClass}`;
+      banner.style.display = "flex";
+      banner.textContent = bannerText;
+    } else {
+      banner.style.display = "none";
+    }
   }
 }
 

@@ -89,6 +89,79 @@ async function generatePost(prompt) {
   return cleaned;
 }
 
+// ---------- LinkedIn token status helpers ----------
+async function fetchUserInfo(accessToken) {
+  try {
+    const res = await fetch('https://api.linkedin.com/v2/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (res.ok) {
+      const d = await res.json();
+      return { ok: true, sub: d.sub };
+    }
+    return { ok: false, httpStatus: res.status };
+  } catch {
+    return { ok: false, httpStatus: 0 };
+  }
+}
+
+// Optional: gives the exact expiry date. Needs the client id/secret of the
+// app that issued the token.
+async function fetchIntrospection(accessToken) {
+  const clientId = process.env.LINKEDIN_CLIENT_ID;
+  const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+  try {
+    const res = await fetch('https://www.linkedin.com/oauth/v2/introspectToken', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        token: accessToken,
+      }),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+async function getTokenStatus() {
+  const accessToken = process.env.LINKEDIN_ACCESS_TOKEN;
+  const personUrn = (process.env.PERSON_URN || '').trim();
+  if (!accessToken || !personUrn) return { status: 'not_configured' };
+
+  const [user, intro] = await Promise.all([
+    fetchUserInfo(accessToken),
+    fetchIntrospection(accessToken),
+  ]);
+
+  // Only trust the expiry date when introspection says the token is active.
+  // (A client id/secret from the wrong app returns active:false, which we ignore.)
+  const expiresAt = intro?.active && intro.expires_at ? intro.expires_at : null;
+  const daysLeft = expiresAt
+    ? Math.max(0, Math.ceil((expiresAt * 1000 - Date.now()) / 86400000))
+    : null;
+
+  // 1. LinkedIn explicitly rejected the token
+  if (user.httpStatus === 401 || intro?.status === 'expired' || intro?.status === 'revoked') {
+    return { status: 'expired' };
+  }
+
+  // 2. Token works and we can see which member it belongs to
+  if (user.ok) {
+    const tokenUrn = `urn:li:person:${user.sub}`;
+    const urnMatch = tokenUrn === personUrn;
+    return { status: 'active', expiresAt, daysLeft, urnMatch, ...(urnMatch ? {} : { tokenUrn }) };
+  }
+
+  // 3. Couldn't verify identity (token lacks openid/profile scope, or LinkedIn unreachable)
+  if (intro?.active) return { status: 'active', expiresAt, daysLeft, urnMatch: null };
+  return { status: 'unverified' };
+}
+
 // ---------- Main handler ----------
 export default async function handler(req, res) {
   // ---------- CORS ----------
@@ -169,7 +242,17 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: err.message });
     }
 
+  } else if (action === 'status') {
+    // ---------- STATUS STEP ----------
+    try {
+      const status = await getTokenStatus();
+      return res.status(200).json({ success: true, ...status });
+    } catch (err) {
+      console.error('Status error:', err);
+      return res.status(500).json({ error: err.message });
+    }
+
   } else {
-    return res.status(400).json({ error: 'Invalid action. Use "generate" or "post".' });
+    return res.status(400).json({ error: 'Invalid action. Use "generate", "post" or "status".' });
   }
 }
