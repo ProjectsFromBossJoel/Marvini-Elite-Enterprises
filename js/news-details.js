@@ -19,6 +19,15 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+function linkify(text) {
+  return escapeHtml(text).replace(/https?:\/\/[^\s<>"']+/g, (url) => {
+    const m = url.match(/[.,:!?)\]]+$/);
+    const trail = m ? m[0] : "";
+    const clean = trail ? url.slice(0, -trail.length) : url;
+    return `<a href="${clean}" target="_blank" rel="noopener noreferrer">${clean}</a>${trail}`;
+  });
+}
+
 function longDateLabel(date) {
   if (!date) return "";
   return date.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
@@ -91,7 +100,7 @@ function renderMainNews() {
       document.getElementById("newsDetailTag").textContent = data.tag || "Update";
       document.getElementById("newsDetailTitle").textContent = data.title || "Untitled";
       document.getElementById("newsDetailMeta").textContent = dateLabel;
-      document.getElementById("newsDetailBody").textContent = data.excerpt || "";
+      document.getElementById("newsDetailBody").innerHTML = linkify(data.excerpt || "");
 
       loadingEl.style.display = "none";
       errorEl.style.display = "none";

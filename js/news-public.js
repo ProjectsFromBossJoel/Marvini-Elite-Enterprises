@@ -10,6 +10,12 @@ function monthYearLabel(date) {
   return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 }
 
+function shortExcerpt(text, max = 160) {
+  const first = String(text ?? "").trim().split(/\n+/)[0];
+  if (first.length <= max) return first;
+  return first.slice(0, max).replace(/\s+\S*$/, "") + "…";
+}
+
 const grid = document.getElementById("newsGrid");
 const fallback = document.getElementById("newsFallback");
 
@@ -44,7 +50,7 @@ if (grid) {
         const ts = n.publishedAt || n.createdAt;
         const dateLabel = ts?.toDate ? monthYearLabel(ts.toDate()) : "";
         const mediaHtml = n.imageUrl
-          ? `<img src="${escapeHtml(n.imageUrl)}" alt="${escapeHtml(n.title || "")}" style="width:100%; height:100%; object-fit:cover;" />`
+          ? `<div class="news-img-placeholder" style="position:relative; overflow:hidden; padding:0;"><img src="${escapeHtml(n.imageUrl)}" alt="${escapeHtml(n.title || "")}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;" /></div>`
           : `<div class="news-img-placeholder" style="display:flex;align-items:center;justify-content:center;font-size:2.4rem;">${escapeHtml(n.emoji || "📰")}</div>`;
         return `
           <article class="news-card reveal-fade-up revealed">
@@ -54,7 +60,7 @@ if (grid) {
             <div class="news-body">
               <span class="news-tag">${escapeHtml(n.tag || "")}</span>
               <h3 class="news-title"><a href="news-details.html?id=${encodeURIComponent(n.id)}" style="color:inherit; text-decoration:none;">${escapeHtml(n.title || "")}</a></h3>
-              <p class="news-excerpt">${escapeHtml(n.excerpt || "")}</p>
+              <p class="news-excerpt" style="display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(shortExcerpt(n.excerpt))}</p>
               <div class="news-meta" style="display:flex; align-items:center;">
                 <time class="news-date">${dateLabel}</time>
                 <a href="news-details.html?id=${encodeURIComponent(n.id)}" style="margin-left:auto; font-weight:700; color:var(--royal-blue,#1A56FF); font-size:0.85rem; text-decoration:none;">Read More →</a>
