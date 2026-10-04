@@ -39,11 +39,25 @@
 
   <style>
     .subpage-hero {
-      padding: 8rem 0 3rem;
+      position: relative;
+      padding: 9rem 0 4rem;
       text-align: center;
-      background: var(--bg-secondary, rgba(26,86,255,0.04));
+      overflow: hidden;
+      background: var(--bg-secondary, rgba(5,150,105,0.04));
     }
-    .subpage-hero-icon { width: 84px; height: 84px; object-fit: contain; margin: 0 auto 1.25rem; display: block; }
+    .subpage-hero::before,
+    .subpage-hero::after {
+      content: ''; position: absolute; border-radius: 50%;
+      filter: blur(60px); opacity: 0.35; z-index: 0; pointer-events: none;
+    }
+    .subpage-hero::before { width: 320px; height: 320px; background: #059669; top: -120px; left: -80px; }
+    .subpage-hero::after  { width: 280px; height: 280px; background: #84CC16; bottom: -100px; right: -60px; }
+    .subpage-hero .container { position: relative; z-index: 1; }
+    .subpage-hero-icon {
+      width: 92px; height: 92px; object-fit: contain; margin: 0 auto 1.25rem; display: block;
+      padding: 14px; background: var(--bg-card, #fff); border-radius: 22px;
+      box-shadow: 0 12px 30px rgba(5,150,105,0.18);
+    }
     .subpage-tag {
       display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: .04em;
       text-transform: uppercase; color: var(--royal-blue, #1A56FF);
@@ -56,29 +70,132 @@
       gap: 1.5rem; margin-top: 2rem;
     }
     .offering-card {
+      position: relative; overflow: hidden;
       background: var(--bg-card, #fff); border: 1px solid var(--border, rgba(0,0,0,0.08));
       border-radius: var(--radius-lg, 16px); padding: 1.75rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
+    .offering-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--grad-blue-green); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .offering-card:hover::before { transform: scaleX(1); }
     .offering-card h4 { font-family: var(--font-heading); margin: 0.5rem 0; }
-    .offering-icon { font-size: 1.8rem; }
+    .offering-icon {
+      width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; border-radius: 14px; background: var(--grad-blue-green);
+      margin-bottom: 0.75rem; box-shadow: 0 8px 20px rgba(26,86,255,0.22);
+    }
     .subpage-gallery {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 1.25rem; margin-top: 2rem;
     }
+    @media (max-width: 900px) { .subpage-gallery { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .subpage-gallery { grid-template-columns: 1fr; } }
     .subpage-gallery-item {
       aspect-ratio: 4/3; border-radius: var(--radius-lg, 16px);
       background: var(--bg-secondary, rgba(26,86,255,0.05));
-      border: 1px dashed var(--border, rgba(0,0,0,0.15));
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 0.5rem; text-align: center; padding: 1rem; color: var(--text-muted, #64748b);
+      border: 1px solid var(--border, rgba(0,0,0,0.08));
+      overflow: hidden; position: relative; margin: 0;
     }
-    .subpage-gallery-item span { font-size: 2rem; }
+    .subpage-gallery-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.4s ease;
+    }
+    .subpage-gallery-item:hover img { transform: scale(1.06); }
+    .subpage-gallery-item figcaption {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.6));
+      color: #fff; font-size: 0.85rem; font-weight: 600; padding: 0.9rem 1rem 0.7rem;
+      text-align: left;
+    }
     .subpage-cta {
       text-align: center; padding: 3.5rem 2rem; border-radius: var(--radius-xl, 24px);
       background: var(--grad-blue-green); color: #fff; margin-top: 3rem;
     }
     .subpage-cta h3 { font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 0.75rem; }
     .subpage-cta p { opacity: 0.92; margin-bottom: 1.5rem; }
+
+    .reveal-fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal-fade-up.revealed { opacity: 1; transform: none; }
+    .offering-card.reveal-fade-up { transition: opacity 0.6s ease, transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+    .offering-card.revealed:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(26,86,255,0.14); border-color: rgba(26,86,255,0.25); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-fade-up { opacity: 1; transform: none; transition: none; }
+    }
+
+    .event-card-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+    .event-card {
+      background: var(--bg-card, #fff); border: 1px solid var(--border, rgba(0,0,0,0.08));
+      border-radius: var(--radius-lg, 16px); overflow: hidden;
+    }
+    .event-card img { width: 100%; height: 190px; object-fit: cover; display: block; }
+    .event-card-body { padding: 1.4rem 1.5rem 1.6rem; }
+    .event-card-tag {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+      color: var(--royal-blue, #1A56FF);
+    }
+    .event-card h3 { font-family: var(--font-heading); margin: 0.4rem 0 0.6rem; font-size: 1.2rem; }
+    .event-card p { color: var(--text-secondary, #475569); font-size: 0.93rem; line-height: 1.65; margin: 0; }
+
+    .process-timeline-wrap {
+      display: grid; grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: 3rem; margin-top: 3rem; align-items: start;
+    }
+    .process-timeline-left { position: relative; padding-left: 60px; padding-bottom: 100px; }
+    .process-timeline-track {
+      position: absolute; left: 20px; top: 6px; bottom: 106px; width: 3px;
+      background: rgba(26,86,255,0.15); border-radius: 3px; overflow: hidden;
+    }
+    .process-timeline-progress {
+      position: absolute; top: 0; left: 0; width: 100%; height: 0%;
+      background: var(--grad-blue-green);
+    }
+    .timeline-step { position: relative; min-height: 120px; padding: 1.25rem 0; }
+    .timeline-step-marker {
+      position: absolute; left: -60px; top: 1.25rem; width: 44px; height: 44px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-weight: 700; color: #fff;
+      background: var(--border, rgba(0,0,0,0.15)); z-index: 1;
+      transition: background 0.35s ease, box-shadow 0.35s ease;
+    }
+    .timeline-step.active .timeline-step-marker {
+      background: var(--grad-blue-green); box-shadow: 0 8px 22px rgba(26,86,255,0.28);
+    }
+    .timeline-step h4 { font-family: var(--font-heading); margin: 0 0 0.4rem; transition: color 0.35s ease; }
+    .timeline-step.active h4 { color: var(--royal-blue, #1A56FF); }
+    .timeline-step p { color: var(--text-secondary, #475569); font-size: 0.92rem; margin: 0; }
+    .process-timeline-right { position: relative; z-index: 1; }
+    .process-timeline-sticky {
+      position: sticky; top: 110px;
+      border-radius: var(--radius-lg, 16px); overflow: hidden;
+      border: 1px solid var(--border, rgba(0,0,0,0.08)); background: var(--bg-card, #fff);
+      box-shadow: 0 18px 40px rgba(26,86,255,0.12);
+    }
+    .process-timeline-sticky img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .process-timeline-panel-text { padding: 1.75rem 2rem 2rem; }
+    .process-timeline-panel-num {
+      font-family: var(--font-heading); font-size: 0.8rem; font-weight: 700;
+      color: var(--royal-blue, #1A56FF); letter-spacing: 0.06em;
+    }
+    .process-timeline-panel-text h4 { font-family: var(--font-heading); margin: 0.35rem 0 0.6rem; font-size: 1.4rem; }
+    .process-timeline-panel-text p { color: var(--text-secondary, #475569); line-height: 1.7; margin: 0; }
+    @media (max-width: 860px) {
+      .process-timeline-wrap { grid-template-columns: 1fr; gap: 0; }
+      .process-timeline-right { display: none; }
+    }
+
+    .faq-list { max-width: 820px; margin: 2rem auto 0; }
+    .faq-list details {
+      background: var(--bg-card, #fff); border: 1px solid var(--border, rgba(0,0,0,0.08));
+      border-radius: var(--radius-lg, 16px); padding: 1.1rem 1.4rem; margin-bottom: 0.9rem;
+    }
+    .faq-list summary { cursor: pointer; font-family: var(--font-heading); font-weight: 600; }
+    .faq-list details p { color: var(--text-secondary, #475569); line-height: 1.7; margin: 0.8rem 0 0; }
   </style>
 </head>
 <body>
@@ -136,6 +253,89 @@
       </div>
     </section>
 
+    <section class="section" aria-label="Focus Areas">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Focus Areas</span>
+          <h2 class="section-title">Where M-Farms Works</h2>
+          <p class="section-subtitle">Three areas that together help a farm grow more and lose less.</p>
+        </div>
+        <div class="event-card-grid">
+          <article class="event-card reveal-fade-up">
+            <img src="img/learn-more-img/crop_production.jpg" alt="Rows of maize growing in a well-kept farm field" loading="lazy" />
+            <div class="event-card-body">
+              <span class="event-card-tag">Production</span>
+              <h3>Crop Production</h3>
+              <p>Cultivation of staple and cash crops such as maize, rice, cocoa, and cassava using modern, sustainable techniques that aim to raise yields while protecting soil health for future seasons.</p>
+            </div>
+          </article>
+          <article class="event-card reveal-fade-up">
+            <img src="img/learn-more-img/crop_production1.jpeg" alt="Drip irrigation lines running through a greenhouse" loading="lazy" />
+            <div class="event-card-body">
+              <span class="event-card-tag">Infrastructure</span>
+              <h3>Water &amp; Protected Growing</h3>
+              <p>Irrigation systems and greenhouse construction that reduce dependence on unpredictable rainfall and allow crops to be grown more reliably across the year.</p>
+            </div>
+          </article>
+          <article class="event-card reveal-fade-up">
+            <img src="img/learn-more-img/farmer_support_market_information.jpeg" alt="Farmers attending a hands-on training session in the field" loading="lazy" />
+            <div class="event-card-body">
+              <span class="event-card-tag">Support</span>
+              <h3>Farmer Support &amp; Market Information</h3>
+              <p>Consultancy, workshops, pest and disease alerts, and market price tracking, so smallholder farmers can make better decisions about what to plant, how to protect it, and when to sell.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="How We Work With Farmers">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Our Approach</span>
+          <h2 class="section-title">From Soil to Sustainable Income</h2>
+        </div>
+
+        <div class="process-timeline-wrap">
+          <div class="process-timeline-left">
+            <div class="process-timeline-track">
+              <div class="process-timeline-progress" id="timelineProgress"></div>
+            </div>
+            <div class="timeline-step" data-num="01" data-title="Assess" data-desc="We start on the land itself, looking at soil condition, water access, existing crops, and the farmer's goals, so every recommendation is based on what the farm actually has." data-img="img/learn-more-img/farm_assess1.jfif">
+              <div class="timeline-step-marker">1</div>
+              <h4>Assess</h4>
+              <p>We look at the soil, water, crops, and the farmer's goals first.</p>
+            </div>
+            <div class="timeline-step" data-num="02" data-title="Plan" data-desc="Crop selection, planting calendars, irrigation needs, and budgets are put into a simple farm plan that a small operation can realistically follow." data-img="img/learn-more-img/farm_plan.jfif">
+              <div class="timeline-step-marker">2</div>
+              <h4>Plan</h4>
+              <p>Crops, calendars, water, and budget become a realistic farm plan.</p>
+            </div>
+            <div class="timeline-step" data-num="03" data-title="Implement" data-desc="Where needed, we install irrigation or greenhouse structures and run hands-on training so the people working the land know how to use and maintain what has been put in place." data-img="img/learn-more-img/farm_implement.jfif">
+              <div class="timeline-step-marker">3</div>
+              <h4>Implement</h4>
+              <p>Irrigation, greenhouses, and hands-on training put the plan into practice.</p>
+            </div>
+            <div class="timeline-step" data-num="04" data-title="Support" data-desc="Through the season, farmers get pest and disease alerts, weather information, and market price updates, helping them protect the crop and choose a good time to sell." data-img="img/learn-more-img/farmer_support_market_information.jpeg">
+              <div class="timeline-step-marker">4</div>
+              <h4>Support</h4>
+              <p>Alerts, weather, and market prices help farmers through the season.</p>
+            </div>
+          </div>
+          <div class="process-timeline-right">
+            <div class="process-timeline-sticky">
+              <img id="timelinePanelImg" src="img/learn-more-img/farms-assess.jpg" alt="Assess" />
+              <div class="process-timeline-panel-text">
+                <span class="process-timeline-panel-num" id="timelinePanelNum">01</span>
+                <h4 id="timelinePanelTitle">Assess</h4>
+                <p id="timelinePanelDesc">We start on the land itself, looking at soil condition, water access, existing crops, and the farmer's goals, so every recommendation is based on what the farm actually has.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" aria-label="What We Offer">
       <div class="container">
         <div class="section-header reveal-fade-up">
@@ -182,21 +382,68 @@
         <div class="section-header reveal-fade-up">
           <span class="section-eyebrow">Visual Story</span>
           <h2 class="section-title">Gallery</h2>
-          <p class="section-subtitle">Photos coming soon — replace these placeholders with real project images.</p>
+          <p class="section-subtitle">A look at the crops, fields and people behind M-Farms.</p>
         </div>
         <div class="subpage-gallery">
-          <div class="subpage-gallery-item">
-            <span aria-hidden="true">🌾</span>
-            <p>Crops &amp; harvest</p>
-          </div>
-          <div class="subpage-gallery-item">
-            <span aria-hidden="true">🚁</span>
-            <p>Drone &amp; field imagery</p>
-          </div>
-          <div class="subpage-gallery-item">
-            <span aria-hidden="true">👩‍🌾</span>
-            <p>Farmers &amp; field teams</p>
-          </div>
+          <figure class="subpage-gallery-item">
+            <img src="img/learn-more-img/crops_harvest.jpg" alt="Freshly harvested crops ready for market" loading="lazy" />
+            <figcaption>Crops &amp; harvest</figcaption>
+          </figure>
+          <figure class="subpage-gallery-item">
+            <img src="img/learn-more-img/drone_field_imagery.jpg" alt="Aerial view of farm fields taken by drone" loading="lazy" />
+            <figcaption>Drone &amp; field imagery</figcaption>
+          </figure>
+          <figure class="subpage-gallery-item">
+            <img src="img/learn-more-img/farmers_field_teams.jpg" alt="Farmers and field team members working together in a field" loading="lazy" />
+            <figcaption>Farmers &amp; field teams</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Why It Matters">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">Why It Matters</span>
+          <h2 class="section-title">Smallholder Farms Feed Communities</h2>
+        </div>
+        <div style="max-width:820px; margin:0 auto; color:var(--text-secondary, #475569); line-height:1.8;">
+          <p class="reveal-fade-up">
+            Across Africa, much of the food that reaches local tables is grown by smallholder farmers working modest plots. Their success decides whether families eat well, whether markets stay supplied, and whether rural communities can earn a steady living. Yet many of these farmers face the same obstacles: unpredictable rainfall, crop pests and diseases that spread before they are identified, limited access to equipment, and little visibility on market prices when it is time to sell.
+          </p>
+          <p class="reveal-fade-up" style="margin-top:1rem;">
+            M-Farms was set up to address those obstacles together rather than one at a time. Better soil practice means little if a crop is lost to an undetected disease; a good harvest earns less if the farmer sells without knowing the going price. By combining farming, consultancy, training, and information in one initiative, M-Farms aims to help farmers build operations that can absorb a bad season and make the most of a good one.
+          </p>
+          <p class="reveal-fade-up" style="margin-top:1rem;">
+            Sustainability runs through all of it. Techniques that protect soil and use water carefully keep farmland productive for the next planting season and the next generation, which is why M-Farms treats training and knowledge-sharing as seriously as the farming itself. The M-Farms platform adds live weather data and market prices, giving farmers practical information they can act on day to day.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Frequently Asked Questions">
+      <div class="container">
+        <div class="section-header reveal-fade-up">
+          <span class="section-eyebrow">FAQ</span>
+          <h2 class="section-title">Common Questions</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>What does M-Farms do?</summary>
+            <p>M-Farms combines commercial farming with services for other farmers: consultancy, irrigation and greenhouse installation, pest and disease alerts, market price tracking, and training workshops.</p>
+          </details>
+          <details>
+            <summary>Who are your services for?</summary>
+            <p>Mainly smallholder farmers and farming communities, though anyone planning a farm or looking to improve an existing one can get in touch.</p>
+          </details>
+          <details>
+            <summary>Which crops do you cover?</summary>
+            <p>Our market price tracking includes maize, rice, cocoa, and cassava, and our consultancy covers crop selection and soil health for a range of crops. Contact us to discuss your specific crop.</p>
+          </details>
+          <details>
+            <summary>What can I find on the M-Farms platform?</summary>
+            <p>The platform offers live weather data, market prices, and the wider M-Farms feature set. Use the button below to visit it.</p>
+          </details>
         </div>
       </div>
     </section>
@@ -231,6 +478,59 @@
       const html = document.documentElement;
       html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
     });
+
+    // Scroll-reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal-fade-up').forEach(el => revealObserver.observe(el));
+
+    // Process timeline: fill line + swap right-panel content on scroll
+    const timelineSteps = document.querySelectorAll('.timeline-step');
+    const timelinePanelImg = document.getElementById('timelinePanelImg');
+    const timelinePanelNum = document.getElementById('timelinePanelNum');
+    const timelinePanelTitle = document.getElementById('timelinePanelTitle');
+    const timelinePanelDesc = document.getElementById('timelinePanelDesc');
+
+    function setActiveTimelineStep(step) {
+      timelineSteps.forEach(s => s.classList.remove('active'));
+      step.classList.add('active');
+      if (timelinePanelImg) {
+        timelinePanelImg.src = step.dataset.img;
+        timelinePanelImg.alt = step.dataset.title;
+      }
+      if (timelinePanelNum) timelinePanelNum.textContent = step.dataset.num;
+      if (timelinePanelTitle) timelinePanelTitle.textContent = step.dataset.title;
+      if (timelinePanelDesc) timelinePanelDesc.textContent = step.dataset.desc;
+    }
+
+    if (timelineSteps.length) {
+      const timelineStepObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) setActiveTimelineStep(entry.target);
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      timelineSteps.forEach(s => timelineStepObserver.observe(s));
+      setActiveTimelineStep(timelineSteps[0]);
+    }
+
+    const timelineLeft = document.querySelector('.process-timeline-left');
+    const timelineProgress = document.getElementById('timelineProgress');
+    function updateTimelineProgress() {
+      if (!timelineLeft || !timelineProgress) return;
+      const rect = timelineLeft.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const progress = Math.min(Math.max((vh / 2 - rect.top) / rect.height, 0), 1);
+      timelineProgress.style.height = (progress * 100) + '%';
+    }
+    window.addEventListener('scroll', updateTimelineProgress, { passive: true });
+    window.addEventListener('resize', updateTimelineProgress);
+    updateTimelineProgress();
   </script>
 </body>
 </html>
